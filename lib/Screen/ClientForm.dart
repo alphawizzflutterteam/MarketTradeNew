@@ -811,9 +811,7 @@ class _Client_formState extends State<Client_form> {
                                 // return null;
                               }
                               return null;
-
                             },
-
                             decoration: InputDecoration(
                                 hintText: 'name',
                                 border: OutlineInputBorder(
@@ -833,7 +831,6 @@ class _Client_formState extends State<Client_form> {
                             }
                             return null;
                           },
-
                           onChanged: (newValue) {
                             setState(() {
                               selected_Status= newValue;
@@ -854,25 +851,25 @@ class _Client_formState extends State<Client_form> {
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                      const Text("Staff",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                      Card(elevation: 6,
-                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: staffcn,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                // return null;
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                hintText: 'hfg',
-                                border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      // const Text("Staff",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      // SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      // Card(elevation: 6,
+                      //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      //   child: TextFormField(
+                      //       keyboardType: TextInputType.text,
+                      //       controller: staffcn,
+                      //       validator: (value) {
+                      //         if (value!.isEmpty) {
+                      //           // return null;
+                      //         }
+                      //         return null;
+                      //       },
+                      //       decoration: InputDecoration(
+                      //           hintText: 'hfg',
+                      //           border: OutlineInputBorder(
+                      //               borderRadius:  BorderRadius.circular(10)))),
+                      // ),
+                      // SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Owner Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       Card(elevation: 6,
@@ -1186,7 +1183,6 @@ class _Client_formState extends State<Client_form> {
 
                             decoration: InputDecoration(
                                 hintText: '9999',
-
                                 border: OutlineInputBorder(
                                     borderRadius:  BorderRadius.circular(10)))),
                       ),

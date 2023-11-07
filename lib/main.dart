@@ -239,7 +239,8 @@ class _MyAppState extends State<MyApp> {
                   .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
             ),
             themeMode: themeNotifier.getThemeMode(),
-          ));
+          ),
+      );
     }
   }
 }

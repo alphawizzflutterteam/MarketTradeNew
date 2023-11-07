@@ -19,10 +19,10 @@ class _Customer_feedbackState extends State<Customer_feedback> {
 
   TextEditingController namecn = TextEditingController();
   TextEditingController emailcn = TextEditingController();
-  TextEditingController timecn= TextEditingController();
-  TextEditingController  firmnamecn= TextEditingController();
-  TextEditingController  datecn= TextEditingController();
-  TextEditingController  remarkcn= TextEditingController();
+  TextEditingController timecn = TextEditingController();
+  TextEditingController firmnamecn = TextEditingController();
+  TextEditingController datecn = TextEditingController();
+  TextEditingController remarkcn = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
@@ -76,7 +76,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                           child: ClipRRect(child: Image.network("${getdata?.data[0].photo}")),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

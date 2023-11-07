@@ -5,7 +5,9 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:omega_employee_management/Model/category_model.dart';
 import 'package:omega_employee_management/Screen/AddClients.dart';
+import 'package:omega_employee_management/Screen/AddPhoto.dart';
 import 'package:omega_employee_management/Screen/My_Wallet.dart';
+import 'package:omega_employee_management/Screen/ViewClient.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:omega_employee_management/Screen/check_out_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -38,12 +40,18 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 import '../Model/ClientModel.dart';
+import '../Model/PermissionModel.dart';
+import 'AddGeoTag.dart';
 import 'ClientForm.dart';
+import 'FeedbackForm.dart';
+import 'FeedbackList.dart';
 import 'Login.dart';
+import 'MySiteVisit.dart';
 import 'ProductList.dart';
 import 'Product_Detail.dart';
 import 'package:http/http.dart' as http;
 import 'SectionList.dart';
+import 'SiteVisitForm.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -90,10 +98,8 @@ class _HomePageState extends State<HomePage>
 
 
   ClientModel? clients;
-  getClients() async{
+  getClients() async {
     var headers = {
-      // 'Token': jwtToken.toString(),
-      // 'Authorisedkey': authKey.toString(),
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
     var request = http.MultipartRequest('POST', Uri.parse(getClientApi.toString()));
@@ -111,7 +117,6 @@ class _HomePageState extends State<HomePage>
       setState(() {
         clients = finalResponse;
       });
-      print("this is client data ${categories.length}");
       print("this is response data ${finalResponse}");
       // setState(() {
       // animalList = finalResponse.data!;
@@ -123,6 +128,37 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+
+  PermissionModel? permission;
+  getPermission() async {
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getPermissionApi.toString()));
+    request.fields.addAll({
+      USER_ID: '${CUR_USERID}',
+    });
+
+    print("this is refer request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = PermissionModel.fromJson(result);
+      setState(() {
+        permission = finalResponse;
+      });
+      print("permission responseeeeee ${finalResponse}");
+      // setState(() {
+      // animalList = finalResponse.data!;
+      // });
+      // print("this is operator list ----->>>> ${operatorList[0].name}");
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
 
   getUserCheckInStatus() async {
     var headers = {
@@ -168,6 +204,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     getClients();
+    getPermission();
     callApi();
     setCatid();
     buttonController = new AnimationController(
@@ -283,21 +320,21 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: Container(
-          // key: whatsapppBoxKey,
-          height: 70.0,
-          width: 70.0,
-          child: FloatingActionButton(
-            backgroundColor: colors.primary,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
-            },
-            child: Text("Add Client", style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),)
-          ),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 30),
+      //   child: Container(
+      //     // key: whatsapppBoxKey,
+      //     height: 70.0,
+      //     width: 70.0,
+      //     child: FloatingActionButton(
+      //       backgroundColor: colors.primary,
+      //       onPressed: () {
+      //         Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
+      //       },
+      //       child: Text("Add Client", style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),)
+      //     ),
+      //   ),
+      // ),
       bottomSheet:
       Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10),
@@ -357,18 +394,17 @@ class _HomePageState extends State<HomePage>
       // ),
       body: _isNetworkAvail
           ? RefreshIndicator(
-        color: colors.primary,
-        key: _refreshIndicatorKey,
-        onRefresh: _refresh,
-        child: SingleChildScrollView(
-          child:
-          Padding(
+          color: colors.primary,
+          key: _refreshIndicatorKey,
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.only(bottom: 25),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               _slider(),
               Padding(
                 padding: const EdgeInsets.all(12),
@@ -379,8 +415,190 @@ class _HomePageState extends State<HomePage>
                 ),
                 ),
               ),
-              _catList(),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        permission?.data?.clients?.add == "on" ?
+                      InkWell(
+                        onTap: () {
+                           Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                          child: Center(
+                              child: Text("ADD", style: TextStyle(fontSize: 13, color: Colors.white))),
+                        ),
+                      ): SizedBox(),
+                        permission?.data?.clients?.view == "on" ?
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ViewClient()));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            child: Center(
+                                child: Text("View", style: TextStyle(fontSize: 13, color: Colors.white))),
+                          ),
+                        ): SizedBox(),
+                        permission?.data?.clients?.gioTag == "on" ?
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddGeoScreen()));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            child: Center(
+                                child: Text("GeoTag", style: TextStyle(fontSize: 13, color: Colors.white),
+                                ),
+                            ),
+                          ),
+                        ): SizedBox(),
+                        permission?.data?.clients?.gioTag == "on" ?
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto()));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            child: Center(
+                                child: Text("Photo", style: TextStyle(fontSize: 13, color: Colors.white))
+                            ),
+                          ),
+                        ): SizedBox(),
+                        // Container(
+                        //   height: 40,
+                        //   width: 95,
+                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                        //   child: Center(
+                        //       child: Text("Edit Client", style: TextStyle(fontSize: 13, color: Colors.white))),
+                        // ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 10),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 90, right: 20),
+                  //   child: Row(
+                  //     children: [
+                  //
+                  //     ],
+                  //   ),
+                  // ),
+                ],
+              ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text("Servey Form", style: TextStyle(
+                      color: colors.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                  ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          permission?.data?.surveyForm?.add == "on" ?
+                          InkWell(
+                            onTap: () {
+                           Navigator.push(context, MaterialPageRoute(builder: (context) => SiteVisitForm()));
+                           },
+                            child: Container(
+                              height: 40,
+                              width: 95,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("Add Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            ),
+                          ): SizedBox(),
+                          SizedBox(width: 30),
+                          permission?.data?.surveyForm?.view == "on" ?
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MySiteVisite()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 95,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("View Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            ),
+                          ): SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text("Feedback", style: TextStyle(
+                      color: colors.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                  ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          permission?.data?.feedback?.add == "on" ?
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackForm()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 95,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("Add Feedback", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            ),
+                          ): SizedBox(),
+                          SizedBox(width: 30),
+                          permission?.data?.feedback?.view == "on" ?
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Customer_feedback()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 95,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("View Feedback", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            ),
+                          ): SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 15),
+              _catList(),
+              //   const SizedBox(height: 15),
               ],
             ),
           ),
@@ -393,7 +611,6 @@ class _HomePageState extends State<HomePage>
     context.read<HomeProvider>().setCatLoading(true);
     context.read<HomeProvider>().setSecLoading(true);
     context.read<HomeProvider>().setSliderLoading(true);
-
     return callApi();
   }
 
@@ -486,7 +703,8 @@ class _HomePageState extends State<HomePage>
                             child: Image.network(
                               "${val.image}",
                               fit: BoxFit.fill,
-                            )),
+                            ),
+                        ),
                       ),
                     );
                   }).toList(),
@@ -1467,9 +1685,7 @@ class _HomePageState extends State<HomePage>
                   ),
                 );
           },
-        ),
-              ),
-            );
+        )));
         // GridView.count(
         //     padding: EdgeInsets.symmetric(horizontal: 20),
         //     crossAxisCount: 3,
@@ -1615,6 +1831,7 @@ class _HomePageState extends State<HomePage>
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
       getClients();
+      getPermission();
       getSetting();
       getSlider();
       getCat();
@@ -2002,7 +2219,6 @@ class _HomePageState extends State<HomePage>
       ),
       onTap: () async {
         int curSlider = context.read<HomeProvider>().curSlider;
-
         // if (homeSliderList[curSlider].type == "products") {
         //   Product? item = homeSliderList[curSlider].list;
         //
@@ -2295,16 +2511,13 @@ class _HomePageState extends State<HomePage>
       if (!error) {
         var data = getdata["data"];
 
-        homeSliderList =
-            (data as List).map((data) => new Model.fromSlider(data)).toList();
-
+        homeSliderList = (data as List).map((data) => new Model.fromSlider(data)).toList();
         pages = homeSliderList.map((slider) {
           return _buildImagePageItem(slider);
         }).toList();
       } else {
         setSnackbar(msg!, context);
       }
-
       context.read<HomeProvider>().setSliderLoading(false);
     }, onError: (error) {
       setSnackbar(error.toString(), context);

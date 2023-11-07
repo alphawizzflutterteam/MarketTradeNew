@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Constant.dart';
 import 'package:omega_employee_management/Helper/PushNotificationService.dart';
@@ -13,15 +15,18 @@ import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/MyProfile.dart';
 import 'package:omega_employee_management/Screen/Product_Detail.dart';
 import 'package:omega_employee_management/Screen/SendOtp.dart';
+import 'package:http/http.dart' as http;
 import 'package:omega_employee_management/Screen/my_spending.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
+import 'Add_Address.dart';
 import 'HomePage.dart';
 import 'SiteVisitForm.dart';
 
+var updateTime = 5;
 
 class Dashboard extends StatefulWidget {
   final int? selectedIndex;
@@ -38,6 +43,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getCurrentLoc();
     SystemChrome.setEnabledSystemUIOverlays(
         [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -77,7 +83,6 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         //     }
         //   },
         // );
-
         setState(
           () {
             _selBottom = _tabController.index;
@@ -85,6 +90,103 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         );
       },
     );
+  }
+
+  var pinController = TextEditingController();
+  var currentAddress = TextEditingController();
+
+   getCurrentLoc() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      print("checking permission here ${permission}");
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // var loc = Provider.of<LocationProvider>(context, listen: false);
+    latitude = position.latitude.toString();
+    longitude = position.longitude.toString();
+    setState(() {
+      longitude_Global=latitude;
+      lattitudee_Global=longitude;
+    });
+
+    List<Placemark> placemark = await placemarkFromCoordinates(
+        double.parse(latitude!), double.parse(longitude!),
+        localeIdentifier: "en");
+    pinController.text = placemark[0].postalCode!;
+    if (mounted) {
+      setState(() {
+        pinController.text = placemark[0].postalCode!;
+        currentAddress.text =
+        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+        // loc.lng = position.longitude.toString();
+        //loc.lat = position.latitude.toString();
+        setState(() {
+          currentlocation_Global=currentAddress.text.toString();
+        });
+        print('Latitudeee${latitude}');
+        print('Longitudee${longitude}');
+
+        print('Current Addresssssss${currentAddress.text}');
+      });
+      if (currentAddress.text == "" || currentAddress.text == null) {
+      } else {
+        setState(() {
+          // navigateToPage();
+        });
+      }
+    }
+    updateLocationPeriodically();
+  }
+
+  updateLocationPeriodically() {
+    Timer.periodic(Duration(minutes: updateTime), (timer) async {
+      Position position =  await getCurrentLoc();
+      if (position != null) {
+        // Do something with the updated location, e.g., send it to a server.
+        print("Updated Location: ${position.latitude}, ${position.longitude}");
+      }
+      updateLocation();
+    });
+  }
+
+  // Future<void> updateLiveLocationPeriodically(Duration interval) async {
+  //   // Use a timer to periodically update the location
+  //   Timer.periodic(interval, (Timer timer) async {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.best,
+  //     );
+  //     setState(() {
+  //       _currentLocation = LocationData.fromPosition(position);
+  //     });
+  //   });
+  // }
+
+  updateLocation() async {
+    var headers = {
+      'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+    request.fields.addAll({
+      'lat': latitude.toString(),
+      'lng': longitude.toString(),
+      'user_id': "${CUR_USERID}"
+    });
+    print("update location parameter ${request.fields}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    }
+    else {
+      print(response.reasonPhrase);
+    }
   }
 
   void initDynamicLinks() async {
@@ -137,8 +239,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
         // if (CUR_USERID != null) parameter[USER_ID] = CUR_USERID;
         Response response =
-            await post(getProductApi, headers: headers, body: parameter)
-                .timeout(Duration(seconds: timeOut));
+            await post(getProductApi, headers: headers, body: parameter).timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];

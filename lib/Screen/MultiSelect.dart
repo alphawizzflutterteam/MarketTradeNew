@@ -150,7 +150,6 @@ class _MultiSelectState extends State<MultiSelect> {
   final List <DealingData>? selectedDealingData = [];
   List <String>_selectedUserItems = [];
 
-
   void _itemChange(DealingData itemValue, bool isSelected) {
     setState(() {
       if (isSelected) {
@@ -188,8 +187,7 @@ class _MultiSelectState extends State<MultiSelect> {
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
-        builder: (context, setState)
-        {
+        builder: (context, setState) {
           return
             AlertDialog(
               title: const Text('Select Category'),
@@ -211,7 +209,8 @@ class _MultiSelectState extends State<MultiSelect> {
                 TextButton(
                   onPressed: _cancel,
                   child: const Text('Cancel',
-                      style: TextStyle(color: colors.primary)),
+                      style: TextStyle(color: colors.primary),
+                  ),
                 ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(

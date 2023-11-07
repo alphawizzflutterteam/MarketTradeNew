@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,8 +15,13 @@ import 'package:omega_employee_management/Screen/Dashboard.dart';
 import '../../Helper/String.dart';
 import 'package:http/http.dart'as http;
 
+import '../Model/GetSettingModel.dart';
+
 var latitude;
 var longitude;
+String? updateTime;
+
+
 class CheckInScreen extends StatefulWidget {
   const CheckInScreen({Key? key}) : super(key: key);
 
@@ -25,9 +31,10 @@ class CheckInScreen extends StatefulWidget {
 
 class _CheckInScreenState extends State<CheckInScreen> {
 
-
   var pinController = TextEditingController();
   var currentAddress = TextEditingController();
+  var readingCtr = TextEditingController();
+
   bool isLoading = false;
   var finalResult;
 
@@ -47,50 +54,72 @@ class _CheckInScreenState extends State<CheckInScreen> {
     }
   }
 
+  String? addClient;
+  String? viewClient;
+  String? getTag;
+  String? addPhoto;
+  String? feedbackAdd;
+  String? feedbackView;
+  String? serveyAdd;
+  String? serveyView;
 
-  Future<void> checkInNow() async {
+  // updateLocationPeriodically() {
+  //   Timer.periodic(Duration(minutes: updateTime), (timer) async {
+  //     Position position =  await getCurrentLoc();
+  //     if (position != null) {
+  //       // Do something with the updated location, e.g., send it to a server.
+  //       print("Updated Location: ${position.latitude}, ${position.longitude}");
+  //     }
+  //     updateLocation();
+  //   });
+  // }
 
-    var headers = {
-      'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
-    request.fields.addAll({
-      'user_id': CUR_USERID.toString(),
-      'checkin_latitude': '${latitude}',
-      'checkin_longitude': '${longitude}',
-      'address': '${currentAddress.text}'
+  latLongUpdate() async {
+    Timer.periodic(Duration(minutes: 2), (timer) async {
+      updateLocation();
+      // Update your UI or perform any necessary operations with the new latitude and longitude values.
     });
-    for (var i = 0; i < (imagePathList.length ?? 0); i++) {
-      print('Imageeeeeeeeeeeeeeeeee${imagePathList}');
-      imagePathList[i] == ""
-          ? null
-          : request.files.add(await http.MultipartFile.fromPath(
-          'checkinimages[]', imagePathList[i].toString()));
-    }
-    print("this is my check in request ${request.fields.toString()}");
+  }
 
+
+  GetSettingModel? setting;
+  getSetting() async {
+    var headers = {
+      'Cookie': 'ci_session=44b4255b3a85f9bd283902547862274a907e9997'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/get_settings'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
-      var str = await response.stream.bytesToString();
+      String str = await response.stream.bytesToString();
       var result = json.decode(str);
-      finalResult = result['data'];
+      var finalResponse = GetSettingModel.fromJson(result);
+      updateTime = setting?.data?.systemSettings?[0].updateLocationTime ?? "";
+      print("update time issss ${updateTime}");
       setState(() {
-        isLoading=false;
+        setting = finalResponse;
       });
-      if(result['data']['error'] == false){
-        Fluttertoast.showToast(msg: result['data']['msg']);
-        // Navigator.pop(context, true);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-      }else{
-        setState(() {
-          isLoading=false;
-        });
-        Fluttertoast.showToast(msg: result['data']['msg']);
-      }
-      // var finalResponse = GetUserExpensesModel.fromJson(result);
-      // final finalResponse = CheckInModel.fromJson(json.decode(Response));
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  updateLocation() async {
+    var headers = {
+      'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+    request.fields.addAll({
+      'lat': latitude.toString(),
+      'lng': longitude.toString(),
+      'user_id': "${CUR_USERID}"
+    });
+    print("update location parameter ${request.fields}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
     }
     else {
       print(response.reasonPhrase);
@@ -108,7 +137,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
     }
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-   // var loc = Provider.of<LocationProvider>(context, listen: false);
+    // var loc = Provider.of<LocationProvider>(context, listen: false);
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
@@ -124,10 +153,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
-       // loc.lng = position.longitude.toString();
+        // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
           currentlocation_Global=currentAddress.text.toString();
@@ -145,6 +174,56 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
     }
   }
+
+  Future<void> checkInNow() async {
+    var headers = {
+      'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
+    request.fields.addAll({
+      'user_id': CUR_USERID.toString(),
+      'checkin_latitude': '${latitude}',
+      'checkin_longitude': '${longitude}',
+      'address': currentAddress.text,
+      'redings': readingCtr.text
+    });
+    for (var i = 0; i < (imagePathList.length ?? 0); i++) {
+      print('Imageeeeeeeeeeeeeeeeee${imagePathList}');
+      imagePathList[i] == ""
+          ? null
+          : request.files.add(await http.MultipartFile.fromPath(
+          'checkinimages[]', imagePathList[i].toString()));
+    }
+    print("this is my check in request ${request.fields.toString()}");
+
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      finalResult = result['data'];
+      setState(() {
+        isLoading = false;
+      });
+      if(result['data']['error'] == false) {
+        Fluttertoast.showToast(msg: result['data']['msg']);
+        // Navigator.pop(context, true);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        Fluttertoast.showToast(msg: result['data']['msg']);
+      }
+      // var finalResponse = GetUserExpensesModel.fromJson(result);
+      // final finalResponse = CheckInModel.fromJson(json.decode(Response));
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+
 
   navigateToPage() async {
     Future.delayed(Duration(milliseconds: 800), () {
@@ -198,19 +277,22 @@ class _CheckInScreenState extends State<CheckInScreen> {
             },
             child: Container(
                 height: 40,
-                width: 165,
+                width: 125,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: colors.primary),
                 child: Center(
                     child: Text(
                       "Upload Selfie",
-                      style: TextStyle(color: colors.whiteTemp),
-                    )))),
+                      style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold),
+                    ),
+                ),
+             ),
+          ),
           const SizedBox(
           height: 10,
-          ),
-        Visibility(
+           ),
+         Visibility(
             visible: isImages,
             child:  buildGridView()),
       ],
@@ -362,6 +444,9 @@ void initState() {
     // TODO: implement initState
     getCurrentLoc();
     super.initState();
+    getCurrentLoc();
+    getSetting();
+    latLongUpdate();
   }
 
   @override
@@ -422,9 +507,33 @@ void initState() {
                           fontWeight: FontWeight.bold,
                           fontSize: 20),
                     ),
-              SizedBox(height: 15,),
-              uploadMultiImage(),
-              SizedBox(height: 50,),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 40, right: 30),
+                child: Row(
+                  children: [
+                    uploadMultiImage(),
+                    SizedBox(width: 20),
+                    Container(
+                      height: 40,
+                      width: 125,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                      child: TextFormField(
+                        controller: readingCtr,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 20, bottom: 10),
+                            border: InputBorder.none,
+                          hintText: "Add Reading",
+                          hintStyle: TextStyle(fontSize: 13, color: colors.whiteTemp),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // uploadMultiImage(),
+              SizedBox(height: 50),
               Container(
                   height: 45,
                   width: 220,
@@ -446,13 +555,13 @@ void initState() {
                         //   checkInNow();
                         // }
                   },
-                      child:isLoading? Center(child: CircularProgressIndicator(
+                      child:isLoading? Center(
+                        child: CircularProgressIndicator(
                         color: Colors.white,
                       ),
-                      )
-                  : Text('CHECK IN NOW'))
-              ),
-                  // : SizedBox.shrink()
+                      ): Text('CHECK IN NOW'),
+                  ),
+              ),// : SizedBox.shrink()
             ],
           ),
         ),

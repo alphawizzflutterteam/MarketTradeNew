@@ -442,19 +442,19 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   elevation: 1,
-      //   leading: InkWell(
-      //     onTap: () {
-      //       Navigator.pop(context);
-      //     },
-      //     child:  Icon(Icons.arrow_back_ios, color: Colors.black),
-      //   ),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.white,
-      //   title: Text("Site Visit", style: TextStyle(fontSize: 15, color: Colors.black)),
-      // ),
-      body: delearRetailerModel == null
+      appBar: AppBar(
+        elevation: 1,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child:  Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: colors.primary,
+        title: Text("Servey Form", style: TextStyle(fontSize: 15, color: Colors.white)),
+      ),
+       body: delearRetailerModel == null
           ? Center(
         child: CircularProgressIndicator(),
         ): SingleChildScrollView(

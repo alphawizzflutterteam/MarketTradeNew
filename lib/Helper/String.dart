@@ -4,11 +4,13 @@ final Uri getSellerApi = Uri.parse(baseUrl + 'get_sellers');
 final Uri getSliderApi = Uri.parse(baseUrl + 'get_slider_images');
 final Uri getCatApi = Uri.parse(baseUrl + 'get_categories');
 final Uri getClientApi = Uri.parse(baseUrl + 'get_referrals');
+final Uri getPermissionApi = Uri.parse(baseUrl + 'permissions');
 final Uri getListsApi = Uri.parse(baseUrl + 'get_lists');
 final Uri addNewClient = Uri.parse(baseUrl + 'add_new_client');
 final Uri clientType = Uri.parse(baseUrl + 'get_client_type');
 final Uri siteVisitFormList = Uri.parse(baseUrl + 'site_visit_form_list');
 final Uri customerFeedbackForm = Uri.parse(baseUrl + 'customer_feedback_form');
+final Uri updateLiveLocation = Uri.parse(baseUrl + 'update_live_location');
 final Uri GetDealingProduct = Uri.parse(baseUrl + 'get_product_categories');
 
 final Uri getSectionApi = Uri.parse(baseUrl + 'get_sections');
@@ -331,14 +333,7 @@ const String ATTACHMENTS = 'attachments';
 
 const String ATTACHMENT = 'attachment';
 const String BANK_STATUS = 'banktransfer_status';
-
-
-
 const String UserId = 'user_id';
-
-
-
-
 
 var currentlocation_Global;
 var longitude_Global;
@@ -348,6 +343,7 @@ final String PAYPAL_RESPONSE_URL = "$baseUrl" + "app_payment_status";
 final String FLUTTERWAVE_RES_URL = baseUrl + "flutterwave-payment-response";
 
 String? CUR_CURRENCY = '';
+String? UPDATAE_TIME = '';
 
 String? CUR_USERID;
 

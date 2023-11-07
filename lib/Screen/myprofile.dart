@@ -541,18 +541,18 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         //     : _getDrawerItem(getTranslated(context, 'MANAGE_ADD_LBL')!,
         //         'assets/images/pro_address.svg'),
         //CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
-        CUR_USERID == "" || CUR_USERID == null
-            ? Container()
-            : _getDrawerItem(getTranslated(context, 'MY_SITE_VISIT')!,
-                'assets/images/pro_wh.svg'),
-        CUR_USERID == "" || CUR_USERID == null
-            ? Container()
-            : _getDrawerItem(getTranslated(context, 'MYFEEDBACK')!,
-            'assets/images/pro_th.svg'),
-        CUR_USERID == "" || CUR_USERID == null
-            ? Container()
-            : _getDrawerItem(getTranslated(context, 'MYFEEDBACKLIST')!,
-            'assets/images/pro_th.svg'),
+        // CUR_USERID == "" || CUR_USERID == null
+        //     ? Container()
+        //     : _getDrawerItem(getTranslated(context, 'MY_SITE_VISIT')!,
+        //         'assets/images/pro_wh.svg'),
+        // CUR_USERID == "" || CUR_USERID == null
+        //     ? Container()
+        //     : _getDrawerItem(getTranslated(context, 'MYFEEDBACK')!,
+        //     'assets/images/pro_th.svg'),
+        // CUR_USERID == "" || CUR_USERID == null
+        //     ? Container()
+        //     : _getDrawerItem(getTranslated(context, 'MYFEEDBACKLIST')!,
+        //     'assets/images/pro_th.svg'),
         // CUR_USERID == "" || CUR_USERID == null
         //     ? Container()
         //     : _getDrawerItem(getTranslated(context, 'MYSITEVISITE')!,

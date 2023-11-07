@@ -460,11 +460,11 @@ Widget shimmer(BuildContext context) {
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  ))
-              .toList(),
+                  ),
+          ).toList(),
         ),
       ),
     ),

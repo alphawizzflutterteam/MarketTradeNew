@@ -277,16 +277,16 @@ class _FeedbackFormState extends State<FeedbackForm> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
-          child:  Icon(Icons.arrow_back_ios, color: Colors.black),
+          child:  Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        title: Text("Feedbacks", style: TextStyle(fontSize: 15, color: Colors.black)),
+        backgroundColor: colors.primary,
+        title: Text("Feedbacks", style: TextStyle(fontSize: 15, color: Colors.white)),
       ),
       body:
       SingleChildScrollView(
