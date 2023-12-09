@@ -122,37 +122,37 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                           SizedBox(height: MediaQuery.of(context).size.height*.03,),
                           Text("Basic Details:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Name: ${getdata?.data[index].basicDetail.name}",style: TextStyle(fontSize: 15),),
+                          Text("Name: ${getdata?.data[index].basicDetail?.name}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Mobile: ${getdata?.data[index].basicDetail.mobile}",style: TextStyle(fontSize: 15),),
+                          Text("Mobile: ${getdata?.data[index].basicDetail?.mobile}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("email: ${getdata?.data[index].basicDetail.email}",style: TextStyle(fontSize: 15),),
+                          Text("email: ${getdata?.data[index].basicDetail?.email}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Address: ${getdata?.data[index].basicDetail.address}",style: TextStyle(fontSize: 15),),
+                          Text("Address: ${getdata?.data[index].basicDetail?.address}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Customer Type: ${getdata?.data[index].basicDetail.customerType}",style: TextStyle(fontSize: 15),),
+                          Text("Customer Type: ${getdata?.data[index].basicDetail?.customerType}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Credit Limit: ${getdata?.data[index].basicDetail.creditLimit}",style: TextStyle(fontSize: 15),),
+                          Text("Credit Limit: ${getdata?.data[index].basicDetail?.creditLimit}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.03,),
                           Text("Customer Dealing:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                           Text("ID & Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("1  ${getdata?.data[index].customerDealingIn[0].name}",style: TextStyle(fontSize: 15),),
+                          Text("1  ${getdata?.data[index].customerDealingIn[0]?.name}",style: TextStyle(fontSize: 15),),
                           // Text("2  ${getdata?.data[index].customerDealingIn[0].name}",style: TextStyle(fontSize: 15),),
                           SizedBox(height: MediaQuery.of(context).size.height*.03,),
                           Text("Survey:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Brand Name: ${getdata?.data[index].survey[index].brandName}",style: TextStyle(fontSize: 14,),),
+                          Text("Brand Name: ${getdata?.data[index].survey[index]?.brandName}",style: TextStyle(fontSize: 14,),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Monthly Sale: ${getdata?.data[index].survey[index].monthlySale}",style: TextStyle(fontSize: 14,),),
+                          Text("Monthly Sale: ${getdata?.data[index].survey[index]?.monthlySale}",style: TextStyle(fontSize: 14,),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Current Stock: ${getdata?.data[index].survey[index].currentStock}",style: TextStyle(fontSize: 14,),),
+                          Text("Current Stock: ${getdata?.data[index].survey[index]?.currentStock}",style: TextStyle(fontSize: 14,),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("WPS: ${getdata?.data[index].survey[index].wps}",style: TextStyle(fontSize: 14,),),
+                          Text("WPS: ${getdata?.data[index].survey[index]?.wps}",style: TextStyle(fontSize: 14,),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("RSP: ${getdata?.data[index].survey[index].rsp}",style: TextStyle(fontSize: 14,),),
+                          Text("RSP: ${getdata?.data[index].survey[index]?.rsp}",style: TextStyle(fontSize: 14,),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          Text("Purchasing From: ${getdata?.data[index].survey[index].purchasingFrom}",style: TextStyle(fontSize: 15),),
+                          Text("Purchasing From: ${getdata?.data[index].survey[index]?.purchasingFrom}",style: TextStyle(fontSize: 15),),
                         ],
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
@@ -177,6 +177,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
     request.fields.addAll({
       'user_id': '${CUR_USERID}'
     });
+    print("customerrr feedbackk ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -184,7 +185,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
       var finalresult=Getdata.fromJson(json.decode(result));
       setState(() {
         getdata = finalresult;
-        namecn.text='${getdata?.data[index].basicDetail.name}';
+        namecn.text='${getdata?.data[index].basicDetail?.name}';
         firmnamecn.text='${getdata?.data[index].nameOfFirm}';
         remarkcn.text='${getdata?.data[index].remarks}';
         datecn.text='${getdata?.data[index].date}';

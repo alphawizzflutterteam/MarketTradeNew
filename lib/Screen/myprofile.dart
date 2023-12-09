@@ -34,6 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/Constant.dart';
 import '../Provider/Theme.dart';
 import '../main.dart';
+import 'Example.dart';
 import 'Faqs.dart';
 import 'FeedbackForm.dart';
 import 'FeedbackList.dart';
@@ -318,11 +319,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                                             .fontColor,
                                         fontWeight: FontWeight.normal),
                               )
-                            : Container(
-                                height: 0,
-                              );
+                            : Container(height: 0);
                       }),
-
                   /* Consumer<UserProvider>(builder: (context, userProvider, _) {
                     print("mobb**${userProvider.profilePic}");
                     return (userProvider.mob != "")
@@ -369,12 +367,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   }
 
   List<Widget> getLngList(BuildContext ctx, StateSetter setModalState) {
-    return languageList
-        .asMap()
-        .map(
+    return languageList.asMap().map(
           (index, element) => MapEntry(
-              index,
-              InkWell(
+              index, InkWell(
                 onTap: () {
                   if (mounted)
                     setState(() {
@@ -429,7 +424,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .lightBlack),
-                              ))
+                              ),
+                          ),
                         ],
                       ),
                       // index == languageList.length - 1
@@ -446,9 +442,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                 ),
               ),
           ),
-        )
-        .values
-        .toList();
+        ).values.toList();
   }
 
   void _changeLan(String language, BuildContext ctx) async {
@@ -643,22 +637,24 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
               color: Theme.of(context).colorScheme.lightBlack, fontSize: 15),
         ),
         onTap: () {
-          if (title == getTranslated(context, 'MY_SITE_VISIT')) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MySiteVisite(),
-              ),
-            );
-            //sendAndRetrieveMessage();
-          } else if (title == getTranslated(context, 'MYFEEDBACK')) {
+          // if (title == getTranslated(context, 'MY_SITE_VISIT')) {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => MySiteVisite(),
+          //     ),
+          //   );
+          //   //sendAndRetrieveMessage();
+          // } else
+            if (title == getTranslated(context, 'MYFEEDBACK')) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FeedbackForm(),
+                  builder: (context) => Example(),
                 ));
           }
-          else if (title == getTranslated(context, 'MYSITEVISITE')) {
+          else
+            if (title == getTranslated(context, 'MYSITEVISITE')) {
             Navigator.push(
                 context,
                 MaterialPageRoute(

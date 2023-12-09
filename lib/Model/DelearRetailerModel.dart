@@ -6,7 +6,7 @@ class DelearRetailerModel {
   DelearRetailerModel({
       bool? error,
       String? message,
-      List<Data>? data,}){
+      List<DealerListData>? data,}){
     _error = error;
     _message = message;
     _data = data;
@@ -18,23 +18,23 @@ class DelearRetailerModel {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(DealerListData.fromJson(v));
       });
     }
   }
   bool? _error;
   String? _message;
-  List<Data>? _data;
+  List<DealerListData>? _data;
 DelearRetailerModel copyWith({  bool? error,
   String? message,
-  List<Data>? data,
+  List<DealerListData>? data,
 }) => DelearRetailerModel(  error: error ?? _error,
   message: message ?? _message,
   data: data ?? _data,
 );
   bool? get error => _error;
   String? get message => _message;
-  List<Data>? get data => _data;
+  List<DealerListData>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -73,8 +73,8 @@ DelearRetailerModel copyWith({  bool? error,
 /// created_at : "2023-09-27 16:18:23"
 /// updated_at : "2023-09-27 16:11:43"
 
-class Data {
-  Data({
+class DealerListData {
+  DealerListData({
       String? id,
       String? userId,
       String? staffId,
@@ -125,7 +125,7 @@ class Data {
     _updatedAt = updatedAt;
 }
 
-  Data.fromJson(dynamic json) {
+  DealerListData.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['user_id'];
     _staffId = json['staff_id'];
@@ -175,7 +175,7 @@ class Data {
   String? _creditLimit;
   String? _createdAt;
   String? _updatedAt;
-Data copyWith({  String? id,
+  DealerListData copyWith({  String? id,
   String? userId,
   String? staffId,
   String? nameOfFirm,
@@ -199,7 +199,7 @@ Data copyWith({  String? id,
   String? creditLimit,
   String? createdAt,
   String? updatedAt,
-}) => Data(  id: id ?? _id,
+}) => DealerListData(  id: id ?? _id,
   userId: userId ?? _userId,
   staffId: staffId ?? _staffId,
   nameOfFirm: nameOfFirm ?? _nameOfFirm,

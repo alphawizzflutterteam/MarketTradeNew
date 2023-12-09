@@ -33,40 +33,40 @@ class Getdata {
 }
 
 class Datum {
-  String id;
-  String userId;
-  DateTime date;
-  String time;
-  String lat;
-  String lng;
-  String nameOfFirm;
-  BasicDetail basicDetail;
-  List<CustomerDealingIn> customerDealingIn;
-  List<Survey> survey;
-  String photo;
-  String remarks;
-  String totalMonthlySale;
-  String totalCurrentStock;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? id;
+  String? userId;
+  DateTime? date;
+  String? time;
+  String? lat;
+  String? lng;
+  String? nameOfFirm;
+  BasicDetail? basicDetail;
+  List<CustomerDealingIn?> customerDealingIn;
+  List<Survey?> survey;
+  String? photo;
+  String? remarks;
+  String? totalMonthlySale;
+  String? totalCurrentStock;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Datum({
-    required this.id,
-    required this.userId,
-    required this.date,
-    required this.time,
-    required this.lat,
-    required this.lng,
-    required this.nameOfFirm,
-    required this.basicDetail,
+     this.id,
+     this.userId,
+     this.date,
+     this.time,
+     this.lat,
+     this.lng,
+     this.nameOfFirm,
+     this.basicDetail,
     required this.customerDealingIn,
     required this.survey,
-    required this.photo,
-    required this.remarks,
-    required this.totalMonthlySale,
-    required this.totalCurrentStock,
-    required this.createdAt,
-    required this.updatedAt,
+     this.photo,
+     this.remarks,
+     this.totalMonthlySale,
+     this.totalCurrentStock,
+     this.createdAt,
+     this.updatedAt,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -91,38 +91,38 @@ class Datum {
   Map<String, dynamic> toJson() => {
     "id": id,
     "user_id": userId,
-    "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    "date": "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
     "time": time,
     "lat": lat,
     "lng": lng,
     "name_of_firm": nameOfFirm,
-    "basic_detail": basicDetail.toJson(),
-    "customer_dealing_in": List<dynamic>.from(customerDealingIn.map((x) => x.toJson())),
-    "survey": List<dynamic>.from(survey.map((x) => x.toJson())),
+    "basic_detail": basicDetail!.toJson(),
+    "customer_dealing_in": List<dynamic>.from(customerDealingIn.map((x) => x!.toJson())),
+    "survey": List<dynamic>.from(survey.map((x) => x!.toJson())),
     "photo": photo,
     "remarks": remarks,
     "total_monthly_sale": totalMonthlySale,
     "total_current_stock": totalCurrentStock,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
   };
 }
 
 class BasicDetail {
-  String name;
-  String mobile;
-  String email;
-  String address;
-  String customerType;
-  String creditLimit;
+  String? name;
+  String? mobile;
+  String? email;
+  String? address;
+  String? customerType;
+  String? creditLimit;
 
   BasicDetail({
-    required this.name,
-    required this.mobile,
-    required this.email,
-    required this.address,
-    required this.customerType,
-    required this.creditLimit,
+     this.name,
+     this.mobile,
+     this.email,
+     this.address,
+     this.customerType,
+     this.creditLimit,
   });
 
   factory BasicDetail.fromJson(Map<String, dynamic> json) => BasicDetail(
@@ -145,8 +145,8 @@ class BasicDetail {
 }
 
 class CustomerDealingIn {
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   CustomerDealingIn({
     required this.id,
@@ -165,20 +165,20 @@ class CustomerDealingIn {
 }
 
 class Survey {
-  String brandName;
-  String monthlySale;
-  String currentStock;
-  String wps;
-  String rsp;
-  String purchasingFrom;
+  String? brandName;
+  String? monthlySale;
+  String? currentStock;
+  String? wps;
+  String? rsp;
+  String? purchasingFrom;
 
   Survey({
-    required this.brandName,
-    required this.monthlySale,
-    required this.currentStock,
-    required this.wps,
-    required this.rsp,
-    required this.purchasingFrom,
+     this.brandName,
+     this.monthlySale,
+     this.currentStock,
+     this.wps,
+     this.rsp,
+     this.purchasingFrom,
   });
 
   factory Survey.fromJson(Map<String, dynamic> json) => Survey(

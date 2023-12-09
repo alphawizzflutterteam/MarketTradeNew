@@ -43,6 +43,7 @@ import '../Model/ClientModel.dart';
 import '../Model/PermissionModel.dart';
 import 'AddGeoTag.dart';
 import 'ClientForm.dart';
+import 'EditClent.dart';
 import 'FeedbackForm.dart';
 import 'FeedbackList.dart';
 import 'Login.dart';
@@ -418,7 +419,7 @@ class _HomePageState extends State<HomePage>
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -448,33 +449,17 @@ class _HomePageState extends State<HomePage>
                                 child: Text("View", style: TextStyle(fontSize: 13, color: Colors.white))),
                           ),
                         ): SizedBox(),
-                        permission?.data?.clients?.gioTag == "on" ?
+                        permission?.data?.clients?.edit == "on" ?
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddGeoScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditClient()));
                           },
                           child: Container(
                             height: 40,
                             width: 80,
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
                             child: Center(
-                                child: Text("GeoTag", style: TextStyle(fontSize: 13, color: Colors.white),
-                                ),
-                            ),
-                          ),
-                        ): SizedBox(),
-                        permission?.data?.clients?.gioTag == "on" ?
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto()));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 80,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                            child: Center(
-                                child: Text("Photo", style: TextStyle(fontSize: 13, color: Colors.white))
-                            ),
+                                child: Text("Edit", style: TextStyle(fontSize: 13, color: Colors.white))),
                           ),
                         ): SizedBox(),
                         // Container(
@@ -497,11 +482,53 @@ class _HomePageState extends State<HomePage>
                   //   ),
                   // ),
                 ],
-              ),
+               ),
+                SizedBox(height: 10),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50, right: 20),
+                      child: Row(
+                        children: [
+                          permission?.data?.clients?.gioTag == "on" ?
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddGeoScreen()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 120,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                child: Text("Pending GeoTag", style: TextStyle(fontSize: 13, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ): SizedBox(),
+                          SizedBox(width: 20),
+                          permission?.data?.clients?.gioTag == "on" ?
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 120,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("Pending Photo", style: TextStyle(fontSize: 13, color: Colors.white))
+                              ),
+                            ),
+                          ): SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Text("Servey Form", style: TextStyle(
+                  child: Text("Customer Survey Form", style: TextStyle(
                       color: colors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600
@@ -550,7 +577,7 @@ class _HomePageState extends State<HomePage>
                 SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Text("Feedback", style: TextStyle(
+                  child: Text("Counter Visit Form", style: TextStyle(
                       color: colors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600
@@ -596,8 +623,8 @@ class _HomePageState extends State<HomePage>
                     ),
                   ],
                 ),
-                const SizedBox(height: 15),
-              _catList(),
+                const SizedBox(height: 45),
+              // _catList(),
               //   const SizedBox(height: 15),
               ],
             ),

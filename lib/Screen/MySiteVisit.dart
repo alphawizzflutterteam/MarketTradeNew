@@ -29,7 +29,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
     };
     var request = http.MultipartRequest('POST', Uri.parse(siteVisitFormList.toString()));
     request.fields.addAll({
-      'user_id': '3'
+      'user_id': '${CUR_USERID}',
     });
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();

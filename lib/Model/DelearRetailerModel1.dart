@@ -1,14 +1,14 @@
 class DelearRetailerModel1 {
   bool? error;
   String? message;
-  Data? data;
+  ContractorData? data;
 
   DelearRetailerModel1({this.error, this.message, this.data});
 
   DelearRetailerModel1.fromJson(Map<String, dynamic> json) {
     error = json['error'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new ContractorData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,65 +22,68 @@ class DelearRetailerModel1 {
   }
 }
 
-class Data {
-  List<Dealers>? dealers;
-  List<Dealers>? retailers;
-  List<Dealers>? contractor;
-  List<Dealers>? builder;
-  List<Dealers>? engineer;
-  List<Dealers>? artitech;
-  List<Dealers>? massion;
+class ContractorData {
+  List<Dealers1>? dealers;
+  List<Dealers1>? retailers;
+  List<Dealers1>? contractor;
+  List<Dealers1>? builder;
+  List<Dealers1>? engineer;
+  List<Dealers1>? artitech;
+  List<Dealers1>? massion;
 
-  Data(
-      {this.dealers,
+  ContractorData(
+      {
+        this.dealers,
         this.retailers,
         this.contractor,
         this.builder,
         this.engineer,
         this.artitech,
-        this.massion});
+        this.massion
+      }
+      );
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ContractorData.fromJson(Map<String, dynamic> json) {
     if (json['dealers'] != null) {
-      dealers = <Dealers>[];
+      dealers = <Dealers1>[];
       json['dealers'].forEach((v) {
-        dealers!.add(new Dealers.fromJson(v));
+        dealers!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['retailers'] != null) {
-      retailers = <Dealers>[];
+      retailers = <Dealers1>[];
       json['retailers'].forEach((v) {
-        retailers!.add(new Dealers.fromJson(v));
+        retailers!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['contractor'] != null) {
-      contractor = <Dealers>[];
+      contractor = <Dealers1>[];
       json['contractor'].forEach((v) {
-        contractor!.add(new Dealers.fromJson(v));
+        contractor!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['builder'] != null) {
-      builder = <Dealers>[];
+      builder = <Dealers1>[];
       json['builder'].forEach((v) {
-        builder!.add(new Dealers.fromJson(v));
+        builder!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['engineer'] != null) {
-      engineer = <Dealers>[];
+      engineer = <Dealers1>[];
       json['engineer'].forEach((v) {
-        engineer!.add(new Dealers.fromJson(v));
+        engineer!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['artitech'] != null) {
-      artitech = <Dealers>[];
+      artitech = <Dealers1>[];
       json['artitech'].forEach((v) {
-        artitech!.add(new Dealers.fromJson(v));
+        artitech!.add(new Dealers1.fromJson(v));
       });
     }
     if (json['massion'] != null) {
-      massion = <Dealers>[];
+      massion = <Dealers1>[];
       json['massion'].forEach((v) {
-        massion!.add(new Dealers.fromJson(v));
+        massion!.add(new Dealers1.fromJson(v));
       });
     }
   }
@@ -112,7 +115,7 @@ class Data {
   }
 }
 
-class Dealers {
+class Dealers1 {
   String? id;
   String? userId;
   String? staffId;
@@ -138,7 +141,7 @@ class Dealers {
   String? createdAt;
   String? updatedAt;
 
-  Dealers(
+  Dealers1(
       {this.id,
         this.userId,
         this.staffId,
@@ -164,7 +167,7 @@ class Dealers {
         this.createdAt,
         this.updatedAt});
 
-  Dealers.fromJson(Map<String, dynamic> json) {
+  Dealers1.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     staffId = json['staff_id'];

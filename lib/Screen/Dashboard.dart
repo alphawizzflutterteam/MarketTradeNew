@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
@@ -9,14 +8,10 @@ import 'package:omega_employee_management/Helper/PushNotificationService.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
-import 'package:omega_employee_management/Provider/UserProvider.dart';
-import 'package:omega_employee_management/Screen/Favorite.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/MyProfile.dart';
 import 'package:omega_employee_management/Screen/Product_Detail.dart';
-import 'package:omega_employee_management/Screen/SendOtp.dart';
 import 'package:http/http.dart' as http;
-import 'package:omega_employee_management/Screen/my_spending.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +48,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     super.initState();
     initDynamicLinks();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
     );
     if(widget.selectedIndex != null){
@@ -294,7 +289,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
           controller: _tabController,
           children: [
             HomePage(),
-            SiteVisitForm(),
+            // SiteVisitForm(),
             // UserExpensesScreen(),
             // AllCategory(),
             // Sale(),
@@ -428,7 +423,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           child: TabBar(
             onTap: (_) {
-              if (_tabController.index == 3) {
+              if (_tabController.index == 2) {
                 if (CUR_USERID == null) {
                   Navigator.push(
                     context,
@@ -455,15 +450,15 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
                 text:
                     _selBottom == 0 ? getTranslated(context, 'HOME_LBL') : null,
               ),
-              Tab(
-                icon: _selBottom == 1
-                    ? Icon(
-                    Icons.assignment
-                )
-                    : Icon(Icons.assignment_outlined),
-                text:
-                _selBottom == 1 ? getTranslated(context, 'MY_LEADS') : null,
-              ),
+              // Tab(
+              //   icon: _selBottom == 1
+              //       ? Icon(
+              //       Icons.assignment
+              //   )
+              //       : Icon(Icons.assignment_outlined),
+              //   text:
+              //   _selBottom == 1 ? getTranslated(context, 'MY_LEADS') : null,
+              // ),
               // Tab(
               //   icon: _selBottom == 1
               //       ? SvgPicture.asset(
@@ -539,7 +534,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
               //   text: _selBottom == 3 ? getTranslated(context, 'CART') : null,
               // ),
               Tab(
-                icon: _selBottom == 2
+                icon: _selBottom == 1
                     ? SvgPicture.asset(
                         imagePath + "profile01.svg",
                         color: colors.primary,
@@ -549,7 +544,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
                         color: colors.primary,
                       ),
                 text:
-                    _selBottom == 2 ? getTranslated(context, 'ACCOUNT') : null,
+                    _selBottom == 1 ? getTranslated(context, 'ACCOUNT') : null,
               ),
             ],
             indicator: UnderlineTabIndicator(

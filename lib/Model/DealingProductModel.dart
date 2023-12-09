@@ -67,7 +67,8 @@ class DealingData {
       String? slug, 
       String? image, 
       dynamic banner, 
-      String? rowOrder, 
+      String? rowOrder,
+      String? ownerName,
       String? status, 
       String? clicks, 
       List<Products>? products,}){
@@ -78,6 +79,7 @@ class DealingData {
     _image = image;
     _banner = banner;
     _rowOrder = rowOrder;
+    _ownerName = ownerName;
     _status = status;
     _clicks = clicks;
     _products = products;
@@ -91,6 +93,7 @@ class DealingData {
     _image = json['image'];
     _banner = json['banner'];
     _rowOrder = json['row_order'];
+    _ownerName = json['owner_name'];
     _status = json['status'];
     _clicks = json['clicks'];
     if (json['products'] != null) {
@@ -108,6 +111,7 @@ class DealingData {
   dynamic _banner;
   String? _rowOrder;
   String? _status;
+  String? _ownerName;
   String? _clicks;
   List<Products>? _products;
   DealingData copyWith({  String? id,
@@ -116,6 +120,7 @@ class DealingData {
   String? slug,
   String? image,
   dynamic banner,
+    String? ownerName,
   String? rowOrder,
   String? status,
   String? clicks,
@@ -127,6 +132,7 @@ class DealingData {
   image: image ?? _image,
   banner: banner ?? _banner,
   rowOrder: rowOrder ?? _rowOrder,
+  ownerName: ownerName ?? _ownerName,
   status: status ?? _status,
   clicks: clicks ?? _clicks,
   products: products ?? _products,
@@ -138,6 +144,7 @@ class DealingData {
   String? get image => _image;
   dynamic get banner => _banner;
   String? get rowOrder => _rowOrder;
+  String? get ownerName => _ownerName;
   String? get status => _status;
   String? get clicks => _clicks;
   List<Products>? get products => _products;
@@ -151,6 +158,7 @@ class DealingData {
     map['image'] = _image;
     map['banner'] = _banner;
     map['row_order'] = _rowOrder;
+    map['owner_name'] = _ownerName;
     map['status'] = _status;
     map['clicks'] = _clicks;
     if (_products != null) {

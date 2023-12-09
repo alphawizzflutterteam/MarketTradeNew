@@ -38,6 +38,14 @@ class SiteSurvey extends StatefulWidget {
   final String? architecMobile;
   final String? mession;
   final String? messionMobile;
+  final String? missionName;
+  final String? missionAddress;
+  final String? contractorName;
+  final String? contractorAddress;
+  final String? engineerName;
+  final String? engineerAddress;
+  final String? architecName;
+  final String? architecAddress;
 
    SiteSurvey(
       {Key? key,
@@ -64,7 +72,15 @@ class SiteSurvey extends StatefulWidget {
         this.architec,
         this.architecMobile,
         this.messionMobile,
-        this.mession
+        this.mession,
+        this.architecAddress,
+        this.architecName,
+        this.contractorAddress,
+        this.contractorName,
+        this.engineerAddress,
+        this.engineerName,
+        this.missionAddress,
+        this.missionName
       })
       : super(key: key);
 
@@ -139,9 +155,17 @@ class _SiteSurveyState extends State<SiteSurvey> {
       'product_used': widget.modelList!.map((product) => product.id).join(','),
       'survey': dataList.toString(),
       'expected_order_date': '${widget.expectedDate}',
-      'remarks': '${widget.remark}'
+      'remarks': '${widget.remark}',
+      'contractor_name': '${widget.contractorName}',
+      'contractor_address': '${widget.contractorAddress}',
+      'engineer_name': '${widget.engineerName}',
+      'engineer_address': '${widget.engineerAddress}',
+      'architect_name': '${widget.architecName}',
+      'architect_address': '${widget.architecAddress}',
+      'massion_name': '${widget.missionName}',
+      'massion_address': '${widget.architecAddress}'
     });
-    print("parameter ${request.fields}");
+    print("add coustomer survey parameter ${request.fields}");
     for (var i = 0; i < (widget.image?.length ?? 0); i++) {
       widget.image?[i] == ""
           ? null
@@ -217,28 +241,20 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             const EdgeInsets.only(left: 80),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: colors.primary),
+                                              borderRadius: BorderRadius.circular(5), color: colors.primary),
                                           height: 35,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2.2,
+                                          width: MediaQuery.of(context).size.width / 2.1,
                                           child: Row(
                                             // crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Center(
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10),
+                                                  padding: const EdgeInsets.only(left: 10),
                                                   child: Text(
-                                                    "Brand Name: ",
+                                                    "Product Name: ",
                                                     style: TextStyle(
                                                         fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                        fontWeight: FontWeight.bold,
                                                         color: Colors.white),
                                                   ),
                                                 ),
@@ -278,7 +294,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                                     Row(
                                                       children: [
                                                         const Text(
-                                                          "Product Name: ",
+                                                          "Brand Name: ",
                                                           style: TextStyle(
                                                             fontSize: 14,
                                                             fontWeight:
@@ -637,7 +653,8 @@ class _SiteSurveyState extends State<SiteSurvey> {
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
                   ),
                   Text("${currentSales}",
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+                  )
                 ],
               ),
             ),
@@ -659,8 +676,6 @@ class _SiteSurveyState extends State<SiteSurvey> {
                       "purchase_price": feedbackList[i][j][2].text,
                       "purchasing_from": feedbackList[i][j][3].text,
                       "last_purchase_date": feedbackList[i][j][4].text
-
-
                       // "monthly_sale": feedbackList[i][j][0].text,
                       // "current_stock": feedbackList[i][j][1].text,
                       // "wps": feedbackList[i][j][2].text,

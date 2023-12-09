@@ -18,10 +18,15 @@ class Survey extends StatefulWidget {
   final String? time;
   final String? date;
   final String? remark;
-  final String? image;
+  List<String>? image;
   final String? clintId;
+  final String? dealerName;
+  final String? dealerMobile;
+  final String? dealermail;
+  final String? dealerLimit;
 
-   Survey({Key? key, this.modelList,this.name, this.email,this.contact,this.creditLimit, this.customerType, this.time, this.date,this.image, this.remark, this.clintId}) : super(key: key);
+   Survey({Key? key, this.modelList,this.name, this.email,this.contact,this.creditLimit, this.customerType, this.time, this.date,this.image,
+     this.remark, this.clintId, this.dealerLimit, this.dealermail, this.dealerMobile, this.dealerName}) : super(key: key);
 
   @override
   State<Survey> createState() => _SurveyState();
@@ -78,13 +83,22 @@ Future<void> feedback() async {
         'email':widget.email,
         'address':"Indore Madhya Pradesh",
         'customer_type':widget.customerType,
-        'credit_limit':widget.creditLimit
+        'credit_limit':widget.creditLimit,
+        'dealer_name': widget.dealerName,
+        'dealer_mobile': widget.dealerMobile,
+        'deler_email': widget.dealermail,
+       'dealer_limit': widget.dealerLimit,
       }),
       'customer_dealing_in':widget.modelList!.map((product) => product.id).join(','),
       'survey': dataList.toString(),
       'remarks': widget.remark ?? ''
     });
-    if(widget.image !=null) request.files.add(await http.MultipartFile.fromPath('photo', widget.image ?? ''));
+    for (var i = 0; i < (widget.image?.length ?? 0); i++) {
+      widget.image?[i] == ""
+          ? null
+          : request.files.add(await http.MultipartFile.fromPath(
+          'photos', widget.image![i].toString()));
+    }
 
     print('sssssssssssss${request.fields}');
     print('${request.url}');

@@ -9,9 +9,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Helper/String.dart';
 import 'package:http/http.dart'as http;
 
@@ -19,7 +21,7 @@ import '../Model/GetSettingModel.dart';
 
 var latitude;
 var longitude;
-String? updateTime;
+
 
 
 class CheckInScreen extends StatefulWidget {
@@ -75,22 +77,25 @@ class _CheckInScreenState extends State<CheckInScreen> {
   // }
 
   latLongUpdate() async {
-    Timer.periodic(Duration(minutes: 2), (timer) async {
+    Timer.periodic(Duration(minutes: 1), (timer) async {
       updateLocation();
       // Update your UI or perform any necessary operations with the new latitude and longitude values.
     });
   }
 
+  String? updateTime;
 
   GetSettingModel? setting;
   getSetting() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     var headers = {
       'Cookie': 'ci_session=44b4255b3a85f9bd283902547862274a907e9997'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/get_settings'));
+    var request = http.MultipartRequest('POST', Uri.parse(getSettingApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      print("get setting apiiii wokinggg");
       String str = await response.stream.bytesToString();
       var result = json.decode(str);
       var finalResponse = GetSettingModel.fromJson(result);
@@ -188,14 +193,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
       'redings': readingCtr.text
     });
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
-      print('Imageeeeeeeeeeeeeeeeee${imagePathList}');
+      print('Imageeeeeeeeeeee ${imagePathList}');
       imagePathList[i] == ""
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
           'checkinimages[]', imagePathList[i].toString()));
     }
     print("this is my check in request ${request.fields.toString()}");
-
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -263,7 +267,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     }
   }
 
-  Widget uploadMultiImage() {
+  Widget uploadMultiImmage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -272,7 +276,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
         ),
         InkWell(
             onTap: () async {
-              pickImageDialog(context, 1);
+              _getFromCamera();
+              // pickImageDialog(context, 1);
               // await pickImages();
             },
             child: Container(
@@ -283,15 +288,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     color: colors.primary),
                 child: Center(
                     child: Text(
-                      "Upload Selfie",
-                      style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold),
+                      "Upload Images",
+                      style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                 ),
              ),
           ),
-          const SizedBox(
-          height: 10,
-           ),
+          const SizedBox(height: 10),
          Visibility(
             visible: isImages,
             child:  buildGridView()),
@@ -304,8 +307,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       height: 170,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
@@ -314,29 +316,37 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(15))
                   ),
                   child: Container(
-                    width: MediaQuery.of(context).size.width/2,
-                    height: MediaQuery.of(context).size.height/2,
+                    width: MediaQuery.of(context).size.width/2.8,
+                    height: MediaQuery.of(context).size.height/4.3,
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.file(File(imagePathList[index]),
-                          fit: BoxFit.cover),
+                      child: Image.file(
+                          File(imagePathList[index]), fit: BoxFit.cover),
                     ),
-                  )),
+                  ),
+              ),
               Positioned(
-                top: 5,
-                right: 10,
-                child: InkWell(
-                  onTap: (){
-                    setState((){
-                      imagePathList.remove(imagePathList[index]);
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove_circle,
-                    size: 30,
-                    color: Colors.red.withOpacity(0.7),),
+                top: 7,
+                right: 50,
+                child: Column(
+                  children: [
+                    Text("${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                    Text("${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),)
+                  ],
                 ),
-              )
+                // InkWell(
+                //   onTap: () {
+                //     setState(() {
+                //       imagePathList.remove(imagePathList[index]);
+                //     });
+                //   },
+                //   child: Icon(
+                //     Icons.remove_circle,
+                //     size: 30,
+                //     color: Colors.red.withOpacity(0.7),
+                //   ),
+                // ),
+              ),
             ],
           );
         },
@@ -344,7 +354,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     );
   }
 
-  void pickImageDialog(BuildContext context,int i) async{
+  void pickImageDialog(BuildContext context,int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
@@ -382,7 +392,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                 },
                 child: Container(
                   child: ListTile(
-                      title:  Text("Camera"),
+                      title: Text("Camera"),
                       leading: Icon(
                         Icons.camera,
                         color: colors.primary,
@@ -396,7 +406,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
       },
     );
   }
-
 
   // Future getImage(ImgSource source, BuildContext context, int i) async {
   //   var image = await ImagePickerGC.pickImage(
@@ -412,7 +421,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
   //   // back();
   // }
 
-
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
@@ -421,7 +429,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
         CropAspectRatioPreset.ratio3x2,
         CropAspectRatioPreset.original,
         CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
+        CropAspectRatioPreset.ratio16x9,
       ],
     );
     Navigator.pop(context);
@@ -435,6 +443,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     }
     back();
   }
+
   ///MULTI IMAGE PICKER FROM GALLERY CAMERA
   ///
   ///
@@ -447,6 +456,21 @@ void initState() {
     getCurrentLoc();
     getSetting();
     latLongUpdate();
+    convertDateTimeDispla();
+  }
+
+
+  var dateFormate;
+  String? formattedDate;
+  String? timeData;
+
+  convertDateTimeDispla() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    formattedDate = formatter.format(now);
+    print("datedetet$formattedDate"); // 2016-01-25
+    timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
+    print("timeeeeeeeeee$timeData");
   }
 
   @override
@@ -469,8 +493,8 @@ void initState() {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 250,
-                width: 250,
+                height: 200,
+                width: 200,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
@@ -500,40 +524,36 @@ void initState() {
                             fontSize: 20),
                       ),
                     )
-                  : Text(
+                    :Text(
                       "${currentAddress.text}",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, right: 30),
-                child: Row(
-                  children: [
-                    uploadMultiImage(),
-                    SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 125,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                      child: TextFormField(
-                        controller: readingCtr,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left: 20, bottom: 10),
-                            border: InputBorder.none,
-                          hintText: "Add Reading",
-                          hintStyle: TextStyle(fontSize: 13, color: colors.whiteTemp),
-                        ),
+                          fontSize: 20,
                       ),
                     ),
-                  ],
+              SizedBox(height: 15),
+              uploadMultiImmage(),
+              // uploadMultiImage()
+              SizedBox(height: 10),
+              Container(
+                height: 40,
+                width: 145,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                child: TextFormField(
+                  maxLength: 6,
+                  controller: readingCtr,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                    counterText: "",
+                    border: InputBorder.none,
+                    hintText: "Add Odometer Start Reading",
+                    hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
+                  ),
                 ),
               ),
-              // uploadMultiImage(),
-              SizedBox(height: 50),
+              SizedBox(height: 20),
               Container(
                   height: 45,
                   width: 220,
@@ -546,22 +566,23 @@ void initState() {
                       ),
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                        // if(latitude == "" || latitude == 0 || latitude ==null) {
-                        //   setSnackbar("Please wait fetching your current location...", context);
+                        // if(latitude == "" || latitude == 0 || latitude ==null || imagePathList.length == null) {
+                        //   setSnackbar("Please wait fetching your current location and select a image", context);
                         // } else {
                         //   setState(() {
                         //     isLoading = true;
                         //   });
                         //   checkInNow();
                         // }
-                  },
-                      child:isLoading? Center(
+                     },
+                      child: isLoading? Center(
                         child: CircularProgressIndicator(
                         color: Colors.white,
                       ),
                       ): Text('CHECK IN NOW'),
                   ),
-              ),// : SizedBox.shrink()
+              ),
+               SizedBox(height: 20),
             ],
           ),
         ),

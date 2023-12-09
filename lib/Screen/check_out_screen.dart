@@ -7,10 +7,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Model/check_in_model.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import '../../Helper/String.dart';
 import 'package:http/http.dart'as http;
 
@@ -28,9 +30,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   var pinController = TextEditingController();
   var currentAddress = TextEditingController();
-  bool isLoading=false;
-  Future<void> checkOutNow() async {
+  var readingCtr = TextEditingController();
 
+  bool isLoading = false;
+  Future<void> checkOutNow() async {
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
@@ -39,7 +42,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       'user_id': CUR_USERID.toString(),
       'checkout_latitude': '${latitude}',
       'checkout_longitude': '${longitude}',
-      'address': '${currentAddress.text}'
+      'address': '${currentAddress.text}',
+      'redings': readingCtr.text
     });
     for (var i = 0; i < imagePathList.length; i++) {
       imagePathList == null
@@ -56,28 +60,25 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
 
     print("this is my check in request ${request.fields.toString()}");
-
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var str = await response.stream.bytesToString();
       var result = json.decode(str);
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
-      if(result['data']['error'] == false){
+      if(result['data']['error'] == false) {
         Fluttertoast.showToast(msg: result['data']['msg']);
-        Navigator.pop(context);
-      }else{
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));
+      } else {
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
         Fluttertoast.showToast(msg: result['data']['msg']);
       }
       // var finalResponse = GetUserExpensesModel.fromJson(result);
-
       // final finalResponse = CheckInModel.fromJson(json.decode(Response));
-
     }
     else {
       print(response.reasonPhrase);
@@ -94,8 +95,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
 
     latitude = position.latitude.toString();
@@ -124,7 +124,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
-
         print('Current Addresssssss${currentAddress.text}');
       });
       if (currentAddress.text == "" || currentAddress.text == null) {
@@ -155,24 +154,19 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   List imagePathList1 = [];
   bool isImages1 = false;
 
-  Future<void> getFromGallery() async {
-    var result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-      allowCompression: true
+  File? _imageFile;
+
+  _getFromCamera() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
     );
-    if (result != null) {
+    if (pickedFile != null) {
       setState(() {
+        _imageFile = File(pickedFile.path);
+        imagePathList.add(_imageFile?.path ?? "");
         isImages = true;
-        // servicePic = File(result.files.single.path.toString());
       });
-      imagePathList = result.paths.toList();
-      // imagePathList.add(result.paths.toString()).toList();
-      print("SERVICE PIC === ${imagePathList}");
-      Navigator.pop(context);
-    } else {
-      Navigator.pop(context);
-      // User canceled the picker
+      //Navigator.pop(context);
     }
   }
 
@@ -206,21 +200,24 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         ),
         InkWell(
             onTap: () async {
-              pickImageDialog(context, 1);
-
+              _getFromCamera();
+              // pickImageDialog(context, 1);
               // await pickImages();
             },
             child: Container(
                 height: 40,
-                width: 165,
+                width: 145,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: colors.primary),
                 child: Center(
                     child: Text(
-                      "Upload Selfie",
+                      "Upload Image",
                       style: TextStyle(color: colors.whiteTemp),
-                    )))),
+                    ),
+                ),
+            ),
+        ),
         Visibility(
             visible: isImages,
             child: imagePathList != null ? buildGridView() : SizedBox.shrink()
@@ -235,7 +232,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         InkWell(
             onTap: () async {
               pickImageDialog1(context, 1);
-
               // await pickImages();
             },
             child: Container(
@@ -255,9 +251,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         Visibility(
             visible: isImages1,
             child: imagePathList1 != null ? buildGridView1() : SizedBox.shrink()
-        )
-
-
+        ),
       ],
     );
   }
@@ -366,35 +360,36 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             children: <Widget>[
               InkWell(
                 onTap: () async {
-                  getFromGallery();
+                  _getFromCamera();
                 },
                 child:  Container(
                   child: ListTile(
-                      title:  Text("Gallery"),
+                      title:  Text("Camera"),
                       leading: Icon(
                         Icons.image,
                         color: colors.primary,
-                      )),
+                      ),
+                  ),
                 ),
               ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  // getImage(ImgSource.Camera, context, i);
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
+              // Container(
+              //   width: 200,
+              //   height: 1,
+              //   color: Colors.black12,
+              // ),
+              // InkWell(
+              //   onTap: () async {
+              //     // getImage(ImgSource.Camera, context, i);
+              //   },
+              //   child: Container(
+              //     child: ListTile(
+              //         title:  Text("Camera"),
+              //         leading: Icon(
+              //           Icons.camera,
+              //           color: colors.primary,
+              //         )),
+              //   ),
+              // ),
             ],
           ),
         );
@@ -599,11 +594,35 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               ),
-              SizedBox(height: 15,),
-              uploadMultiImage(),
-              SizedBox(height: 50,),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    uploadMultiImage(),
+                    SizedBox(width: 20),
+                    Container(
+                      height: 40,
+                      width: 125,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                      child: TextFormField(
+                        controller: readingCtr,
+                        keyboardType: TextInputType.number,
+                        // maxLength: 6,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                          border: InputBorder.none,
+                          hintText: "Add Odometer Stop Reading",
+                          hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
               uploadMultiImage1(),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Container(
                   height: 45,
                   width: 220,
@@ -615,10 +634,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           backgroundColor: colors.primary.withOpacity(0.8)
                       ),
                       onPressed: () {
-                        if(latitude == "" || latitude == 0 || latitude ==null) {
+                        if(latitude == "" || latitude == 0 || latitude == null) {
                           setSnackbar("Please wait fetching your current location...", context);
-
-                        }else{
+                        } else {
                           setState(() {
                             isLoading = true;
                           });
@@ -627,7 +645,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       },
                       child:isLoading? Center(child: CircularProgressIndicator(
                         color: Colors.white,
-                      )):Text('CHECK OUT NOW')))
+                      ),
+                      ):Text('CHECK OUT NOW'),
+                  ),
+              ),
             ],
           ),
         ),

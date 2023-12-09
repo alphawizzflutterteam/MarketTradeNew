@@ -1,4 +1,4 @@
-/// data : [{"id":"4","user_id":"3","date":"2023-10-09","time":"01:47:58","lat":"null","lng":"null","name":"","mobile":"8523658980","address":"indore","state":"0","district":"0","pincode":"452010","contractor_id":"10","contractor_mobile":"2147483647","engineer_id":"9","engineer_mobile":"2147483647","artitech_id":"10","artitech_mobile":"2147483647","massion_id":"12","massion_mobile":"2147483647","site_size":"45","current_status":"45","product_being_used":"33","survey":[{"brand_name":"Cement","total_consumption":"100","further_consumption":"100","purchase_price":"25","purchasing_from":"25","last_purchase_date":"2023-10-10"},{"brand_name":"Cement","total_consumption":"100","further_consumption":"200","purchase_price":"5","purchasing_from":"25","last_purchase_date":"2023-10-10"}],"expected_orders":"2023-10-09","photo":[],"remarks":"hcchhchfhg","created_at":"2023-10-09 17:44:33"}]
+/// data : [{"id":"1","user_id":"1","date":"2023-09-27","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Harish","mobile":"","address":"vijay nagar","state":"2","district":"2","pincode":"452010","contractor_id":"devesh","contractor_mobile":"2147483647","engineer_id":"Amit","engineer_mobile":"2147483647","artitech_id":"Vaibhav","artitech_mobile":"2147483647","massion_id":"shivansh","massion_mobile":"2147483647","site_size":"100","current_status":"1","product_being_used":"32,33","survey":[{"brand_name":"ACC Cement","total_consumption":"100","further_consumption":"250","purchase_price":"250000","purchasing_from":"Aditya Namdev","last_purchase_date":"2023-07-23"}],"expected_orders":"test","photo":["https://developmentalphawizz.com/market_track/"],"remarks":"test remark","massion_name":null,"massion_address":null,"architect_address":null,"architect_name":null,"engineer_address":null,"engineer_name":null,"contractor_address":null,"contractor_name":null,"created_at":"2023-10-09 11:20:34"},{"id":"2","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"1","district":"2","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"32,33","survey":[{"brand_name":"ACC Cement","total_consumption":"100","further_consumption":"250","purchase_price":"250000","purchasing_from":"Aditya Namdev","last_purchase_date":"2023-07-23"}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":null,"massion_address":null,"architect_address":null,"architect_name":null,"engineer_address":null,"engineer_name":null,"contractor_address":null,"contractor_name":null,"created_at":"2023-10-09 11:20:34"},{"id":"3","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"1","district":"2","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"32,33","survey":[{"brand_name":"ACC Cement","total_consumption":"100","further_consumption":"250","purchase_price":"250000","purchasing_from":"Aditya Namdev","last_purchase_date":"2023-07-23"}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":null,"massion_address":null,"architect_address":null,"architect_name":null,"engineer_address":null,"engineer_name":null,"contractor_address":null,"contractor_name":null,"created_at":"2023-10-09 11:20:27"},{"id":"5","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"0","district":"0","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"1,2","survey":[{"brand_name":"","total_consumption":"","further_consumption":"","purchase_price":"","purchasing_from":"Aditya Namdev","last_purchase_date":""}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":"gh","massion_address":null,"architect_address":"fghf","architect_name":"hfg","engineer_address":"gh","engineer_name":"hgf","contractor_address":" nwe","contractor_name":" new","created_at":"2023-12-09 12:49:05"},{"id":"6","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"0","district":"0","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"1,2","survey":[{"brand_name":"","total_consumption":"","further_consumption":"","purchase_price":"","purchasing_from":"Aditya Namdev","last_purchase_date":""}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":"gh","massion_address":null,"architect_address":"fghf","architect_name":"hfg","engineer_address":"gh","engineer_name":"hgf","contractor_address":" nwe","contractor_name":" new","created_at":"2023-12-09 13:15:15"},{"id":"7","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"0","district":"0","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"1,2","survey":[{"brand_name":"","total_consumption":"","further_consumption":"","purchase_price":"","purchasing_from":"Aditya Namdev","last_purchase_date":""}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":"gh","massion_address":null,"architect_address":"fghf","architect_name":"hfg","engineer_address":"gh","engineer_name":"hgf","contractor_address":" nwe","contractor_name":" new","created_at":"2023-12-09 13:15:57"},{"id":"8","user_id":"1","date":"2023-10-06","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name":"Sawan Shakya","mobile":"7896546547","address":"Vijay Nagar","state":"0","district":"0","pincode":"452003","contractor_id":"1","contractor_mobile":"2147483647","engineer_id":"2","engineer_mobile":"2147483647","artitech_id":"4","artitech_mobile":"2147483647","massion_id":"6","massion_mobile":"2147483647","site_size":"25","current_status":"Inprogress","product_being_used":"1,2","survey":[{"brand_name":"","total_consumption":"","further_consumption":"","purchase_price":"","purchasing_from":"Aditya Namdev","last_purchase_date":""}],"expected_orders":"2023-10-25","photo":[],"remarks":"This is a remarks section","massion_name":"gh","massion_address":"newwwwwfgfgf","architect_address":"fghf","architect_name":"hfg","engineer_address":"gh","engineer_name":"hgf","contractor_address":" nwe","contractor_name":" new","created_at":"2023-12-09 13:17:15"}]
 /// error : false
 /// message : "Form Submitted success"
 
@@ -48,34 +48,42 @@ MySiteVisitModel copyWith({  List<SiteVisitData>? data,
 
 }
 
-/// id : "4"
-/// user_id : "3"
-/// date : "2023-10-09"
-/// time : "01:47:58"
-/// lat : "null"
-/// lng : "null"
-/// name : ""
-/// mobile : "8523658980"
-/// address : "indore"
-/// state : "0"
-/// district : "0"
+/// id : "1"
+/// user_id : "1"
+/// date : "2023-09-27"
+/// time : "02:00:00"
+/// lat : "25.15689798"
+/// lng : "75.45678965"
+/// name : "Harish"
+/// mobile : ""
+/// address : "vijay nagar"
+/// state : "2"
+/// district : "2"
 /// pincode : "452010"
-/// contractor_id : "10"
+/// contractor_id : "devesh"
 /// contractor_mobile : "2147483647"
-/// engineer_id : "9"
+/// engineer_id : "Amit"
 /// engineer_mobile : "2147483647"
-/// artitech_id : "10"
+/// artitech_id : "Vaibhav"
 /// artitech_mobile : "2147483647"
-/// massion_id : "12"
+/// massion_id : "shivansh"
 /// massion_mobile : "2147483647"
-/// site_size : "45"
-/// current_status : "45"
-/// product_being_used : "33"
-/// survey : [{"brand_name":"Cement","total_consumption":"100","further_consumption":"100","purchase_price":"25","purchasing_from":"25","last_purchase_date":"2023-10-10"},{"brand_name":"Cement","total_consumption":"100","further_consumption":"200","purchase_price":"5","purchasing_from":"25","last_purchase_date":"2023-10-10"}]
-/// expected_orders : "2023-10-09"
-/// photo : []
-/// remarks : "hcchhchfhg"
-/// created_at : "2023-10-09 17:44:33"
+/// site_size : "100"
+/// current_status : "1"
+/// product_being_used : "32,33"
+/// survey : [{"brand_name":"ACC Cement","total_consumption":"100","further_consumption":"250","purchase_price":"250000","purchasing_from":"Aditya Namdev","last_purchase_date":"2023-07-23"}]
+/// expected_orders : "test"
+/// photo : ["https://developmentalphawizz.com/market_track/"]
+/// remarks : "test remark"
+/// massion_name : null
+/// massion_address : null
+/// architect_address : null
+/// architect_name : null
+/// engineer_address : null
+/// engineer_name : null
+/// contractor_address : null
+/// contractor_name : null
+/// created_at : "2023-10-09 11:20:34"
 
 class SiteVisitData {
   SiteVisitData({
@@ -104,8 +112,16 @@ class SiteVisitData {
       String? productBeingUsed, 
       List<Survey>? survey, 
       String? expectedOrders, 
-      List<dynamic>? photo, 
+      List<String>? photo, 
       String? remarks, 
+      dynamic massionName, 
+      dynamic massionAddress, 
+      dynamic architectAddress, 
+      dynamic architectName, 
+      dynamic engineerAddress, 
+      dynamic engineerName, 
+      dynamic contractorAddress, 
+      dynamic contractorName, 
       String? createdAt,}){
     _id = id;
     _userId = userId;
@@ -134,6 +150,14 @@ class SiteVisitData {
     _expectedOrders = expectedOrders;
     _photo = photo;
     _remarks = remarks;
+    _massionName = massionName;
+    _massionAddress = massionAddress;
+    _architectAddress = architectAddress;
+    _architectName = architectName;
+    _engineerAddress = engineerAddress;
+    _engineerName = engineerName;
+    _contractorAddress = contractorAddress;
+    _contractorName = contractorName;
     _createdAt = createdAt;
 }
 
@@ -168,13 +192,16 @@ class SiteVisitData {
       });
     }
     _expectedOrders = json['expected_orders'];
-    if (json['photo'] != null) {
-      _photo = [];
-      json['photo'].forEach((v) {
-        _photo?.add(v.fromJson(v));
-      });
-    }
+    _photo = json['photo'] != null ? json['photo'].cast<String>() : [];
     _remarks = json['remarks'];
+    _massionName = json['massion_name'];
+    _massionAddress = json['massion_address'];
+    _architectAddress = json['architect_address'];
+    _architectName = json['architect_name'];
+    _engineerAddress = json['engineer_address'];
+    _engineerName = json['engineer_name'];
+    _contractorAddress = json['contractor_address'];
+    _contractorName = json['contractor_name'];
     _createdAt = json['created_at'];
   }
   String? _id;
@@ -202,8 +229,16 @@ class SiteVisitData {
   String? _productBeingUsed;
   List<Survey>? _survey;
   String? _expectedOrders;
-  List<dynamic>? _photo;
+  List<String>? _photo;
   String? _remarks;
+  dynamic _massionName;
+  dynamic _massionAddress;
+  dynamic _architectAddress;
+  dynamic _architectName;
+  dynamic _engineerAddress;
+  dynamic _engineerName;
+  dynamic _contractorAddress;
+  dynamic _contractorName;
   String? _createdAt;
   SiteVisitData copyWith({  String? id,
   String? userId,
@@ -230,8 +265,16 @@ class SiteVisitData {
   String? productBeingUsed,
   List<Survey>? survey,
   String? expectedOrders,
-  List<dynamic>? photo,
+  List<String>? photo,
   String? remarks,
+  dynamic massionName,
+  dynamic massionAddress,
+  dynamic architectAddress,
+  dynamic architectName,
+  dynamic engineerAddress,
+  dynamic engineerName,
+  dynamic contractorAddress,
+  dynamic contractorName,
   String? createdAt,
 }) => SiteVisitData(  id: id ?? _id,
   userId: userId ?? _userId,
@@ -260,6 +303,14 @@ class SiteVisitData {
   expectedOrders: expectedOrders ?? _expectedOrders,
   photo: photo ?? _photo,
   remarks: remarks ?? _remarks,
+  massionName: massionName ?? _massionName,
+  massionAddress: massionAddress ?? _massionAddress,
+  architectAddress: architectAddress ?? _architectAddress,
+  architectName: architectName ?? _architectName,
+  engineerAddress: engineerAddress ?? _engineerAddress,
+  engineerName: engineerName ?? _engineerName,
+  contractorAddress: contractorAddress ?? _contractorAddress,
+  contractorName: contractorName ?? _contractorName,
   createdAt: createdAt ?? _createdAt,
 );
   String? get id => _id;
@@ -287,8 +338,16 @@ class SiteVisitData {
   String? get productBeingUsed => _productBeingUsed;
   List<Survey>? get survey => _survey;
   String? get expectedOrders => _expectedOrders;
-  List<dynamic>? get photo => _photo;
+  List<String>? get photo => _photo;
   String? get remarks => _remarks;
+  dynamic get massionName => _massionName;
+  dynamic get massionAddress => _massionAddress;
+  dynamic get architectAddress => _architectAddress;
+  dynamic get architectName => _architectName;
+  dynamic get engineerAddress => _engineerAddress;
+  dynamic get engineerName => _engineerName;
+  dynamic get contractorAddress => _contractorAddress;
+  dynamic get contractorName => _contractorName;
   String? get createdAt => _createdAt;
 
   Map<String, dynamic> toJson() {
@@ -320,22 +379,28 @@ class SiteVisitData {
       map['survey'] = _survey?.map((v) => v.toJson()).toList();
     }
     map['expected_orders'] = _expectedOrders;
-    if (_photo != null) {
-      map['photo'] = _photo?.map((v) => v.toJson()).toList();
-    }
+    map['photo'] = _photo;
     map['remarks'] = _remarks;
+    map['massion_name'] = _massionName;
+    map['massion_address'] = _massionAddress;
+    map['architect_address'] = _architectAddress;
+    map['architect_name'] = _architectName;
+    map['engineer_address'] = _engineerAddress;
+    map['engineer_name'] = _engineerName;
+    map['contractor_address'] = _contractorAddress;
+    map['contractor_name'] = _contractorName;
     map['created_at'] = _createdAt;
     return map;
   }
 
 }
 
-/// brand_name : "Cement"
+/// brand_name : "ACC Cement"
 /// total_consumption : "100"
-/// further_consumption : "100"
-/// purchase_price : "25"
-/// purchasing_from : "25"
-/// last_purchase_date : "2023-10-10"
+/// further_consumption : "250"
+/// purchase_price : "250000"
+/// purchasing_from : "Aditya Namdev"
+/// last_purchase_date : "2023-07-23"
 
 class Survey {
   Survey({

@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +36,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
   }
 
   ClientModel? clients;
+  List<ClientsData> clientData = [];
   getClients() async {
     var headers = {
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
@@ -53,6 +56,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
       var finalResponse = ClientModel.fromJson(result);
       setState(() {
         clients = finalResponse;
+        clientData = clients?.data ?? [];
       });
       print("this is response data ${finalResponse}");
     }
@@ -61,6 +65,26 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
     }
   }
 
+  searchClients(String value) {
+    if (value.isEmpty) {
+      getClients();
+      setState(() {});
+    }else{
+      final suggestions = clientData.where((element) {
+        final ownerName = element.ownerName.toString().toLowerCase();
+        final address = element.address.toString().toLowerCase();
+        final mobile = element.mobileOne.toString().toLowerCase();
+        final firmName = element.nameOfFirm.toString().toLowerCase();
+        final input = value.toLowerCase();
+        return ownerName.contains(input) || address.contains(input) || mobile.contains(input) ||  firmName.contains(input);
+      }).toList();
+      clientData = suggestions;
+      setState(() {
+      });
+    }
+  }
+
+  TextEditingController searchCtr = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +99,118 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
         child: Column(
           children: [
             SizedBox(height: 10),
-            _catList(),
+            Container(
+              height:50,
+              padding: EdgeInsets.only(left:15,right:15),
+              child: TextFormField(
+                onChanged: (value){
+                  searchClients(value);
+                },
+                controller: searchCtr,
+                decoration: InputDecoration(
+                    suffixIcon: Container(
+                        width: 20,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                        child: Icon(Icons.search, color: Colors.white)),
+                    hintText: "Search here",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
+                ),
+              ),
+            ),
+            Container(
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    childAspectRatio: 4/5.8
+                ),
+                itemCount: clients?.data?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      //  height: MediaQuery.of(context).size.height/1.0,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: colors.primary),
+                          borderRadius: BorderRadius.circular(5)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(0),
+                            child: new ClipRRect(
+                              borderRadius: BorderRadius.circular(0.0),
+                              child: new FadeInImage(
+                                fadeInDuration: Duration(milliseconds: 150),
+                                image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
+                                height: 130.0,
+                                width: double.infinity,
+                                fit: BoxFit.fill,
+                                imageErrorBuilder: (context, error, stackTrace) => erroWidget(50),
+                                placeholder: placeHolder(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Firm:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp),),
+                                    SizedBox(height: 10,),
+                                    Text("Owner:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp),),
+                                    SizedBox(height: 10,),
+                                    Text("Number:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text("${clients?.data?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
+                                    SizedBox(height: 10),
+                                    Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          InkWell(
+                            onTap: () {
+                              geoTagDialog(
+                                  context, clients?.data?[index].id.toString() ?? "");
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: colors.primary
+                              ),
+                              child: Center(child: Text("Add",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            // _catList(),
           ],
         ),
       ),
@@ -122,7 +257,6 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
-
         print('Current Addresssssss${currentAddress.text}');
       });
       if (currentAddress.text == "" || currentAddress.text == null) {
@@ -149,6 +283,10 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      Fluttertoast.showToast(msg: "GeoTag Update Successfully");
+      getClients();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+
     }
     else {
       print(response.reasonPhrase);

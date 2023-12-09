@@ -1,12 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
@@ -17,15 +12,14 @@ import '../Model/ClientModel.dart';
 import '../Provider/HomeProvider.dart';
 import 'ClientForm.dart';
 
-class AddPhoto extends StatefulWidget {
-  const AddPhoto({Key? key}) : super(key: key);
+class EditClient extends StatefulWidget {
+  const EditClient({Key? key}) : super(key: key);
 
   @override
-  State<AddPhoto> createState() => _AddPhotoState();
+  State<EditClient> createState() => _EditClientState();
 }
 
-class _AddPhotoState extends State<AddPhoto> {
-
+class _EditClientState extends State<EditClient> {
 
   @override
   void initState() {
@@ -35,15 +29,13 @@ class _AddPhotoState extends State<AddPhoto> {
 
   ClientModel? clients;
   List<ClientsData> clientData = [];
-
-  getClients() async {
+  getClients() async{
     var headers = {
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
     var request = http.MultipartRequest('POST', Uri.parse(getClientApi.toString()));
     request.fields.addAll({
       USER_ID: '${CUR_USERID}',
-      'filter': 'photo'
     });
 
     print("this is refer request ${request.fields.toString()}");
@@ -58,35 +50,16 @@ class _AddPhotoState extends State<AddPhoto> {
         clientData = clients?.data ?? [];
       });
       print("this is response data ${finalResponse}");
+      // setState(() {
+      // animalList = finalResponse.data!;
+      // });
+      // print("this is operator list ----->>>> ${operatorList[0].name}");
     }
     else {
       print(response.reasonPhrase);
     }
   }
 
-  addPhoto(String? id) async {
-    var headers = {
-      'Cookie': 'ci_session=a668203a30aa21277b05b1ffb48275800e081571'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/update_photo'));
-    request.fields.addAll({
-      'id': id.toString()
-    });
-    print("addd photo parameter ${request.fields}");
-    request.files.add(await http.MultipartFile.fromPath('images', _imageFile!.path.toString()));
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      Fluttertoast.showToast(msg: "Image Update Successfully");
-      getClients();
-      Navigator.push(context, MaterialPageRoute(builder: (clients) => Dashboard()));
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-  }
 
   searchClients(String value) {
     if (value.isEmpty) {
@@ -108,13 +81,14 @@ class _AddPhotoState extends State<AddPhoto> {
   }
 
   TextEditingController searchCtr = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: Text("AddPhoto", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+        title: Text("Edit Clients", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: colors.primary,
       ),
@@ -140,7 +114,6 @@ class _AddPhotoState extends State<AddPhoto> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
             Container(
               child: GridView.builder(
                 shrinkWrap: true,
@@ -149,7 +122,7 @@ class _AddPhotoState extends State<AddPhoto> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio: 4/4.8
+                    childAspectRatio: 4/5.8
                 ),
                 itemCount: clients?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -211,20 +184,20 @@ class _AddPhotoState extends State<AddPhoto> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(height: 10),
                           InkWell(
                             onTap: () {
-                              // addPhotoDialog(context, clients?.data?[index].id.toString() ?? "");
-                              _getFromCamera(clients?.data?[index].id.toString() ?? "");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Client_form(model: clients?.data?[index])));
                             },
                             child: Container(
-                              height: 40,
-                              width: 80,
+                              height: 30,
+                              width: 70,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(5),
                                   color: colors.primary
                               ),
-                              child: Center(child: Text("Add",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
+                              child: Center(
+                                  child: Text("Edit",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
                             ),
                           )
                         ],
@@ -241,6 +214,7 @@ class _AddPhotoState extends State<AddPhoto> {
     );
   }
 
+
   _catList() {
     return  Selector<HomeProvider, bool>(
       builder: (context, data, child) {
@@ -251,20 +225,19 @@ class _AddPhotoState extends State<AddPhoto> {
               baseColor: Theme.of(context).colorScheme.simmerBase,
               highlightColor: Theme.of(context).colorScheme.simmerHigh,
               child: catLoading()),
-        ):
-        Padding(
+        ): Padding(
           padding: const EdgeInsets.all(5.0),
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height/1,
+                height: MediaQuery.of(context).size.height,
                 child:
                 GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    childAspectRatio: 4/5
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      childAspectRatio: 4/6
                   ),
                   itemCount: clients?.data?.length ?? 0,
                   itemBuilder: (context, index) {
@@ -282,15 +255,15 @@ class _AddPhotoState extends State<AddPhoto> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(0),
                               child: new ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(0.0),
                                 child: new FadeInImage(
                                   fadeInDuration: Duration(milliseconds: 150),
                                   image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
-                                  height: 70.0,
-                                  width: 70,
-                                  fit: BoxFit.fill,
+                                  height: 130.0,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.cover,
                                   imageErrorBuilder: (context, error, stackTrace) => erroWidget(50),
                                   placeholder: placeHolder(50),
                                 ),
@@ -298,7 +271,7 @@ class _AddPhotoState extends State<AddPhoto> {
                             ),
                             const SizedBox(width: 20),
                             Padding(
-                              padding: const EdgeInsets.only(left:10.0,right: 10),
+                              padding: const EdgeInsets.only(left: 10.0, right: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -315,8 +288,7 @@ class _AddPhotoState extends State<AddPhoto> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text("${clients?.data?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp,
-                                          overflow: TextOverflow.ellipsis),
+                                      Text("${clients?.data?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
                                       ),
                                       SizedBox(height: 10),
                                       Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
@@ -327,20 +299,20 @@ class _AddPhotoState extends State<AddPhoto> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(height: 10),
                             InkWell(
                               onTap: () {
-                                // addPhotoDialog(context, clients?.data?[index].id.toString() ?? "");
-                                _getFromCamera(clients?.data?[index].id.toString() ?? "");
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Client_form(model: clients?.data?[index])));
                               },
                               child: Container(
-                                height: 40,
-                                width: 80,
+                                height: 30,
+                                width: 70,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                     color: colors.primary
                                 ),
-                                child: Center(child: Text("Add",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
+                                child: Center(
+                                    child: Text("Edit",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
                               ),
                             )
                           ],
@@ -355,138 +327,6 @@ class _AddPhotoState extends State<AddPhoto> {
         );
       },
       selector: (_,homeProvider) => homeProvider.catLoading,
-    );
-  }
-
-   addPhotoDialog(BuildContext context, String id) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          actions: <Widget>[
-            Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 55),
-                  child: InkWell(
-                    onTap: () async {
-                     // _getFromCamera();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 145,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5), color: colors.primary),
-                      child: Center(
-                        child: Text(
-                          "Add Photo",
-                          style: TextStyle(color: colors.whiteTemp),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height:5,
-                ),
-                Visibility(
-                  visible: isImages,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 50, top: 10),
-                        child: buildGridView(),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-                // SizedBox(height: 10),
-                // Container(
-                //   height: 200,
-                //   child: Card(
-                //     child: GridView.builder(
-                //         itemCount: fileModel?.data?.length ?? 0,
-                //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //             crossAxisCount: 2),
-                //         itemBuilder: (context, index) {
-                //           return Padding(
-                //               padding: EdgeInsets.all(5),
-                //               child: Container(
-                //                   decoration: new BoxDecoration(
-                //                       image: new DecorationImage(
-                //                           image: new NetworkImage("${imageUrl}${fileModel?.data}"),
-                //                           fit: BoxFit.cover))));
-                //         }),
-                //   ),
-                // ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(right: 50),
-                  child: InkWell(
-                    onTap: () {
-                      addPhoto(id);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 80,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                      child: Center(
-                        child: Text("Submit", style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  _getFromCamera(String? id) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-        // imagePathList.add(_imageFile?.path ?? "");
-        isImages = true ;
-      });
-      addPhoto(id);
-      //Navigator.pop(context);
-    }
-  }
-
-  final picker = ImagePicker();
-  File? _imageFile;
-  List<String> imagePathList = [];
-  bool isImages = false;
-
-  Widget buildGridView() {
-    return Container(
-      height: 200,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-        child: Container(
-          width: MediaQuery.of(context).size.width/2.3,
-          height: MediaQuery.of(context).size.height/3,
-          child: _imageFile == "" ? Text("--"):
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            child: Image.file(_imageFile!,
-                fit: BoxFit.cover),
-          ),
-        ),
-      ),
     );
   }
 
@@ -510,7 +350,8 @@ class _AddPhotoState extends State<AddPhoto> {
                     width: MediaQuery.of(context).size.width,
                     height: 60.0,
                   ),
-                )).toList()),
+                ))
+                    .toList()),
           ),
         ),
         Container(
@@ -522,4 +363,5 @@ class _AddPhotoState extends State<AddPhoto> {
       ],
     );
   }
+
 }
