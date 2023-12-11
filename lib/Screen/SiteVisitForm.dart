@@ -1488,29 +1488,14 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             height: MediaQuery.of(context).size.height * .01,
                           ),
                           Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedStatus,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedStatus = newValue;
-                                  });
-                                },
-                                items: statusString.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: 'Select Status',
+                            height: 50,
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: siteSizeCtr,
+                              decoration: InputDecoration(
+                                hintText: '',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                             ),
@@ -1519,7 +1504,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             height: MediaQuery.of(context).size.height * .01,
                           ),
                           const Text(
-                            "Site Size",
+                            "Site Size (in sqr. ft.)",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),

@@ -8,10 +8,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Model/check_in_model.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import '../../Helper/String.dart';
 import 'package:http/http.dart'as http;
@@ -192,108 +194,135 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
   }
 
-  Widget uploadMultiImage() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 10,
-        ),
-        InkWell(
-            onTap: () async {
-              _getFromCamera();
-              // pickImageDialog(context, 1);
-              // await pickImages();
-            },
-            child: Container(
-                height: 40,
-                width: 145,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colors.primary),
-                child: Center(
-                    child: Text(
-                      "Upload Image",
-                      style: TextStyle(color: colors.whiteTemp),
-                    ),
-                ),
-            ),
-        ),
-        Visibility(
-            visible: isImages,
-            child: imagePathList != null ? buildGridView() : SizedBox.shrink()
-        ),
-      ],
-    );
+  // Widget uploadMultiImage() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: [
+  //       const SizedBox(height: 10,
+  //       ),
+  //       InkWell(
+  //           onTap: () async {
+  //             _getFromCamera();
+  //             // pickImageDialog(context, 1);
+  //             // await pickImages();
+  //           },
+  //           child: Container(
+  //               height: 40,
+  //               width: 145,
+  //               decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(10),
+  //                   color: colors.primary),
+  //               child: Center(
+  //                   child: Text(
+  //                     "Upload Image",
+  //                     style: TextStyle(color: colors.whiteTemp),
+  //                   ),
+  //               ),
+  //           ),
+  //       ),
+  //       Visibility(
+  //           visible: isImages,
+  //           child: imagePathList != null ? buildGridView() : SizedBox.shrink()
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  var dateFormate;
+  String? formattedDate;
+  String? timeData;
+
+  convertDateTimeDispla() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    formattedDate = formatter.format(now);
+    print("datedetet$formattedDate"); // 2016-01-25
+    timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
+    print("timeeeeeeeeee$timeData");
   }
-  Widget uploadMultiImage1() {
+
+
+
+  Widget uploadMultiImmage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        InkWell(
-            onTap: () async {
-              pickImageDialog1(context, 1);
-              // await pickImages();
-            },
-            child: Container(
-                height: 40,
-                width: 165,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colors.primary),
-                child: Center(
-                    child: Text(
-                      "Installation/Service Report",textAlign:TextAlign.center,
-                      style: TextStyle(color: colors.whiteTemp),
-                    )))),
         const SizedBox(
           height: 10,
         ),
-        Visibility(
-            visible: isImages1,
-            child: imagePathList1 != null ? buildGridView1() : SizedBox.shrink()
+        InkWell(
+          onTap: () async {
+            _getFromCamera();
+            // pickImageDialog(context, 1);
+            // await pickImages();
+          },
+          child: Container(
+            height: 40,
+            width: 125,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: colors.primary),
+            child: Center(
+              child: Text(
+                "Upload Images",
+                style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+            ),
+          ),
         ),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: isImages,
+            child:  buildGridView()),
       ],
     );
   }
 
   Widget buildGridView() {
     return Container(
-      height: 200,
+      height: 170,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
               Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/2,
-                    height: MediaQuery.of(context).size.height/2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.file(File(imagePathList[index]),
-                          fit: BoxFit.cover),
-                    ),
-                  )),
-              Positioned(
-                top: 5,
-                right: 10,
-                child: InkWell(
-                  onTap: (){
-                    setState((){
-                      imagePathList.remove(imagePathList[index]);
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove_circle,
-                    size: 30,
-                    color: Colors.red.withOpacity(0.7),),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15))
                 ),
-              )
+                child: Container(
+                  width: MediaQuery.of(context).size.width/2.8,
+                  height: MediaQuery.of(context).size.height/4.3,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: Image.file(
+                        File(imagePathList[index]), fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 7,
+                right: 50,
+                child: Column(
+                  children: [
+                    Text("${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                    Text("${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),)
+                  ],
+                ),
+                // InkWell(
+                //   onTap: () {
+                //     setState(() {
+                //       imagePathList.remove(imagePathList[index]);
+                //     });
+                //   },
+                //   child: Icon(
+                //     Icons.remove_circle,
+                //     size: 30,
+                //     color: Colors.red.withOpacity(0.7),
+                //   ),
+                // ),
+              ),
             ],
           );
         },
@@ -301,52 +330,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
   }
 
-  Widget buildGridView1() {
-    return Container(
-      height: 200,
-      child: GridView.builder(
-        itemCount: imagePathList1.length,
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            children: [
-              Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/2,
-                    height: MediaQuery.of(context).size.height/2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.file(File(imagePathList1[index]),
-                          fit: BoxFit.cover),
-                    ),
-                  )),
-              Positioned(
-                top: 5,
-                right: 10,
-                child: InkWell(
-                  onTap: (){
-                    setState((){
-                      imagePathList1.remove(imagePathList[index]);
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove_circle,
-                    size: 30,
-                    color: Colors.red.withOpacity(0.7),),
-                ),
-              )
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  void pickImageDialog(BuildContext context,int i) async{
+  void pickImageDialog(BuildContext context,int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
@@ -358,71 +342,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromCamera();
-                },
-                child:  Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.image,
-                        color: colors.primary,
-                      ),
-                  ),
-                ),
-              ),
-              // Container(
-              //   width: 200,
-              //   height: 1,
-              //   color: Colors.black12,
-              // ),
               // InkWell(
               //   onTap: () async {
-              //     // getImage(ImgSource.Camera, context, i);
+              //     getFromGallery();
               //   },
-              //   child: Container(
+              //   child:  Container(
               //     child: ListTile(
-              //         title:  Text("Camera"),
+              //         title:  Text("Gallery"),
               //         leading: Icon(
-              //           Icons.camera,
+              //           Icons.image,
               //           color: colors.primary,
-              //         )),
+              //         ),
+              //     ),
               //   ),
               // ),
-            ],
-          ),
-        );
-      },
-    );
-
-  }
-
-  void pickImageDialog1(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(6))),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  getFromGallery1();
-                },
-                child:  Container(
-                  child: ListTile(
-                      title:  Text("Gallery"),
-                      leading: Icon(
-                        Icons.image,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
               Container(
                 width: 200,
                 height: 1,
@@ -430,15 +363,17 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  // getImage1(ImgSource.Camera, context, i);
+                  _getFromCamera();
+                  // getImage(ImgSource.Camera, context, i);
                 },
                 child: Container(
                   child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
+                    title: Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: colors.primary,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -446,7 +381,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         );
       },
     );
-
   }
 
   // Future getImage(ImgSource source, BuildContext context, int i) async {
@@ -533,6 +467,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void initState() {
     // TODO: implement initState
     getCurrentLoc();
+    convertDateTimeDispla();
     super.initState();
   }
 
@@ -541,11 +476,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     return Scaffold(
       backgroundColor: colors.white70,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(onPressed: (){
-          Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+        // leading: IconButton(onPressed: (){
+        //   Navigator.pop(context);
+        // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -556,20 +492,21 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 250,
-                width: 250,
+                height: 210,
+                width: 210,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
                       "assets/images/checkout.png",
                       fit: BoxFit.cover,
-                    )),
+                    ),
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                "Checking in.....",
+                "Checking Out.....",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colors.whiteTemp),
                 textAlign: TextAlign.center,
               ),
@@ -595,34 +532,27 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     fontSize: 20),
               ),
               SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    uploadMultiImage(),
-                    SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 125,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                      child: TextFormField(
-                        controller: readingCtr,
-                        keyboardType: TextInputType.number,
-                        // maxLength: 6,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left: 10, bottom: 10),
-                          border: InputBorder.none,
-                          hintText: "Add Odometer Stop Reading",
-                          hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
-                        ),
-                      ),
-                    ),
-                  ],
+              uploadMultiImmage(),
+              // uploadMultiImage()
+              SizedBox(height: 10),
+              Container(
+                height: 40,
+                width: 145,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                child: TextFormField(
+                  maxLength: 6,
+                  controller: readingCtr,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                    counterText: "",
+                    border: InputBorder.none,
+                    hintText: "Add Odometer Stop Reading",
+                    hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
+                  ),
                 ),
               ),
-              SizedBox(height: 50),
-              uploadMultiImage1(),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Container(
                   height: 45,
                   width: 220,

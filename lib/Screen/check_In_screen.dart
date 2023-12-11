@@ -227,8 +227,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
     }
   }
 
-
-
   navigateToPage() async {
     Future.delayed(Duration(milliseconds: 800), () {
       Navigator.pushAndRemoveUntil(
@@ -250,7 +248,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
       type: FileType.image,
       allowMultiple: true,
       allowCompression: true,
-
     );
     if (result != null) {
       setState(() {
@@ -478,11 +475,12 @@ void initState() {
     return Scaffold(
       backgroundColor: colors.white70,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(onPressed: (){
-          Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+        // leading: IconButton(onPressed: (){
+        //   Navigator.pop(context);
+        // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

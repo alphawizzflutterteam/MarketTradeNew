@@ -372,6 +372,7 @@ class _HomePageState extends State<HomePage>
         ),
       ),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 0,
         title: Text( isCheckedIn ? "CHECKED-IN"
