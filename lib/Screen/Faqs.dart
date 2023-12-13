@@ -167,8 +167,9 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
                             .subtitle1!
                             .copyWith(color: Theme.of(context).colorScheme.lightBlack),
                       )),
-                  selectedIndex != index || flag
-                      ? Row(
+                     selectedIndex != index || flag
+                      ?
+                     Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -185,10 +186,12 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
                                     color: Theme.of(context).colorScheme.black.withOpacity(0.7)),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                              ))),
-                      Icon(Icons.keyboard_arrow_down)
-                    ],
-                  )
+                              ),
+                          ),
+                      ),
+                        Icon(Icons.keyboard_arrow_down)
+                         ],
+                        )
                       : Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,

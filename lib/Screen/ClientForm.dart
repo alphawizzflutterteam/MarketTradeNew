@@ -784,7 +784,9 @@ class _Client_formState extends State<Client_form> {
   File? panImage;
   File? gstImage;
   File? aadharImage;
-
+  File? aadharBack;
+  File? gstOne;
+  File? gstTwo;
 
   void pickImageDialog(BuildContext context,int i) async{
     return await showDialog<void>(
@@ -800,20 +802,20 @@ class _Client_formState extends State<Client_form> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGallery();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGallery();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -854,20 +856,20 @@ class _Client_formState extends State<Client_form> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryPan();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryPan();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -907,20 +909,20 @@ class _Client_formState extends State<Client_form> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryGst();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -929,6 +931,112 @@ class _Client_formState extends State<Client_form> {
               InkWell(
                 onTap: () async {
                   _getFromCameraGst();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void pickImageDialogGstOne(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraGstOne();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void pickImageDialogGstTwo(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraGstTwo();
                 },
                 child: Container(
                   child: ListTile(
@@ -960,20 +1068,20 @@ class _Client_formState extends State<Client_form> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryAdhar();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryAdhar();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -982,6 +1090,59 @@ class _Client_formState extends State<Client_form> {
               InkWell(
                 onTap: () async {
                   _getFromCameraAdhar();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void pickImageDialogAdharBack(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryAdhar();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  getFromCameraAdharBack();
                 },
                 child: Container(
                   child: ListTile(
@@ -1072,6 +1233,30 @@ class _Client_formState extends State<Client_form> {
     }
   }
 
+  _getFromCameraGstOne() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        gstOne = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
+
+  _getFromCameraGstTwo() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        gstTwo = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
+
   _getFromGalleryAdhar() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
@@ -1096,6 +1281,18 @@ class _Client_formState extends State<Client_form> {
     }
   }
 
+
+  getFromCameraAdharBack() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        aadharBack = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1189,7 +1386,8 @@ class _Client_formState extends State<Client_form> {
                       // SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Owner Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                      Card(elevation: 6,
+                      Card(
+                        elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
                             keyboardType: TextInputType.text,
@@ -1432,7 +1630,6 @@ class _Client_formState extends State<Client_form> {
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
                             keyboardType: TextInputType.text,
-
                             controller: gstcn,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -1463,6 +1660,38 @@ class _Client_formState extends State<Client_form> {
                             Image.network('${widget.model?.gstImg}',)
                         ),
                       ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
+                      ElevatedButton(
+                        onPressed: () {
+                          pickImageDialogGstOne(context, 1);
+                        }, child: Text("Select GST One"),
+                      ),
+                      Center(
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                          ),
+                          child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
+                          Image.network('${widget.model?.gstImg}',)
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
+                      ElevatedButton(
+                        onPressed: () {
+                          pickImageDialogGstTwo(context, 1);
+                        }, child: Text("Select GST Two"),
+                      ),
+                      Center(
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                          ),
+                          child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
+                          Image.network('${widget.model?.gstImg}',)
+                        ),
+                      ),
                       const Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       Card(elevation: 6,
@@ -1476,7 +1705,6 @@ class _Client_formState extends State<Client_form> {
                               }
                               return null;
                             },
-
                             decoration: InputDecoration(
                                 hintText: '57687375747567',
                                 counterText: "",
@@ -1487,7 +1715,7 @@ class _Client_formState extends State<Client_form> {
                       ElevatedButton(
                         onPressed: () {
                           pickImageDialogAdhar(context, 1);
-                        }, child: Text("Select Aadhaar"),
+                        }, child: Text("Select Aadhaar Front"),
                       ),
                       Center(
                         child: Container(
@@ -1497,6 +1725,22 @@ class _Client_formState extends State<Client_form> {
                             child: aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill,):
                             //    Center(child: Image.asset('assets/img.png')),),
                             Image.network('${widget.model?.aadharImg}',)
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
+                      ElevatedButton(
+                        onPressed: () {
+                          pickImageDialogAdharBack(context, 1);
+                        }, child: Text("Select Aadhaar Back"),
+                      ),
+                      Center(
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                          ),
+                          child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
+                          Image.network('${widget.model?.aadharImg}',)
                         ),
                       ),
                       const Text("Customer Type",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1660,7 +1904,10 @@ class _Client_formState extends State<Client_form> {
       'photo': '${_imageFile.toString()}',
       'gst_img': '${gstImage.toString()}',
       'pan_img': '${panImage.toString()}',
-      'aadhar_img': '${aadharImage.toString()}'
+      'aadhar_img': '${aadharImage.toString()}',
+      'aadhar_back': '${aadharBack.toString()}',
+      'gst_img_two': '${gstOne.toString()}',
+      'gst_img_three': '${gstTwo.toString()}'
     });
     print('----${widget.model?.id}');
     print("parameter  ${request.fields}");

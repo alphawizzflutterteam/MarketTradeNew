@@ -22,8 +22,6 @@ import '../Model/GetSettingModel.dart';
 var latitude;
 var longitude;
 
-
-
 class CheckInScreen extends StatefulWidget {
   const CheckInScreen({Key? key}) : super(key: key);
 
@@ -308,28 +306,37 @@ class _CheckInScreenState extends State<CheckInScreen> {
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
-              Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/2.8,
-                    height: MediaQuery.of(context).size.height/4.3,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.file(
-                          File(imagePathList[index]), fit: BoxFit.cover),
-                    ),
-                  ),
+              Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: colors.primary)
+                ),
+                width: MediaQuery.of(context).size.width/2.8,
+                height: 170,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Image.file(
+                      File(imagePathList[index]), fit: BoxFit.cover),
+                ),
               ),
               Positioned(
-                top: 7,
-                right: 50,
-                child: Column(
-                  children: [
-                    Text("${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                    Text("${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),)
-                  ],
+               bottom: 10,
+                child: Container(
+                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                 border: Border.all(color: colors.primary),),
+                width:MediaQuery.of(context).size.width/2.8,
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                      ],
+                    ),
+                  ),
                 ),
                 // InkWell(
                 //   onTap: () {
@@ -448,14 +455,12 @@ class _CheckInScreenState extends State<CheckInScreen> {
   @override
 void initState() {
     // TODO: implement initState
-    getCurrentLoc();
     super.initState();
     getCurrentLoc();
     getSetting();
     latLongUpdate();
     convertDateTimeDispla();
   }
-
 
   var dateFormate;
   String? formattedDate;
@@ -564,8 +569,8 @@ void initState() {
                       ),
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                        // if(latitude == "" || latitude == 0 || latitude ==null || imagePathList.length == null) {
-                        //   setSnackbar("Please wait fetching your current location and select a image", context);
+                        // if(latitude == null || longitude == null ||  _imageFile == null) {
+                        //   setSnackbar("Please select a image", context);
                         // } else {
                         //   setState(() {
                         //     isLoading = true;
@@ -574,9 +579,7 @@ void initState() {
                         // }
                      },
                       child: isLoading? Center(
-                        child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
+                        child: CircularProgressIndicator(color: Colors.white,),
                       ): Text('CHECK IN NOW'),
                   ),
               ),

@@ -475,7 +475,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
         ),
         centerTitle: true,
         backgroundColor: colors.primary,
-        title: Text("Survey Form", style: TextStyle(fontSize: 15, color: Colors.white)),
+        title: Text("Customer Survey Form", style: TextStyle(fontSize: 15, color: Colors.white)),
       ),
        body: delearRetailerModel == null
           ? Center(
@@ -1482,7 +1482,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             height: MediaQuery.of(context).size.height * .01,
                           ),
                           const Text(
-                            "Status",
+                            "Status Of Site",
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .01,
@@ -1551,72 +1551,72 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Remark",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 65,
-                            child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: remarkCtr,
-                                decoration: InputDecoration(
-                                    hintText: '',
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)))),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Expected Date",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 50,
-                            // width: MediaQuery.of(context).size.width / 2.9,
-                            child: TextField(
-                              controller: execteddateCtr,
-                              decoration: InputDecoration(
-                                  hintText: 'Select Expected Date',
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                               onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime(2100),
-                                    builder: (context, child) {
-                                      return Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme:
-                                                const ColorScheme.light(
-                                                    primary: colors.primary),
-                                          ),
-                                          child: child!);
-                                    });
-                                if (pickedDate != null) {
-                                  String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                  setState(() {
-                                    execteddateCtr.text = formattedDate;
-                                  });
-                                }
-                              },
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * .01,
+                          // ),
+                          // const Text(
+                          //   "Remark",
+                          //   style: TextStyle(
+                          //       fontSize: 14, fontWeight: FontWeight.bold),
+                          // ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * .01,
+                          // ),
+                          // Container(
+                          //   height: 65,
+                          //   child: TextFormField(
+                          //       keyboardType: TextInputType.text,
+                          //       controller: remarkCtr,
+                          //       decoration: InputDecoration(
+                          //           hintText: '',
+                          //           border: OutlineInputBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(10)))),
+                          // ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * .01,
+                          // ),
+                          // const Text(
+                          //   "Expected Date",
+                          //   style: TextStyle(
+                          //       fontSize: 14, fontWeight: FontWeight.bold),
+                          // ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * .01,
+                          // ),
+                          // Container(
+                          //   height: 50,
+                          //   // width: MediaQuery.of(context).size.width / 2.9,
+                          //   child: TextField(
+                          //     controller: execteddateCtr,
+                          //     decoration: InputDecoration(
+                          //         hintText: 'Select Expected Date',
+                          //         border: OutlineInputBorder(
+                          //             borderRadius: BorderRadius.circular(10))),
+                          //      onTap: () async {
+                          //       DateTime? pickedDate = await showDatePicker(
+                          //           context: context,
+                          //           initialDate: DateTime.now(),
+                          //           firstDate: DateTime(1950),
+                          //           lastDate: DateTime(2100),
+                          //           builder: (context, child) {
+                          //             return Theme(
+                          //                 data: Theme.of(context).copyWith(
+                          //                   colorScheme:
+                          //                       const ColorScheme.light(
+                          //                           primary: colors.primary),
+                          //                 ),
+                          //                 child: child!);
+                          //           });
+                          //       if (pickedDate != null) {
+                          //         String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                          //         setState(() {
+                          //           execteddateCtr.text = formattedDate;
+                          //         });
+                          //       }
+                          //     },
+                          //   ),
+                          // ),
                           // InkWell(
                           //   onTap:
                           //       () async {
@@ -1657,9 +1657,9 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                           //     ),
                           //   ),
                           // ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * .01,
+                          // ),
                           // InkWell(
                           //   onTap: () {
                           //     pickImageDialog(context, 1);
@@ -1672,7 +1672,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                           //           child: Text("Select Image", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400)))
                           //   ),
                           // ),
-                          uploadMultiImage(),
+                          // uploadMultiImage(),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .01,
                           ),
@@ -1839,7 +1839,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                               contact: mobileCtr.text,
                               address: addressCtr.text,
                               state: getListModel?.data?.states?[stateindex].name,
-                              district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
+                              // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
                               pincode: pinCodeController.text,
                               sitesize: siteSizeCtr.text,
                               expectedDate: execteddateCtr.text,
@@ -1861,11 +1861,11 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                               architecAddress: artitechAddressCtr.text,
                               // creditLimit: widget.creditLimit,
                               //customerType: widget.customerType,
-                              date: dateCtr.text,
+                              // date: dateCtr.text,
                               // status:
                               time: timeCtr.text,
-                              image: imagePathList,
-                              remark: remarkCtr.text,
+                              // image: imagePathList,
+                              // remark: remarkCtr.text,
                               // clintId: cl,
                             ),
                           ),

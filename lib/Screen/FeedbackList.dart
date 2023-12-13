@@ -9,6 +9,7 @@ import '../Model/GetFeedbackModel.dart';
 
 
 class Customer_feedback extends StatefulWidget {
+
   const Customer_feedback({Key? key}) : super(key: key);
 
   @override
@@ -45,7 +46,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
             child: Icon(Icons.arrow_back_ios),
         ),
         centerTitle: true,
-        title: Text("Customer Feedback", style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w800),),
+        title: Text("Counter Visit Form", style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w800),),
       ),
       body: getdata== null ? Center(child: CircularProgressIndicator()) :SingleChildScrollView(
         child: Padding(
@@ -119,7 +120,9 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                               keyboardType: TextInputType.text,
                               controller: remarkcn,
                               decoration: InputDecoration(border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          SizedBox(height: MediaQuery.of(context).size.height*.03,),
+                          SizedBox(height: 5,),
+                          Text("Address: ${getdata?.data[index].basicDetail?.address}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
+                          SizedBox(height: MediaQuery.of(context).size.height*.02,),
                           Text("Basic Details:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                           SizedBox(height: MediaQuery.of(context).size.height*.02,),
                           Text("Name: ${getdata?.data[index].basicDetail?.name}",style: TextStyle(fontSize: 15),),

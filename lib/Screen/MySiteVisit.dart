@@ -38,11 +38,6 @@ class _MySiteVisiteState extends State<MySiteVisite> {
       var finalresult=MySiteVisitModel.fromJson(json.decode(result));
       setState(() {
         getdata = finalresult;
-        // namecn.text='${getdata?.data?[index].basicDetail.name}';
-        // firmnamecn.text='${getdata?.data[index].nameOfFirm}';
-        // remarkcn.text='${getdata?.data[index].remarks}';
-        // datecn.text='${getdata?.data[index].date}';
-        // timecn.text='${getdata?.data[index].time}';
       });
     }
     else {
@@ -64,9 +59,9 @@ class _MySiteVisiteState extends State<MySiteVisite> {
           child: Icon(Icons.arrow_back_ios),
         ),
         centerTitle: true,
-        title: Text("My Site Visit", style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w800),),
+        title: Text("Customer Survey Form", style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w800),),
       ),
-      body: getdata== null ? Center(child: CircularProgressIndicator()) :SingleChildScrollView(
+      body: getdata== null ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -83,7 +78,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                     child: Card(
                       elevation: 5,
                       child: Container(
-                        height: 150,
+                        height: 180,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
@@ -145,6 +140,22 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                     ),
                                     Row(
                                       children: [
+                                        const Text("UserName: ", style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold, )),
+                                        Text(
+                                          "${getdata?.data?[index].name}",
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
                                         const Text("Address: ", style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,),
@@ -162,7 +173,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                     ),
                                     Row(
                                       children: [
-                                        const Text("Ramark: ", style: TextStyle(
+                                        const Text("Remark: ", style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,),
                                         ),
@@ -177,26 +188,27 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                     const SizedBox(
                                       height: 5,
                                     ),
+                                    Row(
+                                      children: [
+                                        const Text("Date & Time: ", style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "${getdata?.data?[index].date} ${getdata?.data?[index].time}",
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
                                   ],
                                 ),
                               ),
-                             // Padding(
-                        //   padding: const EdgeInsets.only(left: 30),
-                        //   child: InkWell(
-                        //     onTap: () {
-                        //       // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryDetails(model: petsHistoryModel?.data?[index])));
-                        //     },
-                        //     child: Container(
-                        //       height: 30,
-                        //       width: 90,
-                        //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                        //       child: const Center(
-                        //         child: Text("View Details",
-                        //             style: TextStyle(fontSize: 14, fontFamily: "Montserrat", color: Colors.white)
-                        //         ),
-                        //       ),
-                        //     ), ),
-                        // ),
+
                             ],
                           ),
                         ),

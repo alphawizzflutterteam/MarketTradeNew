@@ -87,6 +87,11 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   // Text("Survey:",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                   // SizedBox(height: MediaQuery.of(context).size.height*.03,),
                   // Text("Name:${widget.model.?.data[0].basicDetail.name}",style: TextStyle(fontSize: 15),),
+                  Text("Name:   ${widget.model?.name}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w800)),
+                  SizedBox(height: MediaQuery.of(context).size.height*.02),
+                  Text("Address:   ${widget.model?.address}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  SizedBox(height: MediaQuery.of(context).size.height*.02),
+                  Text("Date & Time:   ${widget.model?.date} ${widget.model?.time}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w800)),
                   SizedBox(height: MediaQuery.of(context).size.height*.02),
                   widget.model?.contractorName == null || widget.model?.contractorName == "" ? Text("Contractor Name:  NA", style: TextStyle(fontSize: 15)):
                   Text("Contractor Name:   ${widget.model?.contractorName}",style: TextStyle(fontSize: 15)),

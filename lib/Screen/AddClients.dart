@@ -47,6 +47,7 @@ class _AddClientsState extends State<AddClients> {
   String? selected_Status;
   String? selected_stuff;
   String? selected_State;
+  List<Cities>?cities = [];
   String? selected_District;
   int nwIndex = 0;
   String? selectedDistrict;
@@ -54,7 +55,6 @@ class _AddClientsState extends State<AddClients> {
   List<String> Staff=['Atul Gautam','Pretty Tomer','Sunil','yash',];
   // List<String> District=['Indore','Bhopal','Gwalior','Ujjain',];
   // List<String> State=['MP','Gujrat','Rajasthan','Utter pradesh',];
-
 
   GetListModel? getListModel;
   getState() async {
@@ -95,9 +95,9 @@ class _AddClientsState extends State<AddClients> {
                 onTap: () async {
                   _getFromGallery();
                 },
-                child:  Container(
+                child: Container(
                   child: ListTile(
-                    title:  Text("Gallery"),
+                    title: Text("Gallery"),
                     leading: Icon(
                       Icons.image,
                       color: colors.primary,
@@ -116,11 +116,12 @@ class _AddClientsState extends State<AddClients> {
                 },
                 child: Container(
                   child: ListTile(
-                      title:  Text("Camera"),
+                      title: Text("Camera"),
                       leading: Icon(
                         Icons.camera,
                         color: colors.primary,
-                      )),
+                      ),
+                  ),
                 ),
               ),
             ],
@@ -144,20 +145,20 @@ class _AddClientsState extends State<AddClients> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryPan();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryPan();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -197,20 +198,20 @@ class _AddClientsState extends State<AddClients> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryGst();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child: Container(
+              //     child: ListTile(
+              //       title: Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -226,7 +227,117 @@ class _AddClientsState extends State<AddClients> {
                       leading: Icon(
                         Icons.camera,
                         color: colors.primary,
-                      )),
+                      ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  void pickImageDialogGstOne(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child: Container(
+              //     child: ListTile(
+              //       title: Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraGstOne();
+                },
+                child: Container(
+                  child: ListTile(
+                    title:  Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: colors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void pickImageDialogGstTwo(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryGst();
+              //   },
+              //   child: Container(
+              //     child: ListTile(
+              //       title: Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraGstTwo();
+                },
+                child: Container(
+                  child: ListTile(
+                    title:  Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: colors.primary,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -250,20 +361,20 @@ class _AddClientsState extends State<AddClients> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGalleryAdhar();
-                },
-                child:  Container(
-                  child: ListTile(
-                    title:  Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryAdhar();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 200,
                 height: 1,
@@ -289,13 +400,68 @@ class _AddClientsState extends State<AddClients> {
     );
   }
 
+  void pickImageDialogAdharBack(BuildContext context,int i) async {
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () async {
+              //     _getFromGalleryAdhar();
+              //   },
+              //   child:  Container(
+              //     child: ListTile(
+              //       title:  Text("Gallery"),
+              //       leading: Icon(
+              //         Icons.image,
+              //         color: colors.primary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraAdharBack();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   final picker= ImagePicker();
   File? _imageFile;
   File? panImage;
   File? gstImage;
   File? aadharImage;
-
+  File? aadharBack;
+  File? gstOne;
+  File? gstTwo;
 
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
@@ -309,6 +475,7 @@ class _AddClientsState extends State<AddClients> {
     }
   }
 
+
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.camera,
@@ -316,8 +483,10 @@ class _AddClientsState extends State<AddClients> {
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
+        imagePathList.add(_imageFile?.path ?? "");
+        isImages = true;
       });
-      Navigator.pop(context);
+      //Navigator.pop(context);
     }
   }
 
@@ -369,6 +538,30 @@ class _AddClientsState extends State<AddClients> {
     }
   }
 
+  _getFromCameraGstOne() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        gstOne = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
+
+  _getFromCameraGstTwo() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        gstTwo = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
+
   _getFromGalleryAdhar() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
@@ -393,6 +586,17 @@ class _AddClientsState extends State<AddClients> {
     }
   }
 
+  _getFromCameraAdharBack() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        aadharBack = File(pickedFile.path);
+      });
+      Navigator.pop(context);
+    }
+  }
 
   addClinets() async {
    var headers = {
@@ -419,12 +623,15 @@ class _AddClientsState extends State<AddClients> {
      'credit_limit': creditCTr.text,
      'lat': latitude.toString(),
      'lng': longitude.toString(),
-  });
+   });
    print("parameter addd clientss${request.fields} ${request.files}");
   request.files.add(await http.MultipartFile.fromPath('photo', _imageFile?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('pan_img', panImage?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('aadhar_img', aadharImage?.path ?? ""));
+  request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? ""));
+  request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? ""));
+  request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? ""));
   request.headers.addAll(headers);
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
@@ -439,6 +646,72 @@ class _AddClientsState extends State<AddClients> {
 }
 
   String? selected_Customer;
+  List imagePathList = [];
+  bool isImages = false;
+
+  Widget uploadMultiImmage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        InkWell(
+          onTap: () async {
+            _getFromCamera();
+            // pickImageDialog(context, 1);
+            // await pickImages();
+          },
+          child: Container(
+            height: 40,
+            width: 125,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: colors.primary),
+            child: Center(
+              child: Text(
+                "Upload Images",
+                style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: isImages,
+            child:  buildGridView()),
+      ],
+    );
+  }
+
+  Widget buildGridView() {
+    return Container(
+      height: 170,
+      child: GridView.builder(
+        itemCount: imagePathList.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary)
+                ),
+                width: MediaQuery.of(context).size.width/2.8,
+                height: 170,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Image.file(
+                      File(imagePathList[index]), fit: BoxFit.cover),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -589,6 +862,13 @@ class _AddClientsState extends State<AddClients> {
                         onChanged: (newValue) {
                           setState(() {
                             selected_State = newValue;
+                            getListModel?.data?.states?.map((items) {
+                              if(items.id == newValue) {
+                                cities = items.cities;
+                              }
+                            });
+                            var name =
+                            print("aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
                             // print("current indexxx ${selected}");
                             // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
                             // currentIndex = selected;
@@ -598,7 +878,11 @@ class _AddClientsState extends State<AddClients> {
                         items: getListModel?.data?.states?.map((items) {
                           return DropdownMenuItem(
                             value: items.id,
+
                             child: Text(items.name.toString()),
+
+
+
                           );
                         }).toList(),
                         decoration: InputDecoration(
@@ -761,7 +1045,7 @@ class _AddClientsState extends State<AddClients> {
                     ElevatedButton(
                       onPressed: () {
                         pickImageDialogPan(context, 1);
-                      }, child: Text("Select Pan"),
+                      }, child: Text("Add Pan"),
                     ),
                     Center(
                       child: Container(
@@ -800,7 +1084,7 @@ class _AddClientsState extends State<AddClients> {
                     ElevatedButton(
                       onPressed: () {
                         pickImageDialogGst(context, 1);
-                      }, child: Text("Select GST"),
+                      }, child: Text("Add GST Image1"),
                     ),
                     Center(
                       child: Container(
@@ -809,6 +1093,40 @@ class _AddClientsState extends State<AddClients> {
                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
                         ),
                         child:gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill):
+                        Center(child: Image.asset('assets/images/homelogo.png'),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    ElevatedButton(
+                      onPressed: () {
+                        pickImageDialogGstOne(context, 1);
+                      }, child: Text("Add GST Image2"),
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                        ),
+                        child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
+                        Center(child: Image.asset('assets/images/homelogo.png'),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    ElevatedButton(
+                      onPressed: () {
+                        pickImageDialogGstTwo(context, 1);
+                      }, child: Text("Add GST Image3"),
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                        ),
+                        child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
                         Center(child: Image.asset('assets/images/homelogo.png'),
                         ),
                       ),
@@ -836,7 +1154,7 @@ class _AddClientsState extends State<AddClients> {
                     ElevatedButton(
                       onPressed: () {
                         pickImageDialogAdhar(context, 1);
-                      }, child: Text("Select Aadhaar"),
+                      }, child: Text("Add Aadhaar Front"),
                     ),
                     Center(
                       child: Container(
@@ -845,6 +1163,23 @@ class _AddClientsState extends State<AddClients> {
                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
                         ),
                         child:aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill):
+                        Center(child: Image.asset('assets/images/homelogo.png'),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    ElevatedButton(
+                      onPressed: () {
+                        pickImageDialogAdharBack(context, 1);
+                      }, child: Text("Add Aadhaar Back"),
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                        ),
+                        child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
                         Center(child: Image.asset('assets/images/homelogo.png'),
                         ),
                       ),
@@ -902,23 +1237,8 @@ class _AddClientsState extends State<AddClients> {
                               borderRadius:  BorderRadius.circular(10))),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height*.01),
-                    ElevatedButton(
-                        onPressed: () {
-                          pickImageDialog(context, 1);
-                        }, child: Text("Select Image"),
-                    ),
-                    Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child:_imageFile!=null? Image.file(_imageFile!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
-                      ),
-                    ),
+                    SizedBox(height: 15),
+                    uploadMultiImmage(),
                   ],
                 ),
               ),

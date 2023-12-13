@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +17,11 @@ import '../Model/DelearRetailerModel1.dart';
 import 'MultiSelect.dart';
 import 'Survey.dart';
 
+
+var latitude;
+var longitude;
+
+
 class FeedbackForm extends StatefulWidget {
   const FeedbackForm({Key? key}) : super(key: key);
 
@@ -26,6 +33,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   void initState() {
     super.initState();
+    getCurrentLoc();
     convertDateTimeDispla();
     date();
     getDelearRetaler();
@@ -84,8 +92,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
       var finalResponse = DelearRetailerModel.fromJson(result);
       setState(() {
         delearRetailerModel = finalResponse;
-        delearRetailerModel?.data?.add(DealerListData(ownerName: "Other", id: "800"));
-        delearRetailerModel?.data?.add(DealerListData(ownerName: "NotApplicable", id: "801"));
+        // delearRetailerModel?.data?.add(DealerListData(ownerName: "Other", id: "800"));
+        // delearRetailerModel?.data?.add(DealerListData(ownerName: "NotApplicable", id: "801"));
       });
     }
     else {
@@ -93,6 +101,57 @@ class _FeedbackFormState extends State<FeedbackForm> {
     }
   }
 
+  var pinController = TextEditingController();
+  var currentAddress = TextEditingController();
+
+  Future<void> getCurrentLoc() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      print("checking permission here ${permission}");
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // var loc = Provider.of<LocationProvider>(context, listen: false);
+    latitude = position.latitude.toString();
+    longitude = position.longitude.toString();
+    setState(() {
+      longitude_Global=latitude;
+      lattitudee_Global=longitude;
+    });
+
+    List<Placemark> placemark = await placemarkFromCoordinates(
+        double.parse(latitude!), double.parse(longitude!),
+        localeIdentifier: "en");
+    pinController.text = placemark[0].postalCode!;
+    if (mounted) {
+      setState(() {
+        pinController.text = placemark[0].postalCode!;
+        currentAddress.text =
+        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+        // loc.lng = position.longitude.toString();
+        //loc.lat = position.latitude.toString();
+        setState(() {
+          currentlocation_Global=currentAddress.text.toString();
+        });
+        print('Latitude=============${latitude}');
+        print('Longitude*************${longitude}');
+
+        print('Current Addresssssss${currentAddress.text}');
+      });
+      if (currentAddress.text == "" || currentAddress.text == null) {
+      } else {
+        setState(() {
+          // navigateToPage();
+        });
+      }
+    }
+  }
 
   String? selected;
   int nwIndex = 0;
@@ -140,11 +199,12 @@ class _FeedbackFormState extends State<FeedbackForm> {
                 },
                 child: Container(
                   child: ListTile(
-                      title:  Text("Camera"),
+                      title: Text("Camera"),
                       leading: Icon(
                         Icons.camera,
                         color: colors.primary,
-                      )),
+                      ),
+                  ),
                 ),
               ),
             ],
@@ -343,13 +403,24 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     ),
                   )),
               Positioned(
-                top: 7,
-                right: 10,
-                child: Column(
-                  children: [
-                    Text("${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                    Text("${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),)
-                  ],
+                bottom: 10,
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),),
+                  width:MediaQuery.of(context).size.width/2.8,
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white)),
+                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white)),
+                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                      ],
+                    ),
+                  ),
                 ),
                 // InkWell(
                 //   onTap: () {
@@ -386,7 +457,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         ),
         centerTitle: true,
         backgroundColor: colors.primary,
-        title: Text("Feedbacks", style: TextStyle(fontSize: 15, color: Colors.white)),
+        title: Text("Counter Visit Form", style: TextStyle(fontSize: 15, color: Colors.white)),
       ),
       body:
       SingleChildScrollView(
@@ -400,50 +471,50 @@ class _FeedbackFormState extends State<FeedbackForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Date",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *.01,
-                    ),
-                    Container(
-                      height: 50,
-                      child: TextFormField(
-                          readOnly: true,
-                          controller: dateCtr,
-                          decoration: InputDecoration(
-                            // hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .01,
-                    ),
-                    const Text(
-                      "Time",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .01,
-                    ),
-                    Container(
-                      height: 50,
-                      child: TextFormField(
-                        readOnly: true,
-                          maxLength: 10,
-                          controller: timeCtr,
-                          decoration: InputDecoration(
-                              hintText: '',
-                              counterText: "",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                              ),
-                          ),
-                      ),
-                    ),
+                    // const Text(
+                    //   "Date",
+                    //   style: TextStyle(
+                    //       fontSize: 14, fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height *.01,
+                    // ),
+                    // Container(
+                    //   height: 50,
+                    //   child: TextFormField(
+                    //       readOnly: true,
+                    //       controller: dateCtr,
+                    //       decoration: InputDecoration(
+                    //         // hintText: '',
+                    //           border: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(10)))),
+                    // ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height * .01,
+                    // ),
+                    // const Text(
+                    //   "Time",
+                    //   style: TextStyle(
+                    //       fontSize: 14, fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height * .01,
+                    // ),
+                    // Container(
+                    //   height: 50,
+                    //   child: TextFormField(
+                    //     readOnly: true,
+                    //       maxLength: 10,
+                    //       controller: timeCtr,
+                    //       decoration: InputDecoration(
+                    //           hintText: '',
+                    //           counterText: "",
+                    //           border: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(10),
+                    //           ),
+                    //       ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .01,
                     ),
@@ -486,126 +557,114 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    selected!=null?
-                    selected == "801" ? SizedBox():
-                        selected == "800"? Column(
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height*.01,
-                            ),
-                            Row(
-                              children: [
-                                Text("Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                                SizedBox(width: 30),
-                                Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width / 2.2,
-                                  child: TextFormField(
-                                    controller: dealerNameController,
-                                    // onChanged: (value) {
-                                    //   // String mobileContractor = value ;
-                                    //   contractorMobile = value;
-                                    // },
-                                    // readOnly: true,
-                                    //controller: mobilecn,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                                      // hintText: '',
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Text("Mail:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                                SizedBox(width: 40),
-                                Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width / 2.2,
-                                  child: TextFormField(
-                                    controller: dealerMailController,
-                                    // onChanged: (value) {
-                                    //   // String mobileContractor = value ;
-                                    //   contractorMobile = value;
-                                    // },
-                                    // readOnly: true,
-                                    //controller: mobilecn,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                                      // hintText: '',
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Text("Number:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                                SizedBox(width: 20),
-                                Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width / 2.2,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    maxLength: 10,
-                                    controller: dealerNumberController,
-                                    // onChanged: (value) {
-                                    //   // String mobileContractor = value ;
-                                    //   contractorMobile = value;
-                                    // },
-                                    // readOnly: true,
-                                    //controller: mobilecn,
-                                    decoration: InputDecoration(
-                                      counterText: "",
-                                      contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                                      // hintText: '',
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // SizedBox(height: 10),
-                            // Row(
-                            //   children: [
-                            //     Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            //     SizedBox(width: 10),
-                            //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            //   ],
-                            // ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                                SizedBox(width: 10),
-                                Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width / 2.2,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: dealercreditlimitController,
-                                    // onChanged: (value) {
-                                    //   // String mobileContractor = value ;
-                                    //   contractorMobile = value;
-                                    // },
-                                    // readOnly: true,
-                                    //controller: mobilecn,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                                      // hintText: '',
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ):
+                    selected!= null?
+                    // selected == "801" ? SizedBox():
+                    //     selected == "800"?
+                    //     Column(
+                    //       children: [
+                    //         SizedBox(
+                    //           height: MediaQuery.of(context).size.height*.01,
+                    //         ),
+                    //         Row(
+                    //           children: [
+                    //             Text("Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    //             SizedBox(width: 30),
+                    //             Container(
+                    //               height: 40,
+                    //               width: MediaQuery.of(context).size.width / 2.2,
+                    //               child: TextFormField(
+                    //                 controller: dealerNameController,
+                    //                 // onChanged: (value) {
+                    //                 //   // String mobileContractor = value ;
+                    //                 //   contractorMobile = value;
+                    //                 // },
+                    //                 // readOnly: true,
+                    //                 //controller: mobilecn,
+                    //                 decoration: InputDecoration(
+                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                    //                   // hintText: '',
+                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         SizedBox(height: 10),
+                    //         Row(
+                    //           children: [
+                    //             Text("Mail:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    //             SizedBox(width: 40),
+                    //             Container(
+                    //               height: 40,
+                    //               width: MediaQuery.of(context).size.width / 2.2,
+                    //               child: TextFormField(
+                    //                 controller: dealerMailController,
+                    //                 // onChanged: (value) {
+                    //                 //   // String mobileContractor = value ;
+                    //                 //   contractorMobile = value;
+                    //                 // },
+                    //                 // readOnly: true,
+                    //                 //controller: mobilecn,
+                    //                 decoration: InputDecoration(
+                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                    //                   // hintText: '',
+                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         SizedBox(height: 10),
+                    //         Row(
+                    //           children: [
+                    //             Text("Number:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    //             SizedBox(width: 20),
+                    //             Container(
+                    //               height: 40,
+                    //               width: MediaQuery.of(context).size.width / 2.2,
+                    //               child: TextFormField(
+                    //                 keyboardType: TextInputType.number,
+                    //                 maxLength: 10,
+                    //                 controller: dealerNumberController,
+                    //                 // onChanged: (value) {
+                    //                 //   // String mobileContractor = value ;
+                    //                 //   contractorMobile = value;
+                    //                 // },
+                    //                 // readOnly: true,
+                    //                 //controller: mobilecn,
+                    //                 decoration: InputDecoration(
+                    //                   counterText: "",
+                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                    //                   // hintText: '',
+                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         SizedBox(height: 10),
+                    //         Row(
+                    //           children: [
+                    //             Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    //             SizedBox(width: 10),
+                    //             Container(
+                    //               height: 40,
+                    //               width: MediaQuery.of(context).size.width / 2.2,
+                    //               child: TextFormField(
+                    //                 keyboardType: TextInputType.number,
+                    //                 controller: dealercreditlimitController,
+                    //                 decoration: InputDecoration(
+                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                    //                   // hintText: '',
+                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     ),
+                            // :
                       Column(
                         children: [
                         SizedBox(
@@ -627,21 +686,29 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           ],
                         ),
                         SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Text("Address:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              SizedBox(width: 10),
+                              Text("${delearRetailerModel?.data?[nwIndex].address}, ${delearRetailerModel?.data?[nwIndex].state}, ${delearRetailerModel?.data?[nwIndex].district}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            ],
+                          ),
+                          SizedBox(height: 10),
                         Row(
                           children: [
-                            Text("Contac No:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            Text("Contact No:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                             SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].mobileOne}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            Text("${delearRetailerModel?.data?[nwIndex].mobileOne}, ${delearRetailerModel?.data?[nwIndex].mobileTwo}, ${delearRetailerModel?.data?[nwIndex].whatsappNumber}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                           ],
                         ),
-                        // SizedBox(height: 10),
-                        // Row(
-                        //   children: [
-                        //     Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //     SizedBox(width: 10),
-                        //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //   ],
-                        // ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            SizedBox(width: 10),
+                            Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                          ],
+                        ),
                         SizedBox(height: 10),
                         Row(
                           children: [
@@ -676,32 +743,32 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*.01,
+                      height: MediaQuery.of(context).size.height*.04,
                     ),
-                    const Text(
-                      "Remark",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height*.01,
-                    ),
-                    Container(
-                      height: 65,
-                      child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: remarkCtr,
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                          ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *.01,
-                    ),
+                    // const Text(
+                    //   "Remark",
+                    //   style: TextStyle(
+                    //       fontSize: 14, fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height*.01,
+                    // ),
+                    // Container(
+                    //   height: 65,
+                    //   child: TextFormField(
+                    //       keyboardType: TextInputType.text,
+                    //       controller: remarkCtr,
+                    //       decoration: InputDecoration(
+                    //           hintText: '',
+                    //           border: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(15)
+                    //           ),
+                    //       ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height *.01,
+                    // ),
                     // InkWell(
                     //   onTap: () {
                     //     _getFromCamera();
@@ -715,7 +782,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     //           child: Text("Select Image", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400)))
                     //   ),
                     // ),
-                    uploadMultiImage(),
+                    // uploadMultiImage(),
                     // Stack(
                     //   children: [
                     //     Center(
@@ -874,7 +941,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
               ),
               InkWell(
                 onTap: () {
-                  if(remarkCtr.text.length == 0 || results.length == 0){
+                  if(results.length == 0){
                     Fluttertoast.showToast(msg: "All fields Required");
                   } else{
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Survey(
@@ -884,14 +951,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       contact: delearRetailerModel?.data?[nwIndex].mobileOne,
                       creditLimit: delearRetailerModel?.data?[nwIndex].creditLimit,
                       customerType: delearRetailerModel?.data?[nwIndex].customerType,
-                      dealerName: dealerNameController.text,
-                      dealerMobile: dealerMailController.text,
-                      dealermail: dealerMailController.text,
-                      dealerLimit: dealercreditlimitController.text,
+                      // dealerName: dealerNameController.text,
+                      // dealerMobile: dealerMailController.text,
+                      // dealermail: dealerMailController.text,
+                      // dealerLimit: dealercreditlimitController.text,
                       date: dateCtr.text,
                       time: timeCtr.text,
-                      image: imagePathList,
-                      remark: remarkCtr.text,
+                      // image: imagePathList,
+                      // remark: remarkCtr.text,
                       clintId: selected),
                       ),
                     );
