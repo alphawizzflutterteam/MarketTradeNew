@@ -239,6 +239,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   ///
   ///
   ///
+  ///
   List imagePathList = [];
   bool isImages = false;
   Future<void> getFromGallery() async {
@@ -568,15 +569,15 @@ void initState() {
                           backgroundColor: colors.primary.withOpacity(0.8)
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                        // if(latitude == null || longitude == null ||  _imageFile == null) {
-                        //   setSnackbar("Please select a image", context);
-                        // } else {
-                        //   setState(() {
-                        //     isLoading = true;
-                        //   });
-                        //   checkInNow();
-                        // }
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+                        if(latitude == null || longitude == null ||  _imageFile == null) {
+                          setSnackbar("Please select a image", context);
+                        } else {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          checkInNow();
+                        }
                      },
                       child: isLoading? Center(
                         child: CircularProgressIndicator(color: Colors.white,),

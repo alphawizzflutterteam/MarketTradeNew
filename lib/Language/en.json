@@ -9,6 +9,8 @@
   "FAQS": "Faqs",
   "ABOUT_LBL": "About Us",
   "LOGOUT": "Logout",
+  "DELETE": "Delete Account",
+  "DELETEACCOUNT": "Are you sure you wan't to delete account",
   "ALL_CAT": "All Categories",
   "ADD_CART": "ADD TO CART",
   "CART": "Cart",

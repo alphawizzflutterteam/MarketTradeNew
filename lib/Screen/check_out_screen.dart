@@ -302,13 +302,24 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 ),
               ),
               Positioned(
-                top: 7,
-                right: 50,
-                child: Column(
-                  children: [
-                    Text("${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                    Text("${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),)
-                  ],
+                bottom: 10,
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary)),
+                  width:MediaQuery.of(context).size.width/2.8,
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                      ],
+                    ),
+                  ),
                 ),
                 // InkWell(
                 //   onTap: () {

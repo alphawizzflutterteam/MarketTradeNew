@@ -32,6 +32,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/Constant.dart';
+import '../Model/DeleteAccountModel.dart';
 import '../Provider/Theme.dart';
 import '../main.dart';
 import 'Example.dart';
@@ -601,12 +602,69 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         // _getDrawerItem(getTranslated(context, 'SHARE_APP')!,
         //     'assets/images/pro_share.svg'),
         // CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
-        // CUR_USERID == "" || CUR_USERID == null
-        //     ? Container()
-        //     : _getDrawerItem(getTranslated(context, 'LOGOUT')!,
-        //         'assets/images/pro_logout.svg'),
+        CUR_USERID == "" || CUR_USERID == null
+            ? Container()
+            : _getDrawerItem(getTranslated(context, 'DELETE')!,
+                'assets/images/delete.svg'),
       ],
     );
+  }
+
+  deleteAccountDailog() async {
+    await dialogAnimate(context,
+        StatefulBuilder(builder: (BuildContext context, StateSetter setStater) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStater) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  content: Text(
+                      getTranslated(context, 'DELETEACCOUNT')!,
+                      style: TextStyle(color: Colors.black)
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text(
+                            getTranslated(context, 'NO')!,
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        }),
+                    TextButton(
+                        child: Text(
+                            getTranslated(context, 'YES')!,
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                        ),
+                        onPressed: () {
+                          deleteAccount();
+                          // Navigator.pop(context);
+                        })
+                  ],
+                );
+              });
+        }));
+  }
+
+  Future<DeleteAccountModel?> deleteAccount() async {
+    var header = headers;
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/delete_user'));
+    request.fields.addAll({
+      'user_id': CUR_USERID.toString()
+    });
+    print("User id in delet account ${request.fields}");
+    request.headers.addAll(header);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("delete accountt responseeeee $response");
+      final str = await response.stream.bytesToString();
+      var data  = DeleteAccountModel.fromJson(json.decode(str));
+      // setSnackbar(data.message.toString());
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+      return DeleteAccountModel.fromJson(json.decode(str));
+    } else {
+      return null;
+    }
   }
 
 /*  _getDivider() {
@@ -780,9 +838,14 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           }
           else if (title == "Request Training") {
             openRequestTrainingBottomSheet();
-          } else if (title == getTranslated(context, 'LOGOUT')) {
+          }
+          else if (title == getTranslated(context, 'LOGOUT')) {
             logOutDailog();
-          } else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
+          }
+            else if (title == getTranslated(context, 'DELETE')) {
+              deleteAccountDailog();
+            }
+            else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
             openChangePasswordBottomSheet();
           } else if (title == getTranslated(context, 'CHANGE_LANGUAGE_LBL')) {
             openChangeLanguageBottomSheet();
