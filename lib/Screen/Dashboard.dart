@@ -9,7 +9,6 @@ import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
-import 'package:omega_employee_management/Screen/MyProfile.dart';
 import 'package:omega_employee_management/Screen/Product_Detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -20,6 +19,7 @@ import 'package:http/http.dart';
 import 'Add_Address.dart';
 import 'HomePage.dart';
 import 'SiteVisitForm.dart';
+import 'myprofile.dart';
 
 var updateTime = 5;
 

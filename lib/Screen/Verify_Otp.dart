@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Constant.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 import '../Helper/AppBtn.dart';
@@ -276,7 +278,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
 
       SettingProvider settingsProvider =
       Provider.of<SettingProvider>(context, listen: false);
-
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       // if (widget.title == getTranslated(context, 'SEND_OTP_TITLE')) {
       if (!error!) {
         setSnackbar(msg!);
@@ -293,6 +295,10 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         longitude = i[LONGITUDE];
         image = i[IMAGE];
         CUR_USERID = id;
+        print("User id"+id.toString());
+        final box = GetStorage();
+        box.write('userid', '${id}');
+
         // CUR_USERNAME = username;
         UserProvider userProvider =
         Provider.of<UserProvider>(this.context, listen: false);

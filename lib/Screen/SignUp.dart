@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:get_storage/get_storage.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
@@ -186,6 +188,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
           await post(getUserSignUpApi, body: data, headers: headers)
               .timeout(Duration(seconds: timeOut));
 
+
       var getdata = json.decode(response.body);
       bool error = getdata["error"];
       String? msg = getdata["message"];
@@ -200,6 +203,8 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         mobile = i[MOBILE];
         //countrycode=i[COUNTRY_CODE];
         CUR_USERID = id;
+        final box = GetStorage();
+        box.write('userid', '${id}');
 
         // CUR_USERNAME = name;
 

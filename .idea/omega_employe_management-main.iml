@@ -78,6 +78,12 @@
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/build" />
+      <excludeFolder url="file://$MODULE_DIR$/downloads_path_provider/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

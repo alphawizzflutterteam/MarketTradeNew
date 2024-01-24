@@ -44,8 +44,11 @@ dependencies:
   firebase_auth: ^3.0.0
   sms_autofill: ^2.0.1
   intl: 0.17.0
+  flutter_background_service: ^5.0.5
   country_code_picker: ^2.0.1
   google_maps_flutter: ^2.0.6
+  get_storage:
+  device_info_plus: ^9.1.1
 #  geolocator: ^7.7.0
   file_picker:
 #  ^4.0.0

@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:omega_employee_management/Screen/HomePage.dart';
 import 'package:country_code_picker/country_localizations.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
@@ -27,6 +28,7 @@ import 'Provider/Theme.dart';
 import 'Provider/SettingProvider.dart';
 import 'Provider/order_provider.dart';
 import 'Screen/Dashboard.dart';
+import 'Screen/check_In_screen.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -50,6 +52,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   initializedDownload();
+  await initializeService();
+  await GetStorage.init();
   // FirebaseMessaging.onBackgroundMessage(myForgroundMessageHandler);
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
