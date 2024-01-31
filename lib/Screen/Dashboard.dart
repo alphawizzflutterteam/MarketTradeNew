@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
+import 'package:omega_employee_management/Screen/check_out_screen.dart';
 import 'Add_Address.dart';
 import 'HomePage.dart';
 import 'SiteVisitForm.dart';
@@ -38,6 +39,17 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    // debugPrint("mmmmm"+(DateTime.now().minute).toString());
+    // Navigator.push(context,
+    //     MaterialPageRoute(
+    //       builder: (context) => CheckOutScreen(),
+    //     ));
+    // if(DateTime.now().hour.toString() == "21" && DateTime.now().minute.toString() == "1"){
+    //   Navigator.push(context,
+    //                   MaterialPageRoute(
+    //                     builder: (context) => CheckOutScreen(),
+    //                   ));
+    // }
     getCurrentLoc();
     SystemChrome.setEnabledSystemUIOverlays(
         [SystemUiOverlay.top, SystemUiOverlay.bottom]);
@@ -142,7 +154,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   updateLocationPeriodically() {
     Timer.periodic(Duration(minutes: updateTime), (timer) async {
-      Position position =  await getCurrentLoc();
+      Position position =  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);;
       if (position != null) {
         // Do something with the updated location, e.g., send it to a server.
         print("Updated Location: ${position.latitude}, ${position.longitude}");
@@ -274,6 +286,11 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+     // if(DateTime.now().hour == "21"
+     //     && DateTime.now().minute == "00"
+     //     &&DateTime.now().second == "00"){
+     //
+     // }
     return WillPopScope(
       onWillPop: () async {
         if (_tabController.index != 0) {

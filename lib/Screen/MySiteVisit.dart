@@ -35,7 +35,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var  result=await response.stream.bytesToString();
-      var finalresult=MySiteVisitModel.fromJson(json.decode(result));
+      var finalresult= MySiteVisitModel.fromJson(json.decode(result));
       setState(() {
         getdata = finalresult;
       });
@@ -73,143 +73,135 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MySiteDetails(model: getdata?.data?[index])));
-                    },
+                      },
                     child: Card(
                       elevation: 5,
                       child: Container(
-                        height: 180,
+                        // height: 220,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.all(5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              // Container(
-                              //   padding: EdgeInsets.all(5),
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(10),
-                              //   ),
-                              //   child: ClipRRect(
-                              //     borderRadius: BorderRadius.circular(9),
-                              //     child: getdata?.data?[index].photo?[index] == null || getdata?.data?[index].photo?[index] == "" ? Text(" No Imagae"):
-                              //     Image.network(
-                              //       "${getdata?.data?[index].photo?[index]}",
-                              //       height: 200,
-                              //       width: 100,
-                              //       // fit: BoxFit.fill,
-                              //     ),
-                              //   ),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  const Text("Name: ", style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,)),
+                                  Text(
+                                    "${getdata?.data?[index].name}",
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,),
+                                  ),
+                                ],),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
                                   children: [
-                                    Row(children: [
-                                      const Text("Name: ", style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,)),
-                                      Text(
-                                        "${getdata?.data?[index].name}",
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,),
-                                      ),
-                                    ],),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Mobile: ", style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold, )),
-                                        Text(
-                                          "${getdata?.data?[index].mobile}",
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400, ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("UserName: ", style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold, )),
-                                        Text(
-                                          "${getdata?.data?[index].name}",
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Address: ", style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,),
-                                        ),
-                                        Text(
-                                          "${getdata?.data?[index].address}",
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Remark: ", style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,),
-                                        ),
-                                        Text(
-                                          "${getdata?.data?[index].remarks}",
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text("Date & Time: ", style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "${getdata?.data?[index].date} ${getdata?.data?[index].time}",
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
+                                    const Text("Mobile: ", style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold, )),
+                                    Text(
+                                      "${getdata?.data?[index].mobile}",
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400, ),
                                     ),
                                   ],
                                 ),
-                              ),
-
-                            ],
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Text("UserName: ", style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold, )),
+                                    Text(
+                                      "${getdata?.data?[index].name}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Text("Address: ", style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,),
+                                    ),
+                                    Text(
+                                      "${getdata?.data?[index].address}",
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Text("Remark: ", style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,),
+                                    ),
+                                    Text(
+                                      "${getdata?.data?[index].remarks}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Text("Date & Time: ", style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "${getdata?.data?[index].date} ${getdata?.data?[index].time}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: TextButton(
+                                      onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => MySiteDetails(model: getdata?.data?[index])));
+                                      },
+                                      child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: colors.primary,
+                                            borderRadius: BorderRadius.circular(8)
+                                          ),
+                                         
+                                          child: Text("View Details",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)) ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -687,7 +687,7 @@ class _Client_formState extends State<Client_form> {
 
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: source);
+    final pickedImage = await picker.pickImage(source: source,maxHeight: 640,maxWidth: 400,imageQuality: 80);
     if (pickedImage != null) {
       setState(() {
         _imageFile = File(pickedImage.path);
@@ -741,6 +741,13 @@ class _Client_formState extends State<Client_form> {
   TextEditingController aadharcn= TextEditingController();
   TextEditingController creditcn= TextEditingController();
   TextEditingController staffcn= TextEditingController();
+  TextEditingController udyogIdCtr= TextEditingController();
+  TextEditingController doBCtr= TextEditingController();
+  TextEditingController doACtr= TextEditingController();
+  TextEditingController routeCtr= TextEditingController();
+  TextEditingController marketCtr= TextEditingController();
+  TextEditingController landmarkCtr= TextEditingController();
+
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selected_Status;
@@ -772,6 +779,12 @@ class _Client_formState extends State<Client_form> {
     gstcn.text='${widget.model?.gst}';
     aadharcn.text='${widget.model?.aadhar}';
     creditcn.text='${widget.model?.creditLimit}';
+    doBCtr.text ='${widget.model?.dateOfBirth}';
+    doACtr.text ='${widget.model?.dateOfAnniversary}';
+    routeCtr.text ='${widget.model?.route}';
+    marketCtr.text ='${widget.model?.market}';
+    landmarkCtr.text ='${widget.model?.landmark}';
+    udyogIdCtr.text ='${widget.model?.udyogIdNumber}';
     selected_Status='${widget.model?.status}';
     selected_Customer='${widget.model?.customerType}';
     // panImage!.path =  "${widget.model?.panImg}" ?? "";
@@ -787,6 +800,8 @@ class _Client_formState extends State<Client_form> {
   File? aadharBack;
   File? gstOne;
   File? gstTwo;
+  File? voterIdImage;
+  File? voterIdBackImage;
 
   void pickImageDialog(BuildContext context,int i) async{
     return await showDialog<void>(
@@ -840,7 +855,6 @@ class _Client_formState extends State<Client_form> {
       },
     );
   }
-
 
   void pickImageDialogPan(BuildContext context,int i) async {
     return await showDialog<void>(
@@ -1175,7 +1189,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1199,7 +1213,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraPan() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1223,7 +1237,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGst() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1235,7 +1249,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGstOne() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1247,7 +1261,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGstTwo() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1271,7 +1285,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraAdhar() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1284,13 +1298,62 @@ class _Client_formState extends State<Client_form> {
 
   getFromCameraAdharBack() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         aadharBack = File(pickedFile.path);
       });
       Navigator.pop(context);
+    }
+  }
+  _getFromCameraVoteIdFront() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+    );
+    if (pickedFile != null) {
+      setState(() {
+        voterIdImage = File(pickedFile.path);
+      });
+      // Navigator.pop(context);
+    }
+  }
+  _getFromCameraVoterIdBack() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+    );
+    if (pickedFile != null) {
+      setState(() {
+        voterIdBackImage = File(pickedFile.path);
+      });
+      // Navigator.pop(context);
+    }
+  }
+
+  _showBirthDatePicker() async {
+    var selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate:DateTime(1970),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null){
+      setState(() {
+        doBCtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+      });
+    }
+  }
+  _showAnniversaryDatePicker() async {
+    var selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate:DateTime(1970),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null){
+      setState(() {
+        doACtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+      });
     }
   }
 
@@ -1576,12 +1639,153 @@ class _Client_formState extends State<Client_form> {
                             controller: whatsappcn,
                             validator: (value) {
                               if (value!.isEmpty||value.length<10) {
+                                return "please enter whatsapp number";
                               }
                               return null;
                             },
 
                             decoration: InputDecoration(
                                 hintText: '9854648544',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Date of Birth",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                          onTap: _showBirthDatePicker,
+                            keyboardType: TextInputType.none,
+                            // maxLength: 10,
+                            controller: doBCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please select date of birth";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Date of Anniversary",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                          onTap: _showAnniversaryDatePicker,
+                            keyboardType: TextInputType.none,
+                            // maxLength: 10,
+                            controller: doACtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please select date of anniversary";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Route",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            // maxLength: 10,
+                            controller: routeCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter route";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Market",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            // maxLength: 10,
+                            controller: marketCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return"please enter market";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("landmark",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            // maxLength: 10,
+                            controller: landmarkCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter landmark";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Udyog Id Number",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            // maxLength: 10,
+                            controller: udyogIdCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter udyog Id ";
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
 
                                 counterText: "",
                                 border: OutlineInputBorder(
@@ -1610,7 +1814,8 @@ class _Client_formState extends State<Client_form> {
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogPan(context, 1);
+                          // pickImageDialogPan(context, 1);
+                          _getFromCameraPan();
                         }, child: Text("Select Pan"),
                       ),
                       Center(
@@ -1647,7 +1852,8 @@ class _Client_formState extends State<Client_form> {
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogGst(context, 1);
+                          // pickImageDialogGst(context, 1);
+                          _getFromCameraGst();
                         }, child: Text("Select GST"),
                       ),
                       Center(
@@ -1663,7 +1869,8 @@ class _Client_formState extends State<Client_form> {
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogGstOne(context, 1);
+                          // pickImageDialogGstOne(context, 1);
+                          _getFromCameraGstOne();
                         }, child: Text("Select GST One"),
                       ),
                       Center(
@@ -1673,13 +1880,14 @@ class _Client_formState extends State<Client_form> {
                           decoration: BoxDecoration(border: Border.all(color: Colors.black),
                           ),
                           child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.gstImg}',)
+                          Image.network('${widget.model?.gstTwoImg}',)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogGstTwo(context, 1);
+                          // pickImageDialogGstTwo(context, 1);
+                          _getFromCameraGstTwo();
                         }, child: Text("Select GST Two"),
                       ),
                       Center(
@@ -1689,7 +1897,7 @@ class _Client_formState extends State<Client_form> {
                           decoration: BoxDecoration(border: Border.all(color: Colors.black),
                           ),
                           child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.gstImg}',)
+                          Image.network('${widget.model?.gstThreeImg}',)
                         ),
                       ),
                       const Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1714,7 +1922,8 @@ class _Client_formState extends State<Client_form> {
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogAdhar(context, 1);
+                          // pickImageDialogAdhar(context, 1);
+                          _getFromCameraAdhar();
                         }, child: Text("Select Aadhaar Front"),
                       ),
                       Center(
@@ -1730,7 +1939,8 @@ class _Client_formState extends State<Client_form> {
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
-                          pickImageDialogAdharBack(context, 1);
+                          // pickImageDialogAdharBack(context, 1);
+                          getFromCameraAdharBack();
                         }, child: Text("Select Aadhaar Back"),
                       ),
                       Center(
@@ -1740,7 +1950,41 @@ class _Client_formState extends State<Client_form> {
                           decoration: BoxDecoration(border: Border.all(color: Colors.black),
                           ),
                           child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.aadharImg}',)
+                          Image.network('${widget.model?.aadharBackImg}',)
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
+                      ElevatedButton(
+                        onPressed: () {
+                          // pickImageDialogAdhar(context, 1);
+                          _getFromCameraVoteIdFront();
+                        }, child: Text("Select Voter Id Front"),
+                      ),
+                      Center(
+                        child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                            child: voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill,):
+                            //    Center(child: Image.asset('assets/img.png')),),
+                            Image.network('${widget.model?.voterIdImg}',)
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
+                      ElevatedButton(
+                        onPressed: () {
+                          // pickImageDialogAdharBack(context, 1);
+                          _getFromCameraVoterIdBack();
+                        }, child: Text("Select Voter Id Back"),
+                      ),
+                      Center(
+                        child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                            ),
+                            child: voterIdBackImage!=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
+                            Image.network('${widget.model?.voterIdBackImg}',)
                         ),
                       ),
                       const Text("Customer Type",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1795,7 +2039,8 @@ class _Client_formState extends State<Client_form> {
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       ElevatedButton(onPressed: (){
-                        _showImagePicker(context);
+                        // _showImagePicker(context);
+                        _pickImage(ImageSource.camera);
                       }, child: const Text("Select Image")),
                       Center(
                         child: Container(

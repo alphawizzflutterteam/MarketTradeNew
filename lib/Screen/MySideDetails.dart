@@ -15,6 +15,7 @@ class MySiteDetails extends StatefulWidget {
 class _MySiteDetailsState extends State<MySiteDetails> {
   @override
   Widget build(BuildContext context) {
+    // debugPrint("photos ${widget.model?.photos}");
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -87,6 +88,20 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   // Text("Survey:",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                   // SizedBox(height: MediaQuery.of(context).size.height*.03,),
                   // Text("Name:${widget.model.?.data[0].basicDetail.name}",style: TextStyle(fontSize: 15),),
+
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                      clipBehavior: Clip.hardEdge,
+                      height: 150,
+                      width: 200,
+                      child: ClipRRect(
+                          child: widget.model?.photos?.first == null || widget.model!.photos!.first.isEmpty ?
+                              Image.asset("assets/images/placeholder.png"):
+                          Image.network("${widget.model?.photos?.first}",fit: BoxFit.fill,)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Text("Name:   ${widget.model?.name}",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w800)),
                   SizedBox(height: MediaQuery.of(context).size.height*.02),
                   Text("Address:   ${widget.model?.address}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
@@ -137,23 +152,35 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   SizedBox(height: MediaQuery.of(context).size.height*.03),
                   Text("Survey Details:- ",style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: Colors.black)),
                   SizedBox(height: MediaQuery.of(context).size.height*.03),
-                  widget.model?.survey?[0].brandName == null || widget.model?.survey?[0].brandName == "" ? Text("Product Name:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Product Name:   ${widget.model?.survey?[0].brandName}",style: TextStyle(fontSize: 15)),
-                  SizedBox(height: MediaQuery.of(context).size.height*.02),
-                  widget.model?.survey?[0].totalConsumption == null || widget.model?.survey?[0].totalConsumption == "" ? Text("Total Consumption:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Total Consumption:   ${widget.model?.survey?[0].totalConsumption}",style: TextStyle(fontSize: 15)),
-                  SizedBox(height: MediaQuery.of(context).size.height*.02),
-                  widget.model?.survey?[0].furtherConsumption == null || widget.model?.survey?[0].furtherConsumption == "" ? Text("Further Consumption:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Further Consumption:   ${widget.model?.survey?[0].furtherConsumption}",style: TextStyle(fontSize: 15)),
-                  SizedBox(height: MediaQuery.of(context).size.height*.02),
-                  widget.model?.survey?[0].purchasePrice == null || widget.model?.survey?[0].purchasePrice == "" ? Text("Purchase Price:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Purchase Price:   ${widget.model?.survey?[0].purchasePrice}",style: TextStyle(fontSize: 15)),
-                  SizedBox(height: MediaQuery.of(context).size.height*.02),
-                  widget.model?.survey?[0].purchasingFrom == null || widget.model?.survey?[0].purchasingFrom == "" ? Text("Purchasing From:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Purchasing From:   ${widget.model?.survey?[0].purchasingFrom}",style: TextStyle(fontSize: 15)),
-                  SizedBox(height: MediaQuery.of(context).size.height*.02),
-                  widget.model?.survey?[0].lastPurchaseDate == null || widget.model?.survey?[0].lastPurchaseDate == "" ? Text("Last Purchase Date:  NA", style: TextStyle(fontSize: 15)):
-                  Text("Last Purchase Date:   ${widget.model?.survey?[0].lastPurchaseDate}",style: TextStyle(fontSize: 15)),
+                  SizedBox(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount:widget.model?.survey?.length ,
+                        itemBuilder: (_,i){
+                          return Column(
+                            children: [
+                              widget.model?.survey?[i].brandName == null || widget.model?.survey?[i].brandName == "" ? Text("Product Name:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Product Name:   ${widget.model?.survey?[0].brandName}",style: TextStyle(fontSize: 15)),
+                              SizedBox(height: MediaQuery.of(context).size.height*.02),
+                              widget.model?.survey?[i].totalConsumption == null || widget.model?.survey?[i].totalConsumption == "" ? Text("Total Consumption:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Total Consumption:   ${widget.model?.survey?[0].totalConsumption}",style: TextStyle(fontSize: 15)),
+                              SizedBox(height: MediaQuery.of(context).size.height*.02),
+                              widget.model?.survey?[i].furtherConsumption == null || widget.model?.survey?[i].furtherConsumption == "" ? Text("Further Consumption:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Further Consumption:   ${widget.model?.survey?[0].furtherConsumption}",style: TextStyle(fontSize: 15)),
+                              SizedBox(height: MediaQuery.of(context).size.height*.02),
+                              widget.model?.survey?[i].purchasePrice == null || widget.model?.survey?[i].purchasePrice == "" ? Text("Purchase Price:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Purchase Price:   ${widget.model?.survey?[0].purchasePrice}",style: TextStyle(fontSize: 15)),
+                              SizedBox(height: MediaQuery.of(context).size.height*.02),
+                              widget.model?.survey?[i].purchasingFrom == null || widget.model?.survey?[i].purchasingFrom == "" ? Text("Purchasing From:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Purchasing From:   ${widget.model?.survey?[0].purchasingFrom}",style: TextStyle(fontSize: 15)),
+                              SizedBox(height: MediaQuery.of(context).size.height*.02),
+                              widget.model?.survey?[i].lastPurchaseDate == null || widget.model?.survey?[i].lastPurchaseDate == "" ? Text("Last Purchase Date:  NA", style: TextStyle(fontSize: 15)):
+                              Text("Last Purchase Date:   ${widget.model?.survey?[0].lastPurchaseDate}",style: TextStyle(fontSize: 15)),
+                            ],
+                          );
+                        }),
+                  )
                   // Text("Credit_Limit:${getdata?.data[0].basicDetail.creditLimit}",style: TextStyle(fontSize: 15),),
                   // SizedBox(height: MediaQuery.of(context).size.height*.03,),
                   // Text("Customer Dealing:",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),

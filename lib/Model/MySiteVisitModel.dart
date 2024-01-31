@@ -112,7 +112,7 @@ class SiteVisitData {
       String? productBeingUsed, 
       List<Survey>? survey, 
       String? expectedOrders, 
-      List<String>? photo, 
+      List<String>? photos,
       String? remarks, 
       dynamic massionName, 
       dynamic massionAddress, 
@@ -148,7 +148,7 @@ class SiteVisitData {
     _productBeingUsed = productBeingUsed;
     _survey = survey;
     _expectedOrders = expectedOrders;
-    _photo = photo;
+    _photos = photos;
     _remarks = remarks;
     _massionName = massionName;
     _massionAddress = massionAddress;
@@ -192,7 +192,7 @@ class SiteVisitData {
       });
     }
     _expectedOrders = json['expected_orders'];
-    _photo = json['photo'] != null ? json['photo'].cast<String>() : [];
+    _photos = json['photo'] != null ? json['photo'].cast<String>() : [];
     _remarks = json['remarks'];
     _massionName = json['massion_name'];
     _massionAddress = json['massion_address'];
@@ -229,7 +229,7 @@ class SiteVisitData {
   String? _productBeingUsed;
   List<Survey>? _survey;
   String? _expectedOrders;
-  List<String>? _photo;
+  List<String>? _photos;
   String? _remarks;
   dynamic _massionName;
   dynamic _massionAddress;
@@ -265,7 +265,7 @@ class SiteVisitData {
   String? productBeingUsed,
   List<Survey>? survey,
   String? expectedOrders,
-  List<String>? photo,
+  List<String>? photos,
   String? remarks,
   dynamic massionName,
   dynamic massionAddress,
@@ -301,7 +301,7 @@ class SiteVisitData {
   productBeingUsed: productBeingUsed ?? _productBeingUsed,
   survey: survey ?? _survey,
   expectedOrders: expectedOrders ?? _expectedOrders,
-  photo: photo ?? _photo,
+  photos: photos ?? _photos,
   remarks: remarks ?? _remarks,
   massionName: massionName ?? _massionName,
   massionAddress: massionAddress ?? _massionAddress,
@@ -338,7 +338,7 @@ class SiteVisitData {
   String? get productBeingUsed => _productBeingUsed;
   List<Survey>? get survey => _survey;
   String? get expectedOrders => _expectedOrders;
-  List<String>? get photo => _photo;
+  List<String>? get photos => _photos;
   String? get remarks => _remarks;
   dynamic get massionName => _massionName;
   dynamic get massionAddress => _massionAddress;
@@ -379,7 +379,7 @@ class SiteVisitData {
       map['survey'] = _survey?.map((v) => v.toJson()).toList();
     }
     map['expected_orders'] = _expectedOrders;
-    map['photo'] = _photo;
+    map['photo'] = _photos;
     map['remarks'] = _remarks;
     map['massion_name'] = _massionName;
     map['massion_address'] = _massionAddress;

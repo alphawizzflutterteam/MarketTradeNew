@@ -92,13 +92,24 @@ class ClientsData {
       String? mobileOne, 
       String? mobileTwo, 
       String? whatsappNumber, 
-      String? pan, 
+      String? dateOfBirth,
+      String? dateOfAnniversary,
+      String? udyogIdNumber,
+      String? route,
+      String? market,
+      String? landmark,
+      String? pan,
       String? panImg, 
       String? gst, 
       String? gstImg, 
-      String? aadhar, 
-      String? aadharImg, 
-      String? customerType, 
+      String? gstTwoImg,
+      String? gstThreeImg,
+      String? aadhar,
+      String? aadharImg,
+      String? aadharBackImg,
+      String? voterIdImg,
+      String? voterIdBackImg,
+      String? customerType,
       String? lat, 
       String? lng, 
       String? photo, 
@@ -123,7 +134,10 @@ class ClientsData {
     _panImg = panImg;
     _gst = gst;
     _gstImg = gstImg;
+    _gstTwoImg = gstTwoImg;
+    _gstThreeImg = gstThreeImg;
     _aadhar = aadhar;
+    _aadharBackImg = aadharBackImg;
     _aadharImg = aadharImg;
     _customerType = customerType;
     _lat = lat;
@@ -132,7 +146,15 @@ class ClientsData {
     _creditLimit = creditLimit;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+    _voterIdImg =     voterIdImg    ;
+    _dateOfBirth =       dateOfBirth      ;
+    _dateOfAnniversary = dateOfAnniversary;
+    _udyogIdNumber =     udyogIdNumber    ;
+    _route =             route            ;
+    _market =            market           ;
+    _landmark =          landmark         ;
+    _voterIdBackImg =     voterIdBackImg;
+  }
 
   ClientsData.fromJson(dynamic json) {
     _id = json['id'];
@@ -153,8 +175,11 @@ class ClientsData {
     _panImg = json['pan_img'];
     _gst = json['gst'];
     _gstImg = json['gst_img'];
+    _gstTwoImg = json['gst_img_two'];
+    _gstThreeImg = json['gst_img_three'];
     _aadhar = json['aadhar'];
     _aadharImg = json['aadhar_img'];
+    _aadharBackImg = json['aadhar_back'];
     _customerType = json['customer_type'];
     _lat = json['lat'];
     _lng = json['lng'];
@@ -162,6 +187,14 @@ class ClientsData {
     _creditLimit = json['credit_limit'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+     _voterIdImg =     json['voter_id_front_image'];
+     _dateOfBirth =       json['date_of_birth'];
+     _dateOfAnniversary =   json['date_of_anniversary'];
+     _udyogIdNumber =        json['udyogid_number'];
+     _route =             json['route'];
+     _market =           json['market'];
+     _landmark =          json['landmark'];
+     _voterIdBackImg =    json['voter_id_back_image'];
   }
   String? _id;
   String? _userId;
@@ -181,8 +214,11 @@ class ClientsData {
   String? _panImg;
   String? _gst;
   String? _gstImg;
+  String? _gstTwoImg;
+  String? _gstThreeImg;
   String? _aadhar;
   String? _aadharImg;
+  String? _aadharBackImg;
   String? _customerType;
   String? _lat;
   String? _lng;
@@ -190,6 +226,14 @@ class ClientsData {
   String? _creditLimit;
   String? _createdAt;
   String? _updatedAt;
+  String? _voterIdImg;
+  String? _dateOfBirth;
+  String? _dateOfAnniversary;
+  String? _udyogIdNumber;
+  String? _route;
+  String? _market;
+  String? _landmark;
+  String? _voterIdBackImg;
   ClientsData copyWith({  String? id,
   String? userId,
   String? staffId,
@@ -208,8 +252,11 @@ class ClientsData {
   String? panImg,
   String? gst,
   String? gstImg,
+  String? gstTwoImg,
+  String? gstThreeImg,
   String? aadhar,
   String? aadharImg,
+  String? aadharBackImg,
   String? customerType,
   String? lat,
   String? lng,
@@ -217,6 +264,14 @@ class ClientsData {
   String? creditLimit,
   String? createdAt,
   String? updatedAt,
+  String? voterIdImg,
+  String? dateOfBirth,
+  String? dateOfAnniversary,
+  String? udyogIdNumber,
+  String? route,
+  String? market,
+  String? landmark,
+  String? voterIdBackImg,
 }) => ClientsData(  id: id ?? _id,
   userId: userId ?? _userId,
   staffId: staffId ?? _staffId,
@@ -235,8 +290,11 @@ class ClientsData {
   panImg: panImg ?? _panImg,
   gst: gst ?? _gst,
   gstImg: gstImg ?? _gstImg,
+  gstTwoImg: gstTwoImg ?? _gstTwoImg,
+  gstThreeImg: gstThreeImg ?? _gstThreeImg,
   aadhar: aadhar ?? _aadhar,
   aadharImg: aadharImg ?? _aadharImg,
+  aadharBackImg: aadharBackImg ?? _aadharBackImg,
   customerType: customerType ?? _customerType,
   lat: lat ?? _lat,
   lng: lng ?? _lng,
@@ -244,6 +302,14 @@ class ClientsData {
   creditLimit: creditLimit ?? _creditLimit,
   createdAt: createdAt ?? _createdAt,
   updatedAt: updatedAt ?? _updatedAt,
+  voterIdImg: voterIdImg ?? _voterIdImg,
+  voterIdBackImg: voterIdBackImg ?? _voterIdBackImg,
+  dateOfBirth: dateOfBirth ?? _dateOfBirth,
+  dateOfAnniversary: dateOfAnniversary ?? _dateOfAnniversary,
+  market: market ?? _market,
+  route: route ?? _route,
+  landmark: landmark ?? _landmark,
+  udyogIdNumber: udyogIdNumber ?? _udyogIdNumber,
 );
   String? get id => _id;
   String? get userId => _userId;
@@ -263,8 +329,11 @@ class ClientsData {
   String? get panImg => _panImg;
   String? get gst => _gst;
   String? get gstImg => _gstImg;
+  String? get gstTwoImg => _gstTwoImg;
+  String? get gstThreeImg => _gstThreeImg;
   String? get aadhar => _aadhar;
   String? get aadharImg => _aadharImg;
+  String? get aadharBackImg => _aadharBackImg;
   String? get customerType => _customerType;
   String? get lat => _lat;
   String? get lng => _lng;
@@ -272,6 +341,14 @@ class ClientsData {
   String? get creditLimit => _creditLimit;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String? get voterIdImg => _voterIdImg;
+  String? get voterIdBackImg => _voterIdBackImg;
+  String? get route => _route;
+  String? get landmark => _landmark;
+  String? get market => _market;
+  String? get dateOfBirth => _dateOfBirth;
+  String? get dateOfAnniversary => _dateOfAnniversary;
+  String? get udyogIdNumber => _udyogIdNumber;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -293,8 +370,11 @@ class ClientsData {
     map['pan_img'] = _panImg;
     map['gst'] = _gst;
     map['gst_img'] = _gstImg;
+    map['gst_img_two'] = _gstTwoImg;
+    map['gst_img_three'] = _gstThreeImg;
     map['aadhar'] = _aadhar;
     map['aadhar_img'] = _aadharImg;
+    map['aadhar_back'] = _aadharBackImg;
     map['customer_type'] = _customerType;
     map['lat'] = _lat;
     map['lng'] = _lng;
@@ -302,6 +382,14 @@ class ClientsData {
     map['credit_limit'] = _creditLimit;
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
+    map['date_of_birth'] = _dateOfBirth;
+    map['voter_id_front_image'] = _voterIdImg;
+    map['date_of_anniversary'] = _dateOfAnniversary;
+    map['udyogid_number'] = _udyogIdNumber;
+    map['route'] = _route;
+    map['market'] = _market;
+    map['landmark'] = _landmark;
+    map['voter_id_back_image'] = _voterIdBackImg;
     return map;
   }
 

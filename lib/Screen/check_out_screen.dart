@@ -15,6 +15,7 @@ import 'package:omega_employee_management/Model/check_in_model.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Helper/String.dart';
 import 'package:http/http.dart'as http;
 
@@ -36,10 +37,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   bool isLoading = false;
   Future<void> checkOutNow() async {
+    setState(() {
+      isLoading = true;
+    });
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
+    var request =  http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
     request.fields.addAll({
       'user_id': CUR_USERID.toString(),
       'checkout_latitude': '${latitude}',
@@ -47,6 +51,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       'address': '${currentAddress.text}',
       'redings': readingCtr.text
     });
+
+
     for (var i = 0; i < imagePathList.length; i++) {
       imagePathList == null
           ? null
@@ -65,25 +71,29 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+
       var str = await response.stream.bytesToString();
       var result = json.decode(str);
-      setState(() {
-        isLoading = false;
-      });
+      // Fluttertoast.showToast(msg: result['msg']);
       if(result['data']['error'] == false) {
+        setIsCheckOut();
+
         Fluttertoast.showToast(msg: result['data']['msg']);
         Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));
       } else {
-        setState(() {
-          isLoading = false;
-        });
         Fluttertoast.showToast(msg: result['data']['msg']);
       }
+      setState(() {
+        isLoading = false;
+      });
       // var finalResponse = GetUserExpensesModel.fromJson(result);
       // final finalResponse = CheckInModel.fromJson(json.decode(Response));
     }
     else {
-      print(response.reasonPhrase);
+      setState(() {
+        isLoading = false;
+      });
+      print("reasonnn" +response.reasonPhrase.toString());
     }
   }
 
@@ -475,13 +485,22 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   ///
 
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
-    getCurrentLoc();
+    // if(DateTime.now().hour.toString() == "21" && DateTime.now().minute.toString() == "1" ){
+
+
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
+    // }
+     getCurrentLoc();
     convertDateTimeDispla();
+    // checkOutNow();
     super.initState();
   }
-
+setIsCheckOut() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("CheckIn", false);
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -574,14 +593,23 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           fixedSize: Size(350, 40),
                           backgroundColor: colors.primary.withOpacity(0.8)
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        // await checkOutNow();
                         if(latitude == "" || latitude == 0 || latitude == null) {
                           setSnackbar("Please wait fetching your current location...", context);
-                        } else {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          checkOutNow();
+                        }
+                        else if(_imageFile == null){
+                          setSnackbar("Please select a image", context);
+                        }
+                        else if(readingCtr.text.isEmpty){
+                          setSnackbar("Please enter Odometer start reading", context);
+                        }
+                        else {
+                          // setState(() {
+                          //   isLoading = true;
+                          // });
+                           checkOutNow();
+
                         }
                       },
                       child:isLoading? Center(child: CircularProgressIndicator(
@@ -596,4 +624,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       ),
     );
   }
+}
+
+
+autoCheckOut(){
+  DateTime time = DateTime.now();
 }

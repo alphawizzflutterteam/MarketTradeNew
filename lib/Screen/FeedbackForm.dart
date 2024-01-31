@@ -701,14 +701,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             Text("${delearRetailerModel?.data?[nwIndex].mobileOne}, ${delearRetailerModel?.data?[nwIndex].mobileTwo}, ${delearRetailerModel?.data?[nwIndex].whatsappNumber}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                           ],
                         ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
+                        // SizedBox(height: 10),
+                        // Row(
+                        //   children: [
+                        //     Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //     SizedBox(width: 10),
+                        //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //   ],
+                        // ),
                         SizedBox(height: 10),
                         Row(
                           children: [
@@ -941,7 +941,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
               ),
               InkWell(
                 onTap: () {
-                  if(results.length == 0){
+                  if(results.length == 0 || selected == null){
                     Fluttertoast.showToast(msg: "All fields Required");
                   } else{
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Survey(

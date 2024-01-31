@@ -42,6 +42,13 @@ class _AddClientsState extends State<AddClients> {
   TextEditingController adharCtr= TextEditingController();
   TextEditingController creditCTr= TextEditingController();
   TextEditingController panCtr= TextEditingController();
+  TextEditingController voterIdCtr= TextEditingController();
+  TextEditingController udyogIdCtr= TextEditingController();
+  TextEditingController doBCtr= TextEditingController();
+  TextEditingController doACtr= TextEditingController();
+  TextEditingController routeCtr= TextEditingController();
+  TextEditingController marketCtr= TextEditingController();
+  TextEditingController landmarkCtr= TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selected_Status;
@@ -61,7 +68,8 @@ class _AddClientsState extends State<AddClients> {
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
-    var request = http.MultipartRequest('GET', Uri.parse(getListsApi.toString()));
+    var request = http.MultipartRequest(
+        'GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -71,8 +79,7 @@ class _AddClientsState extends State<AddClients> {
       setState(() {
         getListModel = finalResponse;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -399,7 +406,6 @@ class _AddClientsState extends State<AddClients> {
       },
     );
   }
-
   void pickImageDialogAdharBack(BuildContext context,int i) async {
     return await showDialog<void>(
       context: context,
@@ -452,6 +458,120 @@ class _AddClientsState extends State<AddClients> {
       },
     );
   }
+  void pickImageDialogVoter(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraVoterId();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  void pickImageDialogVoterBack(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraVoterId();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  void pickImageDialogUdyogId(BuildContext context,int i) async{
+    return await showDialog<void>(
+      context: context,
+      // barrierDismissible: barrierDismissible, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 200,
+                height: 1,
+                color: Colors.black12,
+              ),
+              InkWell(
+                onTap: () async {
+                  _getFromCameraUdyogId();
+                },
+                child: Container(
+                  child: ListTile(
+                      title:  Text("Camera"),
+                      leading: Icon(
+                        Icons.camera,
+                        color: colors.primary,
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
 
   final picker= ImagePicker();
@@ -460,8 +580,37 @@ class _AddClientsState extends State<AddClients> {
   File? gstImage;
   File? aadharImage;
   File? aadharBack;
+  File? voterIdImage;
+  File? voterIdBackImage;
+  File? udyogIdImage;
   File? gstOne;
   File? gstTwo;
+  _showBirthDatePicker() async {
+     var selectedDate = await showDatePicker(
+       context: context,
+      initialDate: DateTime.now(),
+      firstDate:DateTime(1970),
+      lastDate: DateTime.now(),
+    );
+     if (selectedDate != null){
+       setState(() {
+         doBCtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+       });
+     }
+  }
+  _showAnniversaryDatePicker() async {
+    var selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate:DateTime(1970),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null){
+      setState(() {
+        doACtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+      });
+    }
+  }
 
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
@@ -474,11 +623,72 @@ class _AddClientsState extends State<AddClients> {
       Navigator.pop(context);
     }
   }
+   getImageFromCamera(src) async{
 
+    var pickedFile = await ImagePicker().pickImage(source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80);
+    switch (src){
+      case "aadhar": if(pickedFile != null){
+        setState(() {
+          aadharImage = File(pickedFile.path);
+        });
+      }
+       break;
+      case "aadhar_back": if(pickedFile != null){
+        setState(() {
+          aadharBack = File(pickedFile.path);
+        });
+      }
+      break;
+      case "voter_id": if(pickedFile != null){
+        setState(() {
+          voterIdImage = File(pickedFile.path);
+        });
+      }
+      break;
+      case "voter_id_back": if(pickedFile != null){
+        setState(() {
+          voterIdBackImage = File(pickedFile.path);
+        });
+      }
+      break;
+      case "pan": if(pickedFile != null){
+        setState(() {
+          panImage = File(pickedFile.path);
+        });
+      }
+      break;
+      case "gst_one": if(pickedFile != null){
+        setState(() {
+          gstImage = File(pickedFile.path);
+        });
+      }
+      break;
+      case "gst_two": if(pickedFile != null){
+        setState(() {
+          gstOne = File(pickedFile.path);
+        });
+      }
+      break;
+      case "gst_three": if(pickedFile != null){
+        setState(() {
+          gstTwo = File(pickedFile.path);
+        });
+      }
+      break;
+      default : if(pickedFile != null){
+             setState(() {
+                _imageFile = File(pickedFile.path);
+                imagePathList.add(_imageFile?.path ?? "");
+                isImages = true;
+                   });
+           }
+    break;
+    }
+   }
 
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -498,19 +708,19 @@ class _AddClientsState extends State<AddClients> {
       setState(() {
         panImage = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
   _getFromCameraPan() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
@@ -522,43 +732,43 @@ class _AddClientsState extends State<AddClients> {
       setState(() {
         gstImage = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
   _getFromCameraGst() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
   _getFromCameraGstOne() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         gstOne = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
   _getFromCameraGstTwo() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         gstTwo = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
@@ -576,25 +786,58 @@ class _AddClientsState extends State<AddClients> {
 
   _getFromCameraAdhar() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         aadharImage = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
   _getFromCameraAdharBack() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         aadharBack = File(pickedFile.path);
       });
-      Navigator.pop(context);
+      // Navigator.pop(context);
+    }
+  }
+  _getFromCameraVoterId() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality:  80
+    );
+    if (pickedFile != null) {
+      setState(() {
+        voterIdImage = File(pickedFile.path);
+      });
+      // Navigator.pop(context);
+    }
+  }
+  _getFromCameraVoterIdBack() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+    );
+    if (pickedFile != null) {
+      setState(() {
+        voterIdBackImage = File(pickedFile.path);
+      });
+      // Navigator.pop(context);
+    }
+  }
+  _getFromCameraUdyogId() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+    );
+    if (pickedFile != null) {
+      setState(() {
+        udyogIdImage = File(pickedFile.path);
+      });
+      // Navigator.pop(context);
     }
   }
 
@@ -602,10 +845,17 @@ class _AddClientsState extends State<AddClients> {
    var headers = {
     'Cookie': 'ci_session=3350434c72c5fbc8f5a7e422a38423adace3eaf8'
    };
+
    var request = http.MultipartRequest('POST', Uri.parse(addNewClient.toString()));
    request.fields.addAll({
      'user_id': '${CUR_USERID}',
      'name_of_firm': namecn.text,
+     "date_of_birth" : doBCtr.text,
+     "date_of_anniversary" : doACtr.text,
+     "udyogid_number":udyogIdCtr.text,
+     "route":routeCtr.text,
+     "market":marketCtr.text,
+     "landmark":landmarkCtr.text,
      'status':selected_Status.toString() ,
      'owner_name': ownernamecn.text,
      'address': addresscn.text,
@@ -624,6 +874,15 @@ class _AddClientsState extends State<AddClients> {
      'lat': latitude.toString(),
      'lng': longitude.toString(),
    });
+   // print( aadharImage!.path.toString());
+   // print("path" + _imageFile!.path.toString());
+   // print("path" + gstImage!.path.toString());
+   // print("path" + aadharBack!.path.toString());
+   // print("path" + panImage!.path.toString());
+   // print("path" + gstOne!.path.toString());
+   // print("path" + gstTwo!.path.toString());
+   // print("path" + voterIdImage!.path.toString());
+   // print("path" + voterIdBackImage!.path.toString());
    print("parameter addd clientss${request.fields} ${request.files}");
   request.files.add(await http.MultipartFile.fromPath('photo', _imageFile?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""));
@@ -632,7 +891,10 @@ class _AddClientsState extends State<AddClients> {
   request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? ""));
   request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? ""));
+  request.files.add(await http.MultipartFile.fromPath('voter_id_front_image', voterIdImage?.path ?? ""));
+  request.files.add(await http.MultipartFile.fromPath('voter_id_back_image', voterIdBackImage?.path ?? ""));
   request.headers.addAll(headers);
+   print("reaquestPAth" + request.files.toString());
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     var finalResponse = await response.stream.bytesToString();
@@ -641,7 +903,7 @@ class _AddClientsState extends State<AddClients> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
   }
   else {
-    print(response.reasonPhrase);
+    print("reason" + response.reasonPhrase.toString());
   }
 }
 
@@ -658,7 +920,7 @@ class _AddClientsState extends State<AddClients> {
         ),
         InkWell(
           onTap: () async {
-            _getFromCamera();
+            getImageFromCamera("image");
             // pickImageDialog(context, 1);
             // await pickImages();
           },
@@ -862,11 +1124,12 @@ class _AddClientsState extends State<AddClients> {
                         onChanged: (newValue) {
                           setState(() {
                             selected_State = newValue;
-                            getListModel?.data?.states?.map((items) {
-                              if(items.id == newValue) {
-                                cities = items.cities;
-                              }
-                            });
+                            stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selected_State);
+                            // getListModel?.data?.states?.map((items) {
+                            //   if(items.id == newValue) {
+                            //     cities = items.cities;
+                            //   }
+                            // });
                             var name =
                             print("aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
                             // print("current indexxx ${selected}");
@@ -901,6 +1164,7 @@ class _AddClientsState extends State<AddClients> {
                         onChanged: (newValue) {
                           setState(() {
                             selected_District = newValue;
+                            nwIndex = getListModel!.data!.states![stateindex].cities!.indexWhere((element) => element.id == selectedDistrict);
                             // print("current indexxx ${selected}");
                             // nwIndex = getListModel!.data!.states![stateindex].cities!.indexWhere((element) => element.id == selectedDistrict)!;
                             // currentIndex = selected;
@@ -1022,6 +1286,122 @@ class _AddClientsState extends State<AddClients> {
                                   borderRadius:  BorderRadius.circular(10)))),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Date of Birth",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                        onTap: (){
+                          _showBirthDatePicker();
+                        },
+                          keyboardType: TextInputType.none,
+                          maxLength: 10,
+                          controller: doBCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please select Your Date of Birth';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Date of Anniversary",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                        onTap: (){
+                          _showAnniversaryDatePicker();
+                        },
+                          keyboardType: TextInputType.none,
+                          maxLength: 10,
+                          controller: doACtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please select Your Date of Anniversary';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Route",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          maxLength: 10,
+                          controller: routeCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Route';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Market",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          maxLength: 10,
+                          controller: marketCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter market';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Landmark",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          maxLength: 10,
+                          controller: landmarkCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Landmark';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     Text("Pan",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     Card(elevation: 6,
@@ -1044,7 +1424,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogPan(context, 1);
+                        // pickImageDialogPan(context, 1);
+                        _getFromCameraPan();
+                       // getImageFromCamera("pan");
                       }, child: Text("Add Pan"),
                     ),
                     Center(
@@ -1083,7 +1465,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogGst(context, 1);
+                         //pickImageDialogGst(context, 1);
+                        _getFromCameraGst();
+                        //getImageFromCamera("gst_one");
                       }, child: Text("Add GST Image1"),
                     ),
                     Center(
@@ -1100,7 +1484,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogGstOne(context, 1);
+                        // pickImageDialogGstOne(context, 1);
+                        _getFromCameraGstOne();
+                       // getImageFromCamera("gst_two");
                       }, child: Text("Add GST Image2"),
                     ),
                     Center(
@@ -1117,7 +1503,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogGstTwo(context, 1);
+                        // pickImageDialogGstTwo(context, 1);
+                       _getFromCameraGstTwo();
+                      //  getImageFromCamera("gst_three");
                       }, child: Text("Add GST Image3"),
                     ),
                     Center(
@@ -1153,7 +1541,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogAdhar(context, 1);
+                        // pickImageDialogAdhar(context, 1);
+                        // _getFromCameraAdhar();
+                        getImageFromCamera("aadhar");
                       }, child: Text("Add Aadhaar Front"),
                     ),
                     Center(
@@ -1170,7 +1560,9 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
-                        pickImageDialogAdharBack(context, 1);
+                        // pickImageDialogAdharBack(context, 1);
+                        // _getFromCameraAdharBack();
+                        getImageFromCamera("aadhar_back");
                       }, child: Text("Add Aadhaar Back"),
                     ),
                     Center(
@@ -1184,6 +1576,100 @@ class _AddClientsState extends State<AddClients> {
                         ),
                       ),
                     ),
+                    Text("Voter Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    // Card(elevation: 6,
+                    //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //   child: TextFormField(
+                    //       keyboardType: TextInputType.number,
+                    //       maxLength: 12,
+                    //       controller: voterIdCtr,
+                    //       validator: (value) {
+                    //         if (value!.isEmpty) {
+                    //           return 'Please Enter Your VoterId No';
+                    //         }
+                    //         return null;
+                    //       },
+                    //       decoration: InputDecoration(
+                    //           hintText: '',
+                    //           counterText: "",
+                    //           border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
+                    // ),
+                    // SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    ElevatedButton(
+                      onPressed: () {
+                        // pickImageDialogVoter(context, 1);
+                        // _getFromCameraVoterId();
+                        getImageFromCamera("voter_id");
+                      }, child: Text("Add Voter Id Front"),
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                        ),
+                        child:voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill):
+                        Center(child: Image.asset('assets/images/homelogo.png'),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    ElevatedButton(
+                      onPressed: () {
+                        // pickImageDialogVoterBack(context, 1);
+                        // _getFromCameraVoterIdBack();
+                        getImageFromCamera("voter_id_back");
+                      }, child: Text("Add Voter Id Back"),
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                        ),
+                        child: voterIdBackImage !=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
+                        Center(child: Image.asset('assets/images/homelogo.png'),
+                        ),
+                      ),
+                    ),
+                    Text("Udyog Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          maxLength: 12,
+                          controller: udyogIdCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your Udyog Id No';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    // SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     // pickImageDialogUdyogId(context, 1);
+                    //     _getFromCameraUdyogId();
+                    //   }, child: Text("Add Udyog Id"),
+                    // ),
+                    // Center(
+                    //   child: Container(
+                    //     height: 150,
+                    //     width: 150,
+                    //     decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                    //     ),
+                    //     child:udyogIdImage!=null? Image.file(udyogIdImage!.absolute,fit: BoxFit.fill):
+                    //     Center(child: Image.asset('assets/images/homelogo.png'),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
                     Text("Customer Type",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -98,6 +99,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
   List<TextEditingController> rspController = [];
   int totalMonthlySales = 0;
   int currentSales = 0;
+  List<int> sums = [];
 
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
@@ -106,13 +108,17 @@ class _SiteSurveyState extends State<SiteSurvey> {
   // List<List<TextEditingController>> wholeDataList = [] ;
 
   List dataList = [];
-
+  int sum = 0;
   List<List<List<TextEditingController>>> feedbackList = [];
 
   void initState() {
     super.initState();
     getCurrentLoc();
     convertDateTimeDispla();
+
+    for(int i = 0; i < (widget.modelList?.length ?? 0); i++){
+      sums.add(sum);
+    }
 
     for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
       List<List<TextEditingController>> wholeDataList = [];
@@ -176,6 +182,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
     });
     print("add coustomer survey parameter ${request.fields}");
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
+      print("imageeeeeeeeeeeee ${imagePathList[i].toString()}");
       imagePathList[i] == ""
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
@@ -190,7 +197,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
       );
       Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
-      print(response.reasonPhrase);
+      print("reasonnnnnnnnnn"+response.reasonPhrase.toString());
     }
   }
 
@@ -254,6 +261,9 @@ class _SiteSurveyState extends State<SiteSurvey> {
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.camera,
+      maxHeight: 500,
+      maxWidth: 300,
+      imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -400,12 +410,15 @@ class _SiteSurveyState extends State<SiteSurvey> {
           children: [
             const SizedBox(height: 5),
             Container(
-              height: MediaQuery.of(context).size.height/1.9,
+              // height: MediaQuery.of(context).size.height/1.9,
               child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 key: Key('${selectedIndex.toString()}'),
                 itemCount: widget.modelList?.length ?? 0,
                 itemBuilder: (context, index) {
                   var item = widget.modelList?[index];
+
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -413,390 +426,420 @@ class _SiteSurveyState extends State<SiteSurvey> {
                           borderRadius: BorderRadius.circular(0),
                           border: Border.all(color: colors.black54)
                       ),
-                      child: ExpansionTile(
-                        collapsedBackgroundColor: colors.whiteTemp,
-                        key: Key(index.toString()),
-                        initiallyExpanded: index == selectedIndex ,
-                        title: Row(
-                          children: [
-                            Text("Product Name: ", style: TextStyle(fontSize: 14)),
-                            Text('${item?.name}', style: TextStyle(fontSize: 14),),
-                          ],
-                        ),
-                        onExpansionChanged: (isExpanded) {
-                          if(isExpanded) {
-                            setState(()  {
-                              const Duration(milliseconds: 2000);
-                              selectedIndex = index;
-                            });
-                          }else{
-                            setState(() {
-                              selectedIndex = -1;
-                            });
-                          }
-                        },
-                        children:[
-                          SingleChildScrollView(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width/1.2,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: item?.products?.length ?? 0,
-                                  itemBuilder: (BuildContext, i) {
-                                    var data = item?.products?[i];
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                            Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              "Expected Consumption: ",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(context).size.width / 2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][0],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                  EdgeInsets.only(top: 7, left: 5),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(
-                                                        5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(
-                                                      color: Colors
-                                                          .black,
-                                                      fontSize: 10),
-                                                  hintText:
-                                                  "Expected Consumption",
-                                                  fillColor: Colors
-                                                      .white70,
-                                                ),
-                                                onSubmitted:
-                                                    (value) {
-                                                  totalMonthlySales +=
-                                                      int.parse(
-                                                          value);
-                                                  setState(() {});
-                                                  print(
-                                                      "printtttttttt ${totalMonthlySales}");
-                                                  // int total = 0;
-                                                  // for (int i = 0; i < 5; i++) {
-                                                  //   String text = monthlyControllers[i].text;
-                                                  //   if (text.isNotEmpty) {
-                                                  //     total += int.parse(text);
-                                                  //   }
-                                                  // }
-                                                  // setState(() {
-                                                  //   totalMonthlySales = total;
-                                                  //   print("total monthly sheet ${totalMonthlySales}");
-                                                  // });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                                "Further Consumption: ",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width /
-                                                  2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][1],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                  border:
-                                                  OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(
-                                                      color: Colors
-                                                          .black,
-                                                      fontSize: 10),
-                                                  hintText:
-                                                  "Fruther Consumption",
-                                                  fillColor: Colors
-                                                      .white70,
-                                                ),
-                                                onSubmitted:
-                                                    (value) {
-                                                  currentSales +=
-                                                      int.parse(
-                                                          value);
-                                                  setState(() {});
-                                                  print(
-                                                      "printtttttttt ${currentSales}");
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                                "Purchase Price: ",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width /
-                                                  2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][2],
-                                                keyboardType: TextInputType.number,
-                                                decoration:
-                                                InputDecoration(
-                                                  contentPadding:
-                                                  EdgeInsets
-                                                      .only(
-                                                      top: 7, left: 5),
-                                                  border:
-                                                  OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(
-                                                      color: Colors
-                                                          .black,
-                                                      fontSize: 10),
-                                                  hintText: "Price",
-                                                  fillColor: Colors
-                                                      .white70,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                                "Purchasing Form: ",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width /
-                                                  2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][3],
-                                                keyboardType:
-                                                TextInputType
-                                                    .text,
-                                                decoration:
-                                                InputDecoration(
-                                                  contentPadding:
-                                                  EdgeInsets
-                                                      .only(
-                                                      top:
-                                                      7,
-                                                      left:
-                                                      5),
-                                                  border:
-                                                  OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(
-                                                      color: Colors
-                                                          .black,
-                                                      fontSize: 10),
-                                                  hintText: "Form",
-                                                  fillColor: Colors
-                                                      .white70,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                                "Last Purchase Date: ",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold)),
-                                            SizedBox(width: 10),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  height: 25,
-                                                  width: MediaQuery.of(
-                                                      context)
-                                                      .size
-                                                      .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller: feedbackList[index][i][4],
-                                                    decoration:
-                                                    InputDecoration(
-                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                      border:
-                                                      OutlineInputBorder(
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                      ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors
-                                                              .black,
-                                                          fontSize:
-                                                          10),
-                                                      hintText:
-                                                      "Date",
-                                                      fillColor: Colors
-                                                          .white70,
-                                                    ),
-                                                    onTap: () async {
-                                                      DateTime?pickedDate =
-                                                      await showDatePicker(
-                                                          context: context,
-                                                          initialDate: DateTime.now(),
-                                                          firstDate: DateTime(1950),
-                                                          lastDate: DateTime(2100),
-                                                          builder: (context, child) {
-                                                            return Theme(
-                                                                data: Theme.of(context).copyWith(
-                                                                  colorScheme: ColorScheme.light(primary: colors.primary),
-                                                                ),
-                                                                child: child!);
-                                                          });
-                                                      if (pickedDate != null) {
-                                                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                                        feedbackList[index][i][4].text = formattedDate;
-                                                        setState(
-                                                                () {
-                                                              dateinput.text = formattedDate;
-                                                            });
-                                                      }
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Divider(color: Colors.black,),
-                                        const SizedBox(height: 5,),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(left: 15, right: 15),
-                                        //   child: Row(
-                                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //     children: [
-                                        //       Text(
-                                        //         "Sum Of Expected",
-                                        //         style: TextStyle(
-                                        //           fontSize: 13,
-                                        //           fontWeight: FontWeight.w800,
-                                        //         ),
-                                        //       ),
-                                        //       Text("${totalMonthlySales}",
-                                        //           style: TextStyle(
-                                        //             fontSize: 13,
-                                        //             fontWeight: FontWeight.w800,
-                                        //           ))
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                        // SizedBox(height: 10),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(left: 15, right: 15),
-                                        //   child: Row(
-                                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //     children: [
-                                        //       Text(
-                                        //         "Sum Of Further",
-                                        //         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
-                                        //       ),
-                                        //       Text("${currentSales}",
-                                        //         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
-                                        //       )
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                        // SizedBox(
-                                        //   height: 10,
-                                        // ),
-                                      ],
-                                    );
-                                  }),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ExpansionTile(
+                            collapsedBackgroundColor: colors.whiteTemp,
+                            key: Key(index.toString()),
+                            initiallyExpanded: index == selectedIndex ,
+                            title: Row(
+                              children: [
+                                Text("Product Name: ", style: TextStyle(fontSize: 14)),
+                                Text('${item?.name}', style: TextStyle(fontSize: 14),),
+                              ],
                             ),
+                            onExpansionChanged: (isExpanded) {
+                              if(isExpanded) {
+                                setState(()  {
+                                  const Duration(milliseconds: 2000);
+                                  selectedIndex = index;
+                                });
+                              }else{
+                                setState(() {
+                                  selectedIndex = -1;
+                                });
+                              }
+                            },
+                            children:[
+                              Container(
+                                height: MediaQuery.of(context).size.height/3.5,
+                                width: MediaQuery.of(context).size.width/1.2,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    // physics: NeverScrollableScrollPhysics(),
+                                    itemCount: item?.products?.length ?? 0,
+                                    itemBuilder: (BuildContext, i) {
+                                      var data = item?.products?[i];
+
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                              Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "Expected Consumption: ",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(context).size.width / 2.9,
+                                                child: TextField(
+                                                  controller: feedbackList[index][i][0],
+                                                  keyboardType: TextInputType.number,
+                                                  // onEditingComplete: (){
+                                                  //   sum += int.parse(feedbackList[index][i][0].text);
+                                                  //   feedbackList[index][i][0].clear();
+                                                  // },
+
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                    EdgeInsets.only(top: 7, left: 5),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.circular(
+                                                          5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 10),
+                                                    hintText:
+                                                    "Expected Consumption",
+                                                    fillColor: Colors
+                                                        .white70,
+                                                  ),
+                                                  onSubmitted:(val){
+                                                    setState(() {
+                                                      sums[index] += int.parse(val);
+                                                    });
+                                                  }
+                                                  //     (value) {
+                                                  //   totalMonthlySales +=
+                                                  //       int.parse(
+                                                  //           value);
+                                                  //   setState(() {});
+                                                  //   print(
+                                                  //       "printtttttttt ${totalMonthlySales}");
+                                                  //   // int total = 0;
+                                                  //   // for (int i = 0; i < 5; i++) {
+                                                  //   //   String text = monthlyControllers[i].text;
+                                                  //   //   if (text.isNotEmpty) {
+                                                  //   //     total += int.parse(text);
+                                                  //   //   }
+                                                  //   // }
+                                                  //   // setState(() {
+                                                  //   //   totalMonthlySales = total;
+                                                  //   //   print("total monthly sheet ${totalMonthlySales}");
+                                                  //   // });
+                                                  // },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                  "Further Consumption: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(
+                                                    context)
+                                                    .size
+                                                    .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller: feedbackList[index][i][1],
+                                                  // onEditingComplete: (){
+                                                  //   setState(() {
+                                                  //     sum += int.parse(feedbackList[index][i][1].text);
+                                                  //   });
+                                                  // },
+                                                  keyboardType: TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                    border:
+                                                    OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 10),
+                                                    hintText:
+                                                    "Fruther Consumption",
+                                                    fillColor: Colors
+                                                        .white70,
+                                                  ),
+                                                  onSubmitted:
+                                                      (val) {
+
+                                                          setState(() {
+                                                            sums[index] += int.parse(val);
+                                                          });
+
+                                                    // currentSales +=
+                                                    //     int.parse(
+                                                    //         val);
+                                                    // setState(() {});
+                                                    // print(
+                                                    //     "printtttttttt ${currentSales}");
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                  "Purchase Price: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(
+                                                    context)
+                                                    .size
+                                                    .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller: feedbackList[index][i][2],
+                                                  keyboardType: TextInputType.number,
+                                                  decoration:
+                                                  InputDecoration(
+                                                    contentPadding:
+                                                    EdgeInsets
+                                                        .only(
+                                                        top: 7, left: 5),
+                                                    border:
+                                                    OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 10),
+                                                    hintText: "Price",
+                                                    fillColor: Colors
+                                                        .white70,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                  "Purchasing Form: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(
+                                                    context)
+                                                    .size
+                                                    .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller: feedbackList[index][i][3],
+                                                  keyboardType:
+                                                  TextInputType
+                                                      .text,
+                                                  decoration:
+                                                  InputDecoration(
+                                                    contentPadding:
+                                                    EdgeInsets
+                                                        .only(
+                                                        top:
+                                                        7,
+                                                        left:
+                                                        5),
+                                                    border:
+                                                    OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 10),
+                                                    hintText: "Form",
+                                                    fillColor: Colors
+                                                        .white70,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  "Last Purchase Date: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold)),
+                                              SizedBox(width: 10),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 25,
+                                                    width: MediaQuery.of(
+                                                        context)
+                                                        .size
+                                                        .width /
+                                                        2.9,
+                                                    child: TextField(
+                                                      readOnly: true,
+                                                      controller: feedbackList[index][i][4],
+                                                      decoration:
+                                                      InputDecoration(
+                                                        contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                        border:
+                                                        OutlineInputBorder(
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                        ),
+                                                        filled: true,
+                                                        hintStyle: TextStyle(
+                                                            color: Colors
+                                                                .black,
+                                                            fontSize:
+                                                            10),
+                                                        hintText:
+                                                        "Date",
+                                                        fillColor: Colors
+                                                            .white70,
+                                                      ),
+                                                      onTap: () async {
+                                                        DateTime?pickedDate =
+                                                        await showDatePicker(
+                                                            context: context,
+                                                            initialDate: DateTime.now(),
+                                                            firstDate: DateTime(1950),
+                                                            lastDate: DateTime(2100),
+                                                            builder: (context, child) {
+                                                              return Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    colorScheme: ColorScheme.light(primary: colors.primary),
+                                                                  ),
+                                                                  child: child!);
+                                                            });
+                                                        if (pickedDate != null) {
+                                                          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                          feedbackList[index][i][4].text = formattedDate;
+                                                          setState(
+                                                                  () {
+                                                                dateinput.text = formattedDate;
+                                                              });
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Divider(color: Colors.black,),
+                                          const SizedBox(height: 5,),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.only(left: 15, right: 15),
+                                          //   child: Row(
+                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //     children: [
+                                          //       Text(
+                                          //         "Sum Of Expected",
+                                          //         style: TextStyle(
+                                          //           fontSize: 13,
+                                          //           fontWeight: FontWeight.w800,
+                                          //         ),
+                                          //       ),
+                                          //       Text("${totalMonthlySales}",
+                                          //           style: TextStyle(
+                                          //             fontSize: 13,
+                                          //             fontWeight: FontWeight.w800,
+                                          //           ))
+                                          //     ],
+                                          //   ),
+                                          // ),
+                                          // SizedBox(height: 10),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.only(left: 15, right: 15),
+                                          //   child: Row(
+                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //     children: [
+                                          //       Text(
+                                          //         "Sum Of Further",
+                                          //         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+                                          //       ),
+                                          //       Text("${currentSales}",
+                                          //         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+                                          //       )
+                                          //     ],
+                                          //   ),
+                                          // ),
+                                          // SizedBox(
+                                          //   height: 10,
+                                          // ),
+                                        ],
+                                      );
+                                    }),
+                              ),
+                            ],
                           ),
+                          selectedIndex == index ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Sum of Consumption: "),
+                              Text(sums[index].toString())
+                            ],
+                          ):const SizedBox.shrink()
                         ],
                       ),
                     ),
@@ -823,6 +866,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                     // width: MediaQuery.of(context).size.width / 2.9,
                     child: TextField(
                       controller: execteddateCtr,
+                      keyboardType: TextInputType.none,
                       decoration: InputDecoration(
                           hintText: 'Select Expected Order Date',
                           border: OutlineInputBorder(
@@ -1669,26 +1713,40 @@ class _SiteSurveyState extends State<SiteSurvey> {
         child: InkWell(
           onTap: () {
             // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
-            for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
-              for (int j = 0;
-              j < (widget.modelList?[i].products?.length ?? 0);
-              j++) {
-                dataList.add(json.encode({
-                  "brand_name": widget.modelList?[i].name,
-                  "total_consumption": feedbackList[i][i][0].text,
-                  "further_consumption": feedbackList[i][j][1].text,
-                  "purchase_price": feedbackList[i][j][2].text,
-                  "purchasing_from": feedbackList[i][j][3].text,
-                  "last_purchase_date": feedbackList[i][j][4].text
-                  // "monthly_sale": feedbackList[i][j][0].text,
-                  // "current_stock": feedbackList[i][j][1].text,
-                  // "wps": feedbackList[i][j][2].text,
-                  // "rsp": feedbackList[i][j][3].text,
-                  // "purchasing_from": feedbackList[i][j][4].text
-                }));
-              }
+            if(
+            execteddateCtr.text.isEmpty || execteddateCtr.text == ""
+            ){
+              Fluttertoast.showToast(msg: "Please select expected order date");
             }
-            siteSurvey();
+            else if(remarkCtr.text.isEmpty || remarkCtr.text ==""){
+              Fluttertoast.showToast(msg: "Please enter remark");
+            }
+            else if(imagePathList.isEmpty){
+              Fluttertoast.showToast(msg: "Please upload image");
+            }
+            else{
+              for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+                for (int j = 0;
+                j < (widget.modelList?[i].products?.length ?? 0);
+                j++) {
+                  dataList.add(json.encode({
+                    "brand_name": widget.modelList?[i].name,
+                    "total_consumption": feedbackList[i][i][0].text,
+                    "further_consumption": feedbackList[i][j][1].text,
+                    "purchase_price": feedbackList[i][j][2].text,
+                    "purchasing_from": feedbackList[i][j][3].text,
+                    "last_purchase_date": feedbackList[i][j][4].text
+                    // "monthly_sale": feedbackList[i][j][0].text,
+                    // "current_stock": feedbackList[i][j][1].text,
+                    // "wps": feedbackList[i][j][2].text,
+                    // "rsp": feedbackList[i][j][3].text,
+                    // "purchasing_from": feedbackList[i][j][4].text
+                  }));
+                }
+              }
+              siteSurvey();
+            }
+
           },
           child: Center(
             child: Container(

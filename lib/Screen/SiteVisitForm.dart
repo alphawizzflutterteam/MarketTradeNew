@@ -446,7 +446,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
     var request = http.MultipartRequest(
-        'GET', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/get_lists'));
+        'GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -511,7 +511,14 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                         borderRadius:
                                             BorderRadius.circular(5),
                                     ),
+
                                 ),
+                              validator: (val){
+                                if(val == null || val.isEmpty){
+                                  return "please enter Name";
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           SizedBox(
@@ -1498,6 +1505,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+
                             ),
                           ),
                           SizedBox(
@@ -1522,6 +1530,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+
                             ),
                           ),
                           SizedBox(
@@ -1830,51 +1839,94 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SiteSurvey(
-                              modelList: results,
-                              name: namecn.text,
-                              contact: mobileCtr.text,
-                              address: addressCtr.text,
-                              state: getListModel?.data?.states?[stateindex].name,
-                              // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
-                              pincode: pinCodeController.text,
-                              sitesize: siteSizeCtr.text,
-                              expectedDate: execteddateCtr.text,
-                              missionName: missionNameCtr.text,
-                              missionAddress: missionAddressCtr.text,
-                              mession: selectedMession,
-                              messionMobile: delearRetailerModel?.data?.massion?[messionIndex].mobileOne == "" || delearRetailerModel?.data?.massion?[messionIndex].mobileOne == null ? messionMobile : delearRetailerModel?.data?.massion?[messionIndex].mobileOne,
-                              contractor: selectedContractor,
-                              contractorMobile: delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne == "" || delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne == null ? contractorMobile : delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne,
-                              contractorName: contractorNameCtr.text,
-                              contractorAddress: contractorAddressCtr.text,
-                              engineer: selectedEngineer,
-                              engineerMobile: delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne == "" || delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne == null ? enaginnerMobile : delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne,
-                              engineerName: engineerNameCtr.text,
-                              engineerAddress: engineerAddressCtr.text,
-                              architec: selectedArchitec,
-                              architecMobile: delearRetailerModel?.data?.artitech?[architectIndex].mobileOne == "" || delearRetailerModel?.data?.artitech?[architectIndex].mobileOne == null ? architecMobile : delearRetailerModel?.data?.artitech?[architectIndex].mobileOne,
-                              architecName: artitechNameCtr.text,
-                              architecAddress: artitechAddressCtr.text,
-                              // creditLimit: widget.creditLimit,
-                              //customerType: widget.customerType,
-                              // date: dateCtr.text,
-                              // status:
-                              time: timeCtr.text,
-                              // image: imagePathList,
-                              // remark: remarkCtr.text,
-                              // clintId: cl,
+                        if(namecn.text.isEmpty || namecn.text == ""){
+                          Fluttertoast.showToast(msg: "Please enter Name");
+                        } else if(selectedState == null){
+                          Fluttertoast.showToast(msg: "Please select State");
+                        }  else if(selectedDistrict == null){
+                          Fluttertoast.showToast(msg: "Please select district");
+                        }else if(results.isEmpty){
+                          Fluttertoast.showToast(msg: "Please select product being used");
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SiteSurvey(
+                                    modelList: results,
+                                    name: namecn.text,
+                                    contact: mobileCtr.text,
+                                    address: addressCtr.text,
+                                    state: getListModel?.data
+                                        ?.states?[stateindex].name,
+                                    // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
+                                    pincode: pinCodeController.text,
+                                    sitesize: siteSizeCtr.text,
+                                    expectedDate: execteddateCtr.text,
+                                    missionName: missionNameCtr.text,
+                                    missionAddress: missionAddressCtr.text,
+                                    mession: selectedMession,
+                                    messionMobile: delearRetailerModel?.data
+                                        ?.massion?[messionIndex].mobileOne ==
+                                        "" || delearRetailerModel?.data
+                                        ?.massion?[messionIndex].mobileOne ==
+                                        null
+                                        ? messionMobile
+                                        : delearRetailerModel?.data
+                                        ?.massion?[messionIndex].mobileOne,
+                                    contractor: selectedContractor,
+                                    contractorMobile: delearRetailerModel?.data
+                                        ?.contractor?[contractorIndex]
+                                        .mobileOne == "" ||
+                                        delearRetailerModel?.data
+                                            ?.contractor?[contractorIndex]
+                                            .mobileOne == null
+                                        ? contractorMobile
+                                        : delearRetailerModel?.data
+                                        ?.contractor?[contractorIndex]
+                                        .mobileOne,
+                                    contractorName: contractorNameCtr.text,
+                                    contractorAddress: contractorAddressCtr
+                                        .text,
+                                    engineer: selectedEngineer,
+                                    engineerMobile: delearRetailerModel?.data
+                                        ?.engineer?[engineerIndex].mobileOne ==
+                                        "" || delearRetailerModel?.data
+                                        ?.engineer?[engineerIndex].mobileOne ==
+                                        null
+                                        ? enaginnerMobile
+                                        : delearRetailerModel?.data
+                                        ?.engineer?[engineerIndex].mobileOne,
+                                    engineerName: engineerNameCtr.text,
+                                    engineerAddress: engineerAddressCtr.text,
+                                    architec: selectedArchitec,
+                                    architecMobile: delearRetailerModel?.data
+                                        ?.artitech?[architectIndex].mobileOne ==
+                                        "" || delearRetailerModel?.data
+                                        ?.artitech?[architectIndex].mobileOne ==
+                                        null
+                                        ? architecMobile
+                                        : delearRetailerModel?.data
+                                        ?.artitech?[architectIndex].mobileOne,
+                                    architecName: artitechNameCtr.text,
+                                    architecAddress: artitechAddressCtr.text,
+                                    // creditLimit: widget.creditLimit,
+                                    //customerType: widget.customerType,
+                                    // date: dateCtr.text,
+                                    // status:
+                                    time: timeCtr.text,
+                                    // image: imagePathList,
+                                    // remark: remarkCtr.text,
+                                    // clintId: cl,
+                                  ),
                             ),
-                          ),
-                        );
-                        // if(namecn.text.isEmpty || siteSizeCtr.text.isEmpty || selectedStatus!.isEmpty || mobileCtr.text.isEmpty || _imageFile!.path.isEmpty) {
-                        //   Fluttertoast.showToast(msg: "All Fields Required");
-                        // } else{
-                        //
-                        // }
+                          );
+                          // if(namecn.text.isEmpty || siteSizeCtr.text.isEmpty || selectedStatus!.isEmpty || mobileCtr.text.isEmpty || _imageFile!.path.isEmpty) {
+                          //   Fluttertoast.showToast(msg: "All Fields Required");
+                          // } else{
+                          //
+                          // }
+                        }
                       },
                       child: Center(
                           child: Container(

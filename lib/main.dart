@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:get_storage/get_storage.dart';
 import 'package:omega_employee_management/Screen/HomePage.dart';
 import 'package:country_code_picker/country_localizations.dart';
@@ -109,7 +110,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
-
   setLocale(Locale locale) {
     if (mounted)
       setState(() {

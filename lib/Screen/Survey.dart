@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
@@ -15,7 +17,7 @@ import '../Model/DealingProductModel.dart';
 import '../Model/GravanceModel.dart';
 
 class Survey extends StatefulWidget {
-  final List <DealingData>? modelList ;
+  final List<DealingData>? modelList;
   final String? name;
   final String? email;
   final String? contact;
@@ -31,38 +33,48 @@ class Survey extends StatefulWidget {
   // final String? dealermail;
   // final String? dealerLimit;
 
-   Survey({Key? key, this.modelList,this.name, this.email,this.contact,this.creditLimit, this.customerType, this.time, this.date, this.clintId,
-     // this.image, this.remark, this.dealerLimit, this.dealermail, this.dealerMobile, this.dealerName
-   }) : super(key: key);
+  Survey({
+    Key? key,
+    this.modelList,
+    this.name,
+    this.email,
+    this.contact,
+    this.creditLimit,
+    this.customerType,
+    this.time,
+    this.date,
+    this.clintId,
+    // this.image, this.remark, this.dealerLimit, this.dealermail, this.dealerMobile, this.dealerName
+  }) : super(key: key);
 
   @override
   State<Survey> createState() => _SurveyState();
 }
 
 class _SurveyState extends State<Survey> {
-
   List<TextEditingController> monthlyControllers = [];
   List<TextEditingController> currentController = [];
   List<TextEditingController> rspController = [];
   int totalMonthlySales = 0;
   int currentSales = 0;
-
+  int sum = 0;
+  List<int> sums = [];
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
 
- // List<List<TextEditingController>> wholeDataList = [] ;
+  // List<List<TextEditingController>> wholeDataList = [] ;
 
   List dataList = [];
 
-  List  <List<List<TextEditingController>>> feedbackList  = [] ;
+  List<List<List<TextEditingController>>> feedbackList = [];
 
   void initState() {
     super.initState();
     getCurrentLoc();
     convertDateTimeDispla();
     getgravance();
-    for(int i = 0; i < (widget.modelList?.length ?? 0);  i++) {
-      List<List<TextEditingController>> wholeDataList = [] ;
+    for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+      List<List<TextEditingController>> wholeDataList = [];
 
       for (int j = 0; j < (widget.modelList?[i].products?.length ?? 0); j++) {
         List<TextEditingController> commenController = [];
@@ -75,10 +87,14 @@ class _SurveyState extends State<Survey> {
       }
       feedbackList.add(wholeDataList);
     }
+    for(var i = 0; i < (widget.modelList?.length??0); i++){
+      sums.add(sum);
+    }
   }
 
-Future<void> feedback() async {
-    var request = http.MultipartRequest('POST', Uri.parse(customerFeedbackForm.toString()));
+  Future<void> feedback() async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(customerFeedbackForm.toString()));
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
       'date': widget.date.toString(),
@@ -95,25 +111,27 @@ Future<void> feedback() async {
         'credit_limit': widget.creditLimit,
         'grivenance': gravance.toString(),
       }),
-      'customer_dealing_in': widget.modelList!.map((product) => product.id).join(','),
+      'customer_dealing_in':
+          widget.modelList!.map((product) => product.id).join(','),
       'survey': dataList.toString(),
       'remarks': remarkCtr.text ?? ''
     });
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
+      debugPrint("imageeeee: ${imagePathList[i].toString()}");
       imagePathList[i] == ""
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
-          'photos', imagePathList[i].toString()));
+              'photos[]', "${imagePathList[i].toString()}"));
     }
     print('sssssssssssss${request.fields}');
     print('${request.url}');
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-    }
-    else {
-      print(response.reasonPhrase);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
+    } else {
+      print("reasonnnnnn"+response.reasonPhrase.toString());
     }
   }
 
@@ -126,17 +144,19 @@ Future<void> feedback() async {
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.camera,
+      maxWidth: 300,
+      maxHeight: 500,
+      imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
         imagePathList.add(_imageFile?.path ?? "");
-        isImages = true ;
+        isImages = true;
       });
       //Navigator.pop(context);
     }
   }
-
 
   TextEditingController remarkCtr = TextEditingController();
   List<String> imagePathList = [];
@@ -155,13 +175,14 @@ Future<void> feedback() async {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
-      longitude_Global=latitude;
-      lattitudee_Global=longitude;
+      longitude_Global = latitude;
+      lattitudee_Global = longitude;
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
@@ -172,13 +193,13 @@ Future<void> feedback() async {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
         // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
-          currentlocation_Global=currentAddress.text.toString();
+          currentlocation_Global = currentAddress.text.toString();
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
@@ -223,9 +244,7 @@ Future<void> feedback() async {
         const SizedBox(
           height: 10,
         ),
-        Visibility(
-            visible: isImages,
-            child:  buildGridView()),
+        Visibility(visible: isImages, child: buildGridView()),
       ],
     );
   }
@@ -248,28 +267,31 @@ Future<void> feedback() async {
       height: 170,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
               Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary)
-                ),
-                width: MediaQuery.of(context).size.width/2.8,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary)),
+                width: MediaQuery.of(context).size.width / 2.8,
                 height: 170,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.file(
-                      File(imagePathList[index]), fit: BoxFit.cover),
+                  child:
+                      Image.file(File(imagePathList[index]), fit: BoxFit.cover),
                 ),
               ),
               Positioned(
                 bottom: 10,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary),),
-                  width:MediaQuery.of(context).size.width/2.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),
+                  ),
+                  width: MediaQuery.of(context).size.width / 2.8,
                   height: 70,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -277,9 +299,20 @@ Future<void> feedback() async {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                        Text(
+                          "Date: ${formattedDate}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        Text(
+                          "Time: ${timeData}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        Text(
+                          "Location: ${currentAddress.text}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        )
                       ],
                     ),
                   ),
@@ -309,7 +342,10 @@ Future<void> feedback() async {
     var headers = {
       'Cookie': 'ci_session=ef29e61acfe01ba495d2b60947f70ae0b26cc807'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/grivenance_list'));
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://developmentalphawizz.com/market_track/app/v1/api/grivenance_list'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -319,18 +355,17 @@ Future<void> feedback() async {
       setState(() {
         gravanceModel = finalResponse;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
 
-
   String? gravance;
+  bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 1,
@@ -338,223 +373,175 @@ Future<void> feedback() async {
           onTap: () {
             Navigator.pop(context);
           },
-          child:  Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: colors.primary,
-        title: Text("Feedback", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w800)),
+        title: Text("Feedback",
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w800)),
       ),
       body: SingleChildScrollView(
-        child:
-        Column(
+        child: Column(
           children: [
             const SizedBox(height: 5),
             Container(
-              height: MediaQuery.of(context).size.height/1.9,
+              // height: MediaQuery.of(context).size.height / 1.9,
               child: ListView.builder(
+                shrinkWrap: true,
                 key: Key('${selectedIndex.toString()}'),
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: widget.modelList?.length ?? 0,
                 itemBuilder: (context, index) {
                   var item = widget.modelList?[index];
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(0),
-                          border: Border.all(color: colors.black54)
-                      ),
-                      child: ExpansionTile(
-                        collapsedBackgroundColor: colors.whiteTemp,
-                        key: Key(index.toString()),
-                        initiallyExpanded: index == selectedIndex ,
-                        title: Row(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            border: Border.all(color: colors.black54)),
+                        child:
+
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Row(
+                        //       children: [
+                        //         const Text("Product Name: "),
+                        //         Text(
+                        //           '${item?.name}',
+                        //           style: TextStyle(fontSize: 14),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     IconButton(
+                        //         onPressed: () {
+                        //           setState(() {
+                        //             isExpanded = !isExpanded;
+                        //           });
+                        //         },
+                        //         icon: Icon(isExpanded
+                        //             ? Icons.arrow_drop_up
+                        //             : Icons.arrow_drop_down))
+                        //   ],
+                        // )
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("Product Name: ", style: TextStyle(fontSize: 14)),
-                            Text('${item?.name}', style: TextStyle(fontSize: 14),),
-                          ],
-                        ),
-                        onExpansionChanged: (isExpanded) {
-                          if(isExpanded) {
-                            setState(()  {
-                              const Duration(milliseconds: 2000);
-                              selectedIndex = index;
-                            });
-                          }else{
-                            setState(() {
-                              selectedIndex = -1;
-                            });
-                          }
-                        },
-                        children:[
-                          SingleChildScrollView(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width/1.2,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: item?.products?.length ?? 0,
-                                  itemBuilder: (BuildContext, i) {
-                                    var data = item?.products?[i];
-                                    return Column(
-                                      children: [
-                                        Row(
+                            ExpansionTile(
+                              collapsedBackgroundColor: colors.whiteTemp,
+                              key: Key(index.toString()),
+                              initiallyExpanded: index == selectedIndex ,
+                              title: Row(
+                                children: [
+                                  Text("Product Name: ", style: TextStyle(fontSize: 14)),
+                                  Text('${item?.name}', style: TextStyle(fontSize: 14),),
+                                ],
+                              ),
+                              onExpansionChanged: (isExpanded) {
+                                if(isExpanded) {
+                                  setState(()  {
+                                    const Duration(milliseconds: 2000);
+                                    selectedIndex = index;
+                                    // isExpanded = true;
+                                  });
+                                }else{
+                                  setState(() {
+                                    selectedIndex = -1;
+                                  });
+                                }
+                              },
+                              children:[
+                                Container(
+                                  height: MediaQuery.of(context).size.height / 3.6,
+                                  width: MediaQuery.of(context).size.width/1.2,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                       // physics: NeverScrollableScrollPhysics(),
+                                      itemCount: item?.products?.length ?? 0,
+                                      itemBuilder: (BuildContext, i) {
+                                        var data = item?.products?[i];
+                                        return Column(
                                           children: [
-                                            const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                            Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          children: [
-                                            const Text("Monthly Sale: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(context).size.width/2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][0],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                  hintText: "Monthly Sale",
-                                                  fillColor: Colors.white70,
-                                                ),
-                                                onSubmitted: (value) {
-                                                  totalMonthlySales += int.parse(value);
-                                                  setState(() {});
-                                                  print("printtttttttt ${totalMonthlySales}");
-                                                  // int total = 0;
-                                                  // for (int i = 0; i < 5; i++) {
-                                                  //   String text = monthlyControllers[i].text;
-                                                  //   if (text.isNotEmpty) {
-                                                  //     total += int.parse(text);
-                                                  //   }
-                                                  // }
-                                                  // setState(() {
-                                                  //   totalMonthlySales = total;
-                                                  //   print("total monthly sheet ${totalMonthlySales}");
-                                                  // });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text("Current Stock: ", style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(context).size.width/2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][1],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                  hintText: "Current stock",
-                                                  fillColor: Colors.white70,
-                                                ),
-                                                onSubmitted: (value) {
-                                                  currentSales += int.parse(value);
-                                                  setState(() {});
-                                                  print("printtttttttt ${currentSales}");
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text("WSP: ", style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold)),
-                                            SizedBox(width: 10,),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(context).size.width/2.9,
-                                              child: TextField(
-                                                controller:feedbackList[index][i][2],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                  hintText: "WSP",
-                                                  fillColor: Colors.white70,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text("RSP: ", style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold)),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              height: 30,
-                                              width: MediaQuery.of(context).size.width/2.9,
-                                              child: TextField(
-                                                controller: feedbackList[index][i][3],
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  filled: true,
-                                                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                  hintText: "RSP",
-                                                  fillColor: Colors.white70,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text("Purchasing Form: ", style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold)),
-                                            SizedBox(width: 10),
                                             Row(
-                                              // mainAxisAlignment: MainAxisAlignment.end,
-                                              // crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
+                                                const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Row(
+                                              children: [
+                                                const Text("Monthly Sale: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                SizedBox(width: 10),
                                                 Container(
                                                   height: 30,
                                                   width: MediaQuery.of(context).size.width/2.9,
                                                   child: TextField(
-                                                    controller: feedbackList[index][i][4],
-                                                    keyboardType: TextInputType.text,
+                                                    controller: feedbackList[index][i][0],
+                                                    onSubmitted: (val){
+
+                                                      setState(() {
+                                                        sums[index] += int.parse(val);
+                                                      });
+                                                      // FocusScope.of(context).unfocus();
+                                                    },
+                                                    keyboardType: TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
+                                                      hintText: "Monthly Sale",
+                                                      fillColor: Colors.white70,
+                                                    ),
+                                                    // onSubmitted: (value) {
+                                                    //   totalMonthlySales += int.parse(value);
+                                                    //   setState(() {});
+                                                    //   print("printtttttttt ${totalMonthlySales}");
+                                                    //   // int total = 0;
+                                                    //   // for (int i = 0; i < 5; i++) {
+                                                    //   //   String text = monthlyControllers[i].text;
+                                                    //   //   if (text.isNotEmpty) {
+                                                    //   //     total += int.parse(text);
+                                                    //   //   }
+                                                    //   // }
+                                                    //   // setState(() {
+                                                    //   //   totalMonthlySales = total;
+                                                    //   //   print("total monthly sheet ${totalMonthlySales}");
+                                                    //   // });
+                                                    // },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text("Current Stock: ", style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold)),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  height: 30,
+                                                  width: MediaQuery.of(context).size.width/2.9,
+                                                  child: TextField(
+                                                    controller: feedbackList[index][i][1],
+                                                    onSubmitted: (val){
+                                                      setState(() {
+                                                        sums[index] += int.parse(val);
+                                                        // feedbackList[index][i][0].text
+                                                      });
+                                                    },
+                                                    keyboardType: TextInputType.number,
                                                     decoration: InputDecoration(
                                                       contentPadding: EdgeInsets.only(top: 7, left: 5),
                                                       border: OutlineInputBorder(
@@ -562,118 +549,194 @@ Future<void> feedback() async {
                                                       ),
                                                       filled: true,
                                                       hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                      hintText: "",
+                                                      hintText: "Current stock",
+                                                      fillColor: Colors.white70,
+                                                    ),
+                                                    // onSubmitted: (value) {
+                                                    //   currentSales += int.parse(value);
+                                                    //   setState(() {});
+                                                    //   print("printtttttttt ${currentSales}");
+                                                    // },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text("WSP: ", style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold)),
+                                                SizedBox(width: 10,),
+                                                Container(
+                                                  height: 30,
+                                                  width: MediaQuery.of(context).size.width/2.9,
+                                                  child: TextField(
+                                                    controller:feedbackList[index][i][2],
+                                                    keyboardType: TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(5.0),
+                                                      ),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
+                                                      hintText: "WSP",
                                                       fillColor: Colors.white70,
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text("RSP: ", style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold)),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  height: 30,
+                                                  width: MediaQuery.of(context).size.width/2.9,
+                                                  child: TextField(
+                                                    controller: feedbackList[index][i][3],
+                                                    keyboardType: TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(5.0),
+                                                      ),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
+                                                      hintText: "RSP",
+                                                      fillColor: Colors.white70,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text("Purchasing Form: ", style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold)),
+                                                SizedBox(width: 10),
+                                                Row(
+                                                  // mainAxisAlignment: MainAxisAlignment.end,
+                                                  // crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      height: 30,
+                                                      width: MediaQuery.of(context).size.width/2.9,
+                                                      child: TextField(
+                                                        controller: feedbackList[index][i][4],
+                                                        keyboardType: TextInputType.text,
+                                                        decoration: InputDecoration(
+                                                          contentPadding: EdgeInsets.only(top: 7, left: 5),
+                                                          border: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.circular(5.0),
+                                                          ),
+                                                          filled: true,
+                                                          hintStyle: TextStyle(color: Colors.black, fontSize: 10),
+                                                          hintText: "",
+                                                          fillColor: Colors.white70,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5,),
+                                            Divider(color: Colors.black,),
+                                            SizedBox(height: 5),
+                                            // if(item?.products?.last == item?.products?[i])
+                                            //   SizedBox(
+                                            //     height: 120,
+                                            //   ),
+                                            // const SizedBox(height: 5,),
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            //   children: [
+                                            //     Text("Sum Of Monthly sale", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ),),
+                                            //     Text("${totalMonthlySales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ))
+                                            //   ],
+                                            // ),
+                                            // SizedBox(height: 10),
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            //   children: [
+                                            //     Text("Sum Of Current Stock", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),),
+                                            //     Text("${currentSales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))
+                                            //   ],
+                                            // ),
+
                                           ],
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Divider(color: Colors.black,),
-                                        // const SizedBox(height: 5,),
-                                        // Row(
-                                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //   children: [
-                                        //     Text("Sum Of Monthly sale", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ),),
-                                        //     Text("${totalMonthlySales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ))
-                                        //   ],
-                                        // ),
-                                        // SizedBox(height: 10),
-                                        // Row(
-                                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //   children: [
-                                        //     Text("Sum Of Current Stock", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),),
-                                        //     Text("${currentSales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))
-                                        //   ],
-                                        // ),
-                                        SizedBox(height: 5),
-                                      ],
-                                    );
-                                  }),
+                                        );
+                                      }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                            selectedIndex == index ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Sum of sale and stock: "),
+                                Text(sums[index].toString())
+                              ],
+                            ):const SizedBox.shrink()
+                          ],
+                        ),
+                        ),
                   );
                 },
               ),
             ),
-           Padding(
-             padding: const EdgeInsets.only(left: 10),
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 SizedBox(height: 9),
-                 const Text(
-                   "Grivenance",
-                   style: TextStyle(
-                       fontSize: 14, fontWeight: FontWeight.bold),
-                 ),
-                 SizedBox(
-                   height: MediaQuery.of(context).size.height *.01,
-                 ),
-                 Container(
-                   height: 50,
-                   width: MediaQuery.of(context).size.width/1.1,
-                   child: Card(
-                     elevation: 2,
-                     shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                     child: DropdownButtonFormField<String>(
-                       value: gravance,
-                       onChanged: (newValue) {
-                         setState(() {
-                           gravance = newValue;
-                           print("current indexxx ${gravance}");
-                           // nwIndex = delearRetailerModel!.data!.indexWhere((element) => element.id == selected);
-                           // currentIndex = selected;
-                           // showTextField = true;
-                         });
-                       },
-                       items: gravanceModel?.data?.map((items) {
-                         return DropdownMenuItem(
-                           value: items.id,
-                           child: Text(items.title.toString()),
-                         );
-                       }).toList(),
-                       decoration: InputDecoration(
-                         contentPadding: EdgeInsets.only(bottom: 5, left: 10),
-                         border: InputBorder.none,
-                         hintText: '',
-                       ),
-                     ),
-                   ),
-                 ),
-               ],
-              ),
-           ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*.02,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 9),
                 const Text(
-                  "Remark",
-                  style: TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                  "Grivenance",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height*.01,
+                  height: MediaQuery.of(context).size.height * .01,
                 ),
                 Container(
-                  height: 45,
-                  width: MediaQuery.of(context).size.width/1.1,
-                  child: TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: remarkCtr,
-                    decoration: InputDecoration(
-                      hintText: '',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  child: Card(
+                    elevation: 2,
+                    shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: DropdownButtonFormField<String>(
+                      value: gravance,
+                      onChanged: (newValue) {
+                        setState(() {
+                          gravance = newValue;
+                          print("current indexxx ${gravance}");
+                          // nwIndex = delearRetailerModel!.data!.indexWhere((element) => element.id == selected);
+                          // currentIndex = selected;
+                          // showTextField = true;
+                        });
+                      },
+                      items: gravanceModel?.data?.map((items) {
+                        return DropdownMenuItem(
+                          value: items.id,
+                          child: Text(items.title.toString()),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 5, left: 10),
+                        border: InputBorder.none,
+                        hintText: '',
                       ),
                     ),
                   ),
@@ -681,12 +744,38 @@ Future<void> feedback() async {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*.02,
+              height: MediaQuery.of(context).size.height * .02,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Remark",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .01,
+                ),
+                Container(
+                  height: 45,
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    controller: remarkCtr,
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .02,
             ),
             uploadMultiImage(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*.03
-            ),
+            SizedBox(height: MediaQuery.of(context).size.height * .05),
             // Padding(
             //   padding: const EdgeInsets.all(8.0),
             //   child: ListView.builder(
@@ -965,34 +1054,51 @@ Future<void> feedback() async {
         height: 35,
         child: InkWell(
           onTap: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
-            for(int i=0; i<(widget.modelList?.length ?? 0); i++ ) {
-              for(int j =0 ; j <(widget.modelList?[i].products?.length ?? 0); j++ )
-              {
-                print('${widget.modelList?[i].products?.length}');
-                dataList.add(json.encode({
-                  "brand_name": widget.modelList?[i].products?[j].name,
-                  "monthly_sale": feedbackList[i][j][0].text,
-                  "current_stock": feedbackList[i][j][1].text,
-                  "wps": feedbackList[i][j][2].text,
-                  "rsp": feedbackList[i][j][3].text,
-                  "purchasing_from": feedbackList[i][j][4].text
-                }),
-                );
-              }
-              print('${dataList}');
+            if (gravance == null || gravance == "") {
+              setSnackbar("Please select Grivenance", context);
             }
-            feedback();
+            else if(imagePathList.isEmpty){
+              Fluttertoast.showToast(msg: "Please upload image");
+            }
+            else if(remarkCtr.text.isEmpty || remarkCtr.text =="" ){
+              Fluttertoast.showToast(msg: "Please enter remark");
+            }
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
+            else{
+              for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+                for (int j = 0;
+                j < (widget.modelList?[i].products?.length ?? 0);
+                j++) {
+                  print('${widget.modelList?[i].products?.length}');
+                  dataList.add(
+                    json.encode({
+                      "brand_name": widget.modelList?[i].products?[j].name,
+                      "monthly_sale": feedbackList[i][j][0].text,
+                      "current_stock": feedbackList[i][j][1].text,
+                      "wps": feedbackList[i][j][2].text,
+                      "rsp": feedbackList[i][j][3].text,
+                      "purchasing_from": feedbackList[i][j][4].text
+                    }),
+                  );
+                }
+                print('${dataList}');
+              }
+              feedback();
+            }
           },
           child: Center(
             child: Container(
-                height: 35,
-                width: MediaQuery.of(context).size.width/1.8,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                child: const Center(
-                    child: Text("Submit Feedback", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400)
-                    )
-                ),
+              height: 35,
+              width: MediaQuery.of(context).size.width / 1.8,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: colors.primary),
+              child: const Center(
+                  child: Text("Submit Feedback",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400))),
             ),
           ),
         ),

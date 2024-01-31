@@ -283,6 +283,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
       if (!error!) {
         setSnackbar(msg!);
         var i = getdata["data"];
+        debugPrint("lllll $i");
         id = i[ID];
         username = i[USERNAME];
         email = i[EMAIL];
@@ -298,6 +299,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         print("User id"+id.toString());
         final box = GetStorage();
         box.write('userid', '${id}');
+        prefs.setString("user_id", "$id");
 
         // CUR_USERNAME = username;
         UserProvider userProvider =

@@ -127,6 +127,46 @@ updateLocation1(Position position) async {
   }
 }
 
+// setIsCheckOut() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   prefs.setBool("checkIn", false);
+// }
+//
+// Future<void> checkOutNow(currentAddress) async {
+//   var headers = {
+//     'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
+//   };
+//   var request = http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
+//   request.fields.addAll({
+//     'user_id': CUR_USERID.toString(),
+//     'checkout_latitude': '${latitude}',
+//     'checkout_longitude': '${longitude}',
+//     'address': currentAddress,
+//     // 'redings': readingCtr.text
+//   });
+//
+//
+//   print("this is my check in request ${request.fields.toString()}");
+//   request.headers.addAll(headers);
+//   http.StreamedResponse response = await request.send();
+//   if (response.statusCode == 200) {
+//     var str = await response.stream.bytesToString();
+//     var result = json.decode(str);
+//
+//     if(result['data']['error'] == false) {
+//       setIsCheckOut();
+//       Fluttertoast.showToast(msg: result['data']['msg']);
+//     } else {
+//       Fluttertoast.showToast(msg: result['message']);
+//     }
+//     // var finalResponse = GetUserExpensesModel.fromJson(result);
+//     // final finalResponse = CheckInModel.fromJson(json.decode(Response));
+//   }
+//   else {
+//     print(response.reasonPhrase);
+//   }
+// }
+
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
   // Only available for flutter 3.0.0 and later
@@ -184,7 +224,21 @@ void onStart(ServiceInstance service) async {
       }
     }
    Position position= await Geolocator.getCurrentPosition();
-    updateLocation1(position);
+     updateLocation1(position);
+    //
+    // List<Placemark> placemark = await placemarkFromCoordinates(
+    //     double.parse(position.latitude.toString()), double.parse(position.longitude.toString()),
+    //     localeIdentifier: "en");
+    // String currentAddress = "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+    // // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
+    // var prefs = await SharedPreferences.getInstance();
+    // bool? isCheckIn = prefs.getBool("checkIn");
+    // if(isCheckIn ?? false){
+    //   checkOutNow(currentAddress);
+    // }
+
+    // }
+
     /// you can see this log in logcat
     print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}  ${position.latitude}  ${position.longitude}');
 
@@ -363,14 +417,21 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
     }
   }
-
+setCheckIn() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool("CheckIn", true);
+  prefs.setString("CheckInTime", DateTime.now().toString());
+}
   Future<void> checkInNow() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+   String? uid = prefs.getString("user_id");
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
     var request = http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
     request.fields.addAll({
-      'user_id': CUR_USERID.toString(),
+      'user_id':   uid?? "",
+      // CUR_USERID.toString(),
       'checkin_latitude': '${latitude}',
       'checkin_longitude': '${longitude}',
       'address': currentAddress.text,
@@ -394,6 +455,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
         isLoading = false;
       });
       if(result['data']['error'] == false) {
+        setCheckIn();
         Fluttertoast.showToast(msg: result['data']['msg']);
         // Navigator.pop(context, true);
         Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
@@ -742,6 +804,7 @@ void initState() {
                     hintText: "Add Odometer Start Reading",
                     hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
                   ),
+
                 ),
               ),
               SizedBox(height: 20),
@@ -757,9 +820,13 @@ void initState() {
                       ),
                       onPressed: () {
                         // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                        if(latitude == null || longitude == null ||  _imageFile == null) {
+                        if(latitude == null || longitude == null ||  _imageFile == null ) {
                           setSnackbar("Please select a image", context);
-                        } else {
+                        }
+                        else if(readingCtr.text.isEmpty){
+                          setSnackbar("Please enter Odometer start reading", context);
+                        }
+                        else {
                           setState(() {
                             isLoading = true;
                           });

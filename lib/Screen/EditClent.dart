@@ -50,6 +50,10 @@ class _EditClientState extends State<EditClient> {
         clientData = clients?.data ?? [];
       });
       print("this is response data ${finalResponse}");
+      print("this is response data ${clientData[1].aadharImg}");
+      print("this is response data ${clientData[1].gstImg }");
+      print("this is response data ${clientData[1].voterIdBackImg}");
+      print("this is response data ${clientData[1].voterIdImg}");
       // setState(() {
       // animalList = finalResponse.data!;
       // });

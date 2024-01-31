@@ -74,7 +74,7 @@ List<Widget> pages = [];
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage>, TickerProviderStateMixin {
   bool _isNetworkAvail = true;
-
+   var userId;
   final _controller = PageController();
   late Animation buttonSqueezeanimation;
   late AnimationController buttonController;
@@ -94,7 +94,10 @@ class _HomePageState extends State<HomePage>
 
   setCatid() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+     userId = pref.getString('user_id');
     pref.setString('cat_id',catId ?? "");
+    var checkinTime = pref.getString("CheckInTime");
+    debugPrint("checkintime $checkinTime}");
     print('helllllo cat Iddddd${catId}');
   }
 
@@ -106,7 +109,7 @@ class _HomePageState extends State<HomePage>
     };
     var request = http.MultipartRequest('POST', Uri.parse(getClientApi.toString()));
     request.fields.addAll({
-      USER_ID: '${CUR_USERID}',
+      USER_ID: '$userId',
     });
 
     print("this is refer request ${request.fields.toString()}");
@@ -138,7 +141,7 @@ class _HomePageState extends State<HomePage>
     };
     var request = http.MultipartRequest('POST', Uri.parse(getPermissionApi.toString()));
     request.fields.addAll({
-      USER_ID: '${CUR_USERID}',
+      USER_ID: '${userId}',
     });
 
     print("this is refer request ${request.fields.toString()}");
@@ -176,7 +179,7 @@ class _HomePageState extends State<HomePage>
       //     categoryValue.toString() : ""
     });
 
-    print("this is refer request ${request.fields.toString()}");
+    print("this is refer request..... ${request.fields.toString()}");
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
