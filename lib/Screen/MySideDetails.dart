@@ -159,6 +159,7 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                       itemCount:widget.model?.survey?.length ,
                         itemBuilder: (_,i){
                           return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               widget.model?.survey?[i].brandName == null || widget.model?.survey?[i].brandName == "" ? Text("Product Name:  NA", style: TextStyle(fontSize: 15)):
                               Text("Product Name:   ${widget.model?.survey?[0].brandName}",style: TextStyle(fontSize: 15)),
