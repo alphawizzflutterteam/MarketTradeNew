@@ -296,7 +296,7 @@ class _SplashScreen extends State<Splash> {
           debugPrint("CheckInTime"+ checkInTime.toString());
            DateTime checkInDateTime = await DateTime.parse(checkInTime??"");
           // DateTime checkInDateTime = DateTime.fromMicrosecondsSinceEpoch(checkInTime??0);
-          DateTime autoCheckOutDateTime = await DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,21,);
+          DateTime autoCheckOutDateTime = await DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,21);
           // Duration timeDifference = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 21, 00).difference(checkInDateTime);
           if(checkInDateTime.isBefore(autoCheckOutDateTime) && DateTime.now().isAfter(autoCheckOutDateTime)){
             await getCurrentLoc();
