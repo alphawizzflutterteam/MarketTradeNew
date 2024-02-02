@@ -423,6 +423,7 @@ setCheckIn() async {
   prefs.setString("CheckInTime", DateTime.now().toString());
 }
   Future<void> checkInNow() async {
+    debugPrint("checkin");
     SharedPreferences prefs = await SharedPreferences.getInstance();
    String? uid = prefs.getString("user_id");
     var headers = {
@@ -455,7 +456,8 @@ setCheckIn() async {
         isLoading = false;
       });
       if(result['data']['error'] == false) {
-        setCheckIn();
+        await setCheckIn();
+
         Fluttertoast.showToast(msg: result['data']['msg']);
         // Navigator.pop(context, true);
         Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
@@ -831,6 +833,7 @@ void initState() {
                             isLoading = true;
                           });
                           checkInNow();
+
                         }
                      },
                       child: isLoading? Center(

@@ -76,7 +76,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       var result = json.decode(str);
       // Fluttertoast.showToast(msg: result['msg']);
       if(result['data']['error'] == false) {
-        setIsCheckOut();
+        await setIsCheckOut();
 
         Fluttertoast.showToast(msg: result['data']['msg']);
         Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));

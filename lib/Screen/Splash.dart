@@ -258,7 +258,8 @@ class _SplashScreen extends State<Splash> {
       var result = json.decode(str);
       // Fluttertoast.showToast(msg: result['msg']);
       if(result['data']['error'] == false) {
-        setIsCheckOut();
+        await setIsCheckOut();
+        debugPrint("checkOut");
         Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));
       }
       // var finalResponse = GetUserExpensesModel.fromJson(result);
@@ -289,19 +290,19 @@ class _SplashScreen extends State<Splash> {
         // String? checkInTime = prefs.getString("CheckInTime");
 
         // Navigator.pushReplacementNamed(context, "/home");
-        bool? checkIn = prefs.getBool("CheckIn");
+        bool? checkIn =  await prefs.getBool("CheckIn");
         if(checkIn ?? false){
-          String? checkInTime = prefs.getString("CheckInTime");
+          String? checkInTime = await prefs.getString("CheckInTime");
           debugPrint("CheckInTime"+ checkInTime.toString());
-           DateTime checkInDateTime = DateTime.parse(checkInTime??"");
+           DateTime checkInDateTime = await DateTime.parse(checkInTime??"");
           // DateTime checkInDateTime = DateTime.fromMicrosecondsSinceEpoch(checkInTime??0);
-          DateTime autoCheckOutDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,21);
+          DateTime autoCheckOutDateTime = await DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,21,);
           // Duration timeDifference = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 21, 00).difference(checkInDateTime);
           if(checkInDateTime.isBefore(autoCheckOutDateTime) && DateTime.now().isAfter(autoCheckOutDateTime)){
             await getCurrentLoc();
             await checkOutNow();
             // Navigator.pushReplacementNamed(context, "/home");
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
           }
           else {
             Navigator.pushReplacementNamed(context, "/home");

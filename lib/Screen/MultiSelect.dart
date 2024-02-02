@@ -140,8 +140,10 @@ class MultiSelect extends StatefulWidget {
   final String? remark;
   final String? image;
   final String? clientId;
+  final List<String>? departments;
+   List<String>? selectedDepartments;
   // required this.type
-  MultiSelect({Key? key, this.dealingData, this.name, this.email,this.contact,this.creditLimit, this.customerType,this.time, this.date,this.image, this.remark, this.clientId }) : super(key: key);
+  MultiSelect({Key? key,this.selectedDepartments, this.departments,this.dealingData, this.name, this.email,this.contact,this.creditLimit, this.customerType,this.time, this.date,this.image, this.remark, this.clientId }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MultiSelectState();
 }
@@ -149,6 +151,7 @@ class _MultiSelectState extends State<MultiSelect> {
 
   final List <DealingData>? selectedDealingData = [];
   List <String>_selectedUserItems = [];
+  List <String>_selectedDepartments = [];
 
   void _itemChange(DealingData itemValue, bool isSelected) {
     setState(() {
@@ -166,6 +169,24 @@ class _MultiSelectState extends State<MultiSelect> {
     });
     print("this is selected values ${_selectedUserItems.toString()}");
   }
+
+  void _departmentValueChange(String? department, bool isSelected) {
+    setState(() {
+      if (isSelected) {
+        setState(() {
+          _selectedDepartments.add(department ?? '');
+
+
+        });
+      } else {
+        setState(() {
+          _selectedDepartments.remove(department ?? '');
+        });
+      }
+    });
+    print("this is selected departments ${_selectedDepartments.toString()}");
+  }
+
 
   void _cancel() {
     Navigator.pop(context);
@@ -189,6 +210,55 @@ class _MultiSelectState extends State<MultiSelect> {
     return StatefulBuilder(
         builder: (context, setState) {
           return
+            widget.departments != null || widget.departments!.isNotEmpty ?
+            AlertDialog(
+              title: const Text('Select Departments'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: widget.departments!
+                      .map((e) =>
+                      CheckboxListTile(
+                        activeColor: colors.primary,
+                        value: _selectedDepartments.contains(e),
+                        title: Text(e ?? ''),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        onChanged: (isSelected) => _departmentValueChange(e, isSelected!),
+                      )
+                  ).toList(),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: _cancel,
+                  child: const Text('Cancel',
+                    style: TextStyle(color: colors.primary),
+                  ),
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: colors.primary
+                    ),
+                    child: const Text('Submit'),
+                    onPressed: () {
+                      //_submit();
+                      Navigator.pop(context, _selectedDepartments);
+                      /*Navigator.push(context, MaterialPageRoute(builder: (context) => SiteSurvey(
+                        modelList: selectedDealingData,
+                        name: widget.name,
+                        email: widget.email,
+                        contact: widget.contact,
+                        creditLimit: widget.creditLimit,
+                        customerType: widget.customerType,
+                        date: widget.date,
+                        time: widget.time,
+                        image: widget.image,
+                        remark: widget.remark,
+                        clintId: widget.clientId,
+                      )));*/
+                    }
+                ),
+              ],
+            ):
             AlertDialog(
               title: const Text('Select Category'),
               content: SingleChildScrollView(
@@ -237,6 +307,7 @@ class _MultiSelectState extends State<MultiSelect> {
                 ),
               ],
             );
+
         }
     );
   }

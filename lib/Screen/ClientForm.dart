@@ -755,6 +755,7 @@ class _Client_formState extends State<Client_form> {
   String? selected_State;
   String? selected_District;
   String? selected_Customer;
+  List<String>? results = ["seller", 'user', "flutter"];
   var stateId;
   var cityId;
   int stateindex = 0;
@@ -1466,6 +1467,47 @@ class _Client_formState extends State<Client_form> {
                                     borderRadius:  BorderRadius.circular(15),
                                 ),
                             ),
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Departments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(
+                        elevation: 3,
+
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          // decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white, border: Border.all(color: Colors.black)),
+                          height: 56,
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 0, left: 10, bottom: 2, right: 10),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row (
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: results!.map((e) {
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: colors.primary),
+                                      child: Center(
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),

@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:omega_employee_management/Screen/MultiSelect.dart';
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/GetListModel.dart';
@@ -62,7 +63,7 @@ class _AddClientsState extends State<AddClients> {
   List<String> Staff=['Atul Gautam','Pretty Tomer','Sunil','yash',];
   // List<String> District=['Indore','Bhopal','Gwalior','Ujjain',];
   // List<String> State=['MP','Gujrat','Rajasthan','Utter pradesh',];
-
+  List<String> results = [];
   GetListModel? getListModel;
   getState() async {
     var headers = {
@@ -83,7 +84,107 @@ class _AddClientsState extends State<AddClients> {
       print(response.reasonPhrase);
     }
   }
+  // DealingProductModel? dealingProductModel;
+  // dealingProduct() async {
+  //   var headers = {
+  //     'Cookie': 'ci_session=4f8360fd4e4e40e498783ef6638c6f55e6bc9fca'
+  //   };
+  //   var request = http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
+  //   request.headers.addAll(headers);
+  //   http.StreamedResponse response = await request.send();
+  //   if (response.statusCode == 200) {
+  //     var result=await response.stream.bytesToString();
+  //     var finalresult = DealingProductModel.fromJson(json.decode(result));
+  //     setState(() {
+  //       dealingProductModel = finalresult;
+  //     });
+  //   }
+  //   else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
+  Widget select() {
+    return InkWell(
+      onTap: (){
+        setState(() {
+          _showMultiSelect();
+        });
+      },
+      child:
+      Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.only(left: 10),
+        decoration: BoxDecoration(
+            color: colors.white70,),
+            // border: Border(
+            //     // bottom: BorderSide(color: colors.blackTemp.withOpacity(0.5),
+            //     ))),
+        child: results.isEmpty ? const Padding(
+          padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Select Department',
+              style: TextStyle(
+                fontSize: 15,
+                color: colors.blackTemp,
+                fontWeight: FontWeight.normal,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ):SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row (
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: results.map((e) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 30,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: Center(
+                    child: Text(
+                      e,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
+  void _showMultiSelect() async {
+    var departments = ["seller","user","flutter"];
+    results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return
+            MultiSelect(
+              departments:  departments,
+              // dealingData: dealingProductModel?.data,
+              // name:delearRetailerModel?.data?[nwIndex].ownerName,
+              // email:delearRetailerModel?.data?[nwIndex].email,
+              // contact: delearRetailerModel?.data?[nwIndex].mobileOne,
+              // creditLimit: delearRetailerModel?.data?[nwIndex].creditLimit,
+              // customerType: delearRetailerModel?.data?[nwIndex].customerType,
+              // date: dateCtr.text,time: timeCtr.text,image: _imageFile?.path,remark: remarkCtr.text,clientId: selected,
+            );
+        });
+      },
+    );
+    setState(() {});
+  }
   void pickImageDialog(BuildContext context,int i) async{
     return await showDialog<void>(
       context: context,
@@ -858,6 +959,7 @@ class _AddClientsState extends State<AddClients> {
      "landmark":landmarkCtr.text,
      'status':selected_Status.toString() ,
      'owner_name': ownernamecn.text,
+     'departments': results.toString(),
      'address': addresscn.text,
      'district': selected_District.toString(),
      'pin_code': pincodecn.text,
@@ -1097,6 +1199,22 @@ class _AddClientsState extends State<AddClients> {
                                   borderRadius:  BorderRadius.circular(10)))),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Text("Department",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    Card(
+                      elevation: 3,
+
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: Container(
+                        // decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white, border: Border.all(color: Colors.black)),
+                        height: 56,
+                        width: MediaQuery.of(context).size.width/1.1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 0, left: 10, bottom: 2, right: 10),
+                          child: select(),
+                        ),
+                      ),
+                    ),
                     Text("Address",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     Card(elevation: 3,

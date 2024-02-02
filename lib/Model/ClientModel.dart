@@ -83,7 +83,8 @@ class ClientsData {
       String? staffId, 
       String? nameOfFirm, 
       String? status, 
-      String? ownerName, 
+      String? ownerName,
+    List<String>? departments,
       String? address, 
       String? email, 
       String? district, 
@@ -122,6 +123,7 @@ class ClientsData {
     _nameOfFirm = nameOfFirm;
     _status = status;
     _ownerName = ownerName;
+    _departments = departments;
     _address = address;
     _email = email;
     _district = district;
@@ -163,6 +165,7 @@ class ClientsData {
     _nameOfFirm = json['name_of_firm'];
     _status = json['status'];
     _ownerName = json['owner_name'];
+    _departments = json['departments'];
     _address = json['address'];
     _email = json['email'];
     _district = json['district'];
@@ -202,6 +205,7 @@ class ClientsData {
   String? _nameOfFirm;
   String? _status;
   String? _ownerName;
+  List<String>? _departments;
   String? _address;
   String? _email;
   String? _district;
@@ -240,6 +244,7 @@ class ClientsData {
   String? nameOfFirm,
   String? status,
   String? ownerName,
+  List<String>? departments,
   String? address,
   String? email,
   String? district,
@@ -278,6 +283,7 @@ class ClientsData {
   nameOfFirm: nameOfFirm ?? _nameOfFirm,
   status: status ?? _status,
   ownerName: ownerName ?? _ownerName,
+    departments: departments ?? _departments,
   address: address ?? _address,
   email: email ?? _email,
   district: district ?? _district,
@@ -317,6 +323,7 @@ class ClientsData {
   String? get nameOfFirm => _nameOfFirm;
   String? get status => _status;
   String? get ownerName => _ownerName;
+  List<String>? get departments => _departments;
   String? get address => _address;
   String? get email => _email;
   String? get district => _district;
@@ -358,6 +365,7 @@ class ClientsData {
     map['name_of_firm'] = _nameOfFirm;
     map['status'] = _status;
     map['owner_name'] = _ownerName;
+    map['departments'] = _departments;
     map['address'] = _address;
     map['email'] = _email;
     map['district'] = _district;
