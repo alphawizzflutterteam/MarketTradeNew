@@ -19,18 +19,18 @@ class TransactionModel {
 
   TransactionModel(
       {this.id,
-      this.amt,
-      this.status,
-      this.msg,
-      this.date,
-      this.type,
-      this.txnID,
-      this.orderId});
+        this.amt,
+        this.status,
+        this.msg,
+        this.date,
+        this.type,
+        this.txnID,
+        this.orderId});
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     String date = json[TRN_DATE];
 
-   date = DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.parse(date));
+    date = DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.parse(date));
     return new TransactionModel(
         orderId: json[ORDER_ID],
         amt: json[AMOUNT],
@@ -38,7 +38,7 @@ class TransactionModel {
         msg: json[MESSAGE],
         type: json[TYPE],
         txnID: json[TXNID],
-       id: json[ID],
+        id: json[ID],
         date: date);
   }
 

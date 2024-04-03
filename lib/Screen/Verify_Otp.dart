@@ -60,6 +60,8 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
       mobileno,
       city,
       area,
+  department_id,
+  location_time,
       pincode,
       address,
       latitude,
@@ -294,21 +296,23 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         pincode = i[PINCODE];
         latitude = i[LATITUDE];
         longitude = i[LONGITUDE];
+        department_id =i['department'];
+        location_time =i['location_time'];
         image = i[IMAGE];
         CUR_USERID = id;
         print("User id"+id.toString());
         final box = GetStorage();
-        box.write('userid', '${id}');
+        box.write('user_id', '${id}');
         prefs.setString("user_id", "$id");
-
+        prefs.setString('department', '${department_id}');
+        prefs.setString('location_time', '${location_time}');
+        print("location time and id here ${department_id} ${location_time}");
         // CUR_USERNAME = username;
-        UserProvider userProvider =
-        Provider.of<UserProvider>(this.context, listen: false);
+        UserProvider userProvider = Provider.of<UserProvider>(this.context, listen: false);
         userProvider.setName(username ?? "");
         userProvider.setEmail(email ?? "");
         userProvider.setProfilePic(image ?? "");
-        SettingProvider settingProvider =
-        Provider.of<SettingProvider>(context, listen: false);
+        SettingProvider settingProvider = Provider.of<SettingProvider>(context, listen: false);
         settingProvider.saveUserDetail(id!, username, email, mobile, city, area,
             address, pincode, latitude, longitude, image, context);
         // Navigator.pushNamedAndRemoveUntil(context, "/home", (r) => false);

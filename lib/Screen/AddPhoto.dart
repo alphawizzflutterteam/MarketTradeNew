@@ -149,7 +149,7 @@ class _AddPhotoState extends State<AddPhoto> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio: 4/4.8
+                    childAspectRatio: 3/4.5
                 ),
                 itemCount: clients?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -183,7 +183,7 @@ class _AddPhotoState extends State<AddPhoto> {
                           ),
                           const SizedBox(width: 20),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            padding: const EdgeInsets.only(left:5.0, right:5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -194,7 +194,9 @@ class _AddPhotoState extends State<AddPhoto> {
                                     SizedBox(height: 10,),
                                     Text("Owner:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp),),
                                     SizedBox(height: 10,),
-                                    Text("Number:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                    Text("Mobile:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                    SizedBox(height: 10,),
+                                    Text("Address:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
                                   ],
                                 ),
                                 Column(
@@ -206,12 +208,16 @@ class _AddPhotoState extends State<AddPhoto> {
                                     Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
                                     SizedBox(height: 10),
                                     Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      width: 105,
+                                        child: Text("${clients?.data?[index].address}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp), maxLines: 2,)),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(height: 10),
                           InkWell(
                             onTap: () {
                               // addPhotoDialog(context, clients?.data?[index].id.toString() ?? "");

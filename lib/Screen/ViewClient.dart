@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 import '../Helper/Color.dart';
@@ -11,6 +12,7 @@ import '../Helper/String.dart';
 import '../Model/ClientModel.dart';
 import '../Provider/HomeProvider.dart';
 import 'ClientForm.dart';
+import 'ClientsView.dart';
 
 class ViewClient extends StatefulWidget {
   const ViewClient({Key? key}) : super(key: key);
@@ -27,19 +29,22 @@ void initState() {
   getClients();
 }
 
-
+String? department_id;
   ClientModel? clients;
-List<ClientsData> clientData = [];
-  getClients() async{
+  List<ClientsData> clientData = [];
+  getClients() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
     var request = http.MultipartRequest('POST', Uri.parse(getClientApi.toString()));
     request.fields.addAll({
       USER_ID: '${CUR_USERID}',
+       'department_id': '${department_id.toString()}'
     });
 
-    print("this is refer request ${request.fields.toString()}");
+    print("this is refer request for department${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -89,7 +94,7 @@ TextEditingController searchCtr = TextEditingController();
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: Text("View Clients", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+        title: Text("Clients List", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: colors.primary,
       ),
@@ -110,13 +115,14 @@ TextEditingController searchCtr = TextEditingController();
                         width: 20,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
                         child: Icon(
-                            Icons.search, color: Colors.white)),
+                            Icons.search, color: Colors.white),
+                    ),
                     hintText: "Search here",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             Container(
               child: GridView.builder(
                 shrinkWrap: true,
@@ -125,7 +131,7 @@ TextEditingController searchCtr = TextEditingController();
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio: 4/4.8
+                    childAspectRatio: 3/4.8
                 ),
                 itemCount: clients?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -148,10 +154,10 @@ TextEditingController searchCtr = TextEditingController();
                               borderRadius: BorderRadius.circular(0.0),
                               child: new FadeInImage(
                                 fadeInDuration: Duration(milliseconds: 150),
-                                image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
-                                height: 130.0,
+                                image: CachedNetworkImageProvider("${clients?.data?[index].photo?[0]}"),
+                                height: 110.0,
                                 width: double.infinity,
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 imageErrorBuilder: (context, error, stackTrace) => erroWidget(50),
                                 placeholder: placeHolder(50),
                               ),
@@ -159,7 +165,7 @@ TextEditingController searchCtr = TextEditingController();
                           ),
                           const SizedBox(width: 20),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            padding: const EdgeInsets.only(left: 5.0, right: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -170,7 +176,9 @@ TextEditingController searchCtr = TextEditingController();
                                     SizedBox(height: 10,),
                                     Text("Owner:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp),),
                                     SizedBox(height: 10,),
-                                    Text("Number:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                    Text("Mobile:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                    SizedBox(height: 10,),
+                                    Text("Address:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
                                   ],
                                 ),
                                 Column(
@@ -182,26 +190,31 @@ TextEditingController searchCtr = TextEditingController();
                                     Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
                                     SizedBox(height: 10),
                                     Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      width: 90,
+                                        child: Text("${clients?.data?[index].address}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp), maxLines: 2,)),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-
-                          // InkWell(
-                          //   onTap: () {
-                          //     Navigator.push(context, MaterialPageRoute(builder: (context) => Client_form(model: clients?.data?[index])));
-                          //   },
-                          //   child: Container(
-                          //     height: 30,
-                          //     width: 70,
-                          //     decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         color: colors.primary
-                          //     ),
-                          //     child: Center(child: Text("Add",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
-                          //   ),
-                          // )
+                          SizedBox(height: 5),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ClientsView(model: clients?.data?[index])));
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: colors.primary
+                              ),
+                              child: Center(
+                                  child: Text("View",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
+                            ),
+                          )
                         ],
                       ),
                     ),

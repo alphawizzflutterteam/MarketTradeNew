@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:omega_employee_management/Model/Notification_Model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,6 @@ class NotificationList extends StatefulWidget {
   State<StatefulWidget> createState() => StateNoti();
 }
 
-
-
 class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   ScrollController controller = new ScrollController();
@@ -34,7 +33,6 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
   int total = 0;
   bool isLoadingmore = true;
   bool _isLoading = true;
-
 
   @override
   void initState() {
@@ -175,41 +173,44 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
             model.img != null && model.img != ''
                 ? GestureDetector(
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 100,
+                      height: 100,
                       child: Hero(
                         tag: model.id!,
                         child: CircleAvatar(
                           backgroundImage: NetworkImage(
                             model.img!,
                           ),
-                          radius: 25,
+                          radius: 15,
                         ),
                       ),
                     ),
                     onTap: () {
-                      Navigator.of(context).push(new PageRouteBuilder(
-                          opaque: false,
-                          barrierDismissible: true,
-                          pageBuilder: (BuildContext context, _, __) {
-                            return new AlertDialog(
-                              elevation: 0,
-                              contentPadding: EdgeInsets.all(0),
-                              backgroundColor: Colors.transparent,
-                              content: new Hero(
-                                tag: model.id!,
-                                child: FadeInImage(
-                                  image: CachedNetworkImageProvider(model.img!),
-                                  fadeInDuration: Duration(milliseconds: 150),
-                                  placeholder: placeHolder(150),
-                                  imageErrorBuilder:
-                                      (context, error, stackTrace) =>
-                                          erroWidget(150),
-                                ),
-                              ),
-                            );
-                          }));
-
+                      final imageProvider = Image.network(model.img!).image;
+                      showImageViewer(context, imageProvider,
+                          onViewerDismissed: () {
+                            print("dismissed");
+                          });
+                      // Navigator.of(context).push(new PageRouteBuilder(
+                      //     opaque: false,
+                      //     barrierDismissible: true,
+                      //     pageBuilder: (BuildContext context, _, __) {
+                      //       return new AlertDialog(
+                      //         elevation: 5,
+                      //         contentPadding: EdgeInsets.all(0),
+                      //         backgroundColor: Colors.white,
+                      //         content: new Hero(
+                      //           tag: model.id!,
+                      //           child: FadeInImage(
+                      //             image: CachedNetworkImageProvider(model.img!),
+                      //             fadeInDuration: Duration(milliseconds: 150),
+                      //             placeholder: placeHolder(150),
+                      //             imageErrorBuilder: (context, error, stackTrace) => erroWidget(150),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }),
+                      // );
                       // return showDialog(
                       //     context: context,
                       //     builder: (BuildContext context) {
@@ -250,7 +251,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
           LIMIT: perPage.toString(),
           OFFSET: offset.toString(),
         };
-
+       print("get notification para${parameter}===========");
         Response response =
             await post(getNotificationApi, headers: headers, body: parameter)
                 .timeout(Duration(seconds: timeOut));

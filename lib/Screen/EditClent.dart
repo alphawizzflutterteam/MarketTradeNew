@@ -52,8 +52,7 @@ class _EditClientState extends State<EditClient> {
       print("this is response data ${finalResponse}");
       print("this is response data ${clientData[1].aadharImg}");
       print("this is response data ${clientData[1].gstImg }");
-      print("this is response data ${clientData[1].voterIdBackImg}");
-      print("this is response data ${clientData[1].voterIdImg}");
+      print("this is response data ${clientData[1].voterIdBackImage}");
       // setState(() {
       // animalList = finalResponse.data!;
       // });
@@ -112,7 +111,8 @@ class _EditClientState extends State<EditClient> {
                     suffixIcon: Container(
                         width: 20,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                        child: Icon(Icons.search, color: Colors.white)),
+                        child: Icon(Icons.search, color: Colors.white),
+                    ),
                     hintText: "Search here",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
                 ),
@@ -126,7 +126,7 @@ class _EditClientState extends State<EditClient> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio: 4/5.8
+                    childAspectRatio: 3/5.8
                 ),
                 itemCount: clients?.data?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -149,7 +149,7 @@ class _EditClientState extends State<EditClient> {
                               borderRadius: BorderRadius.circular(0.0),
                               child: new FadeInImage(
                                 fadeInDuration: Duration(milliseconds: 150),
-                                image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
+                                image: CachedNetworkImageProvider("${clients?.data?[index].photo?[0]}"),
                                 height: 130.0,
                                 width: double.infinity,
                                 fit: BoxFit.fill,
@@ -172,6 +172,8 @@ class _EditClientState extends State<EditClient> {
                                     Text("Owner:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp),),
                                     SizedBox(height: 10,),
                                     Text("Number:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
+                                    SizedBox(height: 10,),
+                                    Text("Address:", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp),),
                                   ],
                                 ),
                                 Column(
@@ -183,6 +185,10 @@ class _EditClientState extends State<EditClient> {
                                     Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
                                     SizedBox(height: 10),
                                     Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      width: 50,
+                                        child: Text("${clients?.data?[index].address}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp), maxLines: 2,)),
                                   ],
                                 ),
                               ],
@@ -203,7 +209,7 @@ class _EditClientState extends State<EditClient> {
                               child: Center(
                                   child: Text("Edit",style: TextStyle(color: colors.whiteTemp,fontWeight: FontWeight.bold),)),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),

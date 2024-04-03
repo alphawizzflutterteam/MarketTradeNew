@@ -17,12 +17,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 import 'package:omega_employee_management/Screen/check_out_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Add_Address.dart';
 import 'HomePage.dart';
 import 'SiteVisitForm.dart';
 import 'myprofile.dart';
-
-var updateTime = 5;
 
 class Dashboard extends StatefulWidget {
   final int? selectedIndex;
@@ -39,6 +38,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    locationTimeUpdate();
     // debugPrint("mmmmm"+(DateTime.now().minute).toString());
     // Navigator.push(context,
     //     MaterialPageRoute(
@@ -74,7 +74,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     pushNotificationService.initialise();
 
     _tabController.addListener(
-      () {
+          () {
         // Future.delayed(Duration(seconds: 0)).then(
         //   (value) {
         //     if (_tabController.index == 3) {
@@ -91,7 +91,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         //   },
         // );
         setState(
-          () {
+              () {
             _selBottom = _tabController.index;
           },
         );
@@ -102,7 +102,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   var pinController = TextEditingController();
   var currentAddress = TextEditingController();
 
-   getCurrentLoc() async {
+  getCurrentLoc() async {
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -152,11 +152,19 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     updateLocationPeriodically();
   }
 
+
+ String? locationTime;
+  locationTimeUpdate() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    locationTime = pref.getString('location_time');
+    print("location timeee ${locationTime}");
+  }
+
+
   updateLocationPeriodically() {
-    Timer.periodic(Duration(minutes: updateTime), (timer) async {
+    Timer.periodic(Duration(minutes: int.parse(locationTime!)), (timer) async {
       Position position =  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);;
       if (position != null) {
-        // Do something with the updated location, e.g., send it to a server.
         print("Updated Location: ${position.latitude}, ${position.longitude}");
       }
       updateLocation();
@@ -199,27 +207,27 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   void initDynamicLinks() async {
     FirebaseDynamicLinks.instance.onLink(
         onSuccess: (PendingDynamicLinkData? dynamicLink) async {
-      final Uri? deepLink = dynamicLink?.link;
+          final Uri? deepLink = dynamicLink?.link;
 
-      if (deepLink != null) {
-        if (deepLink.queryParameters.length > 0) {
-          int index = int.parse(deepLink.queryParameters['index']!);
+          if (deepLink != null) {
+            if (deepLink.queryParameters.length > 0) {
+              int index = int.parse(deepLink.queryParameters['index']!);
 
-          int secPos = int.parse(deepLink.queryParameters['secPos']!);
+              int secPos = int.parse(deepLink.queryParameters['secPos']!);
 
-          String? id = deepLink.queryParameters['id'];
+              String? id = deepLink.queryParameters['id'];
 
-          String? list = deepLink.queryParameters['list'];
+              String? list = deepLink.queryParameters['list'];
 
-          getProduct(id!, index, secPos, list == "true" ? true : false);
-        }
-      }
-    }, onError: (OnLinkErrorException e) async {
+              getProduct(id!, index, secPos, list == "true" ? true : false);
+            }
+          }
+        }, onError: (OnLinkErrorException e) async {
       print(e.message);
     });
 
     final PendingDynamicLinkData? data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri? deepLink = data?.link;
     if (deepLink != null) {
       if (deepLink.queryParameters.length > 0) {
@@ -246,7 +254,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
         // if (CUR_USERID != null) parameter[USER_ID] = CUR_USERID;
         Response response =
-            await post(getProductApi, headers: headers, body: parameter).timeout(Duration(seconds: timeOut));
+        await post(getProductApi, headers: headers, body: parameter).timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
@@ -261,13 +269,13 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ProductDetail(
-                    index: list ? int.parse(id) : index,
-                    model: list
-                        ? items[0]
-                        : sectionList[secPos].productList![index],
-                    secPos: secPos,
-                    list: list,
-                  )));
+                index: list ? int.parse(id) : index,
+                model: list
+                    ? items[0]
+                    : sectionList[secPos].productList![index],
+                secPos: secPos,
+                list: list,
+              )));
         } else {
           if (msg != "Products Not Found !") setSnackbar(msg, context);
         }
@@ -286,11 +294,11 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-     // if(DateTime.now().hour == "21"
-     //     && DateTime.now().minute == "00"
-     //     &&DateTime.now().second == "00"){
-     //
-     // }
+    // if(DateTime.now().hour == "21"
+    //     && DateTime.now().minute == "00"
+    //     &&DateTime.now().second == "00"){
+    //
+    // }
     return WillPopScope(
       onWillPop: () async {
         if (_tabController.index != 0) {
@@ -326,7 +334,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     String? title;
     // if (_selBottom == 1)
     //   title = getTranslated(context, 'CATEGORY');
-     if (_selBottom == 1)
+    if (_selBottom == 1)
       title = getTranslated(context, 'MY_LEADS');
     // else if (_selBottom == 3)
     //   title = getTranslated(context, 'MYBAG');
@@ -336,18 +344,18 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
       centerTitle: _selBottom == 0 ? true : false,
       title: _selBottom == 0
           ? Image.asset(
-              'assets/images/homelogo.png',
-              //height: 40,
-              //   width: 200,
-              height: 90,
-              //s
-              // width: 45,
-            )
+        'assets/images/homelogo.png',
+        //height: 40,
+        //   width: 200,
+        height: 90,
+        //s
+        // width: 45,
+      )
           : Text(
-              title!,
-              style: TextStyle(
-                  color: colors.primary, fontWeight: FontWeight.normal),
-            ),
+        title!,
+        style: TextStyle(
+            color: colors.primary, fontWeight: FontWeight.normal),
+      ),
       // leading: _selBottom == 0
       //     ? InkWell(
       //         child: Center(
@@ -457,15 +465,15 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
               Tab(
                 icon: _selBottom == 0
                     ? SvgPicture.asset(
-                        imagePath + "sel_home.svg",
-                        color: colors.primary,
-                      )
+                  imagePath + "sel_home.svg",
+                  color: colors.primary,
+                )
                     : SvgPicture.asset(
-                        imagePath + "desel_home.svg",
-                        color: colors.primary,
-                      ),
+                  imagePath + "desel_home.svg",
+                  color: colors.primary,
+                ),
                 text:
-                    _selBottom == 0 ? getTranslated(context, 'HOME_LBL') : null,
+                _selBottom == 0 ? getTranslated(context, 'HOME_LBL') : null,
               ),
               // Tab(
               //   icon: _selBottom == 1
@@ -553,15 +561,15 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
               Tab(
                 icon: _selBottom == 1
                     ? SvgPicture.asset(
-                        imagePath + "profile01.svg",
-                        color: colors.primary,
-                      )
+                  imagePath + "profile01.svg",
+                  color: colors.primary,
+                )
                     : SvgPicture.asset(
-                        imagePath + "profile.svg",
-                        color: colors.primary,
-                      ),
+                  imagePath + "profile.svg",
+                  color: colors.primary,
+                ),
                 text:
-                    _selBottom == 1 ? getTranslated(context, 'ACCOUNT') : null,
+                _selBottom == 1 ? getTranslated(context, 'ACCOUNT') : null,
               ),
             ],
             indicator: UnderlineTabIndicator(
@@ -571,7 +579,8 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
             labelColor: colors.primary,
             labelStyle: TextStyle(fontSize: 8 , fontWeight: FontWeight.w600),
           ),
-        ));
+        ),
+    );
   }
 
   @override

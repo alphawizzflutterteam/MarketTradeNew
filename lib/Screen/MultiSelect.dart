@@ -175,8 +175,6 @@ class _MultiSelectState extends State<MultiSelect> {
       if (isSelected) {
         setState(() {
           _selectedDepartments.add(department ?? '');
-
-
         });
       } else {
         setState(() {
@@ -210,55 +208,55 @@ class _MultiSelectState extends State<MultiSelect> {
     return StatefulBuilder(
         builder: (context, setState) {
           return
-            widget.departments != null || widget.departments!.isNotEmpty ?
-            AlertDialog(
-              title: const Text('Select Departments'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: widget.departments!
-                      .map((e) =>
-                      CheckboxListTile(
-                        activeColor: colors.primary,
-                        value: _selectedDepartments.contains(e),
-                        title: Text(e ?? ''),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        onChanged: (isSelected) => _departmentValueChange(e, isSelected!),
-                      )
-                  ).toList(),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: _cancel,
-                  child: const Text('Cancel',
-                    style: TextStyle(color: colors.primary),
-                  ),
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: colors.primary
-                    ),
-                    child: const Text('Submit'),
-                    onPressed: () {
-                      //_submit();
-                      Navigator.pop(context, _selectedDepartments);
-                      /*Navigator.push(context, MaterialPageRoute(builder: (context) => SiteSurvey(
-                        modelList: selectedDealingData,
-                        name: widget.name,
-                        email: widget.email,
-                        contact: widget.contact,
-                        creditLimit: widget.creditLimit,
-                        customerType: widget.customerType,
-                        date: widget.date,
-                        time: widget.time,
-                        image: widget.image,
-                        remark: widget.remark,
-                        clintId: widget.clientId,
-                      )));*/
-                    }
-                ),
-              ],
-            ):
+            // widget.departments != null || widget.departments!.isNotEmpty ?
+            // AlertDialog(
+            //   title: const Text('Select Departments'),
+            //   content: SingleChildScrollView(
+            //     child: ListBody(
+            //       children: widget.departments!
+            //           .map((e) =>
+            //           CheckboxListTile(
+            //             activeColor: colors.primary,
+            //             value: _selectedDepartments.contains(e),
+            //             title: Text(e ?? ''),
+            //             controlAffinity: ListTileControlAffinity.leading,
+            //             onChanged: (isSelected) => _departmentValueChange(e, isSelected!),
+            //           )
+            //       ).toList(),
+            //     ),
+            //   ),
+            //   actions: [
+            //     TextButton(
+            //       onPressed: _cancel,
+            //       child: const Text('Cancel',
+            //         style: TextStyle(color: colors.primary),
+            //       ),
+            //     ),
+            //     ElevatedButton(
+            //         style: ElevatedButton.styleFrom(
+            //             primary: colors.primary
+            //         ),
+            //         child: const Text('Submit'),
+            //         onPressed: () {
+            //           //_submit();
+            //           Navigator.pop(context, _selectedDepartments);
+            //           /*Navigator.push(context, MaterialPageRoute(builder: (context) => SiteSurvey(
+            //             modelList: selectedDealingData,
+            //             name: widget.name,
+            //             email: widget.email,
+            //             contact: widget.contact,
+            //             creditLimit: widget.creditLimit,
+            //             customerType: widget.customerType,
+            //             date: widget.date,
+            //             time: widget.time,
+            //             image: widget.image,
+            //             remark: widget.remark,
+            //             clintId: widget.clientId,
+            //           )));*/
+            //         }
+            //     ),
+            //   ],
+            // ):
             AlertDialog(
               title: const Text('Select Category'),
               content: SingleChildScrollView(
@@ -307,7 +305,6 @@ class _MultiSelectState extends State<MultiSelect> {
                 ),
               ],
             );
-
         }
     );
   }

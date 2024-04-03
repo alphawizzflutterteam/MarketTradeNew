@@ -1,689 +1,26 @@
-//
-// import 'dart:convert';
-// import 'dart:io';
-//
-// import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:http/http.dart'as http;
-// import 'package:omega_employee_management/Screen/Dashboard.dart';
-// import '../Model/ClientModel.dart';
-// import '../Model/GetListModel.dart';
-//
-//
-//
-// class Client_form extends StatefulWidget {
-//   final ClientsData? model;
-//   Client_form({Key? key, this.model}) : super(key: key);
-//
-//   @override
-//   State<Client_form> createState() => _Client_formState();
-// }
-//
-// class _Client_formState extends State<Client_form> {
-//
-//   final picker=ImagePicker();
-//   File? _imageFile;
-//
-//   _getFromGallery() async {
-//     PickedFile? pickedFile = await ImagePicker().getImage(
-//       source: ImageSource.gallery,
-//     );
-//     if (pickedFile != null) {
-//       setState(() {
-//         _imageFile = File(pickedFile.path);
-//       });
-//       Navigator.pop(context);
-//     }
-//   }
-//
-//   _getFromCamera() async {
-//     PickedFile? pickedFile = await ImagePicker().getImage(
-//       source: ImageSource.camera,
-//     );
-//     if (pickedFile != null) {
-//       setState(() {
-//         _imageFile = File(pickedFile.path);
-//       });
-//       Navigator.pop(context);
-//     }
-//   }
-//
-//
-//   void _showImagePicker(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return SafeArea(
-//           child: Wrap(
-//             children: <Widget>[
-//               ListTile(
-//                 leading: Icon(Icons.photo_library),
-//                 title: Text('Gallery'),
-//                 onTap: () {
-//                   _getFromGallery();
-//                   // _pickImage(ImageSource.gallery);
-//                   Navigator.of(context).pop();
-//                 },
-//               ),
-//               ListTile(
-//                 leading: Icon(Icons.photo_camera),
-//                 title: Text('Camera'),
-//                 onTap: () {
-//                   _getFromCamera();
-//                   // _pickImage(ImageSource.camera);
-//                   Navigator.of(context).pop();
-//                 },
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-//   TextEditingController namecn = TextEditingController();
-//   TextEditingController emailcn = TextEditingController();
-//   TextEditingController mobile1cn= TextEditingController();
-//   TextEditingController mobile2cn= TextEditingController();
-//   TextEditingController whatsappcn= TextEditingController();
-//   TextEditingController  department= TextEditingController();
-//   TextEditingController  ownernamecn= TextEditingController();
-//   TextEditingController addresscn= TextEditingController();
-//   TextEditingController pincodecn= TextEditingController();
-//   TextEditingController pancn= TextEditingController();
-//   TextEditingController gstcn= TextEditingController();
-//   TextEditingController aadharcn= TextEditingController();
-//   TextEditingController creditcn= TextEditingController();
-//   TextEditingController staffcn= TextEditingController();
-//
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//   String? selected_Status;
-//   String? selected_Staff;
-//   String? selected_State;
-//   String? selected_District;
-//   String? selected_Customer;
-//   // List<String> Staff=['Atul Gautam','Pretty Tomer','Sunil','yash',];
-//   List<String> District=['Indore','Bhopal','Gwalior','Ujjain',];
-//
-//   void initState(){
-//     super.initState();
-//     fetchState();
-//     namecn.text='${widget.model?.nameOfFirm}';
-//     ownernamecn.text='${widget.model?.ownerName}';
-//     addresscn.text='${widget.model?.address}';
-//     pincodecn.text='${widget.model?.pinCode}';
-//     emailcn.text='${widget.model?.email}';
-//     mobile1cn.text='${widget.model?.mobileOne}';
-//     mobile2cn.text='${widget.model?.mobileTwo}';
-//     whatsappcn.text='${widget.model?.whatsappNumber}';
-//     pancn.text='${widget.model?.pan}';
-//     gstcn.text='${widget.model?.gst}';
-//     aadharcn.text='${widget.model?.aadhar}';
-//     creditcn.text='${widget.model?.creditLimit}';
-//     selected_State='${widget.model?.state}';
-//     selected_Status='${widget.model?.status}';
-//     selected_Customer='${widget.model?.customerType}';
-//     //selected_District='${widget.model?.district}';
-//     // staffcn.text='${widget.model?.}';
-//
-//
-//   }
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return  Scaffold(
-//       appBar: AppBar(
-//         title: Center(child: Text("Add Client")),
-//       ),
-//
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.only(left: 15,right: 15,top: 20),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//
-//             children: [
-//
-//               Form(
-//                   key:_formKey,
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text("Name Of Firm",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//                             controller: namecn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                                 // return null;
-//                               }
-//
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: 'hfg',
-//
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//
-//                         child: DropdownButtonFormField<String>(
-//
-//
-//                           value: selected_Status,
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                             } else {
-//                               return null;
-//                             }
-//                           },
-//
-//                           onChanged: (newValue) {
-//                             setState(() {
-//                               selected_Status= newValue;
-//
-//                             });
-//                           },
-//                           items:getList?.data?.clientStatus?.map((items) {
-//                             return DropdownMenuItem(
-//                               value: items.id,
-//                               child: Text(items.name.toString()),
-//                             );
-//                           }).toList(),
-//                           decoration: InputDecoration(
-//                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                             hintText:
-//                             'Select Status',
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Staff",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//                             controller: staffcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                                 // return null;
-//                               }
-//                             },
-//                             decoration: InputDecoration(
-//                                 hintText: 'hfg',
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Owner Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//                             controller: ownernamecn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: 'fhhhd',
-//
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Address",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//                             controller: addresscn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//                             decoration: InputDecoration(
-//                                 hintText: 'fhhhd',
-//
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("State",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       // Card(elevation: 6,
-//                       //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                       //   child: DropdownButtonFormField<String>(
-//                       //     value: selected_State,
-//                       //     validator: (value) {
-//                       //       if (value == null || value.isEmpty) {
-//                       //       } else {
-//                       //         return null;
-//                       //       }
-//                       //     },
-//                       //     onChanged: (newValue) {
-//                       //       setState(() {
-//                       //         selected_State= newValue;
-//                       //         selected_State=getList?.data?.states?[0].countryId;
-//                       //       });
-//                       //     },
-//                       //     items:getList?.data?.states?.map((items) {
-//                       //       return DropdownMenuItem(
-//                       //         value: items.id,
-//                       //         child: Text(items.name.toString()),
-//                       //       );
-//                       //     }).toList(),
-//                       //     decoration: InputDecoration(
-//                       //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                       //       hintText:
-//                       //       '  Select State',
-//                       //
-//                       //     ),
-//                       //   ),
-//                       // ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("District",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: DropdownButtonFormField<String>(
-//                           value: selected_District,
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                             } else {
-//                               return null;
-//                             }
-//                           },
-//                           onChanged: (newValue) {
-//                             setState(() {
-//                               selected_District= newValue;
-//                             });
-//                           },
-//                           items:District.map((item) {
-//                             return DropdownMenuItem(
-//                               value: item,
-//                               child: Text(item),
-//                             );
-//                           }).toList(),
-//                           decoration: InputDecoration(
-//                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                             hintText:
-//                             '  Select District',
-//
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Pincode",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.number,
-//                             controller: pincodecn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '452011',
-//
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Email",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.emailAddress,
-//                             controller: emailcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: 'hfg@gmail.com',
-//
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Mobile 1",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.number,
-//                             maxLength: 10,
-//                             controller: mobile1cn,
-//                             validator: (value) {
-//                               if (value!.isEmpty||value.length<10) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '9854648544',
-//
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Mobile 2",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.number,
-//                             maxLength: 10,
-//                             controller: mobile2cn,
-//                             validator: (value) {
-//                               if (value!.isEmpty||value.length<10) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '9854648544',
-//
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Whatsapp Number",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.number,
-//                             maxLength: 10,
-//                             controller: whatsappcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty||value.length<10) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '9854648544',
-//
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Pan",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//
-//                             controller: pancn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//                             decoration: InputDecoration(
-//                                 hintText: '4545385838',
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("GST",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//
-//                             controller: gstcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '6565',
-//
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.number,
-//                             maxLength: 12,
-//                             controller: aadharcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty||value.length<12) {
-//                               }
-//                               return null;
-//                             },
-//
-//                             decoration: InputDecoration(
-//                                 hintText: '57687375747567',
-//
-//                                 counterText: "",
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Customer Type",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: DropdownButtonFormField<String>(
-//                           value: selected_Customer,
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                             } else {
-//                               return null;
-//                             }
-//                           },
-//                           onChanged: (newValue) {
-//                             setState(() {
-//                               selected_Customer= newValue;
-//                             });
-//                           },
-//                           items:getList?.data?.customerType?.map((items) {
-//                             return DropdownMenuItem(
-//                               value: items.id,
-//                               child: Text(items.name.toString()),
-//                             );
-//                           }).toList(),
-//                           decoration: InputDecoration(
-//                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                             hintText:
-//                             'Select Customer Type',
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Text("Credit limit",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       Card(elevation: 6,
-//                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-//                         child: TextFormField(
-//                             keyboardType: TextInputType.text,
-//                             controller: creditcn,
-//                             validator: (value) {
-//                               if (value!.isEmpty) {
-//                               }
-//                               return null;
-//                             },
-//                             decoration: InputDecoration(
-//                                 hintText: '999999999.99',
-//                                 border: OutlineInputBorder(
-//                                     borderRadius:  BorderRadius.circular(15)))),
-//                       ),
-//                       SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//                       ElevatedButton(onPressed: (){
-//                         _showImagePicker(context);
-//                       }, child: Text("Select Image")),
-//                       Center(
-//                         child: Container(
-//                             height: 150,
-//                             width: 150,
-//                             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-//                             child:_imageFile!=null? Image.file(_imageFile!.absolute,fit: BoxFit.fill,):
-//                             //    Center(child: Image.asset('assets/img.png')),),
-//                             Image.network('${widget.model?.customerType}')
-//                         ),
-//                       )
-//                     ],
-//                   )
-//               ),
-//               SizedBox(height: MediaQuery.of(context).size.height*.03,),
-//               Row(
-//                 children: [
-//                   SizedBox(width: MediaQuery.of(context).size.width*.02,),
-//                   ElevatedButton(style: ElevatedButton.styleFrom(primary: Colors.green),
-//                       onPressed: (){
-//                         if(_formKey.currentState!.validate()){
-//                           update();
-//                         }
-//                       }, child: Text("Update"))
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   GetListModel? getList;
-//   Future<void> fetchState() async {
-//     var headers = {
-//       'Cookie': 'ci_session=87296a4980f29999f28fd3ac8756e4f69277cda7'
-//     };
-//     var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/get_lists'));
-//
-//     request.headers.addAll(headers);
-//
-//     http.StreamedResponse response = await request.send();
-//     if (response.statusCode == 200) {
-//       var result=await response.stream.bytesToString();
-//       var finalresult = GetListModel.fromJson(json.decode(result));
-//       setState(() {
-//         getList=finalresult;
-//       });
-//     }
-//     else {
-//       print(response.reasonPhrase);
-//     }
-//   }
-//
-//
-//   Future<void> update() async {
-//     var headers = {
-//       'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
-//     };
-//     var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/add_new_client'));
-//     request.fields.addAll({
-//       'user_id': '2',
-//       'name_of_firm': namecn.text,
-//       'status':selected_Status.toString() ,
-//       'owner_name': ownernamecn.text,
-//       'address': addresscn.text,
-//       'district': '2',
-//       'pin_code': pincodecn.text,
-//       'state': selected_State.toString(),
-//       'mobile_one': mobile1cn.text,
-//       'mobile_two': mobile2cn.text,
-//       'whatsapp_number': whatsappcn.text,
-//       'email': emailcn.text,
-//       'pan': pancn.text,
-//       'gst': gstcn.text,
-//       'aadhar': aadharcn.text,
-//       'customer_type': selected_Customer.toString(),
-//       'credit_limit': creditcn.text,
-//       'lat': '22.76975',
-//       'lng': '76.57556',
-//       // "id": "${getLi}"
-//     });
-//
-//     request.headers.addAll(headers);
-//
-//     http.StreamedResponse response = await request.send();
-//
-//     if (response.statusCode == 200) {
-//       var result=await response.stream.bytesToString();
-//       var finalresult=jsonDecode(result);
-//       if(finalresult['error']==false){
-//         Fluttertoast.showToast(msg: finalresult['message']);
-//         Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(),));
-//       }
-//       else{
-//         Fluttertoast.showToast(msg: finalresult['message']);
-//       }
-//     }
-//     else {
-//       print(response.reasonPhrase);
-//     }
-//
-//   }
-// }
-//
-
-
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart'as http;
-import 'package:omega_employee_management/Helper/String.dart';
-import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../Helper/Color.dart';
+import '../Helper/String.dart';
 import '../Model/ClientModel.dart';
 import '../Model/GetListModel.dart';
-import 'Add_Address.dart';
 
-class Client_form extends StatefulWidget {
+class ClientsView extends StatefulWidget {
   final ClientsData? model;
-  const Client_form({Key? key, this.model}) : super(key: key);
+  const ClientsView({Key? key, this.model}) : super(key: key);
 
   @override
-  State<Client_form> createState() => _Client_formState();
+  State<ClientsView> createState() => _ClientsViewState();
 }
-int count = 0;
 
-
-class _Client_formState extends State<Client_form> {
-
+class _ClientsViewState extends State<ClientsView> {
   final picker = ImagePicker();
   File? _imageFile;
 
@@ -741,8 +78,10 @@ class _Client_formState extends State<Client_form> {
   TextEditingController pancn= TextEditingController();
   TextEditingController gstcn= TextEditingController();
   TextEditingController aadharcn= TextEditingController();
-  TextEditingController voterCtr= TextEditingController();
   TextEditingController creditcn= TextEditingController();
+  TextEditingController currentAddresscn= TextEditingController();
+  TextEditingController creaetDateTimecn= TextEditingController();
+  TextEditingController cratedBycn= TextEditingController();
   TextEditingController staffcn= TextEditingController();
   TextEditingController udyogIdCtr= TextEditingController();
   TextEditingController doBCtr= TextEditingController();
@@ -750,6 +89,8 @@ class _Client_formState extends State<Client_form> {
   TextEditingController routeCtr= TextEditingController();
   TextEditingController marketCtr= TextEditingController();
   TextEditingController landmarkCtr= TextEditingController();
+  TextEditingController departmentCtr= TextEditingController();
+  TextEditingController voterCtr= TextEditingController();
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -768,12 +109,16 @@ class _Client_formState extends State<Client_form> {
   // List<String> Staff=['Atul Gautam','Pretty Tomer','Sunil','yash',];
   List<String> District= ['Indore','Bhopal','Gwalior','Ujjain',];
 
+  getData() async {
+    await getState();
+    await fetchState();
+  }
+
   @override
   void initState(){
     super.initState();
-    getState();
-    fetchState();
-    print("statusss=====${widget.model?.status}===========");
+    debugPrint("++++===========${widget.model?.district}");
+    getData();
     namecn.text='${widget.model?.nameOfFirm}';
     ownernamecn.text='${widget.model?.ownerName}';
     addresscn.text='${widget.model?.address}';
@@ -794,9 +139,13 @@ class _Client_formState extends State<Client_form> {
     udyogIdCtr.text ='${widget.model?.udyogidNumber}';
     selected_Status='${widget.model?.status}';
     selected_Customer='${widget.model?.customerType}';
-     selected_State = '${widget.model?.state}';
+    selected_State = '${widget.model?.state}';
     // panImage!.path =  "${widget.model?.panImg}" ?? "";
-    selected_District='${widget.model?.district}';
+    selected_District= '${widget.model?.district}';
+    currentAddresscn.text = '${widget.model?.currentAddress}';
+    creaetDateTimecn.text = '${widget.model?.createdAt}';
+    cratedBycn.text = '${widget.model?.createBy}';
+    departmentCtr.text = '${widget.model?.department?.join(",")}';
     voterCtr.text = '${widget.model?.voterNumber}';
     // staffcn.text='${widget.model?.}';
     // stateId='${widget.model?.state}';
@@ -1197,7 +546,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1221,7 +570,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraPan() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1245,7 +594,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGst() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1257,7 +606,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGstOne() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1269,7 +618,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraGstTwo() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1293,7 +642,7 @@ class _Client_formState extends State<Client_form> {
 
   _getFromCameraAdhar() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1306,7 +655,7 @@ class _Client_formState extends State<Client_form> {
 
   getFromCameraAdharBack() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1317,7 +666,7 @@ class _Client_formState extends State<Client_form> {
   }
   _getFromCameraVoteIdFront() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1328,7 +677,7 @@ class _Client_formState extends State<Client_form> {
   }
   _getFromCameraVoterIdBack() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+        source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
     );
     if (pickedFile != null) {
       setState(() {
@@ -1381,6 +730,8 @@ class _Client_formState extends State<Client_form> {
       setState(() {
         getListModel = finalResponse;
       });
+     log("+++++======$result");
+
       // if(stateId != null){
       //   for(var state in getListModel!.data!.states!){
       //     if(state.id == stateId){
@@ -1392,9 +743,6 @@ class _Client_formState extends State<Client_form> {
       print(response.reasonPhrase);
     }
   }
-
-  List imagePathList = [];
-  bool isImages = false;
 
   Widget buildGridView() {
     return Container(
@@ -1413,7 +761,7 @@ class _Client_formState extends State<Client_form> {
                 height: 170,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network('${widget.model?.photo?[index]}', fit: BoxFit.cover,)
+                  child: Image.network('${widget.model?.photo?[index]}', fit: BoxFit.cover,),
                 ),
               ),
               // Positioned(
@@ -1437,23 +785,23 @@ class _Client_formState extends State<Client_form> {
               //     ),
               //   ),
               // ),
-              Positioned(
-                top: 0,
-                right: 25,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      imagePathList.remove(imagePathList[index]);
-                      count--;
-                    });
-                  },
-                  child: Icon(
-                    Icons.cancel,
-                    size: 30,
-                    color: Colors.red.withOpacity(0.7),
-                  ),
-                ),
-              )
+              // Positioned(
+              //   top: 0,
+              //   right: 25,
+              //   child: InkWell(
+              //     onTap: () {
+              //       setState(() {
+              //         imagePathList.remove(imagePathList[index]);
+              //         count--;
+              //       });
+              //     },
+              //     child: Icon(
+              //       Icons.cancel,
+              //       size: 30,
+              //       color: Colors.red.withOpacity(0.7),
+              //     ),
+              //   ),
+              // )
             ],
           );
         },
@@ -1461,15 +809,32 @@ class _Client_formState extends State<Client_form> {
     );
   }
 
+  _launchMap(lat, lng) async {
+    var url = '';
+    if (Platform.isAndroid) {
+      url =
+      "https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving&dir_action=navigate";
+    } else {
+      url =
+      "http://maps.apple.com/?saddr=&daddr=$lat,$lng&directionsmode=driving&dir_action=navigate";
+    }
+    await launch(url);
+/*    if (await canLaunch(url)) {
+
+    } else {
+      throw 'Could not launch $url';
+    }*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-    backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: colors.primary,
         centerTitle: true,
-        title: Text("Client"),
+        title: Text("View Client List"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -1487,6 +852,7 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                          readOnly: true,
                             keyboardType: TextInputType.text,
                             controller: namecn,
                             validator: (value) {
@@ -1498,7 +864,10 @@ class _Client_formState extends State<Client_form> {
                             decoration: InputDecoration(
                                 hintText: 'name',
                                 border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
+                                    borderRadius:  BorderRadius.circular(10),
+                                ),
+                            ),
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1515,9 +884,9 @@ class _Client_formState extends State<Client_form> {
                             return null;
                           },
                           onChanged: (newValue) {
-                            setState(() {
-                              selected_Status= newValue;
-                            });
+                            // setState(() {
+                            //   selected_Status= newValue;
+                            // });
                           },
                           items: getList?.data?.clientStatus?.map((items) {
                             return DropdownMenuItem(
@@ -1557,19 +926,20 @@ class _Client_formState extends State<Client_form> {
                         elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: ownernamecn,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                hintText: 'name',
-                                border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(15),
-                                ),
+                          readOnly: true,
+                          keyboardType: TextInputType.text,
+                          controller: ownernamecn,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'name',
+                            border: OutlineInputBorder(
+                              borderRadius:  BorderRadius.circular(15),
                             ),
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02),
@@ -1618,19 +988,20 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: addresscn,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                hintText: 'Address',
-                                border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10),
-                                ),
+                          readOnly: true,
+                          keyboardType: TextInputType.text,
+                          controller: addresscn,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Address',
+                            border: OutlineInputBorder(
+                              borderRadius:  BorderRadius.circular(10),
                             ),
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
@@ -1649,7 +1020,7 @@ class _Client_formState extends State<Client_form> {
                               //   }
                               // });
                               var name =
-                              print("aaaaa ${selected_State}");
+                              print("aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
                               // print("current indexxx ${selected}");
                               // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
                               // currentIndex = selected;
@@ -1704,6 +1075,7 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.number,
                             controller: pincodecn,
                             validator: (value) {
@@ -1714,7 +1086,10 @@ class _Client_formState extends State<Client_form> {
                             decoration: InputDecoration(
                                 hintText: '452011',
                                 border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
+                                    borderRadius:  BorderRadius.circular(10),
+                                ),
+                            ),
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Email",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1722,6 +1097,7 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.emailAddress,
                             controller: emailcn,
                             validator: (value) {
@@ -1732,7 +1108,10 @@ class _Client_formState extends State<Client_form> {
                             decoration: InputDecoration(
                                 hintText: 'hfg@gmail.com',
                                 border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
+                                    borderRadius:  BorderRadius.circular(10),
+                                ),
+                            ),
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Mobile 1",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1740,6 +1119,7 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.number,
                             maxLength: 10,
                             controller: mobile1cn,
@@ -1748,7 +1128,6 @@ class _Client_formState extends State<Client_form> {
                               }
                               return null;
                             },
-
                             decoration: InputDecoration(
                                 hintText: '9854648544',
                                 counterText: "",
@@ -1761,21 +1140,24 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.number,
                             maxLength: 10,
                             controller: mobile2cn,
-                            // validator: (value) {
-                            //   if (value!.isEmpty||value.length<10) {
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty||value.length<10) {
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '9854648544',
-
                                 counterText: "",
                                 border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
+                                    borderRadius:  BorderRadius.circular(10),
+                                ),
+                            ),
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       const Text("Whatsapp Number",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1783,39 +1165,42 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.number,
                             maxLength: 10,
                             controller: whatsappcn,
-                            // validator: (value) {
-                            //   if (value!.isEmpty||value.length<10) {
-                            //     return "please enter whatsapp number";
-                            //   }
-                            //   return null;
-                            // },
-
+                            validator: (value) {
+                              if (value!.isEmpty||value.length<10) {
+                                return "please enter whatsapp number";
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                                 hintText: '9854648544',
-
                                 counterText: "",
                                 border: OutlineInputBorder(
-                                    borderRadius:  BorderRadius.circular(10)))),
+                                    borderRadius:  BorderRadius.circular(10),
+                                ),
+                            ),
+                        ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02),
                       const Text("Date of Birth",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02),
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
-                          onTap: _showBirthDatePicker,
+                            readOnly: true,
+                            // onTap: _showBirthDatePicker,
                             keyboardType: TextInputType.none,
                             // maxLength: 10,
                             controller: doBCtr,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //     return "please select date of birth";
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please select date of birth";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1830,16 +1215,17 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
-                          onTap: _showAnniversaryDatePicker,
+                            readOnly: true,
+                            // onTap: _showAnniversaryDatePicker,
                             keyboardType: TextInputType.none,
                             // maxLength: 10,
                             controller: doACtr,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //     return "please select date of anniversary";
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please select date of anniversary";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1854,15 +1240,16 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             // maxLength: 10,
                             controller: routeCtr,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //     return "please enter route";
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter route";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1877,10 +1264,16 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             // maxLength: 10,
                             controller: marketCtr,
-
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return"please enter market";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1895,15 +1288,16 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             // maxLength: 10,
                             controller: landmarkCtr,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //     return "please enter landmark";
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter landmark";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1918,15 +1312,16 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             // maxLength: 10,
                             controller: udyogIdCtr,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //     return "please enter udyog Id ";
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "please enter udyog Id ";
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '',
@@ -1941,8 +1336,14 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             controller: pancn,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '4545385838',
@@ -1954,8 +1355,8 @@ class _Client_formState extends State<Client_form> {
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogPan(context, 1);
-                          _getFromCameraPan();
-                        }, child: Text("Select Pan"),
+                          // _getFromCameraPan();
+                        }, child: Text("Pan"),
                       ),
                       Center(
                         child: Container(
@@ -1964,7 +1365,7 @@ class _Client_formState extends State<Client_form> {
                             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                             child: panImage!=null? Image.file(panImage!.absolute,fit: BoxFit.fill,):
                             //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.panImg}',)
+                            Image.network('${widget.model?.panImg}', fit: BoxFit.fill,)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
@@ -1973,16 +1374,18 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             controller: gstcn,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '6565',
+
                                 counterText: "",
                                 border: OutlineInputBorder(
                                     borderRadius:  BorderRadius.circular(10)))),
@@ -1991,8 +1394,8 @@ class _Client_formState extends State<Client_form> {
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogGst(context, 1);
-                          _getFromCameraGst();
-                        }, child: Text("Select GST"),
+                          // _getFromCameraGst();
+                        }, child: Text("GST"),
                       ),
                       Center(
                         child: Container(
@@ -2001,41 +1404,41 @@ class _Client_formState extends State<Client_form> {
                             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                             child: gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill,):
                             //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.gstImg}',)
+                            Image.network('${widget.model?.gstImg}', fit: BoxFit.fill,)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogGstOne(context, 1);
-                          _getFromCameraGstOne();
-                        }, child: Text("Select GST One"),
+                          // _getFromCameraGstOne();
+                        }, child: Text("GST One"),
                       ),
                       Center(
                         child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                          ),
-                          child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.gstImgTwo}',)
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                            ),
+                            child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
+                            Image.network('${widget.model?.gstImgTwo}', fit: BoxFit.fill,)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogGstTwo(context, 1);
-                          _getFromCameraGstTwo();
-                        }, child: Text("Select GST Two"),
+                          // _getFromCameraGstTwo();
+                        }, child: Text("GST Two"),
                       ),
                       Center(
                         child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                          ),
-                          child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.gstImgThree}',)
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                            ),
+                            child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
+                            Image.network('${widget.model?.gstImgThree}', fit: BoxFit.fill,)
                         ),
                       ),
                       const Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -2043,14 +1446,15 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.number,
                             maxLength: 12,
                             controller: aadharcn,
-                            // validator: (value) {
-                            //   if (value!.isEmpty||value.length<12) {
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty||value.length<12) {
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                                 hintText: '57687375747567',
                                 counterText: "",
@@ -2061,33 +1465,46 @@ class _Client_formState extends State<Client_form> {
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogAdhar(context, 1);
-                          _getFromCameraAdhar();
-                        }, child: Text("Select Aadhaar Front"),
+                          // _getFromCameraAdhar();
+                        }, child: Text("Aadhaar Front"),
                       ),
                       Center(
                         child: Container(
                             height: 150,
                             width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                            ),
                             child: aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill,):
                             //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.aadharImg}',)
+                            Image.network('${widget.model?.aadharImg}', fit: BoxFit.fill,)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogAdharBack(context, 1);
-                          getFromCameraAdharBack();
-                        }, child: Text("Select Aadhaar Back"),
+                          // getFromCameraAdharBack();
+                        }, child: Text("Aadhaar Back"),
                       ),
+                      Center(
+                        child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                            ),
+                            child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
+                            Image.network('${widget.model?.aadharBack}', fit: BoxFit.fill,)
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.01),
                       Text("Voter Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                          readOnly: true,
                             keyboardType: TextInputType.number,
-                            maxLength: 12,
+                            // maxLength: 12,
                             controller: voterCtr,
                             // validator: (value) {
                             //   if (value!.isEmpty) {
@@ -2100,22 +1517,11 @@ class _Client_formState extends State<Client_form> {
                                 counterText: "",
                                 border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
                       ),
-                      Center(
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                          ),
-                          child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
-                          Image.network('${widget.model?.aadharBack}',)
-                        ),
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogAdhar(context, 1);
-                          _getFromCameraVoteIdFront();
-                        }, child: Text("Select Voter Id Front"),
+                          // _getFromCameraVoteIdFront();
+                        }, child: Text("Voter Id Front"),
                       ),
                       Center(
                         child: Container(
@@ -2124,24 +1530,34 @@ class _Client_formState extends State<Client_form> {
                             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                             child: voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill,):
                             //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.voterIdFrontImage}',)
+                            Image.network('${widget.model?.voterIdFrontImage}', fit: BoxFit.fill,)
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
                       ElevatedButton(
                         onPressed: () {
                           // pickImageDialogAdharBack(context, 1);
-                          _getFromCameraVoterIdBack();
-                        }, child: Text("Select Voter Id Back"),
+                          // _getFromCameraVoterIdBack();
+                        }, child: Text("Voter Id Back"),
                       ),
-                      Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                            ),
-                            child: voterIdBackImage!=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
-                            Image.network('${widget.model?.voterIdBackImage}',)
+                      GestureDetector(
+                        // onTap: () {
+                        //   final imageProvider =
+                        //       Image.network(ApiService.adbaseUrl + item.name ?? "").image;
+                        //   showImageViewer(context, imageProvider,
+                        //       onViewerDismissed: () {
+                        //         print("dismissed");
+                        //       });
+                        // },
+                        child: Center(
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                              ),
+                              child: voterIdBackImage!=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
+                              Image.network('${widget.model?.voterIdBackImage}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       const Text("Customer Type",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -2158,9 +1574,9 @@ class _Client_formState extends State<Client_form> {
                             return null;
                           },
                           onChanged: (newValue) {
-                            setState(() {
-                              selected_Customer= newValue;
-                            });
+                            // setState(() {
+                            //   selected_Customer= newValue;
+                            // });
                           },
                           items:getList?.data?.customerType?.map((items) {
                             return DropdownMenuItem(
@@ -2181,13 +1597,14 @@ class _Client_formState extends State<Client_form> {
                       Card(elevation: 6,
                         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
+                            readOnly: true,
                             keyboardType: TextInputType.text,
                             controller: creditcn,
-                            // validator: (value) {
-                            //   if (value!.isEmpty) {
-                            //   }
-                            //   return null;
-                            // },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
 
                             decoration: InputDecoration(
                                 hintText: '9999',
@@ -2195,10 +1612,100 @@ class _Client_formState extends State<Client_form> {
                                     borderRadius:  BorderRadius.circular(10)))),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Current Address",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            readOnly: true,
+                            keyboardType: TextInputType.text,
+                            controller: currentAddresscn,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  _launchMap(
+                                      widget.model?.lat,
+                                      widget.model?.lng,
+                                      // orderItem.sellerLatitude,
+                                      // orderItem.sellerLongitude
+                                  );
+                                },
+                                  child: Icon(Icons.location_disabled_outlined, color: colors.primary,)),
+                                hintText: '',
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Create Date & Time",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            readOnly: true,
+                            keyboardType: TextInputType.text,
+                            controller: creaetDateTimecn,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                hintText: '',
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Department",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            readOnly: true,
+                            keyboardType: TextInputType.text,
+                            controller: departmentCtr,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      const Text("Created By",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                      Card(elevation: 6,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        child: TextFormField(
+                            readOnly: true,
+                            keyboardType: TextInputType.text,
+                            controller: cratedBycn,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              }
+                              return null;
+                            },
+
+                            decoration: InputDecoration(
+                                hintText: '',
+                                border: OutlineInputBorder(
+                                    borderRadius:  BorderRadius.circular(10)))),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       ElevatedButton(onPressed: (){
                         // _showImagePicker(context);
-                        _pickImage(ImageSource.camera);
-                      }, child: const Text("Select Image")),
+                        //   _pickImage(ImageSource.camera);
+                        }, child: const Text("Image"),
+                      ),
                       buildGridView(),
                       // Center(
                       //   child: Container(
@@ -2209,50 +1716,9 @@ class _Client_formState extends State<Client_form> {
                       //       //    Center(child: Image.asset('assets/img.png')),),
                       //       Image.network('${widget.model?.photo}',)
                       //   ),
-                      // )
+                      // ),
                     ],
                   ),
-              ),
-              // SizedBox(height: MediaQuery.of(context).size.height*.03,),
-              // Row(
-              //   children: [
-              //     SizedBox(width: MediaQuery.of(context).size.width*.02,),
-              //     ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              //         onPressed: (){
-              //           if(_formKey.currentState!.validate()){
-              //             update();
-              //           }
-              //         }, child: const Text("Update"))
-              //
-              //   ],
-              // ),
-              SizedBox(height: MediaQuery.of(context).size.height*.02),
-              Container(
-                height: 60,
-                // width: MediaQuery.of(context).size.width/2,
-                child: Center(
-                  child: Column(
-                    children: [
-                      // SizedBox(width: MediaQuery.of(context).size.width*.02,),
-                      Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        child: ElevatedButton(style: ElevatedButton.styleFrom(primary: colors.primary),
-                       onPressed: () {
-                         if(imagePathList.isEmpty || imagePathList.length == "" || imagePathList.length == null){
-                           Fluttertoast.showToast(msg: "Please Select Image");
-                         } else if(selected_Status == null || selected_State == null ){
-                           Fluttertoast.showToast(msg: "Please select Droup Down filleds");
-                         } else if(_formKey.currentState!.validate()){
-                           // Fluttertoast.showToast(msg: "Please Fill All Fields");
-                           update();
-                         }
-                        }, child: Text("Update", style: TextStyle(fontWeight: FontWeight.bold)
-                            )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),
@@ -2276,70 +1742,6 @@ class _Client_formState extends State<Client_form> {
       setState(() {
         getList=finalresult;
       });
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-  }
-
-
-  Future<void> update() async {
-    var headers = {
-      'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/add_new_client'));
-    request.fields.addAll({
-      'user_id': '${CUR_USERID}',
-      'name_of_firm': namecn.text,
-      'status': selected_Status.toString() ,
-      'owner_name': ownernamecn.text,
-      'address': addresscn.text,
-      'district': selected_District.toString(),
-      'pin_code': pincodecn.text,
-      'state': selected_State.toString(),
-      'mobile_one': mobile1cn.text,
-      'mobile_two': mobile2cn.text,
-      'whatsapp_number': whatsappcn.text,
-      'email': emailcn.text,
-      'pan': pancn.text,
-      'gst': gstcn.text,
-      'aadhar': aadharcn.text,
-      'customer_type': selected_Customer.toString(),
-      'credit_limit': creditcn.text,
-      'lat': latitude.toString(),
-      'lng': longitude.toString(),
-      'id': '${widget.model?.id}',
-      'gst_img': '${gstImage.toString()}',
-      'pan_img': '${panImage.toString()}',
-      'aadhar_img': '${aadharImage.toString()}',
-      'aadhar_back': '${aadharBack.toString()}',
-      'gst_img_two': '${gstOne.toString()}',
-      'gst_img_three': '${gstTwo.toString()}',
-        'create_by': '${CUR_USERID}',
-      'voter_number': '${voterCtr.text}',
-
-    });
-    for (var i = 0; i < imagePathList.length; i++) {
-      print('Imageeee $imagePathList');
-      imagePathList.isEmpty
-          ? null
-          : request.files.add(await http.MultipartFile.fromPath(
-          'photos[]', imagePathList[i]));
-    }
-    print('----${widget.model?.id}');
-    print("parameter  ${request.fields}");
-    request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      var result=await response.stream.bytesToString();
-      var finalresult=jsonDecode(result);
-      if(finalresult['error'] == false){
-        Fluttertoast.showToast(msg: finalresult['message']);
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-      }
-      else{
-        Fluttertoast.showToast(msg: finalresult['message']);
-      }
     }
     else {
       print(response.reasonPhrase);

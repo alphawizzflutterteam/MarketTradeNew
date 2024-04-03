@@ -91,7 +91,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: Text("GeoTag", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+        title: Text("GeoTage", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: colors.primary,
       ),

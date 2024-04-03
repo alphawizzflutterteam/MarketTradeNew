@@ -54,6 +54,7 @@ import 'Product_Detail.dart';
 import 'package:http/http.dart' as http;
 import 'SectionList.dart';
 import 'SiteVisitForm.dart';
+import 'ViewCounterVisitForm.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -133,28 +134,30 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-
   PermissionModel? permission;
   getPermission() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
     var headers = {
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
     var request = http.MultipartRequest('POST', Uri.parse(getPermissionApi.toString()));
     request.fields.addAll({
-      USER_ID: '${userId}',
+      USER_ID: '${uid}',
     });
 
-    print("this is refer request ${request.fields.toString()}");
+    print("this is refer  get permission request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      print("permission");
       String str = await response.stream.bytesToString();
       var result = json.decode(str);
       var finalResponse = PermissionModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
       setState(() {
         permission = finalResponse;
       });
-      print("permission responseeeeee ${finalResponse}");
       // setState(() {
       // animalList = finalResponse.data!;
       // });
@@ -353,318 +356,322 @@ class _HomePageState extends State<HomePage>
             });
         return true;
       },
-      child: Scaffold(
-        // floatingActionButton: Padding(
-        //   padding: const EdgeInsets.only(bottom: 30),
-        //   child: Container(
-        //     // key: whatsapppBoxKey,
-        //     height: 70.0,
-        //     width: 70.0,
-        //     child: FloatingActionButton(
-        //       backgroundColor: colors.primary,
-        //       onPressed: () {
-        //         Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
-        //       },
-        //       child: Text("Add Client", style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),)
-        //     ),
-        //   ),
-        // ),
-        bottomSheet:
-        Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // ElevatedButton(
-              //   onPressed: () async {
-              //   var result = await   Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
-              //   if(result != null){
-              //     setState(() {
-              //       getUserCheckInStatus();
-              //     });
-              //   }
-              //   }, child: Text("CHECK-IN",
-              //   ),
-              // style: ElevatedButton.styleFrom(
-              //   elevation: 0,
-              //   shape: StadiumBorder(),
-              //   fixedSize: Size(150, 40),
-              //   backgroundColor: colors.blackTemp.withOpacity(0.8)
-              // ),),
-              // SizedBox(width: 20,),
-              ElevatedButton(onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckOutScreen()));
-              }, child: Text("CHECK-OUT"),
-                style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shape: StadiumBorder(),
-                    fixedSize: Size(150, 40),
-                    backgroundColor: colors.blackTemp.withOpacity(0.8)
-                ),),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          elevation: 0,
-          title: Text( isCheckedIn ? "CHECKED-IN"
-              : "CHECKED-OUT", style: TextStyle(
-              fontWeight: FontWeight.w900,
-              fontSize: 16,
-              color: colors.whiteTemp
-          ),),
-          backgroundColor: isCheckedIn ? Colors.green : Colors.red,
-        ),
-        // appBar: AppBar(
-        //   backgroundColor: Theme.of(context).colorScheme.white,
-        //   centerTitle: true,
-        //   title: Image.asset(
-        //     'assets/images/homelogo.png',
-        //     height: 65,
-        //   ),
-        //   actions: [
-        //     IconButton(onPressed: (){}, icon: Icon(Icons.notifications, color: colors.primary,))
-        //   ],
-        // ),
-        body: _isNetworkAvail
-            ? RefreshIndicator(
-            color: colors.primary,
-            key: _refreshIndicatorKey,
-            onRefresh: _refresh,
-            child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                const SizedBox(height: 10),
-                _slider(),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text("Clients", style: TextStyle(
-                      color: colors.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600
-                  ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          permission?.data?.clients?.add == "on" ?
-                        InkWell(
-                          onTap: () {
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 80,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                            child: Center(
-                                child: Text("ADD", style: TextStyle(fontSize: 13, color: Colors.white))),
-                          ),
-                         ): SizedBox(),
-                          permission?.data?.clients?.view == "on" ?
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ViewClient()));
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 80,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                              child: Center(
-                                  child: Text("View", style: TextStyle(fontSize: 13, color: Colors.white))),
-                            ),
-                          ): SizedBox(),
-                          permission?.data?.clients?.edit == "on" ?
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => EditClient()));
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 80,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                              child: Center(
-                                  child: Text("Edit", style: TextStyle(fontSize: 13, color: Colors.white))),
-                            ),
-                          ): SizedBox(),
-                          // Container(
-                          //   height: 40,
-                          //   width: 95,
-                          //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                          //   child: Center(
-                          //       child: Text("Edit Client", style: TextStyle(fontSize: 13, color: Colors.white))),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    // SizedBox(height: 10),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 90, right: 20),
-                    //   child: Row(
-                    //     children: [
-                    //
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
-                 ),
-                  SizedBox(height: 10),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 50, right: 20),
-                        child: Row(
-                          children: [
-                            permission?.data?.clients?.gioTag == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddGeoScreen()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 120,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                  child: Text("Pending GeoTag", style: TextStyle(fontSize: 13, color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ): SizedBox(),
-                            SizedBox(width: 20),
-                            permission?.data?.clients?.gioTag == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 120,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                    child: Text("Pending Photo", style: TextStyle(fontSize: 13, color: Colors.white))
-                                ),
-                              ),
-                            ): SizedBox(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text("Counter Visit Form", style: TextStyle(
-                        color: colors.primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600
-                    ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            permission?.data?.feedback?.add == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackForm()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 95,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                    child: Text("Add Form", style: TextStyle(fontSize: 13, color: Colors.white))),
-                              ),
-                            ): SizedBox(),
-                            SizedBox(width: 30),
-                            permission?.data?.feedback?.view == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Customer_feedback()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 95,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                    child: Text("View Form", style: TextStyle(fontSize: 13, color: Colors.white))),
-                              ),
-                            ): SizedBox(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text("Customer Survey Form", style: TextStyle(
-                        color: colors.primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600
-                    ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            permission?.data?.surveyForm?.add == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SiteVisitForm()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 95,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                    child: Text("Add Form", style: TextStyle(fontSize: 13, color: Colors.white))),
-                              ),
-                            ): SizedBox(),
-                            SizedBox(width: 30),
-                            permission?.data?.surveyForm?.view == "on" ?
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MySiteVisite()));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 95,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
-                                child: Center(
-                                    child: Text("View Form", style: TextStyle(fontSize: 13, color: Colors.white))),
-                              ),
-                            ): SizedBox(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 45),
-                // _catList(),
-                //   const SizedBox(height: 15),
-                ],
-              ),
+      child: SafeArea(
+        bottom: true,
+        top: false,
+        child: Scaffold(
+          // floatingActionButton: Padding(
+          //   padding: const EdgeInsets.only(bottom: 30),
+          //   child: Container(
+          //     // key: whatsapppBoxKey,
+          //     height: 70.0,
+          //     width: 70.0,
+          //     child: FloatingActionButton(
+          //       backgroundColor: colors.primary,
+          //       onPressed: () {
+          //         Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
+          //       },
+          //       child: Text("Add Client", style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),)
+          //     ),
+          //   ),
+          // ),
+          bottomSheet:
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // ElevatedButton(
+                //   onPressed: () async {
+                //   var result = await   Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
+                //   if(result != null){
+                //     setState(() {
+                //       getUserCheckInStatus();
+                //     });
+                //   }
+                //   }, child: Text("CHECK-IN",
+                //   ),
+                // style: ElevatedButton.styleFrom(
+                //   elevation: 0,
+                //   shape: StadiumBorder(),
+                //   fixedSize: Size(150, 40),
+                //   backgroundColor: colors.blackTemp.withOpacity(0.8)
+                // ),),
+                // SizedBox(width: 20,),
+                ElevatedButton(onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckOutScreen()));
+                }, child: Text("CHECK-OUT"),
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: StadiumBorder(),
+                      fixedSize: Size(150, 40),
+                      backgroundColor: colors.blackTemp.withOpacity(0.8)
+                  ),),
+              ],
             ),
           ),
-        ): noInternet(context),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            elevation: 0,
+            title: Text( isCheckedIn ? "CHECKED-IN"
+                : "CHECKED-OUT", style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 16,
+                color: colors.whiteTemp
+            ),),
+            backgroundColor: isCheckedIn ? Colors.green : Colors.red,
+          ),
+          // appBar: AppBar(
+          //   backgroundColor: Theme.of(context).colorScheme.white,
+          //   centerTitle: true,
+          //   title: Image.asset(
+          //     'assets/images/homelogo.png',
+          //     height: 65,
+          //   ),
+          //   actions: [
+          //     IconButton(onPressed: (){}, icon: Icon(Icons.notifications, color: colors.primary,))
+          //   ],
+          // ),
+          body: _isNetworkAvail
+              ? RefreshIndicator(
+              color: colors.primary,
+              key: _refreshIndicatorKey,
+              onRefresh: _refresh,
+              child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  const SizedBox(height: 10),
+                  _slider(),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text("Clients", style: TextStyle(
+                        color: colors.primary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600
+                    ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            permission?.data?.clients?.add == "on" ?
+                          InkWell(
+                            onTap: () {
+                               Navigator.push(context, MaterialPageRoute(builder: (context) => AddClients()));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 80,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                              child: Center(
+                                  child: Text("ADD", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            ),
+                           ): SizedBox(),
+                            permission?.data?.clients?.view == "on" ?
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ViewClient()));
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 80,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                child: Center(
+                                    child: Text("View", style: TextStyle(fontSize: 13, color: Colors.white))),
+                              ),
+                            ): SizedBox(),
+                            permission?.data?.clients?.edit == "on" ?
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditClient()));
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 80,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                child: Center(
+                                    child: Text("Edit", style: TextStyle(fontSize: 13, color: Colors.white))),
+                              ),
+                            ): SizedBox(),
+                            // Container(
+                            //   height: 40,
+                            //   width: 95,
+                            //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                            //   child: Center(
+                            //       child: Text("Edit Client", style: TextStyle(fontSize: 13, color: Colors.white))),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      // SizedBox(height: 10),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 90, right: 20),
+                      //   child: Row(
+                      //     children: [
+                      //
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                   ),
+                    SizedBox(height: 10),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 50, right: 20),
+                          child: Row(
+                            children: [
+                              permission?.data?.clients?.gioTag == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddGeoScreen()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 120,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                    child: Text("Pending GeoTag", style: TextStyle(fontSize: 13, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ): SizedBox(),
+                              SizedBox(width: 20),
+                              permission?.data?.clients?.gioTag == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 120,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                      child: Text("Pending Photo", style: TextStyle(fontSize: 13, color: Colors.white))
+                                  ),
+                                ),
+                              ): SizedBox(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text("Counter Visit Form", style: TextStyle(
+                          color: colors.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600
+                      ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              permission?.data?.feedback?.add == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackForm()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 95,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                      child: Text("Add Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                                ),
+                              ): SizedBox(),
+                              SizedBox(width: 30),
+                              permission?.data?.feedback?.view == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCounterVisitForm()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 95,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                      child: Text("View Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                                ),
+                              ): SizedBox(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text("Customer Survey Form", style: TextStyle(
+                          color: colors.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600
+                      ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              permission?.data?.surveyForm?.add == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SiteVisitForm()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 95,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                      child: Text("Add Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                                ),
+                              ): SizedBox(),
+                              SizedBox(width: 30),
+                              permission?.data?.surveyForm?.view == "on" ?
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MySiteVisite()));
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 95,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                                  child: Center(
+                                      child: Text("View Form", style: TextStyle(fontSize: 13, color: Colors.white))),
+                                ),
+                              ): SizedBox(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 45),
+                  // _catList(),
+                  //   const SizedBox(height: 15),
+                  ],
+                ),
+              ),
+            ),
+          ): noInternet(context),
+        ),
       ),
     );
   }

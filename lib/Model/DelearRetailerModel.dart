@@ -1,281 +1,217 @@
-/// error : false
-/// message : "All Clients Lists"
-/// data : [{"id":"1","user_id":"2","staff_id":"0","name_of_firm":"BCC Cement","status":"1","owner_name":"Mahendra Singh","address":"Indore Vijay Nagar","email":"sawan@mailinator.com","district":"2","state":"2","pin_code":"452003","mobile_one":"7896543211","mobile_two":"7897897899","whatsapp_number":"7897897891","pan":"AAAAA1234R","gst":"ABCFHRUGKGH","aadhar":"123445679877","customer_type":"1","lat":"25.789456","lng":"75.654789","photo":"https://developmentalphawizz.com/market_track/uploads/user_image/jblogo3.png","credit_limit":"10000.00","created_at":"2023-09-27 16:18:23","updated_at":"2023-09-27 16:11:43"},{"id":"2","user_id":"2","staff_id":"0","name_of_firm":"Birla Cement","status":"1","owner_name":"Mahendra Singh","address":"Indore Vijay Nagar","email":"sawan@mailinator.com","district":"2","state":"2","pin_code":"452003","mobile_one":"7896543211","mobile_two":"7897897899","whatsapp_number":"7897897891","pan":"AAAAA1234R","gst":"ABCFHRUGKGH","aadhar":"123445679877","customer_type":"1","lat":"25.789456","lng":"75.654789","photo":"https://developmentalphawizz.com/market_track/uploads/user_image/jblogo4.png","credit_limit":"10000.00","created_at":"2023-09-27 16:18:34","updated_at":"2023-09-27 16:18:34"},{"id":"6","user_id":"0","staff_id":"1","name_of_firm":"fdfdf","status":"1","owner_name":"dfdf","address":"fdf","email":"test@gmail.com","district":"12","state":"10","pin_code":"465656","mobile_one":"5555555555","mobile_two":"66666666666","whatsapp_number":"77777777777","pan":"45455454554","gst":"6565","aadhar":"54545454545545","customer_type":"2","lat":"","lng":"","photo":"https://developmentalphawizz.com/market_track/uploads/user_image/","credit_limit":"343443.00","created_at":"2023-10-04 17:09:28","updated_at":"2023-10-03 17:39:04"},{"id":"7","user_id":"1","staff_id":"0","name_of_firm":"qwe","status":"1","owner_name":"fdfdf","address":"fdfdfdfd","email":"dfds111@gmail.com","district":"13","state":"10","pin_code":"332323","mobile_one":"3232323233","mobile_two":"32323233232","whatsapp_number":"2323232323","pan":"45455454554","gst":"6565","aadhar":"54545454545545","customer_type":"1","lat":"","lng":"","photo":"https://developmentalphawizz.com/market_track/uploads/user_image/","credit_limit":"99999999.99","created_at":"2023-10-04 17:09:15","updated_at":"2023-10-03 17:53:09"}]
-
 class DelearRetailerModel {
-  DelearRetailerModel({
-      bool? error,
-      String? message,
-      List<DealerListData>? data,}){
-    _error = error;
-    _message = message;
-    _data = data;
-}
+  bool? error;
+  String? message;
+  List<Data>? data;
 
-  DelearRetailerModel.fromJson(dynamic json) {
-    _error = json['error'];
-    _message = json['message'];
+  DelearRetailerModel({this.error, this.message, this.data});
+
+  DelearRetailerModel.fromJson(Map<String, dynamic> json) {
+    error = json['error'];
+    message = json['message'];
     if (json['data'] != null) {
-      _data = [];
+      data = <Data>[];
       json['data'].forEach((v) {
-        _data?.add(DealerListData.fromJson(v));
+        data!.add(new Data.fromJson(v));
       });
     }
   }
-  bool? _error;
-  String? _message;
-  List<DealerListData>? _data;
-DelearRetailerModel copyWith({  bool? error,
-  String? message,
-  List<DealerListData>? data,
-}) => DelearRetailerModel(  error: error ?? _error,
-  message: message ?? _message,
-  data: data ?? _data,
-);
-  bool? get error => _error;
-  String? get message => _message;
-  List<DealerListData>? get data => _data;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['error'] = _error;
-    map['message'] = _message;
-    if (_data != null) {
-      map['data'] = _data?.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['error'] = this.error;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    return map;
+    return data;
   }
-
 }
 
-/// id : "1"
-/// user_id : "2"
-/// staff_id : "0"
-/// name_of_firm : "BCC Cement"
-/// status : "1"
-/// owner_name : "Mahendra Singh"
-/// address : "Indore Vijay Nagar"
-/// email : "sawan@mailinator.com"
-/// district : "2"
-/// state : "2"
-/// pin_code : "452003"
-/// mobile_one : "7896543211"
-/// mobile_two : "7897897899"
-/// whatsapp_number : "7897897891"
-/// pan : "AAAAA1234R"
-/// gst : "ABCFHRUGKGH"
-/// aadhar : "123445679877"
-/// customer_type : "1"
-/// lat : "25.789456"
-/// lng : "75.654789"
-/// photo : "https://developmentalphawizz.com/market_track/uploads/user_image/jblogo3.png"
-/// credit_limit : "10000.00"
-/// created_at : "2023-09-27 16:18:23"
-/// updated_at : "2023-09-27 16:11:43"
+class Data {
+  String? id;
+  String? userId;
+  String? staffId;
+  String? nameOfFirm;
+  String? status;
+  String? ownerName;
+  String? address;
+  String? email;
+  String? district;
+  String? state;
+  String? pinCode;
+  String? mobileOne;
+  String? mobileTwo;
+  String? whatsappNumber;
+  String? pan;
+  String? panImg;
+  String? gst;
+  String? gstImg;
+  String? gstImgTwo;
+  String? gstImgThree;
+  String? aadhar;
+  String? aadharImg;
+  String? aadharBack;
+  String? customerType;
+  String? lat;
+  String? lng;
+  String? photo;
+  String? creditLimit;
+  String? createdAt;
+  String? updatedAt;
+  String? udyogidNumber;
+  String? dateOfBirth;
+  String? dateOfAnniversary;
+  String? route;
+  String? market;
+  String? landmark;
+  String? voterIdBackImage;
+  String? voterIdFrontImage;
+  String? createBy;
+  String? active;
+  String? department;
+  String? currentAddress;
+  String? city;
+  String? statename;
 
-class DealerListData {
-  DealerListData({
-      String? id,
-      String? userId,
-      String? staffId,
-      String? nameOfFirm,
-      String? status,
-      String? ownerName,
-      String? address,
-      String? email,
-      String? district,
-      String? state,
-      String? pinCode,
-      String? mobileOne,
-      String? mobileTwo,
-      String? whatsappNumber,
-      String? pan,
-      String? gst,
-      String? aadhar,
-      String? customerType,
-      String? lat,
-      String? lng,
-      String? photo,
-      String? creditLimit,
-      String? createdAt,
-      String? updatedAt,}){
-    _id = id;
-    _userId = userId;
-    _staffId = staffId;
-    _nameOfFirm = nameOfFirm;
-    _status = status;
-    _ownerName = ownerName;
-    _address = address;
-    _email = email;
-    _district = district;
-    _state = state;
-    _pinCode = pinCode;
-    _mobileOne = mobileOne;
-    _mobileTwo = mobileTwo;
-    _whatsappNumber = whatsappNumber;
-    _pan = pan;
-    _gst = gst;
-    _aadhar = aadhar;
-    _customerType = customerType;
-    _lat = lat;
-    _lng = lng;
-    _photo = photo;
-    _creditLimit = creditLimit;
-    _createdAt = createdAt;
-    _updatedAt = updatedAt;
-}
+  Data(
+      {this.id,
+        this.userId,
+        this.staffId,
+        this.nameOfFirm,
+        this.status,
+        this.ownerName,
+        this.address,
+        this.email,
+        this.district,
+        this.state,
+        this.pinCode,
+        this.mobileOne,
+        this.mobileTwo,
+        this.whatsappNumber,
+        this.pan,
+        this.panImg,
+        this.gst,
+        this.gstImg,
+        this.gstImgTwo,
+        this.gstImgThree,
+        this.aadhar,
+        this.aadharImg,
+        this.aadharBack,
+        this.customerType,
+        this.lat,
+        this.lng,
+        this.photo,
+        this.creditLimit,
+        this.createdAt,
+        this.updatedAt,
+        this.udyogidNumber,
+        this.dateOfBirth,
+        this.dateOfAnniversary,
+        this.route,
+        this.market,
+        this.landmark,
+        this.voterIdBackImage,
+        this.voterIdFrontImage,
+        this.createBy,
+        this.active,
+        this.department,
+        this.currentAddress,
+        this.city,
+        this.statename});
 
-  DealerListData.fromJson(dynamic json) {
-    _id = json['id'];
-    _userId = json['user_id'];
-    _staffId = json['staff_id'];
-    _nameOfFirm = json['name_of_firm'];
-    _status = json['status'];
-    _ownerName = json['owner_name'];
-    _address = json['address'];
-    _email = json['email'];
-    _district = json['district'];
-    _state = json['state'];
-    _pinCode = json['pin_code'];
-    _mobileOne = json['mobile_one'];
-    _mobileTwo = json['mobile_two'];
-    _whatsappNumber = json['whatsapp_number'];
-    _pan = json['pan'];
-    _gst = json['gst'];
-    _aadhar = json['aadhar'];
-    _customerType = json['customer_type'];
-    _lat = json['lat'];
-    _lng = json['lng'];
-    _photo = json['photo'];
-    _creditLimit = json['credit_limit'];
-    _createdAt = json['created_at'];
-    _updatedAt = json['updated_at'];
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    staffId = json['staff_id'];
+    nameOfFirm = json['name_of_firm'];
+    status = json['status'];
+    ownerName = json['owner_name'];
+    address = json['address'];
+    email = json['email'];
+    district = json['district'];
+    state = json['state'];
+    pinCode = json['pin_code'];
+    mobileOne = json['mobile_one'];
+    mobileTwo = json['mobile_two'];
+    whatsappNumber = json['whatsapp_number'];
+    pan = json['pan'];
+    panImg = json['pan_img'];
+    gst = json['gst'];
+    gstImg = json['gst_img'];
+    gstImgTwo = json['gst_img_two'];
+    gstImgThree = json['gst_img_three'];
+    aadhar = json['aadhar'];
+    aadharImg = json['aadhar_img'];
+    aadharBack = json['aadhar_back'];
+    customerType = json['customer_type'];
+    lat = json['lat'];
+    lng = json['lng'];
+    photo = json['photo'];
+    creditLimit = json['credit_limit'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    udyogidNumber = json['udyogid_number'];
+    dateOfBirth = json['date_of_birth'];
+    dateOfAnniversary = json['date_of_anniversary'];
+    route = json['route'];
+    market = json['market'];
+    landmark = json['landmark'];
+    voterIdBackImage = json['voter_id_back_image'];
+    voterIdFrontImage = json['voter_id_front_image'];
+    createBy = json['create_by'];
+    active = json['active'];
+    department = json['department'];
+    currentAddress = json['current_address'];
+    city = json['city'];
+    statename = json['statename'];
   }
-  String? _id;
-  String? _userId;
-  String? _staffId;
-  String? _nameOfFirm;
-  String? _status;
-  String? _ownerName;
-  String? _address;
-  String? _email;
-  String? _district;
-  String? _state;
-  String? _pinCode;
-  String? _mobileOne;
-  String? _mobileTwo;
-  String? _whatsappNumber;
-  String? _pan;
-  String? _gst;
-  String? _aadhar;
-  String? _customerType;
-  String? _lat;
-  String? _lng;
-  String? _photo;
-  String? _creditLimit;
-  String? _createdAt;
-  String? _updatedAt;
-  DealerListData copyWith({  String? id,
-  String? userId,
-  String? staffId,
-  String? nameOfFirm,
-  String? status,
-  String? ownerName,
-  String? address,
-  String? email,
-  String? district,
-  String? state,
-  String? pinCode,
-  String? mobileOne,
-  String? mobileTwo,
-  String? whatsappNumber,
-  String? pan,
-  String? gst,
-  String? aadhar,
-  String? customerType,
-  String? lat,
-  String? lng,
-  String? photo,
-  String? creditLimit,
-  String? createdAt,
-  String? updatedAt,
-}) => DealerListData(  id: id ?? _id,
-  userId: userId ?? _userId,
-  staffId: staffId ?? _staffId,
-  nameOfFirm: nameOfFirm ?? _nameOfFirm,
-  status: status ?? _status,
-  ownerName: ownerName ?? _ownerName,
-  address: address ?? _address,
-  email: email ?? _email,
-  district: district ?? _district,
-  state: state ?? _state,
-  pinCode: pinCode ?? _pinCode,
-  mobileOne: mobileOne ?? _mobileOne,
-  mobileTwo: mobileTwo ?? _mobileTwo,
-  whatsappNumber: whatsappNumber ?? _whatsappNumber,
-  pan: pan ?? _pan,
-  gst: gst ?? _gst,
-  aadhar: aadhar ?? _aadhar,
-  customerType: customerType ?? _customerType,
-  lat: lat ?? _lat,
-  lng: lng ?? _lng,
-  photo: photo ?? _photo,
-  creditLimit: creditLimit ?? _creditLimit,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-);
-  String? get id => _id;
-  String? get userId => _userId;
-  String? get staffId => _staffId;
-  String? get nameOfFirm => _nameOfFirm;
-  String? get status => _status;
-  String? get ownerName => _ownerName;
-  String? get address => _address;
-  String? get email => _email;
-  String? get district => _district;
-  String? get state => _state;
-  String? get pinCode => _pinCode;
-  String? get mobileOne => _mobileOne;
-  String? get mobileTwo => _mobileTwo;
-  String? get whatsappNumber => _whatsappNumber;
-  String? get pan => _pan;
-  String? get gst => _gst;
-  String? get aadhar => _aadhar;
-  String? get customerType => _customerType;
-  String? get lat => _lat;
-  String? get lng => _lng;
-  String? get photo => _photo;
-  String? get creditLimit => _creditLimit;
-  String? get createdAt => _createdAt;
-  String? get updatedAt => _updatedAt;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['user_id'] = _userId;
-    map['staff_id'] = _staffId;
-    map['name_of_firm'] = _nameOfFirm;
-    map['status'] = _status;
-    map['owner_name'] = _ownerName;
-    map['address'] = _address;
-    map['email'] = _email;
-    map['district'] = _district;
-    map['state'] = _state;
-    map['pin_code'] = _pinCode;
-    map['mobile_one'] = _mobileOne;
-    map['mobile_two'] = _mobileTwo;
-    map['whatsapp_number'] = _whatsappNumber;
-    map['pan'] = _pan;
-    map['gst'] = _gst;
-    map['aadhar'] = _aadhar;
-    map['customer_type'] = _customerType;
-    map['lat'] = _lat;
-    map['lng'] = _lng;
-    map['photo'] = _photo;
-    map['credit_limit'] = _creditLimit;
-    map['created_at'] = _createdAt;
-    map['updated_at'] = _updatedAt;
-    return map;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['user_id'] = this.userId;
+    data['staff_id'] = this.staffId;
+    data['name_of_firm'] = this.nameOfFirm;
+    data['status'] = this.status;
+    data['owner_name'] = this.ownerName;
+    data['address'] = this.address;
+    data['email'] = this.email;
+    data['district'] = this.district;
+    data['state'] = this.state;
+    data['pin_code'] = this.pinCode;
+    data['mobile_one'] = this.mobileOne;
+    data['mobile_two'] = this.mobileTwo;
+    data['whatsapp_number'] = this.whatsappNumber;
+    data['pan'] = this.pan;
+    data['pan_img'] = this.panImg;
+    data['gst'] = this.gst;
+    data['gst_img'] = this.gstImg;
+    data['gst_img_two'] = this.gstImgTwo;
+    data['gst_img_three'] = this.gstImgThree;
+    data['aadhar'] = this.aadhar;
+    data['aadhar_img'] = this.aadharImg;
+    data['aadhar_back'] = this.aadharBack;
+    data['customer_type'] = this.customerType;
+    data['lat'] = this.lat;
+    data['lng'] = this.lng;
+    data['photo'] = this.photo;
+    data['credit_limit'] = this.creditLimit;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['udyogid_number'] = this.udyogidNumber;
+    data['date_of_birth'] = this.dateOfBirth;
+    data['date_of_anniversary'] = this.dateOfAnniversary;
+    data['route'] = this.route;
+    data['market'] = this.market;
+    data['landmark'] = this.landmark;
+    data['voter_id_back_image'] = this.voterIdBackImage;
+    data['voter_id_front_image'] = this.voterIdFrontImage;
+    data['create_by'] = this.createBy;
+    data['active'] = this.active;
+    data['department'] = this.department;
+    data['current_address'] = this.currentAddress;
+    data['city'] = this.city;
+    data['statename'] = this.statename;
+    return data;
   }
-
 }

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
@@ -62,6 +64,7 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ));
+    getToken();
     super.initState();
     buttonController = new AnimationController(
         duration: new Duration(milliseconds: 2000), vsync: this);
@@ -173,14 +176,24 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
     );
   }
 
-  int? otp;
 
+  String? token;
+
+  getToken() async {
+    var fcmToken = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      token = fcmToken.toString();
+    });
+    print("FCM ID Is______________ $token");
+  }
+
+  int? otp;
   // Future<void>
   Future<void> getLoginUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var data = {MOBILE: mobile,
+    var data = {MOBILE: mobile, 'fcm_id': token.toString(),
       // PASSWORD: password
     };
+    print("===========login parameter====${data}===========");
     Response response =
         await post(getUserLoginApi, body: data, headers: headers).timeout(Duration(seconds: timeOut));
     var getdata = json.decode(response.body);
@@ -193,7 +206,7 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
       // var i = getdata["data"]['0'];
       // id = i[ID];
       // username = i[USERNAME];
-      // email = i[EMAIL];
+      // ema il = i[EMAIL];
       mobile = getdata["data"][MOBILE];
       otp = getdata["data"][OTP];
       // city = i[CITY];
@@ -250,24 +263,24 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
   }
 
   setMobileNo() {
-    return Container(
+    return
+      Container(
       width: MediaQuery.of(context).size.width * 0.85,
       padding: EdgeInsets.only(
         top: 30.0,
       ),
       child: TextFormField(
         maxLength: 10,
-        onFieldSubmitted: (v) {
-          FocusScope.of(context).requestFocus(passFocus);
-        },
+        // onFieldSubmitted: (v) {
+        //   FocusScope.of(context).requestFocus(passFocus);
+        // },
         keyboardType: TextInputType.number,
         controller: mobileController,
         style: TextStyle(
           color: Theme.of(context).colorScheme.fontColor,
           fontWeight: FontWeight.normal,
-
         ),
-        focusNode: monoFocus,
+        //focusNode: monoFocus,
         textInputAction: TextInputAction.next,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         validator: (val) => validateMob(
@@ -302,7 +315,6 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
             minWidth: 40,
             maxHeight: 20,
           ),
-          
           enabledBorder: UnderlineInputBorder(
             borderSide:
                 BorderSide(color: Theme.of(context).colorScheme.lightBlack2),
@@ -566,29 +578,85 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
           color: Theme.of(context).colorScheme.white,
           child: Form(
             key: _formkey,
-            child: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 2,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 2,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.10,
+                    ),
+                    setSignInLabel(),
+                    Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  padding: EdgeInsets.only(
+                    top: 30.0,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.10,
+                  child: TextFormField(
+                    maxLength: 10,
+                    // onFieldSubmitted: (v) {
+                    //   FocusScope.of(context).requestFocus(passFocus);
+                    // },
+                    keyboardType: TextInputType.number,
+                    controller: mobileController,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.fontColor,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    //focusNode: monoFocus,
+                    textInputAction: TextInputAction.next,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    validator: (val) => validateMob(
+                        val!,
+                        getTranslated(context, 'MOB_REQUIRED'),
+                        getTranslated(context, 'VALID_MOB')),
+                    onSaved: (String? value) {
+                      mobile = value;
+                    },
+                    decoration: InputDecoration(
+                      counterText: "",
+                      prefixIcon: Icon(
+                        Icons.phone_android,
+                        color: Theme.of(context).colorScheme.fontColor,
+                        size: 20,
                       ),
-                      setSignInLabel(),
-                      setMobileNo(),
-                      // setPass(),
-                      loginBtn(),
-                      // termAndPolicyTxt(),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.10,
+                      hintText: "Mobile Number",
+                      hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                          color: Theme.of(context).colorScheme.fontColor,
+                          fontWeight: FontWeight.normal),
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
                       ),
-                    ],
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: colors.primary),
+                        borderRadius: BorderRadius.circular(7.0),
+                      ),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 40,
+                        maxHeight: 20,
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                        BorderSide(color: Theme.of(context).colorScheme.lightBlack2),
+                        borderRadius: BorderRadius.circular(7.0),
+                      ),
+                    ),
                   ),
+                ),
+                    // setMobileNo(),
+                    // setPass(),
+                    loginBtn(),
+                    // termAndPolicyTxt(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.10,
+                    ),
+                  ],
                 ),
               ),
             ),

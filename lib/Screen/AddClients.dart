@@ -4,8 +4,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:omega_employee_management/Screen/MultiSelect.dart';
 import '../Helper/Color.dart';
@@ -20,12 +23,16 @@ class AddClients extends StatefulWidget {
   State<AddClients> createState() => _AddClientsState();
 }
 
+int count = 0;
+
 class _AddClientsState extends State<AddClients> {
 
 
   void initState() {
     super.initState();
+    getCurrentLoc();
     getState();
+    convertDateTimeDispla();
     print("latitute and longtitute ${latitude} ${longitude}");
   }
 
@@ -185,495 +192,6 @@ class _AddClientsState extends State<AddClients> {
     );
     setState(() {});
   }
-  void pickImageDialog(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  _getFromGallery();
-                },
-                child: Container(
-                  child: ListTile(
-                    title: Text("Gallery"),
-                    leading: Icon(
-                      Icons.image,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCamera();
-                },
-                child: Container(
-                  child: ListTile(
-                      title: Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void pickImageDialogPan(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryPan();
-              //   },
-              //   child:  Container(
-              //     child: ListTile(
-              //       title:  Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraPan();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void pickImageDialogGst(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryGst();
-              //   },
-              //   child: Container(
-              //     child: ListTile(
-              //       title: Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraGst();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-
-  void pickImageDialogGstOne(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryGst();
-              //   },
-              //   child: Container(
-              //     child: ListTile(
-              //       title: Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraGstOne();
-                },
-                child: Container(
-                  child: ListTile(
-                    title:  Text("Camera"),
-                    leading: Icon(
-                      Icons.camera,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void pickImageDialogGstTwo(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryGst();
-              //   },
-              //   child: Container(
-              //     child: ListTile(
-              //       title: Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraGstTwo();
-                },
-                child: Container(
-                  child: ListTile(
-                    title:  Text("Camera"),
-                    leading: Icon(
-                      Icons.camera,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void pickImageDialogAdhar(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryAdhar();
-              //   },
-              //   child:  Container(
-              //     child: ListTile(
-              //       title:  Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraAdhar();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-  void pickImageDialogAdharBack(BuildContext context,int i) async {
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // InkWell(
-              //   onTap: () async {
-              //     _getFromGalleryAdhar();
-              //   },
-              //   child:  Container(
-              //     child: ListTile(
-              //       title:  Text("Gallery"),
-              //       leading: Icon(
-              //         Icons.image,
-              //         color: colors.primary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraAdharBack();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-  void pickImageDialogVoter(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraVoterId();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-  void pickImageDialogVoterBack(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraVoterId();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-  void pickImageDialogUdyogId(BuildContext context,int i) async{
-    return await showDialog<void>(
-      context: context,
-      // barrierDismissible: barrierDismissible, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: 200,
-                height: 1,
-                color: Colors.black12,
-              ),
-              InkWell(
-                onTap: () async {
-                  _getFromCameraUdyogId();
-                },
-                child: Container(
-                  child: ListTile(
-                      title:  Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      )),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
 
   final picker= ImagePicker();
   File? _imageFile;
@@ -686,47 +204,78 @@ class _AddClientsState extends State<AddClients> {
   File? udyogIdImage;
   File? gstOne;
   File? gstTwo;
-  _showBirthDatePicker() async {
-     var selectedDate = await showDatePicker(
-       context: context,
-      initialDate: DateTime.now(),
-      firstDate:DateTime(1970),
-      lastDate: DateTime.now(),
-    );
-     if (selectedDate != null){
-       setState(() {
-         doBCtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
-       });
-     }
+
+
+  String _dateValue = '';
+  var dateFormate;
+
+  String convertDateTimeDisplay(String date) {
+    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
+    final DateTime displayDate = displayFormater.parse(date);
+    final String formatted = serverFormater.format(displayDate);
+    return formatted;
   }
+
+  Future _selectDate1() async {
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+                primaryColor: colors.primary,
+                // accentColor: Colors.black,
+                colorScheme: ColorScheme.light(primary: colors.primary),
+                buttonTheme:
+                ButtonThemeData(textTheme: ButtonTextTheme.accent)),
+            child: child!,
+          );
+        });
+    if (picked != null)
+      setState(() {
+        String yourDate = picked.toString();
+        _dateValue = convertDateTimeDisplay(yourDate);
+        dateFormate = DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
+      });
+    setState(() {
+      doBCtr = TextEditingController(text: _dateValue);
+    });
+  }
+
   _showAnniversaryDatePicker() async {
-    var selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate:DateTime(1970),
-      lastDate: DateTime.now(),
-    );
-    if (selectedDate != null){
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1960),
+        lastDate: DateTime.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+                primaryColor: colors.primary,
+                // accentColor: Colors.black,
+                colorScheme: ColorScheme.light(primary: colors.primary),
+                buttonTheme:
+                ButtonThemeData(textTheme: ButtonTextTheme.accent)),
+            child: child!,
+          );
+        });
+    if (picked != null)
       setState(() {
-        doACtr.text = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+        String yourDate = picked.toString();
+        _dateValue = convertDateTimeDisplay(yourDate);
+        dateFormate = DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
       });
-    }
+    setState(() {
+      doACtr = TextEditingController(text: _dateValue);
+    });
   }
 
-  _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-      Navigator.pop(context);
-    }
-  }
-   getImageFromCamera(src) async{
 
-    var pickedFile = await ImagePicker().pickImage(source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80);
+   getImageFromCamera(src) async {
+    var pickedFile = await ImagePicker().pickImage(source: ImageSource.camera,maxHeight: 100,maxWidth: 100,imageQuality: 40);
     switch (src){
       case "aadhar": if(pickedFile != null){
         setState(() {
@@ -777,61 +326,24 @@ class _AddClientsState extends State<AddClients> {
       }
       break;
       default : if(pickedFile != null){
-             setState(() {
-                _imageFile = File(pickedFile.path);
-                imagePathList.add(_imageFile?.path ?? "");
-                isImages = true;
-                   });
-           }
-    break;
-    }
+        setState(() {
+          count++;
+          _imageFile = File(pickedFile.path);
+          imagePathList.add(_imageFile?.path ?? "");
+          isImages = true;
+               });
+             }
+           break;
+       }
    }
-
-  _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-        imagePathList.add(_imageFile?.path ?? "");
-        isImages = true;
-      });
-      //Navigator.pop(context);
-    }
-  }
-
-  _getFromGalleryPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        panImage = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
-    }
-  }
 
   _getFromCameraPan() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+      source: ImageSource.camera,maxHeight:100,maxWidth: 100,imageQuality: 40
     );
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
-    }
-  }
-
-  _getFromGalleryGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        gstImage = File(pickedFile.path);
       });
       // Navigator.pop(context);
     }
@@ -839,7 +351,7 @@ class _AddClientsState extends State<AddClients> {
 
   _getFromCameraGst() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+      source: ImageSource.camera,maxHeight: 100,maxWidth: 100,imageQuality: 40
     );
     if (pickedFile != null) {
       setState(() {
@@ -851,7 +363,7 @@ class _AddClientsState extends State<AddClients> {
 
   _getFromCameraGstOne() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+      source: ImageSource.camera,maxHeight: 100,maxWidth: 100,imageQuality: 40
     );
     if (pickedFile != null) {
       setState(() {
@@ -863,7 +375,7 @@ class _AddClientsState extends State<AddClients> {
 
   _getFromCameraGstTwo() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
+      source: ImageSource.camera,maxHeight: 100,maxWidth: 100,imageQuality: 40
     );
     if (pickedFile != null) {
       setState(() {
@@ -873,72 +385,49 @@ class _AddClientsState extends State<AddClients> {
     }
   }
 
-  _getFromGalleryAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        aadharImage = File(pickedFile.path);
-      });
-      Navigator.pop(context);
+  Future<void> getCurrentLoc() async {
+    print("workingggg===========");
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      print("checking permission here ${permission}");
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
     }
-  }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // var loc = Provider.of<LocationProvider>(context, listen: false);
+    latitude = position.latitude.toString();
+    longitude = position.longitude.toString();
+    setState(() {
+      longitude_Global=latitude;
+      lattitudee_Global=longitude;
+    });
 
-  _getFromCameraAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
-    );
-    if (pickedFile != null) {
+    List<Placemark> placemark = await placemarkFromCoordinates(
+        double.parse(latitude!), double.parse(longitude!),
+        localeIdentifier: "en");
+    pinController.text = placemark[0].postalCode!;
+    if (mounted) {
       setState(() {
-        aadharImage = File(pickedFile.path);
+        pinController.text = placemark[0].postalCode!;
+        currentAddress.text =
+        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+        // loc.lng = position.longitude.toString();
+        //loc.lat = position.latitude.toString();
+        setState(() {
+          currentlocation_Global=currentAddress.text.toString();
+        });
       });
-      // Navigator.pop(context);
-    }
-  }
-
-  _getFromCameraAdharBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
-    );
-    if (pickedFile != null) {
-      setState(() {
-        aadharBack = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
-    }
-  }
-  _getFromCameraVoterId() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality:  80
-    );
-    if (pickedFile != null) {
-      setState(() {
-        voterIdImage = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
-    }
-  }
-  _getFromCameraVoterIdBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
-    );
-    if (pickedFile != null) {
-      setState(() {
-        voterIdBackImage = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
-    }
-  }
-  _getFromCameraUdyogId() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,maxHeight: 640,maxWidth: 400,imageQuality: 80
-    );
-    if (pickedFile != null) {
-      setState(() {
-        udyogIdImage = File(pickedFile.path);
-      });
-      // Navigator.pop(context);
+      if (currentAddress.text == "" || currentAddress.text == null) {
+      } else {
+        setState(() {
+          // navigateToPage();
+        });
+      }
     }
   }
 
@@ -946,7 +435,6 @@ class _AddClientsState extends State<AddClients> {
    var headers = {
     'Cookie': 'ci_session=3350434c72c5fbc8f5a7e422a38423adace3eaf8'
    };
-
    var request = http.MultipartRequest('POST', Uri.parse(addNewClient.toString()));
    request.fields.addAll({
      'user_id': '${CUR_USERID}',
@@ -959,7 +447,7 @@ class _AddClientsState extends State<AddClients> {
      "landmark":landmarkCtr.text,
      'status':selected_Status.toString() ,
      'owner_name': ownernamecn.text,
-     'departments': results.toString(),
+     // 'departments': results.toString(),
      'address': addresscn.text,
      'district': selected_District.toString(),
      'pin_code': pincodecn.text,
@@ -975,6 +463,9 @@ class _AddClientsState extends State<AddClients> {
      'credit_limit': creditCTr.text,
      'lat': latitude.toString(),
      'lng': longitude.toString(),
+     'create_by': '${CUR_USERID}',
+     'voter_number': '${voterIdCtr.text}',
+     'current_address': "${currentAddress.text}",
    });
    // print( aadharImage!.path.toString());
    // print("path" + _imageFile!.path.toString());
@@ -986,15 +477,21 @@ class _AddClientsState extends State<AddClients> {
    // print("path" + voterIdImage!.path.toString());
    // print("path" + voterIdBackImage!.path.toString());
    print("parameter addd clientss${request.fields} ${request.files}");
-  request.files.add(await http.MultipartFile.fromPath('photo', _imageFile?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('pan_img', panImage?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('aadhar_img', aadharImage?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('voter_id_front_image', voterIdImage?.path ?? ""));
-  request.files.add(await http.MultipartFile.fromPath('voter_id_back_image', voterIdBackImage?.path ?? ""));
+   for (var i = 0; i < imagePathList.length; i++) {
+     print('Imageeee $imagePathList');
+     imagePathList.isEmpty
+         ? null
+         : request.files.add(await http.MultipartFile.fromPath(
+         'photos[]', imagePathList[i]));
+   }
+  // request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('pan_img', panImage?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('aadhar_img', aadharImage?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('voter_id_front_image', voterIdImage?.path ?? ""));
+  // request.files.add(await http.MultipartFile.fromPath('voter_id_back_image', voterIdBackImage?.path ?? ""));
   request.headers.addAll(headers);
    print("reaquestPAth" + request.files.toString());
   http.StreamedResponse response = await request.send();
@@ -1048,6 +545,21 @@ class _AddClientsState extends State<AddClients> {
     );
   }
 
+  String? formattedDate;
+  String? timeData;
+
+  convertDateTimeDispla() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    formattedDate = formatter.format(now);
+    print("datedetet$formattedDate"); // 2016-01-25
+    timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
+    print("timeeeeeeeeee$timeData");
+  }
+
+  var pinController = TextEditingController();
+  var currentAddress = TextEditingController();
+
   Widget buildGridView() {
     return Container(
       height: 170,
@@ -1069,6 +581,44 @@ class _AddClientsState extends State<AddClients> {
                       File(imagePathList[index]), fit: BoxFit.cover),
                 ),
               ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),),
+                  width:MediaQuery.of(context).size.width/2.8,
+                  height: 65,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
+                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 25,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      imagePathList.remove(imagePathList[index]);
+                      count--;
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    size: 30,
+                    color: Colors.red.withOpacity(0.7),
+                  ),
+                ),
+              )
             ],
           );
         },
@@ -1127,7 +677,8 @@ class _AddClientsState extends State<AddClients> {
                     SizedBox(height: MediaQuery.of(context).size.height*.02),
                     Card(
                       elevation: 3,
-                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
+                      ),
                       child: DropdownButtonFormField<String>(
                         value: selected_Status,
                         onChanged: (newValue) {
@@ -1199,22 +750,22 @@ class _AddClientsState extends State<AddClients> {
                                   borderRadius:  BorderRadius.circular(10)))),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                    Text("Department",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                    SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                    Card(
-                      elevation: 3,
-
-                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      child: Container(
-                        // decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white, border: Border.all(color: Colors.black)),
-                        height: 56,
-                        width: MediaQuery.of(context).size.width/1.1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0, left: 10, bottom: 2, right: 10),
-                          child: select(),
-                        ),
-                      ),
-                    ),
+                    // Text("Department",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    // SizedBox(height: MediaQuery.of(context).size.height*.02,),
+                    // Card(
+                    //   elevation: 3,
+                    //
+                    //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    //   child: Container(
+                    //     // decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white, border: Border.all(color: Colors.black)),
+                    //     height: 56,
+                    //     width: MediaQuery.of(context).size.width/1.1,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.only(top: 0, left: 10, bottom: 2, right: 10),
+                    //       child: select(),
+                    //     ),
+                    //   ),
+                    // ),
                     Text("Address",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     Card(elevation: 3,
@@ -1248,8 +799,7 @@ class _AddClientsState extends State<AddClients> {
                             //     cities = items.cities;
                             //   }
                             // });
-                            var name =
-                            print("aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
+                            var name = print("aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
                             // print("current indexxx ${selected}");
                             // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
                             // currentIndex = selected;
@@ -1259,11 +809,7 @@ class _AddClientsState extends State<AddClients> {
                         items: getListModel?.data?.states?.map((items) {
                           return DropdownMenuItem(
                             value: items.id,
-
                             child: Text(items.name.toString()),
-
-
-
                           );
                         }).toList(),
                         decoration: InputDecoration(
@@ -1308,6 +854,7 @@ class _AddClientsState extends State<AddClients> {
                     Card(elevation: 3,
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
+                        maxLength: 6,
                           keyboardType: TextInputType.number,
                           controller: pincodecn,
                           validator: (value) {
@@ -1317,6 +864,7 @@ class _AddClientsState extends State<AddClients> {
                             return null;
                           },
                           decoration: InputDecoration(
+                            counterText: "",
                               hintText: '', border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10),
                               ),
                           ),
@@ -1369,12 +917,12 @@ class _AddClientsState extends State<AddClients> {
                           keyboardType: TextInputType.number,
                           maxLength: 10,
                           controller: mobilecnTwo,
-                          validator: (value) {
-                            if (value!.isEmpty||value.length<10) {
-                              return 'Please Enter Your Mobile No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty||value.length<10) {
+                          //     return 'Please Enter Your Mobile No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1391,12 +939,12 @@ class _AddClientsState extends State<AddClients> {
                           keyboardType: TextInputType.number,
                           maxLength: 10,
                           controller: whatsUpCTr,
-                          validator: (value) {
-                            if (value!.isEmpty||value.length<10) {
-                              return 'Please Enter Your Whatsapp No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty||value.length<10) {
+                          //     return 'Please Enter Your Whatsapp No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1411,17 +959,17 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                         onTap: (){
-                          _showBirthDatePicker();
+                          _selectDate1();
                         },
                           keyboardType: TextInputType.none,
                           maxLength: 10,
                           controller: doBCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please select Your Date of Birth';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please select Your Date of Birth';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1441,12 +989,12 @@ class _AddClientsState extends State<AddClients> {
                           keyboardType: TextInputType.none,
                           maxLength: 10,
                           controller: doACtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please select Your Date of Anniversary';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please select Your Date of Anniversary';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1461,14 +1009,14 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          maxLength: 10,
+                          // maxLength: 10,
                           controller: routeCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Route';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Route';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1483,14 +1031,14 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          maxLength: 10,
+                          // maxLength: 10,
                           controller: marketCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter market';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter market';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1505,14 +1053,14 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          maxLength: 10,
+                          // maxLength: 10,
                           controller: landmarkCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Landmark';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Landmark';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1525,14 +1073,15 @@ class _AddClientsState extends State<AddClients> {
                     Card(elevation: 6,
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
+                        // maxLength: 10,
                           keyboardType: TextInputType.text,
                           controller: panCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Pan No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Your Pan No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1564,13 +1113,14 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
+                          maxLength: 15,
                           controller: gstCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Gst No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Your Gst No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1645,12 +1195,12 @@ class _AddClientsState extends State<AddClients> {
                           keyboardType: TextInputType.number,
                           maxLength: 12,
                           controller: adharCtr,
-                          validator: (value) {
-                            if (value!.isEmpty||value.length<12) {
-                              return 'Please Enter Your Aadhaar No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty||value.length<12) {
+                          //     return 'Please Enter Your Aadhaar No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1696,24 +1246,24 @@ class _AddClientsState extends State<AddClients> {
                     ),
                     Text("Voter Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                    // Card(elevation: 6,
-                    //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //   child: TextFormField(
-                    //       keyboardType: TextInputType.number,
-                    //       maxLength: 12,
-                    //       controller: voterIdCtr,
-                    //       validator: (value) {
-                    //         if (value!.isEmpty) {
-                    //           return 'Please Enter Your VoterId No';
-                    //         }
-                    //         return null;
-                    //       },
-                    //       decoration: InputDecoration(
-                    //           hintText: '',
-                    //           counterText: "",
-                    //           border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                    // ),
-                    // SizedBox(height: MediaQuery.of(context).size.height*.01),
+                    Card(elevation: 6,
+                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          maxLength: 12,
+                          controller: voterIdCtr,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your VoterId No';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: '',
+                              counterText: "",
+                              border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*.01),
                     ElevatedButton(
                       onPressed: () {
                         // pickImageDialogVoter(context, 1);
@@ -1756,15 +1306,15 @@ class _AddClientsState extends State<AddClients> {
                     Card(elevation: 6,
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           maxLength: 12,
                           controller: udyogIdCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Udyog Id No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Your Udyog Id No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1829,12 +1379,12 @@ class _AddClientsState extends State<AddClients> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         controller: creditCTr,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Credit limit';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return 'Please Enter Credit limit';
+                        //   }
+                        //   return null;
+                        // },
                         decoration: InputDecoration(
                           hintText: '',
                           border: OutlineInputBorder(
@@ -1858,10 +1408,17 @@ class _AddClientsState extends State<AddClients> {
                         width: MediaQuery.of(context).size.width/2,
                         child: ElevatedButton(style: ElevatedButton.styleFrom(primary: colors.primary),
                             onPressed: () {
-                              if(_formKey.currentState!.validate()){
-                                addClinets();
-                              }
-                            }, child: Text("Add", style: TextStyle(fontWeight: FontWeight.bold, ),)),
+                          // print("hhhhhhhhhhhhhhhhhh");
+                          // addClinets();
+                               if(imagePathList.isEmpty || imagePathList.length == "" || imagePathList.length == null){
+                                Fluttertoast.showToast(msg: "Please Select Image");
+                              } else if(selected_Status == null || selected_District == null || selected_State == null ){
+                                Fluttertoast.showToast(msg: "Please select Droup Down filleds");
+                              } else if(_formKey.currentState!.validate()){
+                                 // Fluttertoast.showToast(msg: "Please Fill All Fields");
+                                 addClinets();
+                               }
+                            }, child: Text("Add", style: TextStyle(fontWeight: FontWeight.bold))),
                       )
                     ],
                   ),

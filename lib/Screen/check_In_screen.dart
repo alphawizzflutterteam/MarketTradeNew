@@ -101,9 +101,10 @@ Future<bool> onIosBackground(ServiceInstance service) async {
   final log = preferences.getStringList('log') ?? <String>[];
   log.add(DateTime.now().toIso8601String());
   await preferences.setStringList('log', log);
-
   return true;
 }
+
+
 updateLocation1(Position position) async {
   final box = GetStorage();
   String? userId = box.read('userid');
@@ -223,8 +224,8 @@ void onStart(ServiceInstance service) async {
         );
       }
     }
-   Position position= await Geolocator.getCurrentPosition();
-     updateLocation1(position);
+    Position position= await Geolocator.getCurrentPosition();
+    updateLocation1(position);
     //
     // List<Placemark> placemark = await placemarkFromCoordinates(
     //     double.parse(position.latitude.toString()), double.parse(position.longitude.toString()),
@@ -417,15 +418,15 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
     }
   }
-setCheckIn() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setBool("CheckIn", true);
-  prefs.setString("CheckInTime", DateTime.now().toString());
-}
+  setCheckIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("CheckIn", true);
+    prefs.setString("CheckInTime", DateTime.now().toString());
+  }
   Future<void> checkInNow() async {
     debugPrint("checkin");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-   String? uid = prefs.getString("user_id");
+    String? uid = prefs.getString("user_id");
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
@@ -480,7 +481,7 @@ setCheckIn() async {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Dashboard()),
-          (route) => false);
+              (route) => false);
     });
   }
 
@@ -521,27 +522,27 @@ setCheckIn() async {
           height: 10,
         ),
         InkWell(
-            onTap: () async {
-              _getFromCamera();
-              // pickImageDialog(context, 1);
-              // await pickImages();
-            },
-            child: Container(
-                height: 40,
-                width: 125,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colors.primary),
-                child: Center(
-                    child: Text(
-                      "Upload Images",
-                      style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                ),
-             ),
+          onTap: () async {
+            _getFromCamera();
+            // pickImageDialog(context, 1);
+            // await pickImages();
+          },
+          child: Container(
+            height: 40,
+            width: 125,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: colors.primary),
+            child: Center(
+              child: Text(
+                "Upload Images",
+                style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+            ),
           ),
-          const SizedBox(height: 10),
-         Visibility(
+        ),
+        const SizedBox(height: 10),
+        Visibility(
             visible: isImages,
             child:  buildGridView()),
       ],
@@ -559,7 +560,7 @@ setCheckIn() async {
             children: [
               Container(
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: colors.primary)
+                    border: Border.all(color: colors.primary)
                 ),
                 width: MediaQuery.of(context).size.width/2.8,
                 height: 170,
@@ -570,11 +571,11 @@ setCheckIn() async {
                 ),
               ),
               Positioned(
-               bottom: 10,
+                bottom: 10,
                 child: Container(
-                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                 border: Border.all(color: colors.primary),),
-                width:MediaQuery.of(context).size.width/2.8,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),),
+                  width:MediaQuery.of(context).size.width/2.8,
                   height: 70,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -647,11 +648,11 @@ setCheckIn() async {
                 },
                 child: Container(
                   child: ListTile(
-                      title: Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      ),
+                    title: Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: colors.primary,
+                    ),
                   ),
                 ),
               ),
@@ -704,7 +705,7 @@ setCheckIn() async {
   ///
 
   @override
-void initState() {
+  void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentLoc();
@@ -770,23 +771,23 @@ void initState() {
               ),
               currentAddress.text == "" || currentAddress.text == null
                   ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "Locating...",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      ),
-                    )
-                    :Text(
-                      "${currentAddress.text}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                      ),
-                    ),
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  "Locating...",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+              )
+                  :Text(
+                "${currentAddress.text}",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
               SizedBox(height: 15),
               uploadMultiImmage(),
               // uploadMultiImage()
@@ -811,37 +812,37 @@ void initState() {
               ),
               SizedBox(height: 20),
               Container(
-                  height: 45,
-                  width: 220,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shape: StadiumBorder(),
-                          fixedSize: Size(350, 40),
-                          backgroundColor: colors.primary.withOpacity(0.8)
-                      ),
-                      onPressed: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                        if(latitude == null || longitude == null ||  _imageFile == null ) {
-                          setSnackbar("Please select a image", context);
-                        }
-                        else if(readingCtr.text.isEmpty){
-                          setSnackbar("Please enter Odometer start reading", context);
-                        }
-                        else {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          checkInNow();
-
-                        }
-                     },
-                      child: isLoading? Center(
-                        child: CircularProgressIndicator(color: Colors.white,),
-                      ): Text('CHECK IN NOW'),
+                height: 45,
+                width: 220,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: StadiumBorder(),
+                      fixedSize: Size(350, 40),
+                      backgroundColor: colors.primary.withOpacity(0.8)
                   ),
+                  onPressed: () {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+                    if(latitude == null || longitude == null ||  _imageFile == null ) {
+                      setSnackbar("Please select a image", context);
+                    }
+                    else if(readingCtr.text.isEmpty){
+                      setSnackbar("Please enter Odometer start reading", context);
+                    }
+                    else {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      checkInNow();
+
+                    }
+                  },
+                  child: isLoading? Center(
+                    child: CircularProgressIndicator(color: Colors.white,),
+                  ): Text('CHECK IN NOW'),
+                ),
               ),
-               SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),

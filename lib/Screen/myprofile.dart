@@ -43,6 +43,7 @@ import 'Manage_Address.dart';
 import 'MyOrder.dart';
 import 'MySiteVisit.dart';
 import 'My_Wallet.dart';
+import 'NotificationLIst.dart';
 import 'Privacy_Policy.dart';
 
 class MyProfile extends StatefulWidget {
@@ -586,6 +587,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         // _getDivider(),
         _getDrawerItem(getTranslated(context, 'CONTACT_LBL')!,
             'assets/images/pro_aboutus.svg'),
+        _getDrawerItem(getTranslated(context, 'NOTIFICATION')!,
+            'assets/images/notification.svg'),
         // _getDivider(),
         _getDrawerItem(
             getTranslated(context, 'FAQS')!, 'assets/images/pro_faq.svg'),
@@ -734,6 +737,14 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                 ),
             );
           }
+            else if (title == getTranslated(context, 'NOTIFICATION')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationList(),
+                ),
+              );
+            }
           else if (title == getTranslated(context, 'MYEARNINGS')) {
             Navigator.push(
                 context,
@@ -842,9 +853,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           else if (title == getTranslated(context, 'LOGOUT')) {
             logOutDailog();
           }
-            else if (title == getTranslated(context, 'DELETE')) {
-              deleteAccountDailog();
-            }
+            // else if (title == getTranslated(context, 'DELETE')) {
+            //   deleteAccountDailog();
+            // }
             else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
             openChangePasswordBottomSheet();
           } else if (title == getTranslated(context, 'CHANGE_LANGUAGE_LBL')) {

@@ -51,8 +51,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       'address': '${currentAddress.text}',
       'redings': readingCtr.text
     });
-
-
+    print("check out parameter ${request.fields}===========");
     for (var i = 0; i < imagePathList.length; i++) {
       imagePathList == null
           ? null
@@ -67,7 +66,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           'form_image[]', imagePathList1[i].toString()));
     }
 
-    print("this is my check in request ${request.fields.toString()}");
+    print("this is my check out request ${request.files}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -324,9 +323,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.red)),
+                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.red)),
+                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.red),overflow: TextOverflow.ellipsis,maxLines: 2)
                       ],
                     ),
                   ),

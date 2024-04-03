@@ -23,6 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
@@ -89,6 +90,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    implementation platform('com.google.firebase:firebase-bom:28.3.1')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    // Add the dependency for the Firebase SDK for Google Analytics
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
 }

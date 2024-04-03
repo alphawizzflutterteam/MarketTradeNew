@@ -92,6 +92,7 @@ class SiteSurvey extends StatefulWidget {
   @override
   State<SiteSurvey> createState() => _SiteSurveyState();
 }
+int count = 0;
 
 class _SiteSurveyState extends State<SiteSurvey> {
   List<TextEditingController> monthlyControllers = [];
@@ -100,6 +101,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
   int totalMonthlySales = 0;
   int currentSales = 0;
   List<int> sums = [];
+  List<int> sumsTwo = [];
 
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
@@ -109,6 +111,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
 
   List dataList = [];
   int sum = 0;
+  int sumTwo = 0;
   List<List<List<TextEditingController>>> feedbackList = [];
 
   void initState() {
@@ -118,6 +121,10 @@ class _SiteSurveyState extends State<SiteSurvey> {
 
     for(int i = 0; i < (widget.modelList?.length ?? 0); i++){
       sums.add(sum);
+    }
+
+    for(int i = 0; i < (widget.modelList?.length ?? 0); i++){
+      sumsTwo.add(sumTwo);
     }
 
     for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
@@ -267,6 +274,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
     );
     if (pickedFile != null) {
       setState(() {
+        count++;
         _imageFile = File(pickedFile.path);
         imagePathList.add(_imageFile?.path ?? "");
         isImages = true ;
@@ -380,6 +388,23 @@ class _SiteSurveyState extends State<SiteSurvey> {
                 //   ),
                 // ),
               ),
+              Positioned(
+                top: 0,
+                right: 35,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      imagePathList.remove(imagePathList[index]);
+                      count--;
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    size: 30,
+                    color: Colors.red.withOpacity(0.7),
+                  ),
+                ),
+              )
             ],
           );
         },
@@ -462,10 +487,10 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                     itemCount: item?.products?.length ?? 0,
                                     itemBuilder: (BuildContext, i) {
                                       var data = item?.products?[i];
-
                                       return Column(
                                         children: [
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                               Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
@@ -475,6 +500,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             height: 5,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               const Text(
                                                 "Expected Consumption: ",
@@ -545,6 +571,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             height: 5,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               const Text(
                                                   "Further Consumption: ",
@@ -592,7 +619,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                                       (val) {
 
                                                           setState(() {
-                                                            sums[index] += int.parse(val);
+                                                            sumsTwo[index] += int.parse(val);
                                                           });
 
                                                     // currentSales +=
@@ -610,6 +637,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             height: 5,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               const Text(
                                                   "Purchase Price: ",
@@ -659,6 +687,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             height: 5,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               const Text(
                                                   "Purchasing Form: ",
@@ -713,6 +742,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                             height: 10,
                                           ),
                                           Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                   "Last Purchase Date: ",
@@ -836,8 +866,21 @@ class _SiteSurveyState extends State<SiteSurvey> {
                           selectedIndex == index ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text("Sum of Consumption: "),
-                              Text(sums[index].toString())
+                              Text("Sum of Expected Consumption: ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
+                              Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: Text(sums[index].toString(),style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+                              )
+                            ],
+                          ):const SizedBox.shrink(),
+                          selectedIndex == index ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Sum of Further Consumption: ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
+                              Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: Text(sumsTwo[index].toString(),style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+                              )
                             ],
                           ):const SizedBox.shrink()
                         ],
@@ -898,6 +941,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                 ],
               ),
             ),
+            SizedBox(height: 5,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1746,7 +1790,6 @@ class _SiteSurveyState extends State<SiteSurvey> {
               }
               siteSurvey();
             }
-
           },
           child: Center(
             child: Container(
@@ -1760,7 +1803,10 @@ class _SiteSurveyState extends State<SiteSurvey> {
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.white,
-                            fontWeight: FontWeight.w400)))),
+                            fontWeight: FontWeight.w400),
+                    ),
+                ),
+            ),
           ),
         ),
       ),

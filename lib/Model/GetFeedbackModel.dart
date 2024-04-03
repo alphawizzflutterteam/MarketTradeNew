@@ -1,11 +1,11 @@
 /// error : false
-/// data : [{"id":"3","user_id":"3","date":"2023-10-07","time":"12:30:56","lat":"22.7475667","lng":"75.898895","name_of_firm":"2","basic_detail":{"name":"Mshesh","mobile":"7777777799","email":"sawan@mailinator.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"34","name":"Ultra Tech Cement","parent_id":"33","slug":"test-tt","image":"","banner":"","row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Cement","monthly_sale":"20","current_stock":"100","wps":"5356","rsp":"5536","purchasing_from":"gjjgg"},{"brand_name":"Cement","monthly_sale":"21","current_stock":"101","wps":"988668","rsp":"86868","purchasing_from":"gugigi"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-07 13:06:06","updated_at":"2023-10-07 12:53:15","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"4","user_id":"3","date":"2023-10-07","time":"12:30:56","lat":"22.7475667","lng":"75.898895","name_of_firm":"2","basic_detail":{"name":"Mshesh","mobile":"7777777799","email":"sawan@mailinator.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Cement","monthly_sale":"20","current_stock":"100","wps":"5356","rsp":"5536","purchasing_from":"gjjgg"},{"brand_name":"Cement","monthly_sale":"21","current_stock":"101","wps":"988668","rsp":"86868","purchasing_from":"gugigi"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-07 13:11:00","updated_at":"2023-10-07 13:05:04","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"5","user_id":"1","date":"2023-09-27","time":"02:00:00","lat":"25.15689798","lng":"75.45678965","name_of_firm":"2","basic_detail":{"name":"test","mobile":"7896543211","email":"sawan@mailinator.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"500"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"34","name":"Ultra Tech Cement","parent_id":"33","slug":"test-tt","image":"","banner":"","row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":"Aditya Namdev"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"This is a remarks section","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 10:41:27","updated_at":"2023-10-08 20:04:32","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"6","user_id":"3","date":"2023-10-09","time":"04:01:53","lat":"22.7468523","lng":"75.8979967","name_of_firm":"4","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"2","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Cement","monthly_sale":"100","current_stock":"200","wps":"1222","rsp":"1777","purchasing_from":"fuffu"},{"brand_name":"Cement","monthly_sale":"1222","current_stock":"5855","wps":"225","rsp":"7828","purchasing_from":"drdds"},{"brand_name":"Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/uploads/user_image/Screenshot_2023-09-01-12-50-07-968_copg_user.jpg","remarks":"hdxhdh","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 16:03:04","updated_at":"2023-10-09 16:03:04","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"7","user_id":"3","date":"2023-10-09","time":"04:01:53","lat":"22.7468523","lng":"75.8979967","name_of_firm":"4","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"2","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Cement","monthly_sale":"100","current_stock":"200","wps":"1222","rsp":"1777","purchasing_from":"fuffu"},{"brand_name":"Cement","monthly_sale":"1222","current_stock":"5855","wps":"225","rsp":"7828","purchasing_from":"drdds"},{"brand_name":"Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Cement","monthly_sale":"100","current_stock":"200","wps":"1222","rsp":"1777","purchasing_from":"fuffu"},{"brand_name":"Cement","monthly_sale":"1222","current_stock":"5855","wps":"225","rsp":"7828","purchasing_from":"drdds"},{"brand_name":"Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/uploads/user_image/Screenshot_2023-09-01-12-50-07-968_copg_user1.jpg","remarks":"hdxhdh","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 16:04:00","updated_at":"2023-10-09 16:04:00","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"8","user_id":"3","date":"2023-10-09","time":"04:04:58","lat":"22.7468523","lng":"75.8979967","name_of_firm":"2","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"200","wps":"800","rsp":"5582","purchasing_from":"xgxxg"},{"brand_name":"Ultra Tech Cement","monthly_sale":"8668","current_stock":"588","wps":"8585","rsp":"8558","purchasing_from":"xtrt"},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 16:09:18","updated_at":"2023-10-09 16:09:18","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"9","user_id":"3","date":"2023-10-09","time":"04:09:38","lat":"22.7468523","lng":"75.8979967","name_of_firm":"0","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 16:10:10","updated_at":"2023-10-09 16:10:10","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"10","user_id":"3","date":"2023-10-09","time":"04:21:12","lat":"22.7468421","lng":"75.8979877","name_of_firm":"4","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"2","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"200","wps":"500","rsp":"580","purchasing_from":"ddds"},{"brand_name":"Ultra Tech Cement","monthly_sale":"255","current_stock":"800","wps":"452","rsp":"4588","purchasing_from":"fgfd"},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/uploads/user_image/images_(1)1.jpg","remarks":"ctctct","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 16:26:18","updated_at":"2023-10-09 16:26:18","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"11","user_id":"3","date":"2023-10-09","time":"06:34:25","lat":"22.7468451","lng":"75.8979953","name_of_firm":"2","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"50.00"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/uploads/user_image/images_(1)2.jpg","remarks":"dhfhdhhf ko","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-10-09 18:37:24","updated_at":"2023-10-09 18:37:24","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"12","user_id":"3","date":"2023-12-09","time":"05:01:42","lat":"22.7469328","lng":"75.8980596","name_of_firm":"800","basic_detail":{"name":"Other","mobile":null,"email":null,"address":"Indore Madhya Pradesh","customer_type":null,"credit_limit":null,"dealer_name":"gccg","dealer_mobile":"fgfdy@gmail.com","deler_email":"fgfdy@gmail.com","dealer_limit":"68886"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"588","current_stock":"588","wps":"55","rsp":"55","purchasing_from":"fff"},{"brand_name":"ACC Cement","monthly_sale":"8858","current_stock":"686886","wps":"888","rsp":"6886","purchasing_from":"gggg"},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/uploads/user_image/8ec12372-20f2-4835-89cb-5e70da7c07f17932929954810443853.jpg","remarks":"hccggcgcg","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2023-12-09 17:47:05","updated_at":"2023-12-09 17:47:05","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"13","user_id":"10","date":"2024-01-24","time":"07:27:13","lat":"22.7469475","lng":"75.898031","name_of_firm":"19","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"1"},"customer_dealing_in":[{"id":"37","name":"fdgdfg","parent_id":"0","slug":"fdgdfg","image":"","banner":null,"row_order":"0","status":null,"clicks":"0"}],"survey":[],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-24 19:29:30","updated_at":"2024-01-24 19:29:30","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"14","user_id":"10","date":"2024-01-24","time":"07:30:06","lat":"22.746945","lng":"75.8980191","name_of_firm":"7","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"2","credit_limit":"50.00","grivenance":"null"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-24 19:30:27","updated_at":"2024-01-24 19:30:27","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"15","user_id":"10","date":"2024-01-24","time":"08:07:25","lat":"22.7469324","lng":"75.8979994","name_of_firm":"6","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"50.00","grivenance":"null"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-24 20:21:29","updated_at":"2024-01-24 20:21:29","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"16","user_id":"10","date":"2024-01-29","time":"05:31:04","lat":"22.7469415","lng":"75.897998","name_of_firm":"17","basic_detail":{"name":"rajelu","mobile":"7852368688","email":"rajty@gmail.com","address":"Indore Madhya Pradesh","customer_type":"2","credit_limit":"5000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"25","current_stock":"25","wps":"6292299","rsp":"58858585","purchasing_from":"dvdvvfvfvd"},{"brand_name":"ACC Cement","monthly_sale":"25","current_stock":"30","wps":"569595","rsp":"959595","purchasing_from":"fvcevrv"},{"brand_name":"gfhfhfgh","monthly_sale":"69","current_stock":"36","wps":"959292","rsp":"2882858","purchasing_from":"vdvffv"},{"brand_name":"erfefdfdf111","monthly_sale":"62","current_stock":"58","wps":"282882","rsp":"8585858","purchasing_from":"vfvvvfvfvf"},{"brand_name":"RCB Testing","monthly_sale":"90","current_stock":"96","wps":"929","rsp":"85858","purchasing_from":"fvvffvtv"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"hhdhdhd","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:34:49","updated_at":"2024-01-29 17:34:49","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"17","user_id":"10","date":"2024-01-29","time":"05:43:03","lat":"22.7469313","lng":"75.8979924","name_of_firm":"18","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"25","current_stock":"25","wps":"6868","rsp":"5758","purchasing_from":"gx"},{"brand_name":"ACC Cement","monthly_sale":"45","current_stock":"25","wps":"6868","rsp":"585858","purchasing_from":"vxgxgx"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"25","wps":"686800","rsp":"5858","purchasing_from":"czgx"},{"brand_name":"erfefdfdf111","monthly_sale":"25","current_stock":"36","wps":"588","rsp":"258","purchasing_from":"fyyfhc"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"fxgxgxgxgc","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:46:13","updated_at":"2024-01-29 17:46:13","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"18","user_id":"10","date":"2024-01-29","time":"05:43:03","lat":"22.7469313","lng":"75.8979924","name_of_firm":"18","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"25","current_stock":"25","wps":"6868","rsp":"5758","purchasing_from":"gx"},{"brand_name":"ACC Cement","monthly_sale":"45","current_stock":"25","wps":"6868","rsp":"585858","purchasing_from":"vxgxgx"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"25","wps":"686800","rsp":"5858","purchasing_from":"czgx"},{"brand_name":"erfefdfdf111","monthly_sale":"25","current_stock":"36","wps":"588","rsp":"258","purchasing_from":"fyyfhc"},{"brand_name":"Ultra Tech Cement","monthly_sale":"25","current_stock":"25","wps":"6868","rsp":"5758","purchasing_from":"gx"},{"brand_name":"ACC Cement","monthly_sale":"45","current_stock":"25","wps":"6868","rsp":"585858","purchasing_from":"vxgxgx"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"25","wps":"686800","rsp":"5858","purchasing_from":"czgx"},{"brand_name":"erfefdfdf111","monthly_sale":"25","current_stock":"36","wps":"588","rsp":"258","purchasing_from":"fyyfhc"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"fxgxgxgxgc","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:46:20","updated_at":"2024-01-29 17:46:20","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"19","user_id":"10","date":"2024-01-29","time":"05:48:06","lat":"22.7469455","lng":"75.8980171","name_of_firm":"20","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"gghhhjk","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:49:02","updated_at":"2024-01-29 17:49:02","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"20","user_id":"10","date":"2024-01-29","time":"05:48:06","lat":"22.7469455","lng":"75.8980171","name_of_firm":"20","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"Ultra Tech Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"gghhhjk","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:49:08","updated_at":"2024-01-29 17:49:08","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null},{"id":"21","user_id":"10","date":"2024-01-29","time":"05:53:20","lat":"22.7469395","lng":"75.8980173","name_of_firm":"20","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00","grivenance":"3"},"customer_dealing_in":[{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"RCB Testing","monthly_sale":"55","current_stock":"55","wps":"55","rsp":"55","purchasing_from":"fghjk"}],"photo":"https://developmentalphawizz.com/market_track/assets/no-image.png","remarks":"hgffdaawy","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-01-29 17:54:47","updated_at":"2024-01-29 17:54:47","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null}]
+/// data : [{"id":"41","user_id":"19","date":"2024-03-09","time":"04:50:52","lat":"22.7469319","lng":"75.8980451","name_of_firm":"47","basic_detail":{"name":"sumit","mobile":"1223355828","email":"alphatest@test.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"100","wps":"350","rsp":"400","purchasing_from":"acc"},{"brand_name":"ACC Cement","monthly_sale":"200","current_stock":"100","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_23c156a9-019c-4cba-81c2-6ce6d872856b6322633441333468531.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_e20621f7-0592-41f1-80bc-a53855daf7922108305720519167184.jpg"],"remarks":"test","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-09 17:11:20","updated_at":"2024-03-09 17:11:20","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"alpha","username":"shivani"},{"id":"42","user_id":"19","date":"2024-03-09","time":"06:55:17","lat":"22.7469353","lng":"75.898034","name_of_firm":"17","basic_detail":{"name":"rajelu","mobile":"7852368688","email":"rajty@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Retailer","credit_limit":"5000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"200","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"100","current_stock":"200","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"200","current_stock":"100","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"200","current_stock":"100","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"100","current_stock":"200","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_abf5fcb2-a6ca-41cf-8f4f-421ec60826dd1293972675365922995.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_c8489c28-8f66-4219-a62b-f86fcf14f08f1890276600557335762.jpg"],"remarks":"tt","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-09 19:00:26","updated_at":"2024-03-09 19:00:26","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Ne one","username":"shivani"},{"id":"43","user_id":"19","date":"2024-03-11","time":"05:10:08","lat":"22.7469252","lng":"75.8979814","name_of_firm":"55","basic_detail":{"name":"Rohti j","mobile":"8787878887","email":"rohitj@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Retailer","credit_limit":"0.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"200","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_1abee307-c0ca-45df-bbd9-9c0051cf1244332852391335282519.jpg"],"remarks":"ttt","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-11 17:09:38","updated_at":"2024-03-11 17:09:38","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Rohti","username":"shivani"},{"id":"44","user_id":"19","date":"2024-03-12","time":"04:24:45","lat":"22.7469269","lng":"75.8980474","name_of_firm":"18","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"37","name":"fdgdfg","parent_id":"0","slug":"fdgdfg","image":"","banner":null,"row_order":"0","status":null,"clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"5008","current_stock":"588888","wps":"5888","rsp":"8888","purchasing_from":"vvcvcvv"},{"brand_name":"ACC Cement","monthly_sale":"588","current_stock":"588888","wps":"8888","rsp":"888","purchasing_from":"vccv"},{"brand_name":"gfhfhfgh","monthly_sale":"888","current_stock":"880","wps":"888","rsp":"8888","purchasing_from":"ccccc"},{"brand_name":"erfefdfdf111","monthly_sale":"888","current_stock":"8888","wps":"8888","rsp":"22555","purchasing_from":"fggbh"},{"brand_name":"ambuja","monthly_sale":"55588","current_stock":"5699","wps":"8566","rsp":"855","purchasing_from":"vvcvg"},{"brand_name":"RCB Testing","monthly_sale":"85555","current_stock":"5555","wps":"8888","rsp":"888","purchasing_from":"cccccc"}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_dc967051-c246-4459-a32f-3fba92c3b1b15224628090582277078.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_f79558de-53c5-4e82-b0ec-13bc5b361ae34068556543733542051.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_2e741ee3-2582-45c5-b7c7-5300be9cd53b8824743336589910010.jpg"],"remarks":"terreer","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-12 16:37:40","updated_at":"2024-03-12 16:37:40","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"45","user_id":"19","date":"2024-03-20","time":"07:14:07","lat":"22.74693","lng":"75.8980204","name_of_firm":"24","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"1"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"37","name":"fdgdfg","parent_id":"0","slug":"fdgdfg","image":"","banner":null,"row_order":"0","status":null,"clicks":"0"},{"id":"41","name":"fdfdfdf111","parent_id":"0","slug":"fdfdfdf111","image":"","banner":"","row_order":"0","status":null,"clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"200","current_stock":"200","wps":"2","rsp":"6","purchasing_from":""},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_970d0e22-b0ad-46e8-a58c-5f3d228043233711225727762090614.jpg"],"remarks":"test","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-20 19:16:21","updated_at":"2024-03-20 19:16:21","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"46","user_id":"19","date":"2024-03-21","time":"12:13:06","lat":"22.7469174","lng":"75.8980464","name_of_firm":"18","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"698","current_stock":"85","wps":"899","rsp":"888","purchasing_from":"fhfbbc"},{"brand_name":"ACC Cement","monthly_sale":"25","current_stock":"58","wps":"8566","rsp":"855","purchasing_from":"hggh"},{"brand_name":"gfhfhfgh","monthly_sale":"66","current_stock":"369","wps":"9898","rsp":"6556","purchasing_from":"xvvx"},{"brand_name":"erfefdfdf111","monthly_sale":"64","current_stock":"87","wps":"8889","rsp":"8565","purchasing_from":"gdgd"},{"brand_name":"ambuja","monthly_sale":"98","current_stock":"55","wps":"5856","rsp":"5886","purchasing_from":"dggdgd"},{"brand_name":"RCB Testing","monthly_sale":"58","current_stock":"58","wps":"39","rsp":"8087","purchasing_from":"hxxgxh"}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_eeb24ced-4535-41b5-a13b-bd6f3a1f38be3065379456284299626.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_4437c8f9-00ef-495f-961a-9a5e48caf3423555982269101254681.jpg"],"remarks":"bxxhdhdh","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-21 12:15:15","updated_at":"2024-03-21 12:15:15","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"47","user_id":"19","date":"2024-03-21","time":"12:19:20","lat":"22.7469247","lng":"75.8980064","name_of_firm":"22","basic_detail":{"name":"Mahendra Singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"45","current_stock":"54","wps":"8558","rsp":"879","purchasing_from":"Ssss"},{"brand_name":"ACC Cement","monthly_sale":"64","current_stock":"65","wps":"8484","rsp":"8787","purchasing_from":"Tttttt"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"645","wps":"8888","rsp":"98989","purchasing_from":"Uuuu"},{"brand_name":"erfefdfdf111","monthly_sale":"546","current_stock":"63194","wps":"8898","rsp":"879","purchasing_from":"Namee"},{"brand_name":"ambuja","monthly_sale":"632","current_stock":"965","wps":"8787","rsp":"9797","purchasing_from":"Kkkkk"}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_6366c08a-499a-4c3f-a0f0-867f5afd0efe8697690476369505138.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_2b7af5b2-36ec-4d2b-87b9-f5a96566115a2209363510919397761.jpg"],"remarks":"Niceee","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-21 12:21:23","updated_at":"2024-03-21 12:21:23","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"48","user_id":"19","date":"2024-03-21","time":"12:19:20","lat":"22.7469247","lng":"75.8980064","name_of_firm":"22","basic_detail":{"name":"Mahendra singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"45","current_stock":"54","wps":"8558","rsp":"879","purchasing_from":"Ssss"},{"brand_name":"ACC Cement","monthly_sale":"64","current_stock":"65","wps":"8484","rsp":"8787","purchasing_from":"Tttttt"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"645","wps":"8888","rsp":"98989","purchasing_from":"Uuuu"},{"brand_name":"erfefdfdf111","monthly_sale":"546","current_stock":"63194","wps":"8898","rsp":"879","purchasing_from":"Namee"},{"brand_name":"ambuja","monthly_sale":"632","current_stock":"965","wps":"8787","rsp":"9797","purchasing_from":"Kkkkk"}],"photo":["https://developmentalphawizz.com/market_track/assets/no-image.png"],"remarks":"Niceee","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-21 18:30:40","updated_at":"2024-03-21 18:30:40","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"49","user_id":"19","date":"2024-03-21","time":"12:19:20","lat":"22.7469247","lng":"75.8980064","name_of_firm":"22","basic_detail":{"name":"Mahendra singh","mobile":"7896543211","email":"testemail@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10000.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"45","current_stock":"54","wps":"8558","rsp":"879","purchasing_from":"Ssss"},{"brand_name":"ACC Cement","monthly_sale":"64","current_stock":"65","wps":"8484","rsp":"8787","purchasing_from":"Tttttt"},{"brand_name":"gfhfhfgh","monthly_sale":"36","current_stock":"645","wps":"8888","rsp":"98989","purchasing_from":"Uuuu"},{"brand_name":"erfefdfdf111","monthly_sale":"546","current_stock":"63194","wps":"8898","rsp":"879","purchasing_from":"Namee"},{"brand_name":"ambuja","monthly_sale":"632","current_stock":"965","wps":"8787","rsp":"9797","purchasing_from":"Kkkkk"}],"photo":["https://developmentalphawizz.com/market_track/assets/no-image.png"],"remarks":"Niceee","total_monthly_sale":"0.00","total_current_stock":"0.00","created_at":"2024-03-21 18:30:48","updated_at":"2024-03-21 18:30:48","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Birla Cement","username":"shivani"},{"id":"50","user_id":"19","date":"2024-03-21","time":"06:35:52","lat":"22.7469321","lng":"75.8980218","name_of_firm":"17","basic_detail":{"name":"rajelu","mobile":"7852368688","email":"rajty@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Retailer","credit_limit":"5000.00","grivenance":"4"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"58","current_stock":"800","wps":"54545","rsp":"848585","purchasing_from":"trsting"},{"brand_name":"ACC Cement","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_295644c8-f907-4065-bbb2-418ad78f64438333703934926315552.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_f24014bf-510e-41ba-8804-01aad14b180f927169932185994594.jpg"],"remarks":"testkbebdbd","total_monthly_sale":"100.00","total_current_stock":"500.00","created_at":"2024-03-21 18:41:14","updated_at":"2024-03-21 18:37:40","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"Ne one","username":"shivani"},{"id":"51","user_id":"19","date":"2024-03-21","time":"06:47:39","lat":"22.7469248","lng":"75.8980456","name_of_firm":"7","basic_detail":{"name":"New Client","mobile":"7485963215","email":"new@gmail.com","address":"Indore Madhya Pradesh","customer_type":"Retailer","credit_limit":"50.00","grivenance":"2"},"customer_dealing_in":[{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}],"survey":[{"brand_name":"Ultra Tech Cement","monthly_sale":"50","current_stock":"80","wps":"5868","rsp":"5858","purchasing_from":"gxgxgx"},{"brand_name":"ACC Cement","monthly_sale":"150","current_stock":"800","wps":"6868","rsp":"528285","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"200","current_stock":"58","wps":"5252","rsp":"5868","purchasing_from":"xfgx"},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}],"photo":["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_6086c7c7-7c63-4703-8fc9-49026809da787511162917084662789.jpg"],"remarks":"jgjgjjg","total_monthly_sale":"400.00","total_current_stock":"938.00","created_at":"2024-03-21 19:07:35","updated_at":"2024-03-21 19:07:35","grivenance":null,"dealer_name":null,"dealer_mobile":null,"deler_email":null,"dealer_limit":null,"firmname":"NewFirm","username":"shivani"}]
 /// message : "Customer feedback lists"
 
 class GetFeedbackModel {
   GetFeedbackModel({
       bool? error, 
-      List<Data>? data, 
+      List<CounterData>? data,
       String? message,}){
     _error = error;
     _data = data;
@@ -17,23 +17,23 @@ class GetFeedbackModel {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(CounterData.fromJson(v));
       });
     }
     _message = json['message'];
   }
   bool? _error;
-  List<Data>? _data;
+  List<CounterData>? _data;
   String? _message;
 GetFeedbackModel copyWith({  bool? error,
-  List<Data>? data,
+  List<CounterData>? data,
   String? message,
 }) => GetFeedbackModel(  error: error ?? _error,
   data: data ?? _data,
   message: message ?? _message,
 );
   bool? get error => _error;
-  List<Data>? get data => _data;
+  List<CounterData>? get data => _data;
   String? get message => _message;
 
   Map<String, dynamic> toJson() {
@@ -48,30 +48,32 @@ GetFeedbackModel copyWith({  bool? error,
 
 }
 
-/// id : "3"
-/// user_id : "3"
-/// date : "2023-10-07"
-/// time : "12:30:56"
-/// lat : "22.7475667"
-/// lng : "75.898895"
-/// name_of_firm : "2"
-/// basic_detail : {"name":"Mshesh","mobile":"7777777799","email":"sawan@mailinator.com","address":"Indore Madhya Pradesh","customer_type":"1","credit_limit":"10000.00"}
-/// customer_dealing_in : [{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"34","name":"Ultra Tech Cement","parent_id":"33","slug":"test-tt","image":"","banner":"","row_order":"0","status":"1","clicks":"0"}]
-/// survey : [{"brand_name":"Cement","monthly_sale":"20","current_stock":"100","wps":"5356","rsp":"5536","purchasing_from":"gjjgg"},{"brand_name":"Cement","monthly_sale":"21","current_stock":"101","wps":"988668","rsp":"86868","purchasing_from":"gugigi"}]
-/// photo : "https://developmentalphawizz.com/market_track/assets/no-image.png"
-/// remarks : ""
+/// id : "41"
+/// user_id : "19"
+/// date : "2024-03-09"
+/// time : "04:50:52"
+/// lat : "22.7469319"
+/// lng : "75.8980451"
+/// name_of_firm : "47"
+/// basic_detail : {"name":"sumit","mobile":"1223355828","email":"alphatest@test.com","address":"Indore Madhya Pradesh","customer_type":"Dealer","credit_limit":"10.00","grivenance":"1"}
+/// customer_dealing_in : [{"id":"33","name":"Cement","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"},{"id":"36","name":"RB","parent_id":"0","slug":"test","image":"","banner":null,"row_order":"0","status":"1","clicks":"0"}]
+/// survey : [{"brand_name":"Ultra Tech Cement","monthly_sale":"100","current_stock":"100","wps":"350","rsp":"400","purchasing_from":"acc"},{"brand_name":"ACC Cement","monthly_sale":"200","current_stock":"100","wps":"","rsp":"","purchasing_from":""},{"brand_name":"gfhfhfgh","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"erfefdfdf111","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"ambuja","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""},{"brand_name":"RCB Testing","monthly_sale":"","current_stock":"","wps":"","rsp":"","purchasing_from":""}]
+/// photo : ["https://developmentalphawizz.com/market_track/uploads/user_image/scaled_23c156a9-019c-4cba-81c2-6ce6d872856b6322633441333468531.jpg","https://developmentalphawizz.com/market_track/uploads/user_image/scaled_e20621f7-0592-41f1-80bc-a53855daf7922108305720519167184.jpg"]
+/// remarks : "test"
 /// total_monthly_sale : "0.00"
 /// total_current_stock : "0.00"
-/// created_at : "2023-10-07 13:06:06"
-/// updated_at : "2023-10-07 12:53:15"
+/// created_at : "2024-03-09 17:11:20"
+/// updated_at : "2024-03-09 17:11:20"
 /// grivenance : null
 /// dealer_name : null
 /// dealer_mobile : null
 /// deler_email : null
 /// dealer_limit : null
+/// firmname : "alpha"
+/// username : "shivani"
 
-class Data {
-  Data({
+class CounterData {
+  CounterData({
       String? id, 
       String? userId, 
       String? date, 
@@ -82,7 +84,7 @@ class Data {
       BasicDetail? basicDetail, 
       List<CustomerDealingIn>? customerDealingIn, 
       List<Survey>? survey, 
-      List<String>? photos, 
+      List<String>? photo, 
       String? remarks, 
       String? totalMonthlySale, 
       String? totalCurrentStock, 
@@ -92,7 +94,9 @@ class Data {
       dynamic dealerName, 
       dynamic dealerMobile, 
       dynamic delerEmail, 
-      dynamic dealerLimit,}){
+      dynamic dealerLimit, 
+      String? firmname, 
+      String? username,}){
     _id = id;
     _userId = userId;
     _date = date;
@@ -103,7 +107,7 @@ class Data {
     _basicDetail = basicDetail;
     _customerDealingIn = customerDealingIn;
     _survey = survey;
-    _photos = photos;
+    _photo = photo;
     _remarks = remarks;
     _totalMonthlySale = totalMonthlySale;
     _totalCurrentStock = totalCurrentStock;
@@ -114,9 +118,11 @@ class Data {
     _dealerMobile = dealerMobile;
     _delerEmail = delerEmail;
     _dealerLimit = dealerLimit;
+    _firmname = firmname;
+    _username = username;
 }
 
-  Data.fromJson(dynamic json) {
+  CounterData.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['user_id'];
     _date = json['date'];
@@ -137,7 +143,7 @@ class Data {
         _survey?.add(Survey.fromJson(v));
       });
     }
-    _photos = json['photo'] != null ? json['photo'].cast<String>() : [];
+    _photo = json['photo'] != null ? json['photo'].cast<String>() : [];
     _remarks = json['remarks'];
     _totalMonthlySale = json['total_monthly_sale'];
     _totalCurrentStock = json['total_current_stock'];
@@ -148,6 +154,8 @@ class Data {
     _dealerMobile = json['dealer_mobile'];
     _delerEmail = json['deler_email'];
     _dealerLimit = json['dealer_limit'];
+    _firmname = json['firmname'];
+    _username = json['username'];
   }
   String? _id;
   String? _userId;
@@ -159,7 +167,7 @@ class Data {
   BasicDetail? _basicDetail;
   List<CustomerDealingIn>? _customerDealingIn;
   List<Survey>? _survey;
-  List<String>? _photos;
+  List<String>? _photo;
   String? _remarks;
   String? _totalMonthlySale;
   String? _totalCurrentStock;
@@ -170,7 +178,9 @@ class Data {
   dynamic _dealerMobile;
   dynamic _delerEmail;
   dynamic _dealerLimit;
-Data copyWith({  String? id,
+  String? _firmname;
+  String? _username;
+  CounterData copyWith({  String? id,
   String? userId,
   String? date,
   String? time,
@@ -180,7 +190,7 @@ Data copyWith({  String? id,
   BasicDetail? basicDetail,
   List<CustomerDealingIn>? customerDealingIn,
   List<Survey>? survey,
-  List<String>? photos,
+  List<String>? photo,
   String? remarks,
   String? totalMonthlySale,
   String? totalCurrentStock,
@@ -191,7 +201,9 @@ Data copyWith({  String? id,
   dynamic dealerMobile,
   dynamic delerEmail,
   dynamic dealerLimit,
-}) => Data(  id: id ?? _id,
+  String? firmname,
+  String? username,
+}) => CounterData(  id: id ?? _id,
   userId: userId ?? _userId,
   date: date ?? _date,
   time: time ?? _time,
@@ -201,7 +213,7 @@ Data copyWith({  String? id,
   basicDetail: basicDetail ?? _basicDetail,
   customerDealingIn: customerDealingIn ?? _customerDealingIn,
   survey: survey ?? _survey,
-  photos: photos ?? _photos,
+  photo: photo ?? _photo,
   remarks: remarks ?? _remarks,
   totalMonthlySale: totalMonthlySale ?? _totalMonthlySale,
   totalCurrentStock: totalCurrentStock ?? _totalCurrentStock,
@@ -212,6 +224,8 @@ Data copyWith({  String? id,
   dealerMobile: dealerMobile ?? _dealerMobile,
   delerEmail: delerEmail ?? _delerEmail,
   dealerLimit: dealerLimit ?? _dealerLimit,
+  firmname: firmname ?? _firmname,
+  username: username ?? _username,
 );
   String? get id => _id;
   String? get userId => _userId;
@@ -223,7 +237,7 @@ Data copyWith({  String? id,
   BasicDetail? get basicDetail => _basicDetail;
   List<CustomerDealingIn>? get customerDealingIn => _customerDealingIn;
   List<Survey>? get survey => _survey;
-  List<String>? get photos => _photos;
+  List<String>? get photo => _photo;
   String? get remarks => _remarks;
   String? get totalMonthlySale => _totalMonthlySale;
   String? get totalCurrentStock => _totalCurrentStock;
@@ -234,6 +248,8 @@ Data copyWith({  String? id,
   dynamic get dealerMobile => _dealerMobile;
   dynamic get delerEmail => _delerEmail;
   dynamic get dealerLimit => _dealerLimit;
+  String? get firmname => _firmname;
+  String? get username => _username;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -253,7 +269,7 @@ Data copyWith({  String? id,
     if (_survey != null) {
       map['survey'] = _survey?.map((v) => v.toJson()).toList();
     }
-    map['photo'] = _photos;
+    map['photo'] = _photo;
     map['remarks'] = _remarks;
     map['total_monthly_sale'] = _totalMonthlySale;
     map['total_current_stock'] = _totalCurrentStock;
@@ -264,17 +280,19 @@ Data copyWith({  String? id,
     map['dealer_mobile'] = _dealerMobile;
     map['deler_email'] = _delerEmail;
     map['dealer_limit'] = _dealerLimit;
+    map['firmname'] = _firmname;
+    map['username'] = _username;
     return map;
   }
 
 }
 
-/// brand_name : "Cement"
-/// monthly_sale : "20"
+/// brand_name : "Ultra Tech Cement"
+/// monthly_sale : "100"
 /// current_stock : "100"
-/// wps : "5356"
-/// rsp : "5536"
-/// purchasing_from : "gjjgg"
+/// wps : "350"
+/// rsp : "400"
+/// purchasing_from : "acc"
 
 class Survey {
   Survey({
@@ -436,12 +454,13 @@ CustomerDealingIn copyWith({  String? id,
 
 }
 
-/// name : "Mshesh"
-/// mobile : "7777777799"
-/// email : "sawan@mailinator.com"
+/// name : "sumit"
+/// mobile : "1223355828"
+/// email : "alphatest@test.com"
 /// address : "Indore Madhya Pradesh"
-/// customer_type : "1"
-/// credit_limit : "10000.00"
+/// customer_type : "Dealer"
+/// credit_limit : "10.00"
+/// grivenance : "1"
 
 class BasicDetail {
   BasicDetail({
@@ -450,13 +469,15 @@ class BasicDetail {
       String? email, 
       String? address, 
       String? customerType, 
-      String? creditLimit,}){
+      String? creditLimit, 
+      String? grivenance,}){
     _name = name;
     _mobile = mobile;
     _email = email;
     _address = address;
     _customerType = customerType;
     _creditLimit = creditLimit;
+    _grivenance = grivenance;
 }
 
   BasicDetail.fromJson(dynamic json) {
@@ -466,6 +487,7 @@ class BasicDetail {
     _address = json['address'];
     _customerType = json['customer_type'];
     _creditLimit = json['credit_limit'];
+    _grivenance = json['grivenance'];
   }
   String? _name;
   String? _mobile;
@@ -473,18 +495,21 @@ class BasicDetail {
   String? _address;
   String? _customerType;
   String? _creditLimit;
+  String? _grivenance;
 BasicDetail copyWith({  String? name,
   String? mobile,
   String? email,
   String? address,
   String? customerType,
   String? creditLimit,
+  String? grivenance,
 }) => BasicDetail(  name: name ?? _name,
   mobile: mobile ?? _mobile,
   email: email ?? _email,
   address: address ?? _address,
   customerType: customerType ?? _customerType,
   creditLimit: creditLimit ?? _creditLimit,
+  grivenance: grivenance ?? _grivenance,
 );
   String? get name => _name;
   String? get mobile => _mobile;
@@ -492,6 +517,7 @@ BasicDetail copyWith({  String? name,
   String? get address => _address;
   String? get customerType => _customerType;
   String? get creditLimit => _creditLimit;
+  String? get grivenance => _grivenance;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -501,6 +527,7 @@ BasicDetail copyWith({  String? name,
     map['address'] = _address;
     map['customer_type'] = _customerType;
     map['credit_limit'] = _creditLimit;
+    map['grivenance'] = _grivenance;
     return map;
   }
 

@@ -220,17 +220,18 @@ class _FeedbackFormState extends State<FeedbackForm> {
     var headers = {
       'Cookie': 'ci_session=4f8360fd4e4e40e498783ef6638c6f55e6bc9fca'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
+    var request =
+    http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      var result=await response.stream.bytesToString();
+      var result = await response.stream.bytesToString();
       var finalresult = DealingProductModel.fromJson(json.decode(result));
       setState(() {
         dealingProductModel = finalresult;
+        print("========dealingg=======${dealingProductModel} ${finalresult}  ${results}===========");
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -672,7 +673,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         ),
                         Row(
                           children: [
-                            Text("Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            Text("Owner Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                             SizedBox(width: 10),
                             Text("${delearRetailerModel?.data?[nwIndex].ownerName}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                           ],
@@ -680,9 +681,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         SizedBox(height: 10),
                         Row(
                           children: [
-                            Text("Mail:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            Text("Firm Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                             SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].email}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            Text("${delearRetailerModel?.data?[nwIndex].nameOfFirm}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -690,7 +691,10 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             children: [
                               Text("Address:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                               SizedBox(width: 10),
-                              Text("${delearRetailerModel?.data?[nwIndex].address}, ${delearRetailerModel?.data?[nwIndex].state}, ${delearRetailerModel?.data?[nwIndex].district}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              Container(
+                                child: Text("${delearRetailerModel?.data?[nwIndex].address},${delearRetailerModel?.data?[nwIndex].statename},${delearRetailerModel?.data?[nwIndex].city},${delearRetailerModel?.data?[nwIndex].pinCode}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                                  maxLines: 2, overflow: TextOverflow.ellipsis),
+                              ),
                             ],
                           ),
                           SizedBox(height: 10),
@@ -701,6 +705,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             Text("${delearRetailerModel?.data?[nwIndex].mobileOne}, ${delearRetailerModel?.data?[nwIndex].mobileTwo}, ${delearRetailerModel?.data?[nwIndex].whatsappNumber}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                           ],
                         ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              SizedBox(width: 10),
+                              Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                            ],
+                          ),
                         // SizedBox(height: 10),
                         // Row(
                         //   children: [
@@ -709,14 +721,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                         //   ],
                         // ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].creditLimit}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
+                        // SizedBox(height: 10),
+                        // Row(
+                        //   children: [
+                        //     Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //     SizedBox(width: 10),
+                        //     Text("${delearRetailerModel?.data?[nwIndex].creditLimit}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //   ],
+                        // ),
                       ],
                       ): SizedBox(),
                     SizedBox(
@@ -970,7 +982,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       width: MediaQuery.of(context).size.width/1.8,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
                       child: const Center(
-                          child: Text("Save", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400),
+                          child: Text("Save & Next", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400),
                           ),
                       ),
                     ),

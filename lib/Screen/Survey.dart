@@ -51,6 +51,8 @@ class Survey extends StatefulWidget {
   State<Survey> createState() => _SurveyState();
 }
 
+int count = 0;
+
 class _SurveyState extends State<Survey> {
   List<TextEditingController> monthlyControllers = [];
   List<TextEditingController> currentController = [];
@@ -58,7 +60,10 @@ class _SurveyState extends State<Survey> {
   int totalMonthlySales = 0;
   int currentSales = 0;
   int sum = 0;
+  int currentSum = 0;
   List<int> sums = [];
+  List<int> currentSums = [];
+
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
 
@@ -87,8 +92,11 @@ class _SurveyState extends State<Survey> {
       }
       feedbackList.add(wholeDataList);
     }
-    for(var i = 0; i < (widget.modelList?.length??0); i++){
+    for (var i = 0; i < (widget.modelList?.length ?? 0); i++) {
       sums.add(sum);
+    }
+    for (var i = 0; i < (widget.modelList?.length ?? 0); i++) {
+      currentSums.add(currentSum);
     }
   }
 
@@ -102,6 +110,8 @@ class _SurveyState extends State<Survey> {
       'lat': latitude.toString(),
       'lng': longitude.toString(),
       'name_of_firm': widget.clintId.toString(),
+      'total_current_stock': '${sumOfCurrentStock}',
+      'total_monthly_sale': '${sumOfMonthlySale}',
       'basic_detail': jsonEncode({
         'name': widget.name,
         'mobile': widget.contact,
@@ -131,7 +141,7 @@ class _SurveyState extends State<Survey> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
-      print("reasonnnnnn"+response.reasonPhrase.toString());
+      print("reasonnnnnn" + response.reasonPhrase.toString());
     }
   }
 
@@ -143,11 +153,10 @@ class _SurveyState extends State<Survey> {
 
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-      maxWidth: 300,
-      maxHeight: 500,
-      imageQuality: 80
-    );
+        source: ImageSource.camera,
+        maxWidth: 300,
+        maxHeight: 500,
+        imageQuality: 80);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -330,6 +339,23 @@ class _SurveyState extends State<Survey> {
                 //   ),
                 // ),
               ),
+              Positioned(
+                top: 0,
+                right: 35,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      imagePathList.remove(imagePathList[index]);
+                      count--;
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    size: 30,
+                    color: Colors.red.withOpacity(0.7),
+                  ),
+                ),
+              )
             ],
           );
         },
@@ -360,6 +386,8 @@ class _SurveyState extends State<Survey> {
     }
   }
 
+  int? sumOfMonthlySale;
+  int? sumOfCurrentStock;
   String? gravance;
   bool isExpanded = false;
 
@@ -399,301 +427,468 @@ class _SurveyState extends State<Survey> {
                   return Padding(
                     padding: const EdgeInsets.all(8),
                     child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            border: Border.all(color: colors.black54)),
-                        child:
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(0),
+                          border: Border.all(color: colors.black54)),
+                      child:
 
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Row(
-                        //       children: [
-                        //         const Text("Product Name: "),
-                        //         Text(
-                        //           '${item?.name}',
-                        //           style: TextStyle(fontSize: 14),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     IconButton(
-                        //         onPressed: () {
-                        //           setState(() {
-                        //             isExpanded = !isExpanded;
-                        //           });
-                        //         },
-                        //         icon: Icon(isExpanded
-                        //             ? Icons.arrow_drop_up
-                        //             : Icons.arrow_drop_down))
-                        //   ],
-                        // )
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Row(
+                          //       children: [
+                          //         const Text("Product Name: "),
+                          //         Text(
+                          //           '${item?.name}',
+                          //           style: TextStyle(fontSize: 14),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     IconButton(
+                          //         onPressed: () {
+                          //           setState(() {
+                          //             isExpanded = !isExpanded;
+                          //           });
+                          //         },
+                          //         icon: Icon(isExpanded
+                          //             ? Icons.arrow_drop_up
+                          //             : Icons.arrow_drop_down))
+                          //   ],
+                          // )
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ExpansionTile(
-                              collapsedBackgroundColor: colors.whiteTemp,
-                              key: Key(index.toString()),
-                              initiallyExpanded: index == selectedIndex ,
-                              title: Row(
-                                children: [
-                                  Text("Product Name: ", style: TextStyle(fontSize: 14)),
-                                  Text('${item?.name}', style: TextStyle(fontSize: 14),),
-                                ],
-                              ),
-                              onExpansionChanged: (isExpanded) {
-                                if(isExpanded) {
-                                  setState(()  {
-                                    const Duration(milliseconds: 2000);
-                                    selectedIndex = index;
-                                    // isExpanded = true;
-                                  });
-                                }else{
-                                  setState(() {
-                                    selectedIndex = -1;
-                                  });
-                                }
-                              },
-                              children:[
-                                Container(
-                                  height: MediaQuery.of(context).size.height / 3.6,
-                                  width: MediaQuery.of(context).size.width/1.2,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                       // physics: NeverScrollableScrollPhysics(),
-                                      itemCount: item?.products?.length ?? 0,
-                                      itemBuilder: (BuildContext, i) {
-                                        var data = item?.products?[i];
-                                        return Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const Text("Brand Name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                                Text(data?.name ?? "", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.primary)),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Row(
-                                              children: [
-                                                const Text("Monthly Sale: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                                SizedBox(width: 10),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context).size.width/2.9,
-                                                  child: TextField(
-                                                    controller: feedbackList[index][i][0],
-                                                    onSubmitted: (val){
-
-                                                      setState(() {
-                                                        sums[index] += int.parse(val);
-                                                      });
-                                                      // FocusScope.of(context).unfocus();
-                                                    },
-                                                    keyboardType: TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                      hintText: "Monthly Sale",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                    // onSubmitted: (value) {
-                                                    //   totalMonthlySales += int.parse(value);
-                                                    //   setState(() {});
-                                                    //   print("printtttttttt ${totalMonthlySales}");
-                                                    //   // int total = 0;
-                                                    //   // for (int i = 0; i < 5; i++) {
-                                                    //   //   String text = monthlyControllers[i].text;
-                                                    //   //   if (text.isNotEmpty) {
-                                                    //   //     total += int.parse(text);
-                                                    //   //   }
-                                                    //   // }
-                                                    //   // setState(() {
-                                                    //   //   totalMonthlySales = total;
-                                                    //   //   print("total monthly sheet ${totalMonthlySales}");
-                                                    //   // });
-                                                    // },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Text("Current Stock: ", style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold)),
-                                                SizedBox(width: 10),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context).size.width/2.9,
-                                                  child: TextField(
-                                                    controller: feedbackList[index][i][1],
-                                                    onSubmitted: (val){
-                                                      setState(() {
-                                                        sums[index] += int.parse(val);
-                                                        // feedbackList[index][i][0].text
-                                                      });
-                                                    },
-                                                    keyboardType: TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                      border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                      ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                      hintText: "Current stock",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                    // onSubmitted: (value) {
-                                                    //   currentSales += int.parse(value);
-                                                    //   setState(() {});
-                                                    //   print("printtttttttt ${currentSales}");
-                                                    // },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Text("WSP: ", style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold)),
-                                                SizedBox(width: 10,),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context).size.width/2.9,
-                                                  child: TextField(
-                                                    controller:feedbackList[index][i][2],
-                                                    keyboardType: TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                      border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                      ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                      hintText: "WSP",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Text("RSP: ", style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold)),
-                                                SizedBox(width: 10),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context).size.width/2.9,
-                                                  child: TextField(
-                                                    controller: feedbackList[index][i][3],
-                                                    keyboardType: TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                      border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                      ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                      hintText: "RSP",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Text("Purchasing Form: ", style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold)),
-                                                SizedBox(width: 10),
-                                                Row(
-                                                  // mainAxisAlignment: MainAxisAlignment.end,
-                                                  // crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Container(
-                                                      height: 30,
-                                                      width: MediaQuery.of(context).size.width/2.9,
-                                                      child: TextField(
-                                                        controller: feedbackList[index][i][4],
-                                                        keyboardType: TextInputType.text,
-                                                        decoration: InputDecoration(
-                                                          contentPadding: EdgeInsets.only(top: 7, left: 5),
-                                                          border: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.circular(5.0),
-                                                          ),
-                                                          filled: true,
-                                                          hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                                                          hintText: "",
-                                                          fillColor: Colors.white70,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 5,),
-                                            Divider(color: Colors.black,),
-                                            SizedBox(height: 5),
-                                            // if(item?.products?.last == item?.products?[i])
-                                            //   SizedBox(
-                                            //     height: 120,
-                                            //   ),
-                                            // const SizedBox(height: 5,),
-                                            // Row(
-                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            //   children: [
-                                            //     Text("Sum Of Monthly sale", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ),),
-                                            //     Text("${totalMonthlySales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ))
-                                            //   ],
-                                            // ),
-                                            // SizedBox(height: 10),
-                                            // Row(
-                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            //   children: [
-                                            //     Text("Sum Of Current Stock", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),),
-                                            //     Text("${currentSales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))
-                                            //   ],
-                                            // ),
-
-                                          ],
-                                        );
-                                      }),
+                          Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ExpansionTile(
+                            collapsedBackgroundColor: colors.whiteTemp,
+                            key: Key(index.toString()),
+                            initiallyExpanded: index == selectedIndex,
+                            title: Row(
+                              children: [
+                                Text("Product Name: ",
+                                    style: TextStyle(fontSize: 14)),
+                                Text(
+                                  '${item?.name}',
+                                  style: TextStyle(fontSize: 14),
                                 ),
                               ],
                             ),
-                            selectedIndex == index ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text("Sum of sale and stock: "),
-                                Text(sums[index].toString())
-                              ],
-                            ):const SizedBox.shrink()
-                          ],
-                        ),
-                        ),
+                            onExpansionChanged: (isExpanded) {
+                              if (isExpanded) {
+                                setState(() {
+                                  const Duration(milliseconds: 2000);
+                                  selectedIndex = index;
+                                  // isExpanded = true;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedIndex = -1;
+                                });
+                              }
+                            },
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height / 3.6,
+                                width: MediaQuery.of(context).size.width / 1.2,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    // physics: NeverScrollableScrollPhysics(),
+                                    itemCount: item?.products?.length ?? 0,
+                                    itemBuilder: (BuildContext, i) {
+                                      var data = item?.products?[i];
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("Brand Name: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Text(data?.name ?? "",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: colors.primary)),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("Monthly Sale: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller: feedbackList[index][i][0],
+                                                  // onTapOutside: (val) {
+                                                  //     setState(() {
+                                                  //       sums[index] +=
+                                                  //           int.parse(val);
+                                                  //       sumOfMonthlySale =
+                                                  //           sums[index];
+                                                  //       print(
+                                                  //           "jhjshjsajd ${sumOfMonthlySale}");
+                                                  //     });
+                                                  // },
+                                                  // onEditingComplete: () {
+                                                  //   setState(() {
+                                                  //     sums[index] +=
+                                                  //         int.parse(feedbackList[index][i][0].text);
+                                                  //     sumOfMonthlySale =
+                                                  //         sums[index];
+                                                  //     print(
+                                                  //         "jhjshjsajd ${sumOfMonthlySale}");
+                                                  //   });
+                                                  // },
+                                                  onSubmitted: (val){
+                                                    setState(() {
+                                                      sums[index] += int.parse(val);
+                                                      sumOfMonthlySale = sums[index];
+                                                      print("jhjshjsajd ${sumOfMonthlySale}");
+                                                    });
+                                                    // FocusScope.of(context).unfocus();
+                                                  },
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            top: 7, left: 5),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0)),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                    hintText: "Monthly Sale",
+                                                    fillColor: Colors.white70,
+                                                  ),
+                                                  // onEditingComplete: (){
+                                                  //   setState(() {
+                                                  //     sums[index] += int.parse(feedbackList[index][i][0].text);
+                                                  //     sumOfMonthlySale = sums[index];
+                                                  //     print("jhjshjsajd ${sumOfMonthlySale}");
+                                                  //   });
+                                                  // },
+                                                  // onSubmitted: (value) {
+                                                  //   totalMonthlySales += int.parse(value);
+                                                  //   setState(() {});
+                                                  //   print("printtttttttt ${totalMonthlySales}");
+                                                  //   // int total = 0;
+                                                  //   // for (int i = 0; i < 5; i++) {
+                                                  //   //   String text = monthlyControllers[i].text;
+                                                  //   //   if (text.isNotEmpty) {
+                                                  //   //     total += int.parse(text);
+                                                  //   //   }
+                                                  //   // }
+                                                  //   // setState(() {
+                                                  //   //   totalMonthlySales = total;
+                                                  //   //   print("total monthly sheet ${totalMonthlySales}");
+                                                  //   // });
+                                                  // },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("Current Stock: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller:
+                                                      feedbackList[index][i][1],
+                                                  onSubmitted: (val) {
+                                                    setState(() {
+                                                      currentSums[index] += int.parse(val);
+                                                      sumOfCurrentStock = currentSums[index];
+                                                      // feedbackList[index][i][0].text
+                                                    });
+                                                  },
+                                                  keyboardType: TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            top: 7, left: 5),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                    hintText: "Current stock",
+                                                    fillColor: Colors.white70,
+                                                  ),
+                                                  // onSubmitted: (value) {
+                                                  //   currentSales += int.parse(value);
+                                                  //   setState(() {});
+                                                  //   print("printtttttttt ${currentSales}");
+                                                  // },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("WSP: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller:
+                                                      feedbackList[index][i][2],
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            top: 7, left: 5),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                    hintText: "WSP",
+                                                    fillColor: Colors.white70,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("RSP: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(width: 10),
+                                              Container(
+                                                height: 30,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.9,
+                                                child: TextField(
+                                                  controller:
+                                                      feedbackList[index][i][3],
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            top: 7, left: 5),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                    ),
+                                                    filled: true,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                    hintText: "RSP",
+                                                    fillColor: Colors.white70,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text("Purchasing Form: ",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(width: 10),
+                                              Row(
+                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    height: 30,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.9,
+                                                    child: TextField(
+                                                      controller:
+                                                          feedbackList[index][i]
+                                                              [4],
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                top: 7,
+                                                                left: 5),
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0),
+                                                        ),
+                                                        filled: true,
+                                                        hintStyle: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 10),
+                                                        hintText: "",
+                                                        fillColor:
+                                                            Colors.white70,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Divider(
+                                            color: Colors.black,
+                                          ),
+                                          SizedBox(height: 5),
+                                          // if(item?.products?.last == item?.products?[i])
+                                          //   SizedBox(
+                                          //     height: 120,
+                                          //   ),
+                                          // const SizedBox(height: 5,),
+                                          // Row(
+                                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //   children: [
+                                          //     Text("Sum Of Monthly sale", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ),),
+                                          //     Text("${totalMonthlySales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, ))
+                                          //   ],
+                                          // ),
+                                          // SizedBox(height: 10),
+                                          // Row(
+                                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          //   children: [
+                                          //     Text("Sum Of Current Stock", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),),
+                                          //     Text("${currentSales}", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))
+                                          //   ],
+                                          // ),
+                                        ],
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          selectedIndex == index
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Sum of Monthly Sale: ",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(sums[index].toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          selectedIndex == index
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Sum of Current Stock: ",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(currentSums[index].toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                )
+                              : const SizedBox.shrink()
+                        ],
+                      ),
+                    ),
                   );
                 },
               ),
@@ -703,7 +898,7 @@ class _SurveyState extends State<Survey> {
               children: [
                 SizedBox(height: 9),
                 const Text(
-                  "Grivenance",
+                  "Grievance",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -1056,19 +1251,17 @@ class _SurveyState extends State<Survey> {
           onTap: () {
             if (gravance == null || gravance == "") {
               setSnackbar("Please select Grivenance", context);
-            }
-            else if(imagePathList.isEmpty){
+            } else if (imagePathList.isEmpty) {
               Fluttertoast.showToast(msg: "Please upload image");
-            }
-            else if(remarkCtr.text.isEmpty || remarkCtr.text =="" ){
+            } else if (remarkCtr.text.isEmpty || remarkCtr.text == "") {
               Fluttertoast.showToast(msg: "Please enter remark");
             }
             // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
-            else{
+            else {
               for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
                 for (int j = 0;
-                j < (widget.modelList?[i].products?.length ?? 0);
-                j++) {
+                    j < (widget.modelList?[i].products?.length ?? 0);
+                    j++) {
                   print('${widget.modelList?[i].products?.length}');
                   dataList.add(
                     json.encode({
