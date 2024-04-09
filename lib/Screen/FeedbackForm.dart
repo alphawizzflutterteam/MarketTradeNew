@@ -546,7 +546,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           items: delearRetailerModel?.data?.map((items) {
                             return DropdownMenuItem(
                               value: items.id,
-                              child: Text(items.ownerName.toString()),
+                              child: Text(items.nameOfFirm.toString()),
                             );
                           }).toList(),
                           decoration: InputDecoration(

@@ -1249,7 +1249,7 @@ class _AddClientsState extends State<AddClients> {
                     Card(elevation: 6,
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           maxLength: 12,
                           controller: voterIdCtr,
                           validator: (value) {
@@ -1307,7 +1307,7 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          maxLength: 12,
+                          maxLength: 19,
                           controller: udyogIdCtr,
                           // validator: (value) {
                           //   if (value!.isEmpty) {
@@ -1377,7 +1377,8 @@ class _AddClientsState extends State<AddClients> {
                     Card(elevation: 6,
                       shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                        keyboardType: TextInputType.text,
+                        maxLength: 10,
+                        keyboardType: TextInputType.number,
                         controller: creditCTr,
                         // validator: (value) {
                         //   if (value!.isEmpty) {
@@ -1386,6 +1387,7 @@ class _AddClientsState extends State<AddClients> {
                         //   return null;
                         // },
                         decoration: InputDecoration(
+                          counterText: "",
                           hintText: '',
                           border: OutlineInputBorder(
                               borderRadius:  BorderRadius.circular(10))),
