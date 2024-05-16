@@ -92,7 +92,7 @@ class _ReferEarnState extends State<ReferEarn> {
                                 color: Theme.of(context).colorScheme.fontColor,
                               ))),
                   onPressed: () {
-                    Clipboard.setData(new ClipboardData(text: REFER_CODE));
+                    Clipboard.setData(new ClipboardData(text: REFER_CODE ?? ""));
                     setSnackbar('Refercode Copied to clipboard');
                   },
                 ),

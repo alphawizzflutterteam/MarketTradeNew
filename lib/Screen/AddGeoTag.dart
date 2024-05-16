@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
@@ -83,6 +85,19 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
       });
     }
   }
+  Future<void> downloadImage(String imageUrl) async {
+    var response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final String filePath = '${directory.path}/image.jpg';
+      final File file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+      print('Image downloaded and saved to: $filePath');
+    } else {
+      print('Failed to download image: ${response.statusCode}');
+    }
+  }
 
   TextEditingController searchCtr = TextEditingController();
   @override
@@ -127,7 +142,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
                     mainAxisSpacing: 5,
                     childAspectRatio: 4/5.8
                 ),
-                itemCount: clients?.data?.length ?? 0,
+                itemCount: clientData?.length ?? 0,
                 itemBuilder: (context, index) {
                   return  Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -148,7 +163,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
                               borderRadius: BorderRadius.circular(0.0),
                               child: new FadeInImage(
                                 fadeInDuration: Duration(milliseconds: 150),
-                                image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
+                                image: CachedNetworkImageProvider("${clientData?[index].photo}"),
                                 height: 130.0,
                                 width: double.infinity,
                                 fit: BoxFit.fill,
@@ -176,12 +191,12 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text("${clients?.data?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
+                                    Text("${clientData?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
                                     ),
                                     SizedBox(height: 10),
-                                    Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
+                                    Text("${clientData?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
                                     SizedBox(height: 10),
-                                    Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                    Text("${clientData?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
                                   ],
                                 ),
                               ],
@@ -191,7 +206,7 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
                           InkWell(
                             onTap: () {
                               geoTagDialog(
-                                  context, clients?.data?[index].id.toString() ?? "");
+                                  context, clientData?[index].id.toString() ?? "");
                             },
                             child: Container(
                               height: 30,

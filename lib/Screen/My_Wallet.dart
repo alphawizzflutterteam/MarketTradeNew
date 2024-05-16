@@ -14,7 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 // import 'package:paytm/paytm.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
@@ -70,7 +70,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
   String? payMethod;
   StateSetter? dialogState;
   bool _isProgress = false;
-  late Razorpay _razorpay;
+  // late Razorpay _razorpay;
   List<TransactionModel> tranList = [];
   int offset = 0;
   int total = 0;
@@ -211,10 +211,10 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
     amtC = new TextEditingController();
     msgC = new TextEditingController();
     getTransaction();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
 
@@ -690,22 +690,22 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    // placeOrder(response.paymentId);
-    // sendRequest(response.paymentId, "RazorPay");
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    setSnackbar(response.message!);
-    if (mounted)
-      setState(() {
-        _isProgress = false;
-      });
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print("EXTERNAL_WALLET: " + response.walletName!);
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   // placeOrder(response.paymentId);
+  //   // sendRequest(response.paymentId, "RazorPay");
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   setSnackbar(response.message!);
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = false;
+  //     });
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   print("EXTERNAL_WALLET: " + response.walletName!);
+  // }
 
   razorpayPayment(double price) async {
     SettingProvider settingsProvider =
@@ -730,7 +730,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
       };
 
       try {
-        _razorpay.open(options);
+        // _razorpay.open(options);
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -981,7 +981,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
   @override
   void dispose() {
     buttonController!.dispose();
-    _razorpay.clear();
+    // _razorpay.clear();
     super.dispose();
   }
 
@@ -1267,7 +1267,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                                     Fluttertoast.showToast(msg: "Please enter amount first!");
                                   }
                                 }, child: Text("Submit", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),), style: ElevatedButton.styleFrom(
-                                  primary: colors.primary,
+                                  backgroundColor: colors.primary,
                                   fixedSize: Size(MediaQuery.of(context).size.width, 35),
                                   shape: StadiumBorder()
                                   // RoundedRectangleBorder(

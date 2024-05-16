@@ -91,6 +91,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
       var result = json.decode(str);
       var finalResponse = DelearRetailerModel.fromJson(result);
       setState(() {
+        print('dealer list----${finalResponse.data}');
         delearRetailerModel = finalResponse;
         // delearRetailerModel?.data?.add(DealerListData(ownerName: "Other", id: "800"));
         // delearRetailerModel?.data?.add(DealerListData(ownerName: "NotApplicable", id: "801"));
@@ -229,7 +230,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
       var finalresult = DealingProductModel.fromJson(json.decode(result));
       setState(() {
         dealingProductModel = finalresult;
-        print("========dealingg=======${dealingProductModel} ${finalresult}  ${results}===========");
+        print("========dealingg=======${dealingProductModel?.data?? ""} ${finalresult}  ${results}===========");
       });
     } else {
       print(response.reasonPhrase);

@@ -62,7 +62,9 @@ class _SurveyState extends State<Survey> {
   int sum = 0;
   int currentSum = 0;
   List<int> sums = [];
+  // List<int> sumsTemp = [];
   List<int> currentSums = [];
+  // List<int> currentSumsTemp = [];
 
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
@@ -72,6 +74,8 @@ class _SurveyState extends State<Survey> {
   List dataList = [];
 
   List<List<List<TextEditingController>>> feedbackList = [];
+  List<List<List<int>>> sumsTemp = [];
+  List<List<List<int>>> currentSumsTemp = [];
 
   void initState() {
     super.initState();
@@ -80,23 +84,34 @@ class _SurveyState extends State<Survey> {
     getgravance();
     for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
       List<List<TextEditingController>> wholeDataList = [];
+      List<List<int>> wholeDataListTemp = [];
 
       for (int j = 0; j < (widget.modelList?[i].products?.length ?? 0); j++) {
         List<TextEditingController> commenController = [];
+        List<int> commenControllerTemp = [];
         commenController.add(TextEditingController());
         commenController.add(TextEditingController());
         commenController.add(TextEditingController());
         commenController.add(TextEditingController());
         commenController.add(TextEditingController());
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
         wholeDataList.add(commenController);
+        wholeDataListTemp.add(commenControllerTemp);
       }
       feedbackList.add(wholeDataList);
+      sumsTemp.add(wholeDataListTemp);
     }
     for (var i = 0; i < (widget.modelList?.length ?? 0); i++) {
       sums.add(sum);
+      //sumsTemp.add(sum);
     }
     for (var i = 0; i < (widget.modelList?.length ?? 0); i++) {
       currentSums.add(currentSum);
+      //currentSumsTemp.add(currentSales);
     }
   }
 
@@ -560,7 +575,13 @@ class _SurveyState extends State<Survey> {
                                                   // },
                                                   onSubmitted: (val){
                                                     setState(() {
-                                                      sums[index] += int.parse(val);
+                                                     if( sumsTemp[index][i][0]!=0)
+                                                       {
+                                                         sums[index]-= sumsTemp[index][i][0];
+                                                       }
+                                                     sumsTemp[index][i][0]=int.parse(val);
+
+                                                     sums[index] += int.parse(val);
                                                       sumOfMonthlySale = sums[index];
                                                       print("jhjshjsajd ${sumOfMonthlySale}");
                                                     });
@@ -634,6 +655,11 @@ class _SurveyState extends State<Survey> {
                                                       feedbackList[index][i][1],
                                                   onSubmitted: (val) {
                                                     setState(() {
+                                                      if( sumsTemp[index][i][1]!=0)
+                                                      {
+                                                        currentSums[index]-= sumsTemp[index][i][1];
+                                                      }
+                                                      sumsTemp[index][i][1]=int.parse(val);
                                                       currentSums[index] += int.parse(val);
                                                       sumOfCurrentStock = currentSums[index];
                                                       // feedbackList[index][i][0].text

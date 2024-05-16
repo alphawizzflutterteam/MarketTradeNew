@@ -1350,7 +1350,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                    child: ElevatedButton(onPressed: () {
                      requestTraining();
                    },
-                       style: ElevatedButton.styleFrom(primary: colors.primary,
+                       style: ElevatedButton.styleFrom(backgroundColor: colors.primary,
                            fixedSize: Size(MediaQuery
                                .of(context)
                                .size

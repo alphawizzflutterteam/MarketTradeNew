@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../Helper/Color.dart';
@@ -73,16 +74,28 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                         Row(
                           children: [
                             // Left side: Image
-                            Container(
-                              width: 110,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Image.network(
-                                '${getdata?.data?[index].photo?[0]}',
-                                fit: BoxFit.cover,
+                            InkWell(
+                              onTap: (){
+                                if(getdata?.data?[index].photo?[0]!=null)
+                                {
+                                  final imageProvider = Image.network(getdata?.data?[index].photo?[0]?? '').image;
+                                  showImageViewer(context, imageProvider,
+                                      onViewerDismissed: () {
+                                        print("dismissed");
+                                      });
+                                }
+                              },
+                              child: Container(
+                                width: 110,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Image.network(
+                                  '${getdata?.data?[index].photo?[0]}',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                             SizedBox(width: 10.0), // Adds some spacing between image and text

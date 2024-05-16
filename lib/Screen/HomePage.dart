@@ -338,14 +338,14 @@ class _HomePageState extends State<HomePage>
                 content: const Text("Are you sure you want to exit this app?"),
                 actions: <Widget>[
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: colors.secondary),
+                    style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
                     child: const Text("YES"),
                     onPressed: () {
                       SystemNavigator.pop();
                     },
                   ),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: colors.secondary),
+                    style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
                     child: const Text("NO"),
                     onPressed: () {
                       Navigator.of(context).pop();

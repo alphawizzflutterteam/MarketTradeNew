@@ -151,7 +151,7 @@ class _AddPhotoState extends State<AddPhoto> {
                     mainAxisSpacing: 5,
                     childAspectRatio: 3/4.5
                 ),
-                itemCount: clients?.data?.length ?? 0,
+                itemCount: clientData?.length ?? 0,
                 itemBuilder: (context, index) {
                   return  Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -172,7 +172,7 @@ class _AddPhotoState extends State<AddPhoto> {
                               borderRadius: BorderRadius.circular(0.0),
                               child: new FadeInImage(
                                 fadeInDuration: Duration(milliseconds: 150),
-                                image: CachedNetworkImageProvider("${clients?.data?[index].photo}"),
+                                image: CachedNetworkImageProvider("${clientData?[index].photo}"),
                                 height: 130.0,
                                 width: double.infinity,
                                 fit: BoxFit.fill,
@@ -202,16 +202,16 @@ class _AddPhotoState extends State<AddPhoto> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text("${clients?.data?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
+                                    Text("${clientData?[index].nameOfFirm}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp, overflow: TextOverflow.ellipsis),
                                     ),
                                     SizedBox(height: 10),
-                                    Text("${clients?.data?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
+                                    Text("${clientData?[index].ownerName}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color:colors.blackTemp)),
                                     SizedBox(height: 10),
-                                    Text("${clients?.data?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
+                                    Text("${clientData?[index].mobileOne}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp)),
                                     SizedBox(height: 10),
                                     Container(
                                       width: 105,
-                                        child: Text("${clients?.data?[index].address}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp), maxLines: 2,)),
+                                        child: Text("${clientData?[index].address}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: colors.blackTemp), maxLines: 2,)),
                                   ],
                                 ),
                               ],
@@ -221,7 +221,7 @@ class _AddPhotoState extends State<AddPhoto> {
                           InkWell(
                             onTap: () {
                               // addPhotoDialog(context, clients?.data?[index].id.toString() ?? "");
-                              _getFromCamera(clients?.data?[index].id.toString() ?? "");
+                              _getFromCamera(clientData?[index].id.toString() ?? "");
                             },
                             child: Container(
                               height: 40,

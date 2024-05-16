@@ -282,7 +282,7 @@ class _MultiSelectState extends State<MultiSelect> {
                 ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: colors.primary
+                        backgroundColor: colors.primary
                     ),
                     child: const Text('Submit'),
                     onPressed: () {

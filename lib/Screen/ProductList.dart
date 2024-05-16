@@ -177,7 +177,7 @@ class StateProduct extends State<ProductList> with TickerProviderStateMixin {
         child: Center(
             child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: colors.primary,
+            backgroundColor: colors.primary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(80.0)),
           ),

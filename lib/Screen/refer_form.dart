@@ -501,7 +501,7 @@ class _ReferFormState extends State<ReferForm> {
                     }
                   },
                       style: ElevatedButton.styleFrom(
-                          primary: colors.primary,
+                          backgroundColor: colors.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),

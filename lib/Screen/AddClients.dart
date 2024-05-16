@@ -484,20 +484,21 @@ class _AddClientsState extends State<AddClients> {
          : request.files.add(await http.MultipartFile.fromPath(
          'photos[]', imagePathList[i]));
    }
-  // request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('pan_img', panImage?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('aadhar_img', aadharImage?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('voter_id_front_image', voterIdImage?.path ?? ""));
-  // request.files.add(await http.MultipartFile.fromPath('voter_id_back_image', voterIdBackImage?.path ?? ""));
+   gstImage!=null ? request.files.add(await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? "")) : true;
+   panImage!=null ? request.files.add(await http.MultipartFile.fromPath('pan_img', panImage?.path ?? "")) : true;
+   aadharImage!=null ? request.files.add(await http.MultipartFile.fromPath('aadhar_img', aadharImage?.path ?? "")) : true;
+   aadharBack !=null ? request.files.add(await http.MultipartFile.fromPath('aadhar_back', aadharBack?.path ?? "")) :true;
+   gstOne!=null ?  request.files.add(await http.MultipartFile.fromPath('gst_img_two', gstOne?.path ?? "")) :true;
+   gstTwo!=null ? request.files.add(await http.MultipartFile.fromPath('gst_img_three', gstTwo?.path ?? "")) : true;
+   voterIdImage != null ? request.files.add(await http.MultipartFile.fromPath('voter_id_front_image', voterIdImage?.path ?? "")) : true;
+   voterIdBackImage!=null ?  request.files.add(await http.MultipartFile.fromPath('voter_id_back_image', voterIdBackImage?.path ?? "")) :true ;
   request.headers.addAll(headers);
    print("reaquestPAth" + request.files.toString());
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     var finalResponse = await response.stream.bytesToString();
     final jsonresponse = json.decode(finalResponse);
+    print('add clicent ${jsonresponse}');
     Fluttertoast.showToast(msg: '${jsonresponse['message']}');
     Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
   }
@@ -878,12 +879,12 @@ class _AddClientsState extends State<AddClients> {
                       child: TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           controller: emailcn,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Email';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Your Email';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
@@ -1097,14 +1098,34 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add Pan"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child:panImage!=null? Image.file(panImage!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                      child: Stack(
+                       children: [
+                         Container(
+                           height: 150,
+                           width: 150,
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                           ),
+                           child:panImage!=null? Image.file(panImage!.absolute,fit: BoxFit.fill):
+                           Center(child: Image.asset('assets/images/homelogo.png'),
+                           ),
+                         ),
+                         panImage!=null?
+                         Positioned(
+                           right: 2,
+                           child:  InkWell(
+                             onTap: (){
+                               panImage=null;
+                               setState(() {
+
+                               });
+                             },
+                             child: Icon(
+                               Icons.cancel,
+                               size: 30,
+                               color: Colors.red.withOpacity(0.7),
+                             ),
+                           ),) : SizedBox()
+                       ],
                       ),
                     ),
                     Text("GST",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1139,14 +1160,35 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add GST Image1"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child:gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                      child: Stack(
+                     children: [
+                       Container(
+                         height: 150,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                         ),
+                         child:gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill):
+                         Center(child: Image.asset('assets/images/homelogo.png'),
+                         ),
+                       ),
+
+                       gstImage!=null?
+                       Positioned(
+                         right: 2,
+                         child:  InkWell(
+                           onTap: (){
+                             gstImage=null;
+                             setState(() {
+
+                             });
+                           },
+                           child: Icon(
+                             Icons.cancel,
+                             size: 30,
+                             color: Colors.red.withOpacity(0.7),
+                           ),
+                         ),) : SizedBox()
+                     ],
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1158,14 +1200,34 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add GST Image2"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                      child: Stack(
+                     children: [
+                       Container(
+                         height: 150,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                         ),
+                         child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
+                         Center(child: Image.asset('assets/images/homelogo.png'),
+                         ),
+                       ),
+                       gstOne!=null?
+                       Positioned(
+                         right: 2,
+                         child:  InkWell(
+                           onTap: (){
+                             gstOne=null;
+                             setState(() {
+
+                             });
+                           },
+                           child: Icon(
+                             Icons.cancel,
+                             size: 30,
+                             color: Colors.red.withOpacity(0.7),
+                           ),
+                         ),) : SizedBox()
+                     ],
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1177,14 +1239,35 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add GST Image3"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                      child: Stack(
+
+                     children: [
+                       Container(
+                         height: 150,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                         ),
+                         child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
+                         Center(child: Image.asset('assets/images/homelogo.png'),
+                         ),
+                       ),
+                       gstTwo!=null?
+                       Positioned(
+                         right: 2,
+                         child:  InkWell(
+                           onTap: (){
+                             gstTwo=null;
+                             setState(() {
+
+                             });
+                           },
+                           child: Icon(
+                             Icons.cancel,
+                             size: 30,
+                             color: Colors.red.withOpacity(0.7),
+                           ),
+                         ),) : SizedBox()
+                     ],
                       ),
                     ),
                     Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1215,14 +1298,34 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add Aadhaar Front"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                      child: Stack(
+                       children : [
+                         Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                          ),
+                          child:aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill):
+                          Center(child: Image.asset('assets/images/homelogo.png'),
+                          ),
                         ),
-                        child:aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                         aadharImage!=null?
+                         Positioned(
+                           right: 2,
+                           child:  InkWell(
+                             onTap: (){
+                               aadharImage=null;
+                               setState(() {
+
+                               });
+                             },
+                             child: Icon(
+                               Icons.cancel,
+                               size: 30,
+                               color: Colors.red.withOpacity(0.7),
+                             ),
+                           ),) : SizedBox()
+                       ]
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1234,15 +1337,36 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add Aadhaar Back"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
-                      ),
+                   child: Stack(
+                     children: [
+                       Container(
+                         height: 150,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                         ),
+                         child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
+                         Center(child: Image.asset('assets/images/homelogo.png'),
+                         ),
+                       ),
+
+                       aadharBack!=null?
+                       Positioned(
+                         right: 2,
+                         child:  InkWell(
+                           onTap: (){
+                             aadharBack=null;
+                             setState(() {
+
+                             });
+                           },
+                           child: Icon(
+                             Icons.cancel,
+                             size: 30,
+                             color: Colors.red.withOpacity(0.7),
+                           ),
+                         ),) : SizedBox()
+                     ],
+                   ),
                     ),
                     Text("Voter Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     SizedBox(height: MediaQuery.of(context).size.height*.02,),
@@ -1252,12 +1376,12 @@ class _AddClientsState extends State<AddClients> {
                           keyboardType: TextInputType.text,
                           maxLength: 12,
                           controller: voterIdCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your VoterId No';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return 'Please Enter Your VoterId No';
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '',
                               counterText: "",
@@ -1272,14 +1396,34 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add Voter Id Front"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                      child: Stack(
+                       children : [
+                         Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                          ),
+                          child:voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill):
+                          Center(child: Image.asset('assets/images/homelogo.png'),
+                          ),
                         ),
-                        child:voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                         voterIdImage!=null?
+                         Positioned(
+                           right: 2,
+                           child:  InkWell(
+                             onTap: (){
+                               voterIdImage=null;
+                               setState(() {
+
+                               });
+                             },
+                             child: Icon(
+                               Icons.cancel,
+                               size: 30,
+                               color: Colors.red.withOpacity(0.7),
+                             ),
+                           ),) : SizedBox()
+                       ]
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1291,14 +1435,34 @@ class _AddClientsState extends State<AddClients> {
                       }, child: Text("Add Voter Id Back"),
                     ),
                     Center(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                        ),
-                        child: voterIdBackImage !=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
-                        Center(child: Image.asset('assets/images/homelogo.png'),
-                        ),
+                      child: Stack(
+                       children: [
+                         Container(
+                           height: 150,
+                           width: 150,
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                           ),
+                           child: voterIdBackImage !=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
+                           Center(child: Image.asset('assets/images/homelogo.png'),
+                           ),
+                         ),
+                         voterIdBackImage!=null?
+                         Positioned(
+                           right: 2,
+                           child:  InkWell(
+                             onTap: (){
+                               voterIdBackImage=null;
+                               setState(() {
+
+                               });
+                             },
+                             child: Icon(
+                             Icons.cancel,
+                             size: 30,
+                             color: Colors.red.withOpacity(0.7),
+                         ),
+                           ),) : SizedBox()
+                       ],
                       ),
                     ),
                     Text("Udyog Id",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1408,7 +1572,7 @@ class _AddClientsState extends State<AddClients> {
                       // SizedBox(width: MediaQuery.of(context).size.width*.02,),
                       Container(
                         width: MediaQuery.of(context).size.width/2,
-                        child: ElevatedButton(style: ElevatedButton.styleFrom(primary: colors.primary),
+                        child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
                             onPressed: () {
                           // print("hhhhhhhhhhhhhhhhhh");
                           // addClinets();

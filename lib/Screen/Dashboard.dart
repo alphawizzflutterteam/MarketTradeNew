@@ -51,8 +51,8 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     //                   ));
     // }
     getCurrentLoc();
-    SystemChrome.setEnabledSystemUIOverlays(
-        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -149,7 +149,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         });
       }
     }
-    updateLocationPeriodically();
+    // updateLocationPeriodically();
   }
 
 
@@ -167,7 +167,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
       if (position != null) {
         print("Updated Location: ${position.latitude}, ${position.longitude}");
       }
-      updateLocation();
+      // updateLocation();
     });
   }
 
@@ -205,26 +205,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   void initDynamicLinks() async {
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData? dynamicLink) async {
-          final Uri? deepLink = dynamicLink?.link;
-
-          if (deepLink != null) {
-            if (deepLink.queryParameters.length > 0) {
-              int index = int.parse(deepLink.queryParameters['index']!);
-
-              int secPos = int.parse(deepLink.queryParameters['secPos']!);
-
-              String? id = deepLink.queryParameters['id'];
-
-              String? list = deepLink.queryParameters['list'];
-
-              getProduct(id!, index, secPos, list == "true" ? true : false);
-            }
-          }
-        }, onError: (OnLinkErrorException e) async {
-      print(e.message);
-    });
+    FirebaseDynamicLinks.instance.onLink;
 
     final PendingDynamicLinkData? data =
     await FirebaseDynamicLinks.instance.getInitialLink();

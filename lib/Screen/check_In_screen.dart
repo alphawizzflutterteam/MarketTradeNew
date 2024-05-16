@@ -225,7 +225,7 @@ void onStart(ServiceInstance service) async {
       }
     }
     Position position= await Geolocator.getCurrentPosition();
-    updateLocation1(position);
+    // updateLocation1(position);
     //
     // List<Placemark> placemark = await placemarkFromCoordinates(
     //     double.parse(position.latitude.toString()), double.parse(position.longitude.toString()),

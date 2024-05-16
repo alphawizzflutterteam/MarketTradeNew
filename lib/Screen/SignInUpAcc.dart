@@ -19,7 +19,7 @@ class SignInUpAcc extends StatefulWidget {
 class _SignInUpAccState extends State<SignInUpAcc> {
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,

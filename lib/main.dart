@@ -18,7 +18,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Helper/Demo_Localization.dart';
@@ -171,9 +171,9 @@ class _MyAppState extends State<MyApp> {
             localizationsDelegates: [
               CountryLocalizations.delegate,
               DemoLocalization.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              // GlobalMaterialLocalizations.delegate,
+              // GlobalWidgetsLocalizations.delegate,
+              // GlobalCupertinoLocalizations.delegate,
             ],
             localeResolutionCallback: (locale, supportedLocales) {
               for (var supportedLocale in supportedLocales) {
@@ -225,7 +225,7 @@ class _MyAppState extends State<MyApp> {
               toggleableActiveColor: colors.primary,
               fontFamily: 'opensans',
               brightness: Brightness.dark,
-              accentColor: colors.darkIcon,
+              // accentColor: colors.darkIcon,
               iconTheme:
                   Theme.of(context).iconTheme.copyWith(color: colors.secondary),
               textTheme: TextTheme(

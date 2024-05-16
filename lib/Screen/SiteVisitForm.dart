@@ -1029,7 +1029,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       ],
                                     )
                               : SizedBox(),
-                          selectedContractor != null ? selectedContractor == "9090"
+                          selectedContractor != null ? selectedContractor == "9090" || selectedContractor == "9091"
                               ? SizedBox()
                               : Column(
                             children: [
@@ -1121,139 +1121,139 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   SizedBox(height: 10),
                                 ],
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              selectedContractor == "9091"
-                                  ? Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Name:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          contractorNameCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          // readOnly: true,
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Address:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          contractorAddressCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ): SizedBox(),
+                              // SizedBox(
+                              //   height: 10,
+                              // ),
+                              // selectedContractor == "9091"
+                              //     ? Column(
+                              //   children: [
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Name:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 20,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             contractorNameCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             // readOnly: true,
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     SizedBox(
+                              //       height: 8,
+                              //     ),
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Address:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             contractorAddressCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10),
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // ): SizedBox(),
                             ],
                           )
                               : SizedBox(),
@@ -1540,7 +1540,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       ],
                                     )
                               : SizedBox(),
-                          selectedEngineer != null ? selectedEngineer == "907"
+                          selectedEngineer != null ? selectedEngineer == "907" || selectedEngineer=='909'
                               ? SizedBox()
                               : Column(
                             children: [
@@ -1640,139 +1640,139 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   SizedBox(height: 10),
                                 ],
                               ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              selectedEngineer == "909"
-                                  ? Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Name:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          engineerNameCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          // readOnly: true,
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Address:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          engineerAddressCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                                  : SizedBox(),
+                              // SizedBox(
+                              //   height: 8,
+                              // ),
+                              // selectedEngineer == "909"
+                              //     ? Column(
+                              //   children: [
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Name:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 20,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             engineerNameCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             // readOnly: true,
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     SizedBox(
+                              //       height: 8,
+                              //     ),
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Address:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             engineerAddressCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // )
+                              //     : SizedBox(),
                             ],
                           )
                               : SizedBox(),
@@ -2058,7 +2058,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       ],
                                     ) : SizedBox(),
                           selectedArchitec != null
-                              ? selectedArchitec == "906"
+                              ? selectedArchitec == "906" ||selectedArchitec == "900"
                               ? SizedBox()
                               : Column(
                             children: [
@@ -2156,139 +2156,139 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   SizedBox(height: 10),
                                 ],
                               ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              selectedArchitec == "900"
-                                  ? Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Name:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          artitechNameCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          // readOnly: true,
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Address:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          artitechAddressCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                                  : SizedBox(),
+                              // SizedBox(
+                              //   height: 8,
+                              // ),
+                              // selectedArchitec == "900"
+                              //     ? Column(
+                              //   children: [
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Name:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 20,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             artitechNameCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             // readOnly: true,
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     SizedBox(
+                              //       height: 8,
+                              //     ),
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Address:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             artitechAddressCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // )
+                              //     : SizedBox(),
                             ],
                           )
                               : SizedBox(),
@@ -2345,7 +2345,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   : Column(
                                       children: [
                                         Row(
-                                          mainAxisSize: MainAxisSize.min,
+                                        //  mainAxisSize: MainAxisSize.min,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
@@ -2563,7 +2563,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                     )
                               : SizedBox(),
                           selectedMession != null
-                              ? selectedMession == "902"
+                              ? selectedMession == "902" || selectedMession == "904"
                               ? SizedBox()
                               : Column(
                             children: [
@@ -2649,139 +2649,139 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   SizedBox(height: 10),
                                 ],
                               ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              selectedMession == "904"
-                                  ? Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Name:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          missionNameCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          // readOnly: true,
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      SizedBox(
-                                        height: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .height *
-                                            .01,
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets
-                                            .only(top: 10),
-                                        child: Text(
-                                          "Address:",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w800),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        child: TextFormField(
-                                          controller:
-                                          missionAddressCtr,
-                                          // onChanged: (value) {
-                                          //   // String mobileContractor = value ;
-                                          //   contractorMobile = value;
-                                          // },
-                                          //controller: mobilecn,
-                                          decoration:
-                                          InputDecoration(
-                                            contentPadding:
-                                            EdgeInsets.only(
-                                                bottom: 4,
-                                                left: 3),
-                                            // hintText: '',
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                                  : SizedBox(),
+                              // SizedBox(
+                              //   height: 8,
+                              // ),
+                              // selectedMession == "904"
+                              //     ? Column(
+                              //   children: [
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Name:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 20,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             missionNameCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             // readOnly: true,
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     SizedBox(
+                              //       height: 8,
+                              //     ),
+                              //     Row(
+                              //       crossAxisAlignment:
+                              //       CrossAxisAlignment
+                              //           .start,
+                              //       children: [
+                              //         SizedBox(
+                              //           height: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .height *
+                              //               .01,
+                              //         ),
+                              //         Padding(
+                              //           padding:
+                              //           const EdgeInsets
+                              //               .only(top: 10),
+                              //           child: Text(
+                              //             "Address:",
+                              //             style: TextStyle(
+                              //                 fontSize: 12,
+                              //                 fontWeight:
+                              //                 FontWeight
+                              //                     .w800),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Container(
+                              //           height: 40,
+                              //           width: MediaQuery.of(
+                              //               context)
+                              //               .size
+                              //               .width /
+                              //               2.2,
+                              //           child: TextFormField(
+                              //             controller:
+                              //             missionAddressCtr,
+                              //             // onChanged: (value) {
+                              //             //   // String mobileContractor = value ;
+                              //             //   contractorMobile = value;
+                              //             // },
+                              //             //controller: mobilecn,
+                              //             decoration:
+                              //             InputDecoration(
+                              //               contentPadding:
+                              //               EdgeInsets.only(
+                              //                   bottom: 4,
+                              //                   left: 3),
+                              //               // hintText: '',
+                              //               border: OutlineInputBorder(
+                              //                   borderRadius:
+                              //                   BorderRadius
+                              //                       .circular(
+                              //                       10)),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // )
+                              //     : SizedBox(),
                             ],
                           )
                               : SizedBox(),

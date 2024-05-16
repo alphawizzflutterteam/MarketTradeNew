@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -743,6 +746,64 @@ class _ClientsViewState extends State<ClientsView> {
       print(response.reasonPhrase);
     }
   }
+  Future<void> downloadImage(String imageUrl) async {
+    // print("mmmmmmmm");
+    var response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.bodyBytes));
+      Fluttertoast.showToast(msg: "Image saved to gallery");
+      print('Image saved to gallery: $result');
+    } else {
+      print('Failed to download image: ${response.statusCode}');
+    }
+  }
+  showDilaogBox(String imageUrl)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you want to download Image?'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                child: Container(
+                  //  padding: EdgeInsets.all(16),
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary
+                  ),
+                  child: Center(child: Text("Yes",style: TextStyle(color: colors.whiteTemp),)),
+                ),
+                onTap: () {
+                  downloadImage(imageUrl);
+                  Navigator.of(context).pop(); // Close the AlertDialog
+                  // getImageFromGallery();
+                },
+              ),
+              InkWell(
+                child: Container(
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: Center(child: Text("No",style: TextStyle(color: colors.whiteTemp),)),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop(); // Close the AlertDialog
+                  //getImageFromCamera();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget buildGridView() {
     return Container(
@@ -753,15 +814,31 @@ class _ClientsViewState extends State<ClientsView> {
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary)
-                ),
-                width: MediaQuery.of(context).size.width/2.8,
-                height: 170,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network('${widget.model?.photo?[index]}', fit: BoxFit.cover,),
+              InkWell(
+                onTap: (){
+                  if(widget.model?.photo?[index]!=null)
+                  {
+                    final imageProvider = Image.network(widget.model?.photo?[index]?? '').image;
+                    showImageViewer(context, imageProvider,
+                        onViewerDismissed: () {
+                          print("dismissed");
+                        });
+                  }
+                },
+                onLongPress: (){
+                  if(widget.model?.photo?[index]!=null)
+                    showDilaogBox(widget.model?.photo?[index]?? "");
+                },
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: colors.primary)
+                  ),
+                  width: MediaQuery.of(context).size.width/2.8,
+                  height: 170,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Image.network('${widget.model?.photo?[index]}', fit: BoxFit.cover,),
+                  ),
                 ),
               ),
               // Positioned(
@@ -1325,7 +1402,6 @@ class _ClientsViewState extends State<ClientsView> {
 
                             decoration: InputDecoration(
                                 hintText: '',
-
                                 counterText: "",
                                 border: OutlineInputBorder(
                                     borderRadius:  BorderRadius.circular(10)))),
@@ -1354,18 +1430,36 @@ class _ClientsViewState extends State<ClientsView> {
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
                       ElevatedButton(
                         onPressed: () {
+
                           // pickImageDialogPan(context, 1);
                           // _getFromCameraPan();
                         }, child: Text("Pan"),
                       ),
-                      Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                            child: panImage!=null? Image.file(panImage!.absolute,fit: BoxFit.fill,):
-                            //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.panImg}', fit: BoxFit.fill,)
+                      InkWell(
+                        onTap: ()
+                        {
+                          if(widget.model?.panImg!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.panImg ?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                              });
+                            }
+                        },
+                        onLongPress: (){
+                          if(widget.model?.panImg!=null)
+                          showDilaogBox(widget.model?.panImg ?? "");
+                        },
+                        child: Center(
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                              child: panImage!=null? Image.file(panImage!.absolute,fit: BoxFit.fill,):
+                              //    Center(child: Image.asset('assets/img.png')),),
+                              Image.network('${widget.model?.panImg}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.02,),
@@ -1398,13 +1492,30 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("GST"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                            child: gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill,):
-                            //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.gstImg}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            if(widget.model?.gstImg!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.gstImg ?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+                          },
+                          onLongPress: (){
+                            if(widget.model?.gstImg!=null)
+                              showDilaogBox(widget.model?.gstImg ?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                              child: gstImage!=null? Image.file(gstImage!.absolute,fit: BoxFit.fill,):
+                              //    Center(child: Image.asset('assets/img.png')),),
+                              Image.network('${widget.model?.gstImg}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1415,13 +1526,30 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("GST One"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                            ),
-                            child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
-                            Image.network('${widget.model?.gstImgTwo}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            if(widget.model?.gstImgTwo!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.gstImgTwo ?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+                          },
+                          onLongPress: (){
+                            if(widget.model?.gstImgTwo!=null)
+                              showDilaogBox(widget.model?.gstImgTwo ?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                              ),
+                              child:gstOne!=null? Image.file(gstOne!.absolute,fit: BoxFit.fill):
+                              Image.network('${widget.model?.gstImgTwo}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1432,13 +1560,30 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("GST Two"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                            ),
-                            child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
-                            Image.network('${widget.model?.gstImgThree}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            if(widget.model?.gstImgThree!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.gstImgThree ?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+                          },
+                          onLongPress: (){
+                            if(widget.model?.gstImgThree!=null)
+                              showDilaogBox(widget.model?.gstImgThree ?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                              ),
+                              child:gstTwo!=null? Image.file(gstTwo!.absolute,fit: BoxFit.fill):
+                              Image.network('${widget.model?.gstImgThree}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       const Text("Aadhaar",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
@@ -1469,14 +1614,32 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("Aadhaar Front"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                            ),
-                            child: aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill,):
-                            //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.aadharImg}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            if(widget.model?.aadharImg!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.aadharImg ?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+
+                          },
+                          onLongPress: (){
+                            if(widget.model?.aadharImg!=null)
+                              showDilaogBox(widget.model?.aadharImg ?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                              ),
+                              child: aadharImage!=null? Image.file(aadharImage!.absolute,fit: BoxFit.fill,):
+                              //    Center(child: Image.asset('assets/img.png')),),
+                              Image.network('${widget.model?.aadharImg}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1487,13 +1650,30 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("Aadhaar Back"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                            ),
-                            child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
-                            Image.network('${widget.model?.aadharBack}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            if(widget.model?.aadharBack!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.aadharBack?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+                          },
+                          onLongPress: (){
+                            if(widget.model?.aadharBack!=null)
+                              showDilaogBox(widget.model?.aadharBack?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                              ),
+                              child: aadharBack!=null? Image.file(aadharBack!.absolute,fit: BoxFit.fill):
+                              Image.network('${widget.model?.aadharBack}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1524,13 +1704,32 @@ class _ClientsViewState extends State<ClientsView> {
                         }, child: Text("Voter Id Front"),
                       ),
                       Center(
-                        child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                            child: voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill,):
-                            //    Center(child: Image.asset('assets/img.png')),),
-                            Image.network('${widget.model?.voterIdFrontImage}', fit: BoxFit.fill,)
+                        child: InkWell(
+                          onTap: (){
+                            if(widget.model?.voterIdFrontImage!=null)
+                            {
+                              final imageProvider = Image.network(widget.model?.voterIdFrontImage?? '').image;
+                              showImageViewer(context, imageProvider,
+                                  onViewerDismissed: () {
+                                    print("dismissed");
+                                  });
+                            }
+
+
+                          },
+
+                          onLongPress: (){
+                            if(widget.model?.voterIdFrontImage!=null)
+                              showDilaogBox(widget.model?.voterIdFrontImage?? "");
+                          },
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                              child: voterIdImage!=null? Image.file(voterIdImage!.absolute,fit: BoxFit.fill,):
+                              //    Center(child: Image.asset('assets/img.png')),),
+                              Image.network('${widget.model?.voterIdFrontImage}', fit: BoxFit.fill,)
+                          ),
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*.01),
@@ -1550,13 +1749,29 @@ class _ClientsViewState extends State<ClientsView> {
                         //       });
                         // },
                         child: Center(
-                          child: Container(
-                              height: 150,
-                              width: 150,
-                              decoration: BoxDecoration(border: Border.all(color: Colors.black),
-                              ),
-                              child: voterIdBackImage!=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
-                              Image.network('${widget.model?.voterIdBackImage}', fit: BoxFit.fill,)
+                          child: InkWell(
+                            onTap: (){
+                              if(widget.model?.voterIdBackImage!=null)
+                              {
+                                final imageProvider = Image.network(widget.model?.voterIdBackImage?? '').image;
+                                showImageViewer(context, imageProvider,
+                                    onViewerDismissed: () {
+                                      print("dismissed");
+                                    });
+                              }
+                            },
+                            onLongPress: (){
+                              if(widget.model?.voterIdBackImage!=null)
+                                showDilaogBox(widget.model?.voterIdBackImage?? "");
+                            },
+                            child: Container(
+                                height: 150,
+                                width: 150,
+                                decoration: BoxDecoration(border: Border.all(color: Colors.black),
+                                ),
+                                child: voterIdBackImage!=null? Image.file(voterIdBackImage!.absolute,fit: BoxFit.fill):
+                                Image.network('${widget.model?.voterIdBackImage}', fit: BoxFit.fill,)
+                            ),
                           ),
                         ),
                       ),

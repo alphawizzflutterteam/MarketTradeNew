@@ -14,7 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 // import 'package:paytm/paytm.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/SimBtn.dart';
@@ -92,7 +92,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   List<SectionModel> saveLaterList = [];
   String? msg;
   bool _isLoading = true;
-  Razorpay? _razorpay;
+  // Razorpay? _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController noteC = new TextEditingController();
   StateSetter? checkoutState;
@@ -166,7 +166,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     buttonController!.dispose();
     for (int i = 0; i < _controller.length; i++) _controller[i].dispose();
 
-    if (_razorpay != null) _razorpay!.clear();
+    // if (_razorpay != null) _razorpay!.clear();
     super.dispose();
   }
 
@@ -2459,10 +2459,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
   checkout(List<SectionModel> cartList) {
-    _razorpay = Razorpay();
-    _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
@@ -2773,23 +2773,23 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    placeOrder(response.paymentId);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    var getdata = json.decode(response.message!);
-    String errorMsg = getdata["error"]["description"];
-    setSnackbar(errorMsg, _checkscaffoldKey);
-
-    if (mounted)
-      checkoutState!(() {
-        _placeOrder = true;
-      });
-    context.read<CartProvider>().setProgress(false);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {}
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   placeOrder(response.paymentId);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   var getdata = json.decode(response.message!);
+  //   String errorMsg = getdata["error"]["description"];
+  //   setSnackbar(errorMsg, _checkscaffoldKey);
+  //
+  //   if (mounted)
+  //     checkoutState!(() {
+  //       _placeOrder = true;
+  //     });
+  //   context.read<CartProvider>().setProgress(false);
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {}
 
   updateCheckout() {
     if (mounted) checkoutState!(() {});
@@ -2816,7 +2816,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       };
 
       try {
-        _razorpay!.open(options);
+        // _razorpay!.open(options);
       } catch (e) {
         debugPrint(e.toString());
       }
