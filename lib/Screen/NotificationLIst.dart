@@ -106,7 +106,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
     notiList.clear();
     return getNotification();
   }
-
+//kkk
   @override
   Widget build(BuildContext context) {
     return Scaffold(
