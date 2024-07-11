@@ -74,14 +74,14 @@ class SiteVisitData {
   String? mobileTwo;
   String? whatsappNumber;
   String? pan;
-  Null? panImg;
+  String? panImg;
   String? gst;
-  Null? gstImg;
-  Null? gstImgTwo;
-  Null? gstImgThree;
+  String? gstImg;
+  String? gstImgTwo;
+  String? gstImgThree;
   String? aadhar;
-  Null? aadharImg;
-  Null? aadharBack;
+  String? aadharImg;
+  String? aadharBack;
   String? customerType;
   String? creditLimit;
   String? updatedAt;
@@ -91,8 +91,8 @@ class SiteVisitData {
   String? route;
   String? market;
   String? landmark;
-  Null? voterIdBackImage;
-  Null? voterIdFrontImage;
+  String? voterIdBackImage;
+  String? voterIdFrontImage;
   String? createBy;
   String? active;
   String? department;
@@ -100,74 +100,74 @@ class SiteVisitData {
 
   SiteVisitData(
       {this.id,
-        this.userId,
-        this.date,
-        this.time,
-        this.lat,
-        this.lng,
-        this.name,
-        this.mobile,
-        this.address,
-        this.state,
-        this.district,
-        this.pincode,
-        this.contractorId,
-        this.contractorMobile,
-        this.engineerId,
-        this.engineerMobile,
-        this.artitechId,
-        this.artitechMobile,
-        this.massionId,
-        this.massionMobile,
-        this.siteSize,
-        this.currentStatus,
-        this.productBeingUsed,
-        this.survey,
-        this.expectedOrders,
-        this.photo,
-        this.remarks,
-        this.massionName,
-        this.massionAddress,
-        this.architectAddress,
-        this.architectName,
-        this.engineerAddress,
-        this.engineerName,
-        this.contractorAddress,
-        this.contractorName,
-        this.createdAt,
-        this.staffId,
-        this.nameOfFirm,
-        this.status,
-        this.ownerName,
-        this.email,
-        this.pinCode,
-        this.mobileOne,
-        this.mobileTwo,
-        this.whatsappNumber,
-        this.pan,
-        this.panImg,
-        this.gst,
-        this.gstImg,
-        this.gstImgTwo,
-        this.gstImgThree,
-        this.aadhar,
-        this.aadharImg,
-        this.aadharBack,
-        this.customerType,
-        this.creditLimit,
-        this.updatedAt,
-        this.udyogidNumber,
-        this.dateOfBirth,
-        this.dateOfAnniversary,
-        this.route,
-        this.market,
-        this.landmark,
-        this.voterIdBackImage,
-        this.voterIdFrontImage,
-        this.createBy,
-        this.active,
-        this.department,
-        this.currentAddress});
+      this.userId,
+      this.date,
+      this.time,
+      this.lat,
+      this.lng,
+      this.name,
+      this.mobile,
+      this.address,
+      this.state,
+      this.district,
+      this.pincode,
+      this.contractorId,
+      this.contractorMobile,
+      this.engineerId,
+      this.engineerMobile,
+      this.artitechId,
+      this.artitechMobile,
+      this.massionId,
+      this.massionMobile,
+      this.siteSize,
+      this.currentStatus,
+      this.productBeingUsed,
+      this.survey,
+      this.expectedOrders,
+      this.photo,
+      this.remarks,
+      this.massionName,
+      this.massionAddress,
+      this.architectAddress,
+      this.architectName,
+      this.engineerAddress,
+      this.engineerName,
+      this.contractorAddress,
+      this.contractorName,
+      this.createdAt,
+      this.staffId,
+      this.nameOfFirm,
+      this.status,
+      this.ownerName,
+      this.email,
+      this.pinCode,
+      this.mobileOne,
+      this.mobileTwo,
+      this.whatsappNumber,
+      this.pan,
+      this.panImg,
+      this.gst,
+      this.gstImg,
+      this.gstImgTwo,
+      this.gstImgThree,
+      this.aadhar,
+      this.aadharImg,
+      this.aadharBack,
+      this.customerType,
+      this.creditLimit,
+      this.updatedAt,
+      this.udyogidNumber,
+      this.dateOfBirth,
+      this.dateOfAnniversary,
+      this.route,
+      this.market,
+      this.landmark,
+      this.voterIdBackImage,
+      this.voterIdFrontImage,
+      this.createBy,
+      this.active,
+      this.department,
+      this.currentAddress});
 
   SiteVisitData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -333,11 +333,11 @@ class Survey {
 
   Survey(
       {this.brandName,
-        this.totalConsumption,
-        this.furtherConsumption,
-        this.purchasePrice,
-        this.purchasingFrom,
-        this.lastPurchaseDate});
+      this.totalConsumption,
+      this.furtherConsumption,
+      this.purchasePrice,
+      this.purchasingFrom,
+      this.lastPurchaseDate});
 
   Survey.fromJson(Map<String, dynamic> json) {
     brandName = json['brand_name'];

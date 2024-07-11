@@ -68,7 +68,7 @@ class _AddPhotoState extends State<AddPhoto> {
     var headers = {
       'Cookie': 'ci_session=a668203a30aa21277b05b1ffb48275800e081571'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/update_photo'));
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/rename_market_track/app/v1/api/update_photo'));
     request.fields.addAll({
       'id': id.toString()
     });

@@ -1,22 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 import 'package:omega_employee_management/Model/DelearRetailerModel1.dart';
 import 'package:omega_employee_management/Screen/SiteSurvey.dart';
+
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/DealingProductModel.dart';
-import '../Model/DelearRetailerModel.dart';
-import '../Model/GedClientDataModel.dart';
 import '../Model/GetListModel.dart';
-import 'MultiSelect.dart';
 import 'MultiSelectTwo.dart';
-import 'Survey.dart';
 
 class SiteVisitForm extends StatefulWidget {
   const SiteVisitForm({Key? key}) : super(key: key);
@@ -424,7 +421,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'https://developmentalphawizz.com/market_track/app/v1/api/get_client_type1'));
+            'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_client_type1'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -478,2750 +475,2873 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 1,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: colors.primary,
-        title: Text("Customer Survey Form",
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 1,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios, color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: colors.primary,
+          title: Text(
+            "Customer Survey Form",
             style: TextStyle(fontSize: 15, color: Colors.white),
+          ),
         ),
-      ),
-      body: delearRetailerModel == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Name",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 40,
-                            child: TextFormField(
-                              // readOnly: true,
-                              controller: namecn,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(bottom: 5, left: 5),
-                                // hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return "please enter Name";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Mobile",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 65,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              maxLength: 10,
-                              // readOnly: true,
-                              controller: mobileCtr,
-                              decoration: InputDecoration(
-                                counterText: "",
-                                contentPadding:
-                                    EdgeInsets.only(bottom: 5, left: 5),
-                                // hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // const Text(
-                          //   "Date",
-                          //   style: TextStyle(
-                          //       fontSize: 14, fontWeight: FontWeight.bold),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // Container(
-                          //   height: 50,
-                          //   child: TextFormField(
-                          //       readOnly: true,
-                          //       controller: dateCtr,
-                          //       decoration: InputDecoration(
-                          //           // hintText: '',
-                          //           border: OutlineInputBorder(
-                          //               borderRadius:
-                          //                   BorderRadius.circular(10)))),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // const Text(
-                          //   "Time",
-                          //   style: TextStyle(
-                          //       fontSize: 14, fontWeight: FontWeight.bold),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // Container(
-                          //   height: 50,
-                          //   child: TextFormField(
-                          //     readOnly: true,
-                          //     maxLength: 10,
-                          //     controller: timeCtr,
-                          //     decoration: InputDecoration(
-                          //       hintText: '',
-                          //       counterText: "",
-                          //       border: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Address",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 40,
-                            child: TextFormField(
-                              // readOnly: true,
-                              controller: addressCtr,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(bottom: 5, left: 5),
-                                // hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "State",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedState,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedState = newValue;
-                                    // print("current indexxx ${selected}");
-                                    stateindex = getListModel!.data!.states!
-                                        .indexWhere((element) =>
-                                            element.id == selectedState);
-                                    // currentIndex = selected;
-                                    // showTextField = true;
-                                  });
-                                },
-                                items: getListModel?.data?.states?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.name.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: 'Select State',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            "District",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedDistrict,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedDistrict = newValue;
-                                    // print("current indexxx ${selected}");
-                                    nwIndex = getListModel!
-                                        .data!.states![stateindex].cities!
-                                        .indexWhere((element) =>
-                                            element.id == selectedDistrict)!;
-                                    // currentIndex = selected;
-                                    // showTextField = true;
-                                  });
-                                },
-                                items: getListModel
-                                    ?.data?.states?[stateindex].cities
-                                    ?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.city.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: 'Select District',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Pin Code",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 40,
-                            child: TextFormField(
-                              maxLength: 6,
-                              keyboardType: TextInputType.number,
-                              // readOnly: true,
-                              controller: pinCodeController,
-                              decoration: InputDecoration(
-                                counterText: "",
-                                // hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Name Of Contractor",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedContractor,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedContractor = newValue;
-                                    contractorIndex = delearRetailerModel!
-                                        .data!.contractor!
-                                        .indexWhere((element) =>
-                                            element.id == selectedContractor);
-                                    // currentIndex = selected;
-                                    showTextField = true;
-                                  });
-                                },
-                                items: delearRetailerModel?.data?.contractor
-                                    ?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.ownerName.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: '',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          selectedContractor != null ? selectedContractor == "9090"
-                                  ? SizedBox()
-                                  : Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .01,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Text(
-                                                "Mobile:",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 15,
-                                            ),
-                                            delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne == null
-                                                || delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne ==" "
-                                                ? Container(
-                                                    height: 40,
-                                                    width: MediaQuery.of(context).size.width / 2.2,
-                                                    child: TextFormField(
-                                                      keyboardType: TextInputType.number,
-                                                      onChanged: (value) {
-                                                        // String mobileContractor = value ;
-                                                        contractorMobile =
-                                                            value;
-                                                      },
-                                                      // readOnly: true,
-                                                      //controller: mobilecn,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                bottom: 4,
-                                                                left: 3),
-                                                        // hintText: '',
-                                                        border: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black)),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "${delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne}",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                            SizedBox(height: 10),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        selectedContractor == "9091"
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Name:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              contractorNameCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          // readOnly: true,
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Address:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              contractorAddressCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : SizedBox(),
-                                      ],
-                                    )
-                              : SizedBox(),
-                          selectedContractor != null ? selectedContractor == "9090" || selectedContractor == "9091"
-                              ? SizedBox()
-                              : Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context)
-                                        .size
-                                        .height *
-                                        .01,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10),
-                                    child: Text(
-                                      "Address:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight:
-                                          FontWeight.w800),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  delearRetailerModel?.data?.contractor?[contractorIndex].address == null || delearRetailerModel?.data?.contractor?[contractorIndex].address ==" "
-                                      ? Container(
-                                    height: 40,
-                                    width: MediaQuery.of(context).size.width / 2.2,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        // String mobileContractor = value ;
-                                        contractoraddress = value;
-                                      },
-                                      // readOnly: true,
-                                      //controller: mobilecn,
-                                      decoration:
-                                      InputDecoration(
-                                        contentPadding:
-                                        EdgeInsets.only(
-                                            bottom: 4,
-                                            left: 3),
-                                        // hintText: '',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10)),
-                                      ),
-                                    ),
-                                  )
-                                      : Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10),
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors
-                                                    .black)),
-                                        child: Center(
-                                          child: Text(
-                                            "${delearRetailerModel?.data?.contractor?[contractorIndex].address}",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight:
-                                                FontWeight
-                                                    .w800),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                              // SizedBox(
-                              //   height: 10,
-                              // ),
-                              // selectedContractor == "9091"
-                              //     ? Column(
-                              //   children: [
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Name:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 20,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             contractorNameCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             // readOnly: true,
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //     SizedBox(
-                              //       height: 8,
-                              //     ),
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Address:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 10,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             contractorAddressCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10),
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ],
-                              // ): SizedBox(),
-                            ],
-                          )
-                              : SizedBox(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Name Of Engineer",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedEngineer,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedEngineer = newValue;
-                                    engineerIndex = delearRetailerModel!
-                                        .data!.engineer!
-                                        .indexWhere((element) =>
-                                            element.id == selectedEngineer);
-                                    // currentIndex = selected;
-                                    showTextField = true;
-                                  });
-                                },
-                                items: delearRetailerModel?.data?.engineer
-                                    ?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.ownerName.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: '',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          selectedEngineer != null ? selectedEngineer == "907"
-                                  ? SizedBox()
-                                  : Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .01,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Text(
-                                                "Mobile:",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 15,
-                                            ),
-                                            delearRetailerModel!
-                                                            .data!
-                                                            .engineer?[
-                                                                engineerIndex]
-                                                            .mobileOne ==
-                                                        null ||
-                                                    delearRetailerModel!
-                                                            .data!
-                                                            .engineer?[
-                                                                engineerIndex]
-                                                            .mobileOne ==
-                                                        " "
-                                                ? Container(
-                                                    height: 40,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                    child: TextFormField(
-                                                      onChanged: (value) {
-                                                        enaginnerMobile = value;
-                                                      },
-                                                      // controller: ownerNameCtr,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        // hintText: '',
-                                                        border: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black)),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "${delearRetailerModel!.data!.engineer?[engineerIndex].mobileOne}",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                            SizedBox(height: 10),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        selectedEngineer == "909"
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Name:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              engineerNameCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          // readOnly: true,
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Address:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              engineerAddressCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : SizedBox(),
-                                      ],
-                                    )
-                              : SizedBox(),
-                          selectedEngineer != null ? selectedEngineer == "907" || selectedEngineer=='909'
-                              ? SizedBox()
-                              : Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context)
-                                        .size
-                                        .height *
-                                        .01,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10),
-                                    child: Text(
-                                      "Address:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight:
-                                          FontWeight.w800),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  delearRetailerModel!
-                                      .data!
-                                      .engineer?[
-                                  engineerIndex]
-                                      .address ==
-                                      null ||
-                                      delearRetailerModel!
-                                          .data!
-                                          .engineer?[
-                                      engineerIndex]
-                                          .address ==
-                                          " "
-                                      ? Container(
-                                    height: 40,
-                                    width:
-                                    MediaQuery.of(context)
-                                        .size
-                                        .width /
-                                        2.2,
-                                    child: TextFormField(
-                                      onChanged: (value) {
-                                        enaginneraddress = value;
-                                      },
-                                      // controller: ownerNameCtr,
-                                      decoration:
-                                      InputDecoration(
-                                        // hintText: '',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10)),
-                                      ),
-                                    ),
-                                  )
-                                      : Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10),
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors
-                                                    .black)),
-                                        child: Center(
-                                          child: Text(
-                                            "${delearRetailerModel!.data!.engineer?[engineerIndex].address}",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight:
-                                                FontWeight
-                                                    .w800),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                              // SizedBox(
-                              //   height: 8,
-                              // ),
-                              // selectedEngineer == "909"
-                              //     ? Column(
-                              //   children: [
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Name:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 20,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             engineerNameCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             // readOnly: true,
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //     SizedBox(
-                              //       height: 8,
-                              //     ),
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Address:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 10,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             engineerAddressCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ],
-                              // )
-                              //     : SizedBox(),
-                            ],
-                          )
-                              : SizedBox(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Name Of Arti-tech",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedArchitec,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedArchitec = newValue;
-                                    architectIndex = delearRetailerModel!
-                                        .data!.artitech!
-                                        .indexWhere((element) =>
-                                            element.id == selectedArchitec);
-                                    // currentIndex = selected;
-                                    showTextField = true;
-                                  });
-                                },
-                                items: delearRetailerModel?.data?.artitech
-                                    ?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.ownerName.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: '',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          selectedArchitec != null
-                              ? selectedArchitec == "906"
-                                  ? SizedBox()
-                                  : Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .01,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Text("Mobile:",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w800)),
-                                            ),
-                                            SizedBox(
-                                              width: 15,
-                                            ),
-                                            delearRetailerModel
-                                                            ?.data
-                                                            ?.artitech?[
-                                                                architectIndex]
-                                                            .mobileOne ==
-                                                        null ||
-                                                    delearRetailerModel
-                                                            ?.data
-                                                            ?.artitech?[
-                                                                architectIndex]
-                                                            .mobileOne ==
-                                                        " "
-                                                ? Container(
-                                                    height: 40,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                    child: TextFormField(
-                                                      onChanged: (value) {
-                                                        architecMobile = value;
-                                                      },
-                                                      readOnly: true,
-                                                      // controller: ownerNameCtr,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        // hintText: '',
-                                                        border: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black)),
-                                                        child: Center(
-                                                            child: Text(
-                                                                "${delearRetailerModel?.data?.artitech?[architectIndex].mobileOne}",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800))),
-                                                      ),
-                                                    ],
-                                                  ),
-                                            SizedBox(height: 10),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        selectedArchitec == "900"
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Name:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              artitechNameCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          // readOnly: true,
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Address:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              artitechAddressCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : SizedBox(),
-                                      ],
-                                    ) : SizedBox(),
-                          selectedArchitec != null
-                              ? selectedArchitec == "906" ||selectedArchitec == "900"
-                              ? SizedBox()
-                              : Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context)
-                                        .size
-                                        .height *
-                                        .01,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10),
-                                    child: Text("Address:",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight:
-                                            FontWeight.w800)),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  delearRetailerModel
-                                      ?.data
-                                      ?.artitech?[
-                                  architectIndex]
-                                      .address ==
-                                      null ||
-                                      delearRetailerModel
-                                          ?.data
-                                          ?.artitech?[
-                                      architectIndex]
-                                          .address ==
-                                          " "
-                                      ? Container(
-                                    height: 40,
-                                    width:
-                                    MediaQuery.of(context)
-                                        .size
-                                        .width /
-                                        2.2,
-                                    child: TextFormField(
-                                      onChanged: (value) {
-                                        architecaddress = value;
-                                      },
-                                      readOnly: true,
-                                      // controller: ownerNameCtr,
-                                      decoration:
-                                      InputDecoration(
-                                        // hintText: '',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10)),
-                                      ),
-                                    ),
-                                  )
-                                      : Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        width: MediaQuery.of(
-                                            context)
-                                            .size
-                                            .width /
-                                            2.2,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10),
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors
-                                                    .black)),
-                                        child: Center(
-                                            child: Text(
-                                                "${delearRetailerModel?.data?.artitech?[architectIndex].address}",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                    12,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w800))),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                              // SizedBox(
-                              //   height: 8,
-                              // ),
-                              // selectedArchitec == "900"
-                              //     ? Column(
-                              //   children: [
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Name:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 20,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             artitechNameCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             // readOnly: true,
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //     SizedBox(
-                              //       height: 8,
-                              //     ),
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Address:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 10,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             artitechAddressCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ],
-                              // )
-                              //     : SizedBox(),
-                            ],
-                          )
-                              : SizedBox(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Name Of Massion",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 60,
-                            child: Card(
-                              elevation: 2,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedMession,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedMession = newValue;
-                                    messionIndex = delearRetailerModel!
-                                        .data!.massion!
-                                        .indexWhere((element) =>
-                                            element.id == selectedMession);
-                                    // currentIndex = selected;
-                                    showTextField = true;
-                                  });
-                                },
-                                items: delearRetailerModel?.data?.massion
-                                    ?.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.ownerName.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(top: 5, left: 10),
-                                  border: InputBorder.none,
-                                  hintText: '',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          selectedMession != null
-                              ? selectedMession == "902"
-                                  ? SizedBox()
-                                  : Column(
-                                      children: [
-                                        Row(
-                                        //  mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Text("Mobile:",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w800)),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            delearRetailerModel
-                                                            ?.data
-                                                            ?.massion?[
-                                                                messionIndex]
-                                                            .mobileOne ==
-                                                        null ||
-                                                    delearRetailerModel
-                                                            ?.data
-                                                            ?.massion?[
-                                                                messionIndex]
-                                                            .mobileOne ==
-                                                        " "
-                                                ? Container(
-                                                    height: 40,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                    child: TextFormField(
-                                                      onChanged: (value) {
-                                                        messionMobile = value;
-                                                      },
-                                                      controller:
-                                                          TextEditingController(),
-                                                      decoration:
-                                                          InputDecoration(
-                                                        // hintText: '',
-                                                        border: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(
-                                                    height: 40,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        color: Colors.white,
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.black)),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "${delearRetailerModel?.data?.massion?[messionIndex].mobileOne}",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w800),
-                                                      ),
-                                                    ),
-                                                  ),
-                                            SizedBox(height: 10),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        selectedMession == "904"
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Name:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              missionNameCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          // readOnly: true,
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .01,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 10),
-                                                        child: Text(
-                                                          "Address:",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            2.2,
-                                                        child: TextFormField(
-                                                          controller:
-                                                              missionAddressCtr,
-                                                          // onChanged: (value) {
-                                                          //   // String mobileContractor = value ;
-                                                          //   contractorMobile = value;
-                                                          // },
-                                                          //controller: mobilecn,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 4,
-                                                                    left: 3),
-                                                            // hintText: '',
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : SizedBox(),
-                                      ],
-                                    )
-                              : SizedBox(),
-                          selectedMession != null
-                              ? selectedMession == "902" || selectedMession == "904"
-                              ? SizedBox()
-                              : Column(
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10),
-                                    child: Text("Address:",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight:
-                                            FontWeight.w800)),
-                                  ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  delearRetailerModel
-                                      ?.data
-                                      ?.massion?[
-                                  messionIndex]
-                                      .address ==
-                                      null ||
-                                      delearRetailerModel
-                                          ?.data
-                                          ?.massion?[
-                                      messionIndex]
-                                          .address ==
-                                          " "
-                                      ? Container(
-                                    height: 40,
-                                    width:
-                                    MediaQuery.of(context)
-                                        .size
-                                        .width /
-                                        2.2,
-                                    child: TextFormField(
-                                      onChanged: (value) {
-                                        messionaddress = value;
-                                      },
-                                      controller:
-                                      TextEditingController(),
-                                      decoration:
-                                      InputDecoration(
-                                        // hintText: '',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius
-                                                .circular(
-                                                10)),
-                                      ),
-                                    ),
-                                  )
-                                      : Container(
-                                    height: 40,
-                                    width:
-                                    MediaQuery.of(context)
-                                        .size
-                                        .width /
-                                        2.2,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(10),
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            color:
-                                            Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        "${delearRetailerModel?.data?.massion?[messionIndex].address}",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight:
-                                            FontWeight
-                                                .w800),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                              // SizedBox(
-                              //   height: 8,
-                              // ),
-                              // selectedMession == "904"
-                              //     ? Column(
-                              //   children: [
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Name:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 20,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             missionNameCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             // readOnly: true,
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //     SizedBox(
-                              //       height: 8,
-                              //     ),
-                              //     Row(
-                              //       crossAxisAlignment:
-                              //       CrossAxisAlignment
-                              //           .start,
-                              //       children: [
-                              //         SizedBox(
-                              //           height: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .height *
-                              //               .01,
-                              //         ),
-                              //         Padding(
-                              //           padding:
-                              //           const EdgeInsets
-                              //               .only(top: 10),
-                              //           child: Text(
-                              //             "Address:",
-                              //             style: TextStyle(
-                              //                 fontSize: 12,
-                              //                 fontWeight:
-                              //                 FontWeight
-                              //                     .w800),
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           width: 10,
-                              //         ),
-                              //         Container(
-                              //           height: 40,
-                              //           width: MediaQuery.of(
-                              //               context)
-                              //               .size
-                              //               .width /
-                              //               2.2,
-                              //           child: TextFormField(
-                              //             controller:
-                              //             missionAddressCtr,
-                              //             // onChanged: (value) {
-                              //             //   // String mobileContractor = value ;
-                              //             //   contractorMobile = value;
-                              //             // },
-                              //             //controller: mobilecn,
-                              //             decoration:
-                              //             InputDecoration(
-                              //               contentPadding:
-                              //               EdgeInsets.only(
-                              //                   bottom: 4,
-                              //                   left: 3),
-                              //               // hintText: '',
-                              //               border: OutlineInputBorder(
-                              //                   borderRadius:
-                              //                   BorderRadius
-                              //                       .circular(
-                              //                       10)),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ],
-                              // )
-                              //     : SizedBox(),
-                            ],
-                          )
-                              : SizedBox(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text("Status Of Site",
+        body: delearRetailerModel == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Name",
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 50,
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              controller: statusSiteCtr,
-                              decoration: InputDecoration(
-                                hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 40,
+                              child: TextFormField(
+                                // readOnly: true,
+                                controller: namecn,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(bottom: 5, left: 5),
+                                  // hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return "please enter Name";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Mobile",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 65,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                maxLength: 10,
+                                // readOnly: true,
+                                controller: mobileCtr,
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  contentPadding:
+                                      EdgeInsets.only(bottom: 5, left: 5),
+                                  // hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Site Size (in sqr. ft.)",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Container(
-                            height: 50,
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              controller: siteSizeCtr,
-                              decoration: InputDecoration(
-                                hintText: '',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                            // const Text(
+                            //   "Date",
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // Container(
+                            //   height: 50,
+                            //   child: TextFormField(
+                            //       readOnly: true,
+                            //       controller: dateCtr,
+                            //       decoration: InputDecoration(
+                            //           // hintText: '',
+                            //           border: OutlineInputBorder(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10)))),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // const Text(
+                            //   "Time",
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // Container(
+                            //   height: 50,
+                            //   child: TextFormField(
+                            //     readOnly: true,
+                            //     maxLength: 10,
+                            //     controller: timeCtr,
+                            //     decoration: InputDecoration(
+                            //       hintText: '',
+                            //       counterText: "",
+                            //       border: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Address",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 40,
+                              child: TextFormField(
+                                // readOnly: true,
+                                controller: addressCtr,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(bottom: 5, left: 5),
+                                  // hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          const Text(
-                            "Product Being Used",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Card(
-                            elevation: 3,
-                            child: Container(
-                              decoration: BoxDecoration(
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "State",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedState,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedState = newValue;
+                                      // print("current indexxx ${selected}");
+                                      stateindex = getListModel!.data!.states!
+                                          .indexWhere((element) =>
+                                              element.id == selectedState);
+                                      // currentIndex = selected;
+                                      // showTextField = true;
+                                    });
+                                  },
+                                  items:
+                                      getListModel?.data?.states?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.name.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: 'Select State',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Text(
+                              "District",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedDistrict,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedDistrict = newValue;
+                                      // print("current indexxx ${selected}");
+                                      nwIndex = getListModel!
+                                          .data!.states![stateindex].cities!
+                                          .indexWhere((element) =>
+                                              element.id == selectedDistrict);
+                                      // currentIndex = selected;
+                                      // showTextField = true;
+                                    });
+                                  },
+                                  items: getListModel
+                                      ?.data?.states?[stateindex].cities
+                                      ?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.city.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: 'Select District',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Pin Code",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 40,
+                              child: TextFormField(
+                                maxLength: 6,
+                                keyboardType: TextInputType.number,
+                                // readOnly: true,
+                                controller: pinCodeController,
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  // hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Name Of Contractor",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedContractor,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedContractor = newValue;
+                                      contractorIndex = delearRetailerModel!
+                                          .data!.contractor!
+                                          .indexWhere((element) =>
+                                              element.id == selectedContractor);
+                                      // currentIndex = selected;
+                                      showTextField = true;
+                                    });
+                                  },
+                                  items: delearRetailerModel?.data?.contractor
+                                      ?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.ownerName.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: '',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            selectedContractor != null
+                                ? selectedContractor == "9090"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text(
+                                                  "Mobile:",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.contractor?[
+                                                                  contractorIndex]
+                                                              .mobileOne ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.contractor?[
+                                                                  contractorIndex]
+                                                              .mobileOne ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        // onChanged: (value) {
+                                                        //   // String mobileContractor = value ;
+                                                        //   contractorMobile =
+                                                        //       value;
+                                                        // },
+                                                        // readOnly: true,
+                                                        //controller: mobilecn,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          contentPadding:
+                                                              EdgeInsets.only(
+                                                                  bottom: 4,
+                                                                  left: 3),
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "${delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne}",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          selectedContractor == "9091"
+                                              ? Column(
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Name:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                contractorNameCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            // readOnly: true,
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Address:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                contractorAddressCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            selectedContractor != null
+                                ? selectedContractor == "9090" ||
+                                        selectedContractor == "9091"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text(
+                                                  "Address:",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.contractor?[
+                                                                  contractorIndex]
+                                                              .address ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.contractor?[
+                                                                  contractorIndex]
+                                                              .address ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        onChanged: (value) {
+                                                          // String mobileContractor = value ;
+                                                          contractoraddress =
+                                                              value;
+                                                        },
+                                                        // readOnly: true,
+                                                        //controller: mobilecn,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          contentPadding:
+                                                              EdgeInsets.only(
+                                                                  bottom: 4,
+                                                                  left: 3),
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "${delearRetailerModel?.data?.contractor?[contractorIndex].address}",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          // SizedBox(
+                                          //   height: 10,
+                                          // ),
+                                          // selectedContractor == "9091"
+                                          //     ? Column(
+                                          //   children: [
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Name:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 20,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             contractorNameCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             // readOnly: true,
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //     SizedBox(
+                                          //       height: 8,
+                                          //     ),
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Address:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 10,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             contractorAddressCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10),
+                                          //               ),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //   ],
+                                          // ): SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Name Of Engineer",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedEngineer,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedEngineer = newValue;
+                                      engineerIndex = delearRetailerModel!
+                                          .data!.engineer!
+                                          .indexWhere((element) =>
+                                              element.id == selectedEngineer);
+                                      // currentIndex = selected;
+                                      showTextField = true;
+                                    });
+                                  },
+                                  items: delearRetailerModel?.data?.engineer
+                                      ?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.ownerName.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: '',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            selectedEngineer != null
+                                ? selectedEngineer == "907"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text(
+                                                  "Mobile:",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              delearRetailerModel!
+                                                              .data!
+                                                              .engineer?[
+                                                                  engineerIndex]
+                                                              .mobileOne ==
+                                                          null ||
+                                                      delearRetailerModel!
+                                                              .data!
+                                                              .engineer?[
+                                                                  engineerIndex]
+                                                              .mobileOne ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          enaginnerMobile =
+                                                              value;
+                                                        },
+                                                        // controller: ownerNameCtr,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "${delearRetailerModel!.data!.engineer?[engineerIndex].mobileOne}",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          selectedEngineer == "909"
+                                              ? Column(
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Name:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                engineerNameCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            // readOnly: true,
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Address:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                engineerAddressCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            selectedEngineer != null
+                                ? selectedEngineer == "907" ||
+                                        selectedEngineer == '909'
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text(
+                                                  "Address:",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              delearRetailerModel!
+                                                              .data!
+                                                              .engineer?[
+                                                                  engineerIndex]
+                                                              .address ==
+                                                          null ||
+                                                      delearRetailerModel!
+                                                              .data!
+                                                              .engineer?[
+                                                                  engineerIndex]
+                                                              .address ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          enaginneraddress =
+                                                              value;
+                                                        },
+                                                        // controller: ownerNameCtr,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "${delearRetailerModel!.data!.engineer?[engineerIndex].address}",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          // SizedBox(
+                                          //   height: 8,
+                                          // ),
+                                          // selectedEngineer == "909"
+                                          //     ? Column(
+                                          //   children: [
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Name:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 20,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             engineerNameCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             // readOnly: true,
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //     SizedBox(
+                                          //       height: 8,
+                                          //     ),
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Address:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 10,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             engineerAddressCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //   ],
+                                          // )
+                                          //     : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Name Of Arti-tech",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedArchitec,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedArchitec = newValue;
+                                      architectIndex = delearRetailerModel!
+                                          .data!.artitech!
+                                          .indexWhere((element) =>
+                                              element.id == selectedArchitec);
+                                      // currentIndex = selected;
+                                      showTextField = true;
+                                    });
+                                  },
+                                  items: delearRetailerModel?.data?.artitech
+                                      ?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.ownerName.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: '',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            selectedArchitec != null
+                                ? selectedArchitec == "906"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text("Mobile:",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w800)),
+                                              ),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.artitech?[
+                                                                  architectIndex]
+                                                              .mobileOne ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.artitech?[
+                                                                  architectIndex]
+                                                              .mobileOne ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          architecMobile =
+                                                              value;
+                                                        },
+                                                        readOnly: true,
+                                                        // controller: ownerNameCtr,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                              child: Text(
+                                                                  "${delearRetailerModel?.data?.artitech?[architectIndex].mobileOne}",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800))),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          selectedArchitec == "900"
+                                              ? Column(
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Name:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                artitechNameCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            // readOnly: true,
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Address:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                artitechAddressCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            selectedArchitec != null
+                                ? selectedArchitec == "906" ||
+                                        selectedArchitec == "900"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .01,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text("Address:",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w800)),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.artitech?[
+                                                                  architectIndex]
+                                                              .address ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.artitech?[
+                                                                  architectIndex]
+                                                              .address ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          architecaddress =
+                                                              value;
+                                                        },
+                                                        readOnly: true,
+                                                        // controller: ownerNameCtr,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          child: Center(
+                                                              child: Text(
+                                                                  "${delearRetailerModel?.data?.artitech?[architectIndex].address}",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800))),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          // SizedBox(
+                                          //   height: 8,
+                                          // ),
+                                          // selectedArchitec == "900"
+                                          //     ? Column(
+                                          //   children: [
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Name:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 20,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             artitechNameCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             // readOnly: true,
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //     SizedBox(
+                                          //       height: 8,
+                                          //     ),
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Address:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 10,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             artitechAddressCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //   ],
+                                          // )
+                                          //     : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Name Of Massion",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 60,
+                              child: Card(
+                                elevation: 2,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedMession,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedMession = newValue;
+                                      messionIndex = delearRetailerModel!
+                                          .data!.massion!
+                                          .indexWhere((element) =>
+                                              element.id == selectedMession);
+                                      // currentIndex = selected;
+                                      showTextField = true;
+                                    });
+                                  },
+                                  items: delearRetailerModel?.data?.massion
+                                      ?.map((items) {
+                                    return DropdownMenuItem(
+                                      value: items.id,
+                                      child: Text(items.ownerName.toString()),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 5, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: '',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            selectedMession != null
+                                ? selectedMession == "902"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            //  mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text("Mobile:",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w800)),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.massion?[
+                                                                  messionIndex]
+                                                              .mobileOne ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.massion?[
+                                                                  messionIndex]
+                                                              .mobileOne ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          messionMobile = value;
+                                                        },
+                                                        controller:
+                                                            TextEditingController(),
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .black)),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "${delearRetailerModel?.data?.massion?[messionIndex].mobileOne}",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800),
+                                                        ),
+                                                      ),
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          selectedMession == "904"
+                                              ? Column(
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Name:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                missionNameCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            // readOnly: true,
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .01,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10),
+                                                          child: Text(
+                                                            "Address:",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                          child: TextFormField(
+                                                            controller:
+                                                                missionAddressCtr,
+                                                            // onChanged: (value) {
+                                                            //   // String mobileContractor = value ;
+                                                            //   contractorMobile = value;
+                                                            // },
+                                                            //controller: mobilecn,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 4,
+                                                                      left: 3),
+                                                              // hintText: '',
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            selectedMession != null
+                                ? selectedMession == "902" ||
+                                        selectedMession == "904"
+                                    ? SizedBox()
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text("Address:",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w800)),
+                                              ),
+                                              SizedBox(
+                                                width: 6,
+                                              ),
+                                              delearRetailerModel
+                                                              ?.data
+                                                              ?.massion?[
+                                                                  messionIndex]
+                                                              .address ==
+                                                          null ||
+                                                      delearRetailerModel
+                                                              ?.data
+                                                              ?.massion?[
+                                                                  messionIndex]
+                                                              .address ==
+                                                          " "
+                                                  ? Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      child: TextFormField(
+                                                        onChanged: (value) {
+                                                          messionaddress =
+                                                              value;
+                                                        },
+                                                        controller:
+                                                            TextEditingController(),
+                                                        decoration:
+                                                            InputDecoration(
+                                                          // hintText: '',
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height: 40,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.2,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .black)),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "${delearRetailerModel?.data?.massion?[messionIndex].address}",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800),
+                                                        ),
+                                                      ),
+                                                    ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          ),
+                                          // SizedBox(
+                                          //   height: 8,
+                                          // ),
+                                          // selectedMession == "904"
+                                          //     ? Column(
+                                          //   children: [
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Name:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 20,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             missionNameCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             // readOnly: true,
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //     SizedBox(
+                                          //       height: 8,
+                                          //     ),
+                                          //     Row(
+                                          //       crossAxisAlignment:
+                                          //       CrossAxisAlignment
+                                          //           .start,
+                                          //       children: [
+                                          //         SizedBox(
+                                          //           height: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .height *
+                                          //               .01,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding:
+                                          //           const EdgeInsets
+                                          //               .only(top: 10),
+                                          //           child: Text(
+                                          //             "Address:",
+                                          //             style: TextStyle(
+                                          //                 fontSize: 12,
+                                          //                 fontWeight:
+                                          //                 FontWeight
+                                          //                     .w800),
+                                          //           ),
+                                          //         ),
+                                          //         SizedBox(
+                                          //           width: 10,
+                                          //         ),
+                                          //         Container(
+                                          //           height: 40,
+                                          //           width: MediaQuery.of(
+                                          //               context)
+                                          //               .size
+                                          //               .width /
+                                          //               2.2,
+                                          //           child: TextFormField(
+                                          //             controller:
+                                          //             missionAddressCtr,
+                                          //             // onChanged: (value) {
+                                          //             //   // String mobileContractor = value ;
+                                          //             //   contractorMobile = value;
+                                          //             // },
+                                          //             //controller: mobilecn,
+                                          //             decoration:
+                                          //             InputDecoration(
+                                          //               contentPadding:
+                                          //               EdgeInsets.only(
+                                          //                   bottom: 4,
+                                          //                   left: 3),
+                                          //               // hintText: '',
+                                          //               border: OutlineInputBorder(
+                                          //                   borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(
+                                          //                       10)),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ),
+                                          //   ],
+                                          // )
+                                          //     : SizedBox(),
+                                        ],
+                                      )
+                                : SizedBox(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text("Status Of Site",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 50,
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                controller: statusSiteCtr,
+                                decoration: InputDecoration(
+                                  hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Site Size (in sqr. ft.)",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Container(
+                              height: 50,
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                controller: siteSizeCtr,
+                                decoration: InputDecoration(
+                                  hintText: '',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            const Text(
+                              "Product Being Used",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            Card(
+                              elevation: 3,
+                              child: Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.white,
                                   border: Border.all(color: Colors.black),
-                              ),
-                              height: 45,
-                              width: MediaQuery.of(context).size.width / 1.1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 0, left: 10, bottom: 2, right: 10),
-                                child: select(),
+                                ),
+                                height: 45,
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 0, left: 10, bottom: 2, right: 10),
+                                  child: select(),
+                                ),
                               ),
                             ),
-                          ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // const Text(
-                          //   "Remark",
-                          //   style: TextStyle(
-                          //       fontSize: 14, fontWeight: FontWeight.bold),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // Container(
-                          //   height: 65,
-                          //   child: TextFormField(
-                          //       keyboardType: TextInputType.text,
-                          //       controller: remarkCtr,
-                          //       decoration: InputDecoration(
-                          //           hintText: '',
-                          //           border: OutlineInputBorder(
-                          //               borderRadius:
-                          //                   BorderRadius.circular(10)))),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // const Text(
-                          //   "Expected Date",
-                          //   style: TextStyle(
-                          //       fontSize: 14, fontWeight: FontWeight.bold),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // Container(
-                          //   height: 50,
-                          //   // width: MediaQuery.of(context).size.width / 2.9,
-                          //   child: TextField(
-                          //     controller: execteddateCtr,
-                          //     decoration: InputDecoration(
-                          //         hintText: 'Select Expected Date',
-                          //         border: OutlineInputBorder(
-                          //             borderRadius: BorderRadius.circular(10))),
-                          //      onTap: () async {
-                          //       DateTime? pickedDate = await showDatePicker(
-                          //           context: context,
-                          //           initialDate: DateTime.now(),
-                          //           firstDate: DateTime(1950),
-                          //           lastDate: DateTime(2100),
-                          //           builder: (context, child) {
-                          //             return Theme(
-                          //                 data: Theme.of(context).copyWith(
-                          //                   colorScheme:
-                          //                       const ColorScheme.light(
-                          //                           primary: colors.primary),
-                          //                 ),
-                          //                 child: child!);
-                          //           });
-                          //       if (pickedDate != null) {
-                          //         String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                          //         setState(() {
-                          //           execteddateCtr.text = formattedDate;
-                          //         });
-                          //       }
-                          //     },
-                          //   ),
-                          // ),
-                          // InkWell(
-                          //   onTap:
-                          //       () async {
-                          //     DateTime?pickedDate =
-                          //     await showDatePicker(context:
-                          //     context, initialDate: DateTime.now(),
-                          //         firstDate: DateTime(
-                          //             1950),
-                          //         lastDate: DateTime(
-                          //             2100),
-                          //         builder:
-                          //             (context, child) {
-                          //           return Theme(
-                          //               data: Theme.of(context).copyWith(
-                          //                 colorScheme: const ColorScheme.light(primary: colors.primary),
-                          //               ),
-                          //               child: child!);
-                          //         });
-                          //     if (pickedDate !=
-                          //         null) {
-                          //       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                          //       setState(
-                          //               () {
-                          //             execteddateCtr.text = formattedDate;
-                          //           });
-                          //     }
-                          //   },
-                          //   child: Container(
-                          //     height: 65,
-                          //     child: TextFormField(
-                          //         keyboardType: TextInputType.text,
-                          //         controller: execteddateCtr,
-                          //         decoration: InputDecoration(
-                          //             hintText: '',
-                          //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
-                          //             ),
-                          //         ),
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .01,
-                          // ),
-                          // InkWell(
-                          //   onTap: () {
-                          //     pickImageDialog(context, 1);
-                          //   },
-                          //   child: Container(
-                          //       height: 35,
-                          //       width: MediaQuery.of(context).size.width/3,
-                          //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                          //       child: const Center(
-                          //           child: Text("Select Image", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400)))
-                          //   ),
-                          // ),
-                          // uploadMultiImage(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          // Center(
-                          //   child: Container(
-                          //     height: 150,
-                          //     width: 150,
-                          //     decoration: BoxDecoration(
-                          //         border: Border.all(color: Colors.black)),
-                          //     child: _imageFile != null
-                          //         ? Image.file(
-                          //             _imageFile!.absolute,
-                          //             fit: BoxFit.fill,
-                          //           )
-                          //         : Center(
-                          //             child: Image.asset('assets/img.png')),
-                          //   ),
-                          // ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          //    const Text("Select Payment", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                          //    ),
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //    children: [
-                          //      Row(
-                          //        children: [
-                          //          Row(
-                          //            children: <Widget>[
-                          //              Text('Subscription: ${getPlansModel?.data?[0].amount}', style: const TextStyle(fontSize: 12),),
-                          //              Radio(
-                          //                value: 'Subscription',
-                          //                groupValue: selectedSubscription,
-                          //                onChanged: (value) {
-                          //                  setState(() {
-                          //                    selectedSubscription = value;
-                          //                  });
-                          //                },
-                          //              ),
-                          //              const Text('Wallet', style: TextStyle(fontSize: 12)),
-                          //              Radio(
-                          //                value: 'Wallet',
-                          //                groupValue: selectedWallet,
-                          //                onChanged: (value) {
-                          //                  setState(() {
-                          //                    selectedWallet = value;
-                          //                  });
-                          //                },
-                          //              ),
-                          //            ],
-                          //          ),
-                          //          // Radio buttons for Wallet
-                          //          // Row(
-                          //          //   children: <Widget>[
-                          //          //     Text('Online', style: TextStyle(fontSize: 12)),
-                          //          //     Radio(
-                          //          //       value: 'Online',
-                          //          //       groupValue: selectedOnlinePayment,
-                          //          //       onChanged: (value) {
-                          //          //         setState(() {
-                          //          //           selectedOnlinePayment = value;
-                          //          //         });
-                          //          //       },
-                          //          //     ),
-                          //          //   ],
-                          //          // ),
-                          //        ],
-                          //      ),
-                          // //     RadioListTile(
-                          // //     title: const Text('Subscription', style: TextStyle(fontSize: 14)),
-                          // //    value: 'Subscription',
-                          // //    groupValue: selecteSubscription,
-                          // //    onChanged: (value) {
-                          // //     setState(() {
-                          // //       selecteSubscription = value;
-                          // //     });
-                          // //   },
-                          // // ),
-                          // //      Text("${getPlansModel?.data?[0].amount}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: colors.black),
-                          // //      ),
-                          // // // RadioListTile(
-                          // // //   title: Text('Wallet'),
-                          // // //   value: 'Wallet',
-                          // // //   groupValue: selecteWallet,
-                          // // //   onChanged: (value) {
-                          // // //     setState(() {
-                          // // //       selecteWallet = value;
-                          // // //     });
-                          // // //   },
-                          // // // ),
-                          // // RadioListTile(
-                          // //   title: Text('Online Payment'),
-                          // //   value: 'Online Payment',
-                          // //   groupValue: selecteOnline,
-                          // //   onChanged: (value) {
-                          // //     setState(() {
-                          // //       selecteOnline = value;
-                          // //     });
-                          // //   },
-                          // //     ),
-                          //   ],
-                          // ),
-                          //    SizedBox(
-                          //      height: MediaQuery.of(context).size.height *.02,
-                          //    ),
-                          // ElevatedButton(
-                          //   style: ElevatedButton.styleFrom(primary: colors.primary),
-                          //   onPressed: () {
-                          //     showExitPopup();
-                          //   },
-                          //   child: const Text("Upload Report"),
-                          // ),
-                          // const SizedBox(height: 10),
-                          // imageFile == null ? const SizedBox.shrink(): InkWell(
-                          //   onTap: () {
-                          //     showExitPopup();
-                          //   },
-                          //   child: Container(
-                          //     height: 100,
-                          //     width: double.infinity,
-                          //     margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          //     child: Image.file(imageFile!,fit: BoxFit.fill,),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .02,
-                          // ),
-                          // ElevatedButton(
-                          //     style: ElevatedButton.styleFrom(primary: colors.primary),
-                          //     onPressed: () {
-                          //       showExitPopup1();
-                          //     },
-                          //     child: const Text("Upload Pet Image")),
-                          // SizedBox(height: 10,),
-                          // petImage == null ? SizedBox.shrink() :  InkWell(
-                          //   onTap: () {
-                          //     showExitPopup1();
-                          //   },
-                          //   child: Container(
-                          //     height: 100,
-                          //     width: double.infinity,
-                          //     margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          //     child: Image.file(petImage!,fit: BoxFit.fill,),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: MediaQuery.of(context).size.height * .02,
-                          // ),
-                        ],
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // const Text(
+                            //   "Remark",
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // Container(
+                            //   height: 65,
+                            //   child: TextFormField(
+                            //       keyboardType: TextInputType.text,
+                            //       controller: remarkCtr,
+                            //       decoration: InputDecoration(
+                            //           hintText: '',
+                            //           border: OutlineInputBorder(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10)))),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // const Text(
+                            //   "Expected Date",
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // Container(
+                            //   height: 50,
+                            //   // width: MediaQuery.of(context).size.width / 2.9,
+                            //   child: TextField(
+                            //     controller: execteddateCtr,
+                            //     decoration: InputDecoration(
+                            //         hintText: 'Select Expected Date',
+                            //         border: OutlineInputBorder(
+                            //             borderRadius: BorderRadius.circular(10))),
+                            //      onTap: () async {
+                            //       DateTime? pickedDate = await showDatePicker(
+                            //           context: context,
+                            //           initialDate: DateTime.now(),
+                            //           firstDate: DateTime(1950),
+                            //           lastDate: DateTime(2100),
+                            //           builder: (context, child) {
+                            //             return Theme(
+                            //                 data: Theme.of(context).copyWith(
+                            //                   colorScheme:
+                            //                       const ColorScheme.light(
+                            //                           primary: colors.primary),
+                            //                 ),
+                            //                 child: child!);
+                            //           });
+                            //       if (pickedDate != null) {
+                            //         String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            //         setState(() {
+                            //           execteddateCtr.text = formattedDate;
+                            //         });
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
+                            // InkWell(
+                            //   onTap:
+                            //       () async {
+                            //     DateTime?pickedDate =
+                            //     await showDatePicker(context:
+                            //     context, initialDate: DateTime.now(),
+                            //         firstDate: DateTime(
+                            //             1950),
+                            //         lastDate: DateTime(
+                            //             2100),
+                            //         builder:
+                            //             (context, child) {
+                            //           return Theme(
+                            //               data: Theme.of(context).copyWith(
+                            //                 colorScheme: const ColorScheme.light(primary: colors.primary),
+                            //               ),
+                            //               child: child!);
+                            //         });
+                            //     if (pickedDate !=
+                            //         null) {
+                            //       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            //       setState(
+                            //               () {
+                            //             execteddateCtr.text = formattedDate;
+                            //           });
+                            //     }
+                            //   },
+                            //   child: Container(
+                            //     height: 65,
+                            //     child: TextFormField(
+                            //         keyboardType: TextInputType.text,
+                            //         controller: execteddateCtr,
+                            //         decoration: InputDecoration(
+                            //             hintText: '',
+                            //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+                            //             ),
+                            //         ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .01,
+                            // ),
+                            // InkWell(
+                            //   onTap: () {
+                            //     pickImageDialog(context, 1);
+                            //   },
+                            //   child: Container(
+                            //       height: 35,
+                            //       width: MediaQuery.of(context).size.width/3,
+                            //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
+                            //       child: const Center(
+                            //           child: Text("Select Image", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400)))
+                            //   ),
+                            // ),
+                            // uploadMultiImage(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            // Center(
+                            //   child: Container(
+                            //     height: 150,
+                            //     width: 150,
+                            //     decoration: BoxDecoration(
+                            //         border: Border.all(color: Colors.black)),
+                            //     child: _imageFile != null
+                            //         ? Image.file(
+                            //             _imageFile!.absolute,
+                            //             fit: BoxFit.fill,
+                            //           )
+                            //         : Center(
+                            //             child: Image.asset('assets/img.png')),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .01,
+                            ),
+                            //    const Text("Select Payment", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            //    ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //    children: [
+                            //      Row(
+                            //        children: [
+                            //          Row(
+                            //            children: <Widget>[
+                            //              Text('Subscription: ${getPlansModel?.data?[0].amount}', style: const TextStyle(fontSize: 12),),
+                            //              Radio(
+                            //                value: 'Subscription',
+                            //                groupValue: selectedSubscription,
+                            //                onChanged: (value) {
+                            //                  setState(() {
+                            //                    selectedSubscription = value;
+                            //                  });
+                            //                },
+                            //              ),
+                            //              const Text('Wallet', style: TextStyle(fontSize: 12)),
+                            //              Radio(
+                            //                value: 'Wallet',
+                            //                groupValue: selectedWallet,
+                            //                onChanged: (value) {
+                            //                  setState(() {
+                            //                    selectedWallet = value;
+                            //                  });
+                            //                },
+                            //              ),
+                            //            ],
+                            //          ),
+                            //          // Radio buttons for Wallet
+                            //          // Row(
+                            //          //   children: <Widget>[
+                            //          //     Text('Online', style: TextStyle(fontSize: 12)),
+                            //          //     Radio(
+                            //          //       value: 'Online',
+                            //          //       groupValue: selectedOnlinePayment,
+                            //          //       onChanged: (value) {
+                            //          //         setState(() {
+                            //          //           selectedOnlinePayment = value;
+                            //          //         });
+                            //          //       },
+                            //          //     ),
+                            //          //   ],
+                            //          // ),
+                            //        ],
+                            //      ),
+                            // //     RadioListTile(
+                            // //     title: const Text('Subscription', style: TextStyle(fontSize: 14)),
+                            // //    value: 'Subscription',
+                            // //    groupValue: selecteSubscription,
+                            // //    onChanged: (value) {
+                            // //     setState(() {
+                            // //       selecteSubscription = value;
+                            // //     });
+                            // //   },
+                            // // ),
+                            // //      Text("${getPlansModel?.data?[0].amount}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: colors.black),
+                            // //      ),
+                            // // // RadioListTile(
+                            // // //   title: Text('Wallet'),
+                            // // //   value: 'Wallet',
+                            // // //   groupValue: selecteWallet,
+                            // // //   onChanged: (value) {
+                            // // //     setState(() {
+                            // // //       selecteWallet = value;
+                            // // //     });
+                            // // //   },
+                            // // // ),
+                            // // RadioListTile(
+                            // //   title: Text('Online Payment'),
+                            // //   value: 'Online Payment',
+                            // //   groupValue: selecteOnline,
+                            // //   onChanged: (value) {
+                            // //     setState(() {
+                            // //       selecteOnline = value;
+                            // //     });
+                            // //   },
+                            // //     ),
+                            //   ],
+                            // ),
+                            //    SizedBox(
+                            //      height: MediaQuery.of(context).size.height *.02,
+                            //    ),
+                            // ElevatedButton(
+                            //   style: ElevatedButton.styleFrom(primary: colors.primary),
+                            //   onPressed: () {
+                            //     showExitPopup();
+                            //   },
+                            //   child: const Text("Upload Report"),
+                            // ),
+                            // const SizedBox(height: 10),
+                            // imageFile == null ? const SizedBox.shrink(): InkWell(
+                            //   onTap: () {
+                            //     showExitPopup();
+                            //   },
+                            //   child: Container(
+                            //     height: 100,
+                            //     width: double.infinity,
+                            //     margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            //     child: Image.file(imageFile!,fit: BoxFit.fill,),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .02,
+                            // ),
+                            // ElevatedButton(
+                            //     style: ElevatedButton.styleFrom(primary: colors.primary),
+                            //     onPressed: () {
+                            //       showExitPopup1();
+                            //     },
+                            //     child: const Text("Upload Pet Image")),
+                            // SizedBox(height: 10,),
+                            // petImage == null ? SizedBox.shrink() :  InkWell(
+                            //   onTap: () {
+                            //     showExitPopup1();
+                            //   },
+                            //   child: Container(
+                            //     height: 100,
+                            //     width: double.infinity,
+                            //     margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            //     child: Image.file(petImage!,fit: BoxFit.fill,),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * .02,
+                            // ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .02,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if (namecn.text.isEmpty || namecn.text == "") {
-                          Fluttertoast.showToast(msg: "Please enter Name");
-                        }
-                        else if(mobileCtr.text.isEmpty || mobileCtr.text == "") {
-                          Fluttertoast.showToast(msg: "Please enter number");
-                        } else if(addressCtr.text.isEmpty || addressCtr.text == "") {
-                          Fluttertoast.showToast(msg: "Please enter address");
-                        }
-                        else if (selectedState == null) {
-                          Fluttertoast.showToast(msg: "Please select State");
-                        } else if (selectedDistrict == null) {
-                          Fluttertoast.showToast(msg: "Please select district");
-                        } else if (results.isEmpty) {
-                          Fluttertoast.showToast(msg: "Please select product being used");
-                        } else {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => SiteSurvey(
-                                modelList: results,
-                                name: namecn.text,
-                                contact: mobileCtr.text,
-                                address: addressCtr.text,
-                                state: getListModel?.data?.states?[stateindex].name,
-                                // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
-                                pincode: pinCodeController.text,
-                                sitesize: siteSizeCtr.text,
-                                expectedDate: execteddateCtr.text,
-                                missionName: missionNameCtr.text,
-                                missionAddress: missionAddressCtr.text,
-                                mession: selectedMession,
-                                messionMobile: delearRetailerModel?.data?.massion?[messionIndex].mobileOne == "" || delearRetailerModel?.data?.massion?[messionIndex].mobileOne == null ? messionMobile : delearRetailerModel?.data?.massion?[messionIndex].mobileOne,
-                                contractor: selectedContractor,
-                                contractorMobile: delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne == "" || delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne == null ? contractorMobile : delearRetailerModel?.data?.contractor?[contractorIndex].mobileOne,
-                                contractorName: contractorNameCtr.text,
-                                contractorAddress: contractorAddressCtr.text,
-                                engineer: selectedEngineer,
-                                engineerMobile: delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne == "" || delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne == null ? enaginnerMobile : delearRetailerModel?.data?.engineer?[engineerIndex].mobileOne,
-                                engineerName: engineerNameCtr.text,
-                                engineerAddress: engineerAddressCtr.text,
-                                architec: selectedArchitec,
-                                architecMobile: delearRetailerModel?.data?.artitech?[architectIndex].mobileOne == "" || delearRetailerModel?.data?.artitech?[architectIndex].mobileOne == null ? architecMobile : delearRetailerModel?.data?.artitech?[architectIndex].mobileOne,
-                                architecName: artitechNameCtr.text,
-                                architecAddress: artitechAddressCtr.text,
-                                // creditLimit: widget.creditLimit,
-                                //customerType: widget.customerType,
-                                // date: dateCtr.text,
-                                // status:
-                                time: timeCtr.text,
-                                // image: imagePathList,
-                                // remark: remarkCtr.text,
-                                // clintId: cl,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .02,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (namecn.text.isEmpty || namecn.text == "") {
+                            Fluttertoast.showToast(msg: "Please enter Name");
+                          } else if (mobileCtr.text.isEmpty ||
+                              mobileCtr.text == "") {
+                            Fluttertoast.showToast(msg: "Please enter number");
+                          } else if (addressCtr.text.isEmpty ||
+                              addressCtr.text == "") {
+                            Fluttertoast.showToast(msg: "Please enter address");
+                          } else if (selectedState == null) {
+                            Fluttertoast.showToast(msg: "Please select State");
+                          } else if (selectedDistrict == null) {
+                            Fluttertoast.showToast(
+                                msg: "Please select district");
+                          } else if (results.isEmpty) {
+                            Fluttertoast.showToast(
+                                msg: "Please select product being used");
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SiteSurvey(
+                                  modelList: results,
+                                  name: namecn.text,
+                                  contact: mobileCtr.text,
+                                  address: addressCtr.text,
+                                  state: getListModel
+                                      ?.data?.states?[stateindex].name,
+                                  // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
+                                  pincode: pinCodeController.text,
+                                  sitesize: siteSizeCtr.text,
+                                  expectedDate: execteddateCtr.text,
+                                  missionName: missionNameCtr.text,
+                                  missionAddress: missionAddressCtr.text,
+                                  mession: selectedMession,
+                                  messionMobile: delearRetailerModel
+                                                  ?.data
+                                                  ?.massion?[messionIndex]
+                                                  .mobileOne ==
+                                              "" ||
+                                          delearRetailerModel
+                                                  ?.data
+                                                  ?.massion?[messionIndex]
+                                                  .mobileOne ==
+                                              null
+                                      ? messionMobile
+                                      : delearRetailerModel?.data
+                                          ?.massion?[messionIndex].mobileOne,
+                                  contractor: selectedContractor,
+                                  contractorMobile: delearRetailerModel
+                                                  ?.data
+                                                  ?.contractor?[contractorIndex]
+                                                  .mobileOne ==
+                                              "" ||
+                                          delearRetailerModel
+                                                  ?.data
+                                                  ?.contractor?[contractorIndex]
+                                                  .mobileOne ==
+                                              null
+                                      ? contractorMobile
+                                      : delearRetailerModel
+                                          ?.data
+                                          ?.contractor?[contractorIndex]
+                                          .mobileOne,
+                                  contractorName: contractorNameCtr.text,
+                                  contractorAddress: contractorAddressCtr.text,
+                                  engineer: selectedEngineer,
+                                  engineerMobile: delearRetailerModel
+                                                  ?.data
+                                                  ?.engineer?[engineerIndex]
+                                                  .mobileOne ==
+                                              "" ||
+                                          delearRetailerModel
+                                                  ?.data
+                                                  ?.engineer?[engineerIndex]
+                                                  .mobileOne ==
+                                              null
+                                      ? enaginnerMobile
+                                      : delearRetailerModel?.data
+                                          ?.engineer?[engineerIndex].mobileOne,
+                                  engineerName: engineerNameCtr.text,
+                                  engineerAddress: engineerAddressCtr.text,
+                                  architec: selectedArchitec,
+                                  architecMobile: delearRetailerModel
+                                                  ?.data
+                                                  ?.artitech?[architectIndex]
+                                                  .mobileOne ==
+                                              "" ||
+                                          delearRetailerModel
+                                                  ?.data
+                                                  ?.artitech?[architectIndex]
+                                                  .mobileOne ==
+                                              null
+                                      ? architecMobile
+                                      : delearRetailerModel?.data
+                                          ?.artitech?[architectIndex].mobileOne,
+                                  architecName: artitechNameCtr.text,
+                                  architecAddress: artitechAddressCtr.text,
+                                  // creditLimit: widget.creditLimit,
+                                  //customerType: widget.customerType,
+                                  // date: dateCtr.text,
+                                  // status:
+                                  time: timeCtr.text,
+                                  // image: imagePathList,
+                                  // remark: remarkCtr.text,
+                                  // clintId: cl,
+                                ),
                               ),
-                            ),
-                          );
-                          // if(namecn.text.isEmpty || siteSizeCtr.text.isEmpty || selectedStatus!.isEmpty || mobileCtr.text.isEmpty || _imageFile!.path.isEmpty) {
-                          //   Fluttertoast.showToast(msg: "All Fields Required");
-                          // } else{
-                          //
-                          // }
-                        }
-                      },
-                      child: Center(
-                        child: Container(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width / 1.8,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: colors.primary),
-                          child: const Center(
-                            child: Text(
-                              "Save & Next",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
+                            );
+                            // if(namecn.text.isEmpty || siteSizeCtr.text.isEmpty || selectedStatus!.isEmpty || mobileCtr.text.isEmpty || _imageFile!.path.isEmpty) {
+                            //   Fluttertoast.showToast(msg: "All Fields Required");
+                            // } else{
+                            //
+                            // }
+                          }
+                        },
+                        child: Center(
+                          child: Container(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width / 1.8,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: colors.primary),
+                            child: const Center(
+                              child: Text(
+                                "Save & Next",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10)
-                  ],
+                      SizedBox(height: 10)
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

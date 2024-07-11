@@ -5,22 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'package:omega_employee_management/Model/GedClientDataModel.dart';
+
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/DealingProductModel.dart';
 import '../Model/DelearRetailerModel.dart';
-import '../Model/DelearRetailerModel1.dart';
 import 'MultiSelect.dart';
 import 'Survey.dart';
 
-
 var latitude;
 var longitude;
-
 
 class FeedbackForm extends StatefulWidget {
   const FeedbackForm({Key? key}) : super(key: key);
@@ -30,7 +27,6 @@ class FeedbackForm extends StatefulWidget {
 }
 
 class _FeedbackFormState extends State<FeedbackForm> {
-
   void initState() {
     super.initState();
     getCurrentLoc();
@@ -60,14 +56,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
   String? timeData;
 
   convertDateTimeDispla() {
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-       formattedDate = formatter.format(now);
-      print("datedetet${formattedDate}"); // 2016-01-25
-       timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
-      print("timeeeeeeeeee${timeData}");
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    formattedDate = formatter.format(now);
+    print("datedetet${formattedDate}"); // 2016-01-25
+    timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
+    print("timeeeeeeeeee${timeData}");
   }
-
 
   date() async {
     dateCtr.text = formattedDate.toString();
@@ -79,10 +74,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
     var headers = {
       'Cookie': 'ci_session=ef29e61acfe01ba495d2b60947f70ae0b26cc807'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(clientType.toString()));
-    request.fields.addAll({
-      'client_type': '1,2'
-    });
+    var request =
+        http.MultipartRequest('POST', Uri.parse(clientType.toString()));
+    request.fields.addAll({'client_type': '1,2'});
 
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -96,8 +90,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         // delearRetailerModel?.data?.add(DealerListData(ownerName: "Other", id: "800"));
         // delearRetailerModel?.data?.add(DealerListData(ownerName: "NotApplicable", id: "801"));
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -115,13 +108,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
-      longitude_Global=latitude;
-      lattitudee_Global=longitude;
+      longitude_Global = latitude;
+      lattitudee_Global = longitude;
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
@@ -132,13 +126,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
         // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
-          currentlocation_Global=currentAddress.text.toString();
+          currentlocation_Global = currentAddress.text.toString();
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
@@ -157,11 +151,11 @@ class _FeedbackFormState extends State<FeedbackForm> {
   String? selected;
   int nwIndex = 0;
   var currentIndex;
-  final picker=ImagePicker();
+  final picker = ImagePicker();
   File? _imageFile;
   bool showTextField = false;
 
-  void pickImageDialog(BuildContext context,int i) async {
+  void pickImageDialog(BuildContext context, int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
@@ -169,7 +163,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(6),
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
             ),
           ),
           content: Column(
@@ -200,11 +195,11 @@ class _FeedbackFormState extends State<FeedbackForm> {
                 },
                 child: Container(
                   child: ListTile(
-                      title: Text("Camera"),
-                      leading: Icon(
-                        Icons.camera,
-                        color: colors.primary,
-                      ),
+                    title: Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: colors.primary,
+                    ),
                   ),
                 ),
               ),
@@ -215,14 +210,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
     );
   }
 
-
   DealingProductModel? dealingProductModel;
   dealingProduct() async {
     var headers = {
       'Cookie': 'ci_session=4f8360fd4e4e40e498783ef6638c6f55e6bc9fca'
     };
     var request =
-    http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
+        http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -230,13 +224,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
       var finalresult = DealingProductModel.fromJson(json.decode(result));
       setState(() {
         dealingProductModel = finalresult;
-        print("========dealingg=======${dealingProductModel?.data?? ""} ${finalresult}  ${results}===========");
+        print(
+            "========dealingg=======${dealingProductModel?.data ?? ""} ${finalresult}  ${results}===========");
       });
     } else {
       print(response.reasonPhrase);
     }
   }
-
 
   _getFromGallery() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
@@ -258,7 +252,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
       setState(() {
         _imageFile = File(pickedFile.path);
         imagePathList.add(_imageFile?.path ?? "");
-        isImages = true ;
+        isImages = true;
       });
       //Navigator.pop(context);
     }
@@ -268,56 +262,59 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   Widget select() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         setState(() {
           _showMultiSelect();
         });
       },
-      child:
-      Container(
+      child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
             color: colors.white70,
             border: Border(
-                bottom: BorderSide(color: colors.blackTemp.withOpacity(0.5),
-                ))),
-        child: results.isEmpty ? const Padding(
-          padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-          child: Text(
-            'Select',
-            style: TextStyle(
-              fontSize: 15,
-              color: colors.blackTemp,
-              fontWeight: FontWeight.normal,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ):SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row (
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: results.map((e) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 10, left: 1, right: 1),
-                child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    height: 30,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: colors.primary),
-                        child: Center(
-                        child: Text(
-                          "${e.name}",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                    ),
+                bottom: BorderSide(
+              color: colors.blackTemp.withOpacity(0.5),
+            ))),
+        child: results.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                child: Text(
+                  'Select',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: colors.blackTemp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              );
-            }).toList(),
-          ),
-        ),
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: results.map((e) {
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 1, right: 1),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: colors.primary),
+                        child: Center(
+                          child: Text(
+                            "${e.name}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
       ),
     );
   }
@@ -327,22 +324,20 @@ class _FeedbackFormState extends State<FeedbackForm> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-          return
-            MultiSelect(
-              dealingData: dealingProductModel?.data,
-              // name:delearRetailerModel?.data?[nwIndex].ownerName,
-              // email:delearRetailerModel?.data?[nwIndex].email,
-              // contact: delearRetailerModel?.data?[nwIndex].mobileOne,
-              // creditLimit: delearRetailerModel?.data?[nwIndex].creditLimit,
-              // customerType: delearRetailerModel?.data?[nwIndex].customerType,
-              // date: dateCtr.text,time: timeCtr.text,image: _imageFile?.path,remark: remarkCtr.text,clientId: selected,
-            );
+          return MultiSelect(
+            dealingData: dealingProductModel?.data,
+            // name:delearRetailerModel?.data?[nwIndex].ownerName,
+            // email:delearRetailerModel?.data?[nwIndex].email,
+            // contact: delearRetailerModel?.data?[nwIndex].mobileOne,
+            // creditLimit: delearRetailerModel?.data?[nwIndex].creditLimit,
+            // customerType: delearRetailerModel?.data?[nwIndex].customerType,
+            // date: dateCtr.text,time: timeCtr.text,image: _imageFile?.path,remark: remarkCtr.text,clientId: selected,
+          );
         });
       },
     );
     setState(() {});
   }
-
 
   List<String> imagePathList = [];
   bool isImages = false;
@@ -376,9 +371,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         const SizedBox(
           height: 10,
         ),
-        Visibility(
-            visible: isImages,
-            child:  buildGridView()),
+        Visibility(visible: isImages, child: buildGridView()),
       ],
     );
   }
@@ -388,7 +381,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
       height: 200,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
@@ -407,9 +401,11 @@ class _FeedbackFormState extends State<FeedbackForm> {
               Positioned(
                 bottom: 10,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary),),
-                  width:MediaQuery.of(context).size.width/2.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),
+                  ),
+                  width: MediaQuery.of(context).size.width / 2.8,
                   height: 70,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -417,9 +413,18 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white)),
-                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white)),
-                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                        Text("Date: ${formattedDate}",
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.white)),
+                        Text("Time: ${timeData}",
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.white)),
+                        Text(
+                          "Location: ${currentAddress.text}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        )
                       ],
                     ),
                   ),
@@ -444,7 +449,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -455,14 +459,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
           onTap: () {
             Navigator.pop(context);
           },
-          child:  Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: colors.primary,
-        title: Text("Counter Visit Form", style: TextStyle(fontSize: 15, color: Colors.white)),
+        title: Text("Counter Visit Form",
+            style: TextStyle(fontSize: 15, color: Colors.white)),
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: Column(
@@ -522,24 +526,26 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     ),
                     const Text(
                       "Dealer & Retailer",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height *.01,
+                      height: MediaQuery.of(context).size.height * .01,
                     ),
                     Container(
                       height: 60,
                       child: Card(
                         elevation: 2,
-                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         child: DropdownButtonFormField<String>(
                           value: selected,
                           onChanged: (newValue) {
                             setState(() {
                               selected = newValue;
                               print("current indexxx ${selected}");
-                               nwIndex = delearRetailerModel!.data!.indexWhere((element) => element.id == selected);
+                              nwIndex = delearRetailerModel!.data!.indexWhere(
+                                  (element) => element.id == selected);
                               // currentIndex = selected;
                               showTextField = true;
                             });
@@ -551,7 +557,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             );
                           }).toList(),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 5, left: 10),
+                            contentPadding:
+                                EdgeInsets.only(bottom: 5, left: 10),
                             border: InputBorder.none,
                             hintText: 'Select Dealer & Retailer',
                           ),
@@ -559,204 +566,247 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    selected!= null?
-                    // selected == "801" ? SizedBox():
-                    //     selected == "800"?
-                    //     Column(
-                    //       children: [
-                    //         SizedBox(
-                    //           height: MediaQuery.of(context).size.height*.01,
-                    //         ),
-                    //         Row(
-                    //           children: [
-                    //             Text("Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                    //             SizedBox(width: 30),
-                    //             Container(
-                    //               height: 40,
-                    //               width: MediaQuery.of(context).size.width / 2.2,
-                    //               child: TextFormField(
-                    //                 controller: dealerNameController,
-                    //                 // onChanged: (value) {
-                    //                 //   // String mobileContractor = value ;
-                    //                 //   contractorMobile = value;
-                    //                 // },
-                    //                 // readOnly: true,
-                    //                 //controller: mobilecn,
-                    //                 decoration: InputDecoration(
-                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                    //                   // hintText: '',
-                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         SizedBox(height: 10),
-                    //         Row(
-                    //           children: [
-                    //             Text("Mail:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                    //             SizedBox(width: 40),
-                    //             Container(
-                    //               height: 40,
-                    //               width: MediaQuery.of(context).size.width / 2.2,
-                    //               child: TextFormField(
-                    //                 controller: dealerMailController,
-                    //                 // onChanged: (value) {
-                    //                 //   // String mobileContractor = value ;
-                    //                 //   contractorMobile = value;
-                    //                 // },
-                    //                 // readOnly: true,
-                    //                 //controller: mobilecn,
-                    //                 decoration: InputDecoration(
-                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                    //                   // hintText: '',
-                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         SizedBox(height: 10),
-                    //         Row(
-                    //           children: [
-                    //             Text("Number:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                    //             SizedBox(width: 20),
-                    //             Container(
-                    //               height: 40,
-                    //               width: MediaQuery.of(context).size.width / 2.2,
-                    //               child: TextFormField(
-                    //                 keyboardType: TextInputType.number,
-                    //                 maxLength: 10,
-                    //                 controller: dealerNumberController,
-                    //                 // onChanged: (value) {
-                    //                 //   // String mobileContractor = value ;
-                    //                 //   contractorMobile = value;
-                    //                 // },
-                    //                 // readOnly: true,
-                    //                 //controller: mobilecn,
-                    //                 decoration: InputDecoration(
-                    //                   counterText: "",
-                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                    //                   // hintText: '',
-                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         SizedBox(height: 10),
-                    //         Row(
-                    //           children: [
-                    //             Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                    //             SizedBox(width: 10),
-                    //             Container(
-                    //               height: 40,
-                    //               width: MediaQuery.of(context).size.width / 2.2,
-                    //               child: TextFormField(
-                    //                 keyboardType: TextInputType.number,
-                    //                 controller: dealercreditlimitController,
-                    //                 decoration: InputDecoration(
-                    //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
-                    //                   // hintText: '',
-                    //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ],
-                    //     ),
-                            // :
-                      Column(
-                        children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height*.01,
-                        ),
-                        Row(
-                          children: [
-                            Text("Owner Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].ownerName}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text("Firm Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].nameOfFirm}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                          Row(
+                    selected != null
+                        ?
+                        // selected == "801" ? SizedBox():
+                        //     selected == "800"?
+                        //     Column(
+                        //       children: [
+                        //         SizedBox(
+                        //           height: MediaQuery.of(context).size.height*.01,
+                        //         ),
+                        //         Row(
+                        //           children: [
+                        //             Text("Name:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //             SizedBox(width: 30),
+                        //             Container(
+                        //               height: 40,
+                        //               width: MediaQuery.of(context).size.width / 2.2,
+                        //               child: TextFormField(
+                        //                 controller: dealerNameController,
+                        //                 // onChanged: (value) {
+                        //                 //   // String mobileContractor = value ;
+                        //                 //   contractorMobile = value;
+                        //                 // },
+                        //                 // readOnly: true,
+                        //                 //controller: mobilecn,
+                        //                 decoration: InputDecoration(
+                        //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                        //                   // hintText: '',
+                        //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         SizedBox(height: 10),
+                        //         Row(
+                        //           children: [
+                        //             Text("Mail:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //             SizedBox(width: 40),
+                        //             Container(
+                        //               height: 40,
+                        //               width: MediaQuery.of(context).size.width / 2.2,
+                        //               child: TextFormField(
+                        //                 controller: dealerMailController,
+                        //                 // onChanged: (value) {
+                        //                 //   // String mobileContractor = value ;
+                        //                 //   contractorMobile = value;
+                        //                 // },
+                        //                 // readOnly: true,
+                        //                 //controller: mobilecn,
+                        //                 decoration: InputDecoration(
+                        //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                        //                   // hintText: '',
+                        //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         SizedBox(height: 10),
+                        //         Row(
+                        //           children: [
+                        //             Text("Number:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //             SizedBox(width: 20),
+                        //             Container(
+                        //               height: 40,
+                        //               width: MediaQuery.of(context).size.width / 2.2,
+                        //               child: TextFormField(
+                        //                 keyboardType: TextInputType.number,
+                        //                 maxLength: 10,
+                        //                 controller: dealerNumberController,
+                        //                 // onChanged: (value) {
+                        //                 //   // String mobileContractor = value ;
+                        //                 //   contractorMobile = value;
+                        //                 // },
+                        //                 // readOnly: true,
+                        //                 //controller: mobilecn,
+                        //                 decoration: InputDecoration(
+                        //                   counterText: "",
+                        //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                        //                   // hintText: '',
+                        //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         SizedBox(height: 10),
+                        //         Row(
+                        //           children: [
+                        //             Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                        //             SizedBox(width: 10),
+                        //             Container(
+                        //               height: 40,
+                        //               width: MediaQuery.of(context).size.width / 2.2,
+                        //               child: TextFormField(
+                        //                 keyboardType: TextInputType.number,
+                        //                 controller: dealercreditlimitController,
+                        //                 decoration: InputDecoration(
+                        //                   contentPadding: EdgeInsets.only(bottom: 4, left: 3),
+                        //                   // hintText: '',
+                        //                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        // :
+                        Column(
                             children: [
-                              Text("Address:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                              SizedBox(width: 10),
-                              Container(
-                                child: Text("${delearRetailerModel?.data?[nwIndex].address},${delearRetailerModel?.data?[nwIndex].statename},${delearRetailerModel?.data?[nwIndex].city},${delearRetailerModel?.data?[nwIndex].pinCode}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
-                                  maxLines: 2, overflow: TextOverflow.ellipsis),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .01,
                               ),
+                              Row(
+                                children: [
+                                  Text("Owner Name:",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                  SizedBox(width: 10),
+                                  Text(
+                                      "${delearRetailerModel?.data?[nwIndex].ownerName}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text("Firm Name:",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                  SizedBox(width: 10),
+                                  Text(
+                                      "${delearRetailerModel?.data?[nwIndex].nameOfFirm}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text("Address:",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    child: Text(
+                                        "${delearRetailerModel?.data?[nwIndex].address},${delearRetailerModel?.data?[nwIndex].statename},${delearRetailerModel?.data?[nwIndex].city},${delearRetailerModel?.data?[nwIndex].pinCode}",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w800),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text("Contact No:",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                  SizedBox(width: 10),
+                                  Text(
+                                      "${delearRetailerModel?.data?[nwIndex].mobileOne}, ${delearRetailerModel?.data?[nwIndex].mobileTwo}, ${delearRetailerModel?.data?[nwIndex].whatsappNumber}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text("Customer Type:",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                  SizedBox(width: 10),
+                                  Text(
+                                      "${delearRetailerModel?.data?[nwIndex].customerType}",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                              // SizedBox(height: 10),
+                              // Row(
+                              //   children: [
+                              //     Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              //     SizedBox(width: 10),
+                              //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              //   ],
+                              // ),
+                              // SizedBox(height: 10),
+                              // Row(
+                              //   children: [
+                              //     Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              //     SizedBox(width: 10),
+                              //     Text("${delearRetailerModel?.data?[nwIndex].creditLimit}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                              //   ],
+                              // ),
                             ],
-                          ),
-                          SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text("Contact No:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            SizedBox(width: 10),
-                            Text("${delearRetailerModel?.data?[nwIndex].mobileOne}, ${delearRetailerModel?.data?[nwIndex].mobileTwo}, ${delearRetailerModel?.data?[nwIndex].whatsappNumber}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                              SizedBox(width: 10),
-                              Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                            ],
-                          ),
-                        // SizedBox(height: 10),
-                        // Row(
-                        //   children: [
-                        //     Text("Customer Type:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //     SizedBox(width: 10),
-                        //     Text("${delearRetailerModel?.data?[nwIndex].customerType}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //   ],
-                        // ),
-                        // SizedBox(height: 10),
-                        // Row(
-                        //   children: [
-                        //     Text("Credit Limit:", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //     SizedBox(width: 10),
-                        //     Text("${delearRetailerModel?.data?[nwIndex].creditLimit}", style:TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                        //   ],
-                        // ),
-                      ],
-                      ): SizedBox(),
+                          )
+                        : SizedBox(),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*.01,
+                      height: MediaQuery.of(context).size.height * .01,
                     ),
                     const Text(
                       "Customer Dealing In",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*.01,
+                      height: MediaQuery.of(context).size.height * .01,
                     ),
                     Card(
                       elevation: 3,
                       child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white, border: Border.all(color: Colors.black)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black)),
                         height: 45,
-                        width: MediaQuery.of(context).size.width/1.1,
+                        width: MediaQuery.of(context).size.width / 1.1,
                         child: Padding(
-                            padding: const EdgeInsets.only(top: 0, left: 10, bottom: 2, right: 10),
-                            child: select(),
+                          padding: const EdgeInsets.only(
+                              top: 0, left: 10, bottom: 2, right: 10),
+                          child: select(),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*.04,
+                      height: MediaQuery.of(context).size.height * .04,
                     ),
                     // const Text(
                     //   "Remark",
@@ -954,39 +1004,52 @@ class _FeedbackFormState extends State<FeedbackForm> {
               ),
               InkWell(
                 onTap: () {
-                  if(results.length == 0 || selected == null){
+                  if (results.length == 0 || selected == null) {
                     Fluttertoast.showToast(msg: "All fields Required");
-                  } else{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Survey(
-                      modelList: results,
-                      name:delearRetailerModel?.data?[nwIndex].ownerName,
-                      email:delearRetailerModel?.data?[nwIndex].email,
-                      contact: delearRetailerModel?.data?[nwIndex].mobileOne,
-                      creditLimit: delearRetailerModel?.data?[nwIndex].creditLimit,
-                      customerType: delearRetailerModel?.data?[nwIndex].customerType,
-                      // dealerName: dealerNameController.text,
-                      // dealerMobile: dealerMailController.text,
-                      // dealermail: dealerMailController.text,
-                      // dealerLimit: dealercreditlimitController.text,
-                      date: dateCtr.text,
-                      time: timeCtr.text,
-                      // image: imagePathList,
-                      // remark: remarkCtr.text,
-                      clintId: selected),
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Survey(
+                            modelList: results,
+                            name: delearRetailerModel?.data?[nwIndex].ownerName,
+                            email: delearRetailerModel?.data?[nwIndex].email,
+                            contact:
+                                delearRetailerModel?.data?[nwIndex].mobileOne,
+                            creditLimit:
+                                delearRetailerModel?.data?[nwIndex].creditLimit,
+                            customerType: delearRetailerModel
+                                ?.data?[nwIndex].customerType,
+                            // dealerName: dealerNameController.text,
+                            // dealerMobile: dealerMailController.text,
+                            // dealermail: dealerMailController.text,
+                            // dealerLimit: dealercreditlimitController.text,
+                            date: dateCtr.text,
+                            time: timeCtr.text,
+                            // image: imagePathList,
+                            // remark: remarkCtr.text,
+                            clintId: selected),
                       ),
                     );
                   }
                 },
                 child: Center(
-                    child: Container(
-                      height: 40,
-                      width: MediaQuery.of(context).size.width/1.8,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: colors.primary),
-                      child: const Center(
-                          child: Text("Save & Next", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400),
-                          ),
+                  child: Container(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width / 1.8,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: colors.primary),
+                    child: const Center(
+                      child: Text(
+                        "Save & Next",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
+                  ),
                 ),
               ),
               SizedBox(height: 10)

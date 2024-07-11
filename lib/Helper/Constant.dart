@@ -17,7 +17,7 @@ const int perPage = 10;
 // final String baseUrl ='https://rekoindia.com/app/v1/api/';
 // final String baseUrl= 'https://developmentalphawizz.com/referral_management/app/v1/api/';
 
-final String baseUrl = 'https://developmentalphawizz.com/market_track/app/v1/api/';
+final String baseUrl = 'https://developmentalphawizz.com/rename_market_track/app/v1/api/';
 
 // final String baseUrl = 'https://omegaemp.com/app/v1/api/';
     //'https://admin.aimmoney.in/app/v1/api/';

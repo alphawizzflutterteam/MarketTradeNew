@@ -7,11 +7,13 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -19,11 +21,8 @@ import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../Helper/String.dart';
-import 'package:http/http.dart'as http;
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-
-
 import '../Model/GetSettingModel.dart';
 
 var latitude;
@@ -35,6 +34,7 @@ class CheckInScreen extends StatefulWidget {
   @override
   State<CheckInScreen> createState() => _CheckInScreenState();
 }
+
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
@@ -43,12 +43,12 @@ Future<void> initializeService() async {
     'my_foreground', // id
     'MY FOREGROUND SERVICE', // title
     description:
-    'This channel is used for important notifications.', // description
+        'This channel is used for important notifications.', // description
     importance: Importance.low, // importance must be at low or higher level
   );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   if (Platform.isIOS || Platform.isAndroid) {
     await flutterLocalNotificationsPlugin.initialize(
@@ -61,7 +61,7 @@ Future<void> initializeService() async {
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await service.configure(
@@ -89,7 +89,6 @@ Future<void> initializeService() async {
       onBackground: onIosBackground,
     ),
   );
-
 }
 
 Future<bool> onIosBackground(ServiceInstance service) async {
@@ -104,14 +103,14 @@ Future<bool> onIosBackground(ServiceInstance service) async {
   return true;
 }
 
-
 updateLocation1(Position position) async {
   final box = GetStorage();
   String? userId = box.read('userid');
   var headers = {
     'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
   };
-  var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+  var request =
+      http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
   request.fields.addAll({
     'lat': position.latitude.toString(),
     'lng': position.longitude.toString(),
@@ -122,8 +121,7 @@ updateLocation1(Position position) async {
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
     print(await response.stream.bytesToString());
-  }
-  else {
+  } else {
     print(response.reasonPhrase);
   }
 }
@@ -181,7 +179,7 @@ void onStart(ServiceInstance service) async {
 
   /// OPTIONAL when use custom notification
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
@@ -224,7 +222,7 @@ void onStart(ServiceInstance service) async {
         );
       }
     }
-    Position position= await Geolocator.getCurrentPosition();
+    Position position = await Geolocator.getCurrentPosition();
     // updateLocation1(position);
     //
     // List<Placemark> placemark = await placemarkFromCoordinates(
@@ -241,7 +239,8 @@ void onStart(ServiceInstance service) async {
     // }
 
     /// you can see this log in logcat
-    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}  ${position.latitude}  ${position.longitude}');
+    print(
+        'FLUTTER BACKGROUND SERVICE: ${DateTime.now()}  ${position.latitude}  ${position.longitude}');
 
     // test using external plugin
 
@@ -266,8 +265,8 @@ void onStart(ServiceInstance service) async {
     );
   });
 }
-class _CheckInScreenState extends State<CheckInScreen> {
 
+class _CheckInScreenState extends State<CheckInScreen> {
   var pinController = TextEditingController();
   var currentAddress = TextEditingController();
   var readingCtr = TextEditingController();
@@ -326,7 +325,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
     var headers = {
       'Cookie': 'ci_session=44b4255b3a85f9bd283902547862274a907e9997'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(getSettingApi.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(getSettingApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -339,8 +339,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       setState(() {
         setting = finalResponse;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -380,13 +379,14 @@ class _CheckInScreenState extends State<CheckInScreen> {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
-      longitude_Global=latitude;
-      lattitudee_Global=longitude;
+      longitude_Global = latitude;
+      lattitudee_Global = longitude;
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
@@ -397,13 +397,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
         // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
-          currentlocation_Global=currentAddress.text.toString();
+          currentlocation_Global = currentAddress.text.toString();
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
@@ -418,11 +418,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
     }
   }
+
   setCheckIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("CheckIn", true);
     prefs.setString("CheckInTime", DateTime.now().toString());
   }
+
   Future<void> checkInNow() async {
     debugPrint("checkin");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -430,9 +432,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
     request.fields.addAll({
-      'user_id':   uid?? "",
+      'user_id': uid ?? "",
       // CUR_USERID.toString(),
       'checkin_latitude': '${latitude}',
       'checkin_longitude': '${longitude}',
@@ -444,7 +447,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       imagePathList[i] == ""
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
-          'checkinimages[]', imagePathList[i].toString()));
+              'checkinimages[]', imagePathList[i].toString()));
     }
     print("this is my check in request ${request.fields.toString()}");
     request.headers.addAll(headers);
@@ -456,12 +459,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
       setState(() {
         isLoading = false;
       });
-      if(result['data']['error'] == false) {
+      if (result['data']['error'] == false) {
         await setCheckIn();
 
         Fluttertoast.showToast(msg: result['data']['msg']);
         // Navigator.pop(context, true);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
       } else {
         setState(() {
           isLoading = false;
@@ -470,8 +474,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       }
       // var finalResponse = GetUserExpensesModel.fromJson(result);
       // final finalResponse = CheckInModel.fromJson(json.decode(Response));
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -481,7 +484,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Dashboard()),
-              (route) => false);
+          (route) => false);
     });
   }
 
@@ -531,61 +534,75 @@ class _CheckInScreenState extends State<CheckInScreen> {
             height: 40,
             width: 125,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: colors.primary),
+                borderRadius: BorderRadius.circular(10), color: colors.primary),
             child: Center(
               child: Text(
                 "Upload Images",
-                style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(
+                    color: colors.whiteTemp,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
               ),
             ),
           ),
         ),
         const SizedBox(height: 10),
-        Visibility(
-            visible: isImages,
-            child:  buildGridView()),
+        Visibility(visible: isImages, child: buildGridView()),
       ],
     );
   }
 
   Widget buildGridView() {
     return Container(
-      height: 170,
+      height: 190,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
               Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary)
-                ),
-                width: MediaQuery.of(context).size.width/2.8,
-                height: 170,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary)),
+                width: MediaQuery.of(context).size.width / 2.8,
+                height: 190,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.file(
-                      File(imagePathList[index]), fit: BoxFit.cover),
+                  child:
+                      Image.file(File(imagePathList[index]), fit: BoxFit.cover),
                 ),
               ),
               Positioned(
                 bottom: 10,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary),),
-                  width:MediaQuery.of(context).size.width/2.8,
-                  height: 70,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: colors.primary),
+                  ),
+                  width: MediaQuery.of(context).size.width / 2.8,
+                  height: 65,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.white),),
-                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.white),overflow: TextOverflow.ellipsis,maxLines: 2,)
+                        Text(
+                          "Date: ${formattedDate}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        Text(
+                          "Time: ${timeData}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        Text(
+                          "Location: ${currentAddress.text}",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        )
                       ],
                     ),
                   ),
@@ -610,7 +627,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     );
   }
 
-  void pickImageDialog(BuildContext context,int i) async {
+  void pickImageDialog(BuildContext context, int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
@@ -763,7 +780,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
               ),
               Text(
                 "Checking in.....",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colors.whiteTemp),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: colors.whiteTemp),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -771,23 +791,23 @@ class _CheckInScreenState extends State<CheckInScreen> {
               ),
               currentAddress.text == "" || currentAddress.text == null
                   ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "Locating...",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-              )
-                  :Text(
-                "${currentAddress.text}",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        "Locating...",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    )
+                  : Text(
+                      "${currentAddress.text}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
               SizedBox(height: 15),
               uploadMultiImmage(),
               // uploadMultiImage()
@@ -795,7 +815,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
               Container(
                 height: 40,
                 width: 145,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: colors.primary),
                 child: TextFormField(
                   maxLength: 6,
                   controller: readingCtr,
@@ -807,7 +829,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     hintText: "Add Odometer Start Reading",
                     hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
                   ),
-
                 ),
               ),
               SizedBox(height: 20),
@@ -819,27 +840,30 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       elevation: 0,
                       shape: StadiumBorder(),
                       fixedSize: Size(350, 40),
-                      backgroundColor: colors.primary.withOpacity(0.8)
-                  ),
+                      backgroundColor: colors.primary.withOpacity(0.8)),
                   onPressed: () {
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                    if(latitude == null || longitude == null ||  _imageFile == null ) {
+                    if (latitude == null ||
+                        longitude == null ||
+                        _imageFile == null) {
                       setSnackbar("Please select a image", context);
-                    }
-                    else if(readingCtr.text.isEmpty){
-                      setSnackbar("Please enter Odometer start reading", context);
-                    }
-                    else {
+                    } else if (readingCtr.text.isEmpty) {
+                      setSnackbar(
+                          "Please enter Odometer start reading", context);
+                    } else {
                       setState(() {
                         isLoading = true;
                       });
                       checkInNow();
-
                     }
                   },
-                  child: isLoading? Center(
-                    child: CircularProgressIndicator(color: Colors.white,),
-                  ): Text('CHECK IN NOW'),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text('CHECK IN NOW'),
                 ),
               ),
               SizedBox(height: 20),

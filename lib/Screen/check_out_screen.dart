@@ -6,19 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
-import 'package:omega_employee_management/Model/check_in_model.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
-import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Helper/String.dart';
-import 'package:http/http.dart'as http;
 
+import '../../Helper/String.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({Key? key}) : super(key: key);
@@ -43,42 +41,44 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
-    var request =  http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
     request.fields.addAll({
       'user_id': CUR_USERID.toString(),
       'checkout_latitude': '${latitude}',
       'checkout_longitude': '${longitude}',
       'address': '${currentAddress.text}',
-      'redings': readingCtr.text
+      'redings': readingCtr.text,
+      'checkout_date': formattedDate.toString()
     });
     print("check out parameter ${request.fields}===========");
     for (var i = 0; i < imagePathList.length; i++) {
       imagePathList == null
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
-          'checkoutimages[]', imagePathList[i].toString()));
+              'checkoutimages[]', imagePathList[i].toString()));
     }
     print('My Imageeeeeeeeeeeeeee${imagePathList1}');
     for (var i = 0; i < imagePathList1.length; i++) {
       imagePathList1 == null
           ? null
           : request.files.add(await http.MultipartFile.fromPath(
-          'form_image[]', imagePathList1[i].toString()));
+              'form_image[]', imagePathList1[i].toString()));
     }
 
     print("this is my check out request ${request.files}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-
       var str = await response.stream.bytesToString();
       var result = json.decode(str);
       // Fluttertoast.showToast(msg: result['msg']);
-      if(result['data']['error'] == false) {
+      if (result['data']['error'] == false) {
         await setIsCheckOut();
 
         Fluttertoast.showToast(msg: result['data']['msg']);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CheckInScreen()));
       } else {
         Fluttertoast.showToast(msg: result['data']['msg']);
       }
@@ -87,12 +87,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       });
       // var finalResponse = GetUserExpensesModel.fromJson(result);
       // final finalResponse = CheckInModel.fromJson(json.decode(Response));
-    }
-    else {
+    } else {
       setState(() {
         isLoading = false;
       });
-      print("reasonnn" +response.reasonPhrase.toString());
+      print("reasonnn" + response.reasonPhrase.toString());
     }
   }
 
@@ -106,14 +105,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
 
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
-      longitude_Global=latitude;
-      lattitudee_Global=longitude;
+      longitude_Global = latitude;
+      lattitudee_Global = longitude;
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
@@ -125,13 +125,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
         // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
-          currentlocation_Global=currentAddress.text.toString();
+          currentlocation_Global = currentAddress.text.toString();
         });
         print('Latitude=============${latitude}');
         print('Longitude*************${longitude}');
@@ -151,7 +151,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Dashboard()),
-              (route) => false);
+          (route) => false);
     });
   }
 
@@ -181,13 +181,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
   }
 
-
   Future<void> getFromGallery1() async {
     var result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-      allowCompression: true
-    );
+        type: FileType.image, allowMultiple: true, allowCompression: true);
     if (result != null) {
       setState(() {
         isImages1 = true;
@@ -250,8 +246,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     print("timeeeeeeeeee$timeData");
   }
 
-
-
   Widget uploadMultiImmage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,20 +263,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             height: 40,
             width: 125,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: colors.primary),
+                borderRadius: BorderRadius.circular(10), color: colors.primary),
             child: Center(
               child: Text(
                 "Upload Images",
-                style: TextStyle(color: colors.whiteTemp, fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(
+                    color: colors.whiteTemp,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
               ),
             ),
           ),
         ),
         const SizedBox(height: 10),
-        Visibility(
-            visible: isImages,
-            child:  buildGridView()),
+        Visibility(visible: isImages, child: buildGridView()),
       ],
     );
   }
@@ -292,30 +286,31 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       height: 170,
       child: GridView.builder(
         itemCount: imagePathList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
                 child: Container(
-                  width: MediaQuery.of(context).size.width/2.8,
-                  height: MediaQuery.of(context).size.height/4.3,
+                  width: MediaQuery.of(context).size.width / 2.8,
+                  height: MediaQuery.of(context).size.height / 4.3,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
-                    child: Image.file(
-                        File(imagePathList[index]), fit: BoxFit.cover),
+                    child: Image.file(File(imagePathList[index]),
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),
               Positioned(
                 bottom: 10,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: colors.primary)),
-                  width:MediaQuery.of(context).size.width/2.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: colors.primary)),
+                  width: MediaQuery.of(context).size.width / 2.8,
                   height: 70,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -323,9 +318,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Date: ${formattedDate}", style: TextStyle(fontSize: 10, color: Colors.red)),
-                        Text("Time: ${timeData}", style: TextStyle(fontSize: 10, color: Colors.red)),
-                        Text("Location: ${currentAddress.text}", style: TextStyle(fontSize: 10, color: Colors.red),overflow: TextOverflow.ellipsis,maxLines: 2)
+                        Text("Date: ${formattedDate}",
+                            style: TextStyle(fontSize: 10, color: Colors.red)),
+                        Text("Time: ${timeData}",
+                            style: TextStyle(fontSize: 10, color: Colors.red)),
+                        Text("Location: ${currentAddress.text}",
+                            style: TextStyle(fontSize: 10, color: Colors.red),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2)
                       ],
                     ),
                   ),
@@ -350,7 +350,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
   }
 
-  void pickImageDialog(BuildContext context,int i) async {
+  void pickImageDialog(BuildContext context, int i) async {
     return await showDialog<void>(
       context: context,
       // barrierDismissible: barrierDismissible, // user must tap button!
@@ -484,22 +484,23 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   ///
 
   @override
-  void initState()  {
+  void initState() {
     // TODO: implement initState
     // if(DateTime.now().hour.toString() == "21" && DateTime.now().minute.toString() == "1" ){
 
-
-      // Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
+    // Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
     // }
-     getCurrentLoc();
+    getCurrentLoc();
     convertDateTimeDispla();
     // checkOutNow();
     super.initState();
   }
-setIsCheckOut() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  setIsCheckOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("CheckIn", false);
-}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -524,11 +525,11 @@ setIsCheckOut() async {
                 height: 210,
                 width: 210,
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "assets/images/checkout.png",
-                      fit: BoxFit.cover,
-                    ),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    "assets/images/checkout.png",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(
@@ -536,7 +537,10 @@ setIsCheckOut() async {
               ),
               Text(
                 "Checking Out.....",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colors.whiteTemp),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: colors.whiteTemp),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -544,22 +548,22 @@ setIsCheckOut() async {
               ),
               currentAddress.text == "" || currentAddress.text == null
                   ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "Locating...",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-              )
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        "Locating...",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    )
                   : Text(
-                "${currentAddress.text}",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
+                      "${currentAddress.text}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
               SizedBox(height: 15),
               uploadMultiImmage(),
               // uploadMultiImage()
@@ -567,7 +571,9 @@ setIsCheckOut() async {
               Container(
                 height: 40,
                 width: 145,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: colors.primary),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: colors.primary),
                 child: TextFormField(
                   maxLength: 6,
                   controller: readingCtr,
@@ -583,39 +589,40 @@ setIsCheckOut() async {
               ),
               SizedBox(height: 20),
               Container(
-                  height: 45,
-                  width: 220,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shape: StadiumBorder(),
-                          fixedSize: Size(350, 40),
-                          backgroundColor: colors.primary.withOpacity(0.8)
-                      ),
-                      onPressed: () async {
-                        // await checkOutNow();
-                        if(latitude == "" || latitude == 0 || latitude == null) {
-                          setSnackbar("Please wait fetching your current location...", context);
-                        }
-                        else if(_imageFile == null){
-                          setSnackbar("Please select a image", context);
-                        }
-                        else if(readingCtr.text.isEmpty){
-                          setSnackbar("Please enter Odometer start reading", context);
-                        }
-                        else {
-                          // setState(() {
-                          //   isLoading = true;
-                          // });
-                           checkOutNow();
-
-                        }
-                      },
-                      child:isLoading? Center(child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                      ):Text('CHECK OUT NOW'),
-                  ),
+                height: 45,
+                width: 220,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: StadiumBorder(),
+                      fixedSize: Size(350, 40),
+                      backgroundColor: colors.primary.withOpacity(0.8)),
+                  onPressed: () async {
+                    // await checkOutNow();
+                    if (latitude == "" || latitude == 0 || latitude == null) {
+                      setSnackbar(
+                          "Please wait fetching your current location...",
+                          context);
+                    } else if (_imageFile == null) {
+                      setSnackbar("Please select a image", context);
+                    } else if (readingCtr.text.isEmpty) {
+                      setSnackbar(
+                          "Please enter Odometer start reading", context);
+                    } else {
+                      // setState(() {
+                      //   isLoading = true;
+                      // });
+                      checkOutNow();
+                    }
+                  },
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text('CHECK OUT NOW'),
+                ),
               ),
             ],
           ),
@@ -625,7 +632,6 @@ setIsCheckOut() async {
   }
 }
 
-
-autoCheckOut(){
+autoCheckOut() {
   DateTime time = DateTime.now();
 }

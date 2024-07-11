@@ -651,7 +651,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   Future<DeleteAccountModel?> deleteAccount() async {
     var header = headers;
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/market_track/app/v1/api/delete_user'));
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/rename_market_track/app/v1/api/delete_user'));
     request.fields.addAll({
       'user_id': CUR_USERID.toString()
     });
