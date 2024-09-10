@@ -666,12 +666,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Helper/Color.dart';
 import '../Model/ClientModel.dart';
 import '../Model/GetListModel.dart';
@@ -694,11 +696,11 @@ class _Client_formState extends State<Client_form> {
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
-        source: source, maxHeight: 640, maxWidth: 400, imageQuality: 80);
+        source: source, maxHeight: 400, maxWidth: 400, imageQuality: 50);
     if (pickedImage != null) {
       setState(() {
         _imageFile = File(pickedImage.path);
-        imagePathList.add(_imageFile!);
+        imagePathList.add(_imageFile?.path ?? "");
       });
     }
   }
@@ -783,7 +785,8 @@ class _Client_formState extends State<Client_form> {
     fetchState();
     getCurrentLoc();
     convertDateTimeDispla();
-    print("statusss=====${widget.model?.status}===========");
+    print(
+        "statusss=====${widget.model?.status} id is${widget.model?.id}===========");
     namecn.text = '${widget.model?.nameOfFirm}';
     ownernamecn.text = '${widget.model?.ownerName}';
     addresscn.text = '${widget.model?.address}';
@@ -1221,9 +1224,9 @@ class _Client_formState extends State<Client_form> {
   _getFromCamera() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera,
-        maxHeight: 640,
+        maxHeight: 400,
         maxWidth: 400,
-        imageQuality: 80);
+        imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -1247,9 +1250,9 @@ class _Client_formState extends State<Client_form> {
   _getFromCameraPan() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera,
-        maxHeight: 640,
+        maxHeight: 400,
         maxWidth: 400,
-        imageQuality: 80);
+        imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -1438,7 +1441,7 @@ class _Client_formState extends State<Client_form> {
     }
   }
 
-  List<File> imagePathList = [];
+  List imagePathList = [];
   List apiImages = [];
   bool isImages = false;
 
@@ -1463,14 +1466,13 @@ class _Client_formState extends State<Client_form> {
                     });
                   }
                 },
-
-          onLongPress: () {
-          // if (voterIdBackImage != null)
-          // Fluttertoast.showToast(
-          // msg: 'Already saved in gallery');
-          if (apiImages[index] != null)
-          showDilaogBox(apiImages[index] ?? "");
-          },
+                onLongPress: () {
+                  // if (voterIdBackImage != null)
+                  // Fluttertoast.showToast(
+                  // msg: 'Already saved in gallery');
+                  if (apiImages[index] != null)
+                    showDilaogBox(apiImages[index] ?? "");
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -1538,7 +1540,10 @@ class _Client_formState extends State<Client_form> {
         elevation: 0,
         backgroundColor: colors.primary,
         centerTitle: true,
-        title: Text("Client"),
+        title: Text(
+          "Edit Client Form",
+          style: TextStyle(fontSize: 15),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -1848,16 +1853,19 @@ class _Client_formState extends State<Client_form> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15)),
                       child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: emailcn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: 'hfg@gmail.com',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailcn,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'hfg@gmail.com',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -1875,18 +1883,21 @@ class _Client_formState extends State<Client_form> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          controller: mobile1cn,
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 10) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '9854648544',
-                              counterText: "",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        controller: mobile1cn,
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 10) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '9854648544',
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -1904,20 +1915,23 @@ class _Client_formState extends State<Client_form> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          controller: mobile2cn,
-                          // validator: (value) {
-                          //   if (value!.isEmpty||value.length<10) {
-                          //   }
-                          //   return null;
-                          // },
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        controller: mobile2cn,
+                        // validator: (value) {
+                        //   if (value!.isEmpty||value.length<10) {
+                        //   }
+                        //   return null;
+                        // },
 
-                          decoration: InputDecoration(
-                              hintText: '9854648544',
-                              counterText: "",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        decoration: InputDecoration(
+                          hintText: '9854648544',
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -1935,21 +1949,23 @@ class _Client_formState extends State<Client_form> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          controller: whatsappcn,
-                          // validator: (value) {
-                          //   if (value!.isEmpty||value.length<10) {
-                          //     return "please enter whatsapp number";
-                          //   }
-                          //   return null;
-                          // },
-
-                          decoration: InputDecoration(
-                              hintText: '9854648544',
-                              counterText: "",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        controller: whatsappcn,
+                        // validator: (value) {
+                        //   if (value!.isEmpty||value.length<10) {
+                        //     return "please enter whatsapp number";
+                        //   }
+                        //   return null;
+                        // },
+                        decoration: InputDecoration(
+                          hintText: '9854648544',
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -2123,7 +2139,7 @@ class _Client_formState extends State<Client_form> {
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          // maxLength: 10,
+                          maxLength: 19,
                           controller: udyogIdCtr,
                           // validator: (value) {
                           //   if (value!.isEmpty) {
@@ -2699,14 +2715,14 @@ class _Client_formState extends State<Client_form> {
                                 });
                               }
                             },
-                        onLongPress: () {
-              if (voterIdImage != null)
-              Fluttertoast.showToast(
-              msg: 'Already saved in gallery');
-              else if (widget.model?.voterIdFrontImage != null)
-              showDilaogBox(widget.model?.voterIdFrontImage ?? "");
-              }
-                            ),
+                            onLongPress: () {
+                              if (voterIdImage != null)
+                                Fluttertoast.showToast(
+                                    msg: 'Already saved in gallery');
+                              else if (widget.model?.voterIdFrontImage != null)
+                                showDilaogBox(
+                                    widget.model?.voterIdFrontImage ?? "");
+                            }),
                         voterIdImage != null
                             ? Positioned(
                                 right: 2,
@@ -2767,16 +2783,14 @@ class _Client_formState extends State<Client_form> {
                                 });
                               }
                             },
-                        onLongPress: () {
-              if (voterIdBackImage != null)
-              Fluttertoast.showToast(
-              msg: 'Already saved in gallery');
-              else if (widget.model?.voterIdBackImage != null)
-              showDilaogBox(widget.model?.voterIdBackImage ?? "");
-              }
-              ),
-
-
+                            onLongPress: () {
+                              if (voterIdBackImage != null)
+                                Fluttertoast.showToast(
+                                    msg: 'Already saved in gallery');
+                              else if (widget.model?.voterIdBackImage != null)
+                                showDilaogBox(
+                                    widget.model?.voterIdBackImage ?? "");
+                            }),
                         voterIdBackImage != null
                             ? Positioned(
                                 right: 2,
@@ -2806,7 +2820,8 @@ class _Client_formState extends State<Client_form> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: DropdownButtonFormField<String>(
                         value: selected_Customer,
                         validator: (value) {
@@ -2911,25 +2926,19 @@ class _Client_formState extends State<Client_form> {
                       Container(
                         width: MediaQuery.of(context).size.width / 2,
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: colors.primary),
-                            onPressed: () {
-                              if (imagePathList.isEmpty ||
-                                  imagePathList.length == "" ||
-                                  imagePathList.length == null) {
-                                Fluttertoast.showToast(
-                                    msg: "Please Select Image");
-                              } else if (selected_Status == null ||
-                                  selected_State == null) {
-                                Fluttertoast.showToast(
-                                    msg: "Please select Droup Down filleds");
-                              } else if (_formKey.currentState!.validate()) {
-                                // Fluttertoast.showToast(msg: "Please Fill All Fields");
-                                update();
-                              }
-                            },
-                            child: Text("Update",
-                                style: TextStyle(fontWeight: FontWeight.bold))),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: colors.primary),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              // Fluttertoast.showToast(msg: "Please Fill All Fields");
+                              update();
+                            }
+                          },
+                          child: Text(
+                            "Update",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -2968,6 +2977,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   Future<void> update() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
     };
@@ -2978,6 +2989,12 @@ class _Client_formState extends State<Client_form> {
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
       'name_of_firm': namecn.text,
+      "date_of_birth": doBCtr.text,
+      "date_of_anniversary": doACtr.text,
+      "udyogid_number": udyogIdCtr.text,
+      "route": routeCtr.text,
+      "market": marketCtr.text,
+      "landmark": landmarkCtr.text,
       'status': selected_Status.toString(),
       'owner_name': ownernamecn.text,
       'address': addresscn.text,
@@ -2996,6 +3013,7 @@ class _Client_formState extends State<Client_form> {
       'lat': latitude.toString(),
       'lng': longitude.toString(),
       'id': '${widget.model?.id}',
+      'department': '${department_id.toString()}',
       // 'gst_img': '${gstImage.toString()}',
       // 'pan_img': '${panImage.toString()}',
       // 'aadhar_img': '${aadharImage.toString()}',
@@ -3004,7 +3022,11 @@ class _Client_formState extends State<Client_form> {
       // 'gst_img_three': '${gstTwo.toString()}',
       'create_by': '${CUR_USERID}',
       'voter_number': '${voterCtr.text}',
+      for (var i = 0; i < imagePathList.length; i++)
+        'photo[]': imagePathList[i],
+      for (var i = 0; i < apiImages.length; i++) 'photos[]': apiImages[i],
     });
+    print("update parara ${request.fields}");
     gstImage != null
         ? request.files.add(
             await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""))
@@ -3026,32 +3048,39 @@ class _Client_formState extends State<Client_form> {
             'gst_img_two', gstOne?.path ?? ""))
         : true;
     gstTwo != null
-        ? request.files.add(await http.MultipartFile.fromPath(
-            'gst_img_three', gstTwo?.path ?? ""))
+        ? request.files.add(
+            await http.MultipartFile.fromPath(
+                'gst_img_three', gstTwo?.path ?? ""),
+          )
         : true;
     voterIdImage != null
-        ? request.files.add(await http.MultipartFile.fromPath(
-            'voter_id_front_image', voterIdImage?.path ?? ""))
+        ? request.files.add(
+            await http.MultipartFile.fromPath(
+                'voter_id_front_image', voterIdImage?.path ?? ""),
+          )
         : true;
     voterIdBackImage != null
-        ? request.files.add(await http.MultipartFile.fromPath(
-            'voter_id_back_image', voterIdBackImage?.path ?? ""))
+        ? request.files.add(
+            await http.MultipartFile.fromPath(
+                'voter_id_back_image', voterIdBackImage?.path ?? ""),
+          )
         : true;
-
-    for (var i = 0; i < imagePathList.length; i++) {
-      print('Imageeee $imagePathList');
-      imagePathList.isEmpty
-          ? null
-          : request.files.add(
-              await http.MultipartFile.fromPath('photos[]', imagePathList[i].toString()));
-    }
-    for (var i = 0; i < apiImages.length; i++) {
-      print('Imageeee $apiImages');
-      apiImages.isEmpty
-          ? null
-          : request.files
-              .add(await http.MultipartFile.fromPath('photos[]', apiImages[i]));
-    }
+    // for (var i = 0; i < imagePathList.length; i++) {
+    //   print('Imageeee $imagePathList');
+    //   imagePathList.isEmpty
+    //       ? null
+    //       : request.files.add(
+    //           await http.MultipartFile.fromPath('photos[]', imagePathList[i]),
+    //         );
+    // }
+    // for (var i = 0; i < apiImages.length; i++) {
+    //   print('apii Imageeee $apiImages');
+    //   apiImages.isEmpty
+    //       ? null
+    //       : request.files.add(
+    //           await http.MultipartFile.fromPath('photos[]', apiImages[i]),
+    //         );
+    // }
     print('----${widget.model?.id}');
     print("parameter  ${request.fields}");
     request.headers.addAll(headers);
@@ -3075,7 +3104,7 @@ class _Client_formState extends State<Client_form> {
   String? timeData;
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet$formattedDate"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -3093,14 +3122,14 @@ class _Client_formState extends State<Client_form> {
           return Stack(
             children: [
               InkWell(
-                onTap: (){
+                onTap: () {
                   if (imagePathList[index] != null) {
                     final imageProvider =
                         Image.file(imagePathList[index]!).image;
                     showImageViewer(context, imageProvider,
                         onViewerDismissed: () {
-                          print("dismissed");
-                        });
+                      print("dismissed");
+                    });
                   }
                 },
                 child: Container(
@@ -3111,8 +3140,8 @@ class _Client_formState extends State<Client_form> {
                   height: 170,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child:
-                        Image.file(imagePathList[index], fit: BoxFit.cover),
+                    child: Image.file(File(imagePathList[index]),
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),

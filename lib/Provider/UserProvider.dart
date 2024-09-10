@@ -1,5 +1,5 @@
-import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:omega_employee_management/Provider/SettingProvider.dart';
 
 class UserProvider extends ChangeNotifier {
   String _userName = '',
@@ -9,7 +9,7 @@ class UserProvider extends ChangeNotifier {
       _mob = '',
       _profilePic = '',
       _email = '';
-  String?  _userId = '';
+  String? _userId = '';
 
   String? _curPincode = '';
 
@@ -54,7 +54,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void setName(String count) {
-    //settingsProvider.userName=count;
+    // settingsProvider.userName=count;
     _userName = count;
     notifyListeners();
   }

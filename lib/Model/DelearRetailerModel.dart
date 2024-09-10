@@ -1,7 +1,7 @@
 class DelearRetailerModel {
   bool? error;
   String? message;
-  List<Data>? data;
+  List<ChapterData>? data;
 
   DelearRetailerModel({this.error, this.message, this.data});
 
@@ -9,9 +9,9 @@ class DelearRetailerModel {
     error = json['error'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <ChapterData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new ChapterData.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class DelearRetailerModel {
   }
 }
 
-class Data {
+class ChapterData {
   String? id;
   String? userId;
   String? staffId;
@@ -73,53 +73,53 @@ class Data {
   String? city;
   String? statename;
 
-  Data(
+  ChapterData(
       {this.id,
-        this.userId,
-        this.staffId,
-        this.nameOfFirm,
-        this.status,
-        this.ownerName,
-        this.address,
-        this.email,
-        this.district,
-        this.state,
-        this.pinCode,
-        this.mobileOne,
-        this.mobileTwo,
-        this.whatsappNumber,
-        this.pan,
-        this.panImg,
-        this.gst,
-        this.gstImg,
-        this.gstImgTwo,
-        this.gstImgThree,
-        this.aadhar,
-        this.aadharImg,
-        this.aadharBack,
-        this.customerType,
-        this.lat,
-        this.lng,
-        this.photo,
-        this.creditLimit,
-        this.createdAt,
-        this.updatedAt,
-        this.udyogidNumber,
-        this.dateOfBirth,
-        this.dateOfAnniversary,
-        this.route,
-        this.market,
-        this.landmark,
-        this.voterIdBackImage,
-        this.voterIdFrontImage,
-        this.createBy,
-        this.active,
-        this.department,
-        this.currentAddress,
-        this.city,
-        this.statename});
+      this.userId,
+      this.staffId,
+      this.nameOfFirm,
+      this.status,
+      this.ownerName,
+      this.address,
+      this.email,
+      this.district,
+      this.state,
+      this.pinCode,
+      this.mobileOne,
+      this.mobileTwo,
+      this.whatsappNumber,
+      this.pan,
+      this.panImg,
+      this.gst,
+      this.gstImg,
+      this.gstImgTwo,
+      this.gstImgThree,
+      this.aadhar,
+      this.aadharImg,
+      this.aadharBack,
+      this.customerType,
+      this.lat,
+      this.lng,
+      this.photo,
+      this.creditLimit,
+      this.createdAt,
+      this.updatedAt,
+      this.udyogidNumber,
+      this.dateOfBirth,
+      this.dateOfAnniversary,
+      this.route,
+      this.market,
+      this.landmark,
+      this.voterIdBackImage,
+      this.voterIdFrontImage,
+      this.createBy,
+      this.active,
+      this.department,
+      this.currentAddress,
+      this.city,
+      this.statename});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ChapterData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     staffId = json['staff_id'];

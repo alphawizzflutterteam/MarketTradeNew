@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:omega_employee_management/Model/Notification_Model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:omega_employee_management/Model/Notification_Model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
@@ -106,11 +109,12 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
     notiList.clear();
     return getNotification();
   }
+
 //kkk
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(getTranslated(context,'NOTIFICATION')!, context),
+        appBar: getAppBar(getTranslated(context, 'NOTIFICATION')!, context),
         key: _scaffoldKey,
         body: _isNetworkAvail
             ? _isLoading
@@ -122,7 +126,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                         child: Center(
                             child: Text(getTranslated(context, 'noNoti')!)))
                     : RefreshIndicator(
-                         color: colors.primary,
+                        color: colors.primary,
                         key: _refreshIndicatorKey,
                         onRefresh: _refresh,
                         child: ListView.builder(
@@ -141,7 +145,19 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
             : noInternet(context));
   }
 
-
+  Future<bool> _requestPermission(Permission permission) async {
+    final plugin = DeviceInfoPlugin();
+    final android = await plugin.androidInfo;
+    print("++++++++++++");
+    var status = android.version.sdkInt < 33
+        ? await Permission.storage.request()
+        : PermissionStatus.granted;
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      return status == PermissionStatus.granted;
+    }
+  }
 
   Widget listItem(int index) {
     NotificationModel model = notiList[index];
@@ -149,94 +165,151 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    model.date!,
-                    style: TextStyle(color: colors.primary),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      model.title!,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Text(model.desc!)
-                ],
-              ),
-            ),
-            model.img != null && model.img != ''
-                ? GestureDetector(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      child: Hero(
-                        tag: model.id!,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            model.img!,
-                          ),
-                          radius: 15,
+        child: Column(
+          children: [
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        model.date!,
+                        style: TextStyle(color: colors.primary),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          model.title!,
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ),
-                    onTap: () {
-                      final imageProvider = Image.network(model.img!).image;
-                      showImageViewer(context, imageProvider,
-                          onViewerDismissed: () {
+                      Text(model.desc!)
+                    ],
+                  ),
+                ),
+                model.img != null && model.img != ''
+                    ? GestureDetector(
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          child: Hero(
+                            tag: model.id!,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                model.img!,
+                              ),
+                              radius: 15,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          final imageProvider = Image.network(model.img!).image;
+                          showImageViewer(context, imageProvider,
+                              onViewerDismissed: () {
                             print("dismissed");
                           });
-                      // Navigator.of(context).push(new PageRouteBuilder(
-                      //     opaque: false,
-                      //     barrierDismissible: true,
-                      //     pageBuilder: (BuildContext context, _, __) {
-                      //       return new AlertDialog(
-                      //         elevation: 5,
-                      //         contentPadding: EdgeInsets.all(0),
-                      //         backgroundColor: Colors.white,
-                      //         content: new Hero(
-                      //           tag: model.id!,
-                      //           child: FadeInImage(
-                      //             image: CachedNetworkImageProvider(model.img!),
-                      //             fadeInDuration: Duration(milliseconds: 150),
-                      //             placeholder: placeHolder(150),
-                      //             imageErrorBuilder: (context, error, stackTrace) => erroWidget(150),
-                      //           ),
-                      //         ),
-                      //       );
-                      //     }),
-                      // );
-                      // return showDialog(
-                      //     context: context,
-                      //     builder: (BuildContext context) {
-                      //       return StatefulBuilder(builder:
-                      //           (BuildContext context, StateSetter setStater) {
-                      //         return AlertDialog(
-                      //             backgroundColor: Colors.transparent,
-                      //             shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.all(
-                      //                     Radius.circular(5.0))),
-                      //             content: Hero(
-                      //               tag: model.id,
-                      //               child: FadeInImage(
-                      //                 image: NetworkImage(model.img),
-                      //                 fadeInDuration:
-                      //                     Duration(milliseconds: 150),
-                      //                 placeholder: placeHolder(150),
-                      //               ),
-                      //             ));
-                      //       });
-                      //     });
-                    },
-                  )
-                : Container(
-                    height: 0,
+                          // Navigator.of(context).push(new PageRouteBuilder(
+                          //     opaque: false,
+                          //     barrierDismissible: true,
+                          //     pageBuilder: (BuildContext context, _, __) {
+                          //       return new AlertDialog(
+                          //         elevation: 5,
+                          //         contentPadding: EdgeInsets.all(0),
+                          //         backgroundColor: Colors.white,
+                          //         content: new Hero(
+                          //           tag: model.id!,
+                          //           child: FadeInImage(
+                          //             image: CachedNetworkImageProvider(model.img!),
+                          //             fadeInDuration: Duration(milliseconds: 150),
+                          //             placeholder: placeHolder(150),
+                          //             imageErrorBuilder: (context, error, stackTrace) => erroWidget(150),
+                          //           ),
+                          //         ),
+                          //       );
+                          //     }),
+                          // );
+                          // return showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context) {
+                          //       return StatefulBuilder(builder:
+                          //           (BuildContext context, StateSetter setStater) {
+                          //         return AlertDialog(
+                          //             backgroundColor: Colors.transparent,
+                          //             shape: RoundedRectangleBorder(
+                          //                 borderRadius: BorderRadius.all(
+                          //                     Radius.circular(5.0))),
+                          //             content: Hero(
+                          //               tag: model.id,
+                          //               child: FadeInImage(
+                          //                 image: NetworkImage(model.img),
+                          //                 fadeInDuration:
+                          //                     Duration(milliseconds: 150),
+                          //                 placeholder: placeHolder(150),
+                          //               ),
+                          //             ));
+                          //       });
+                          //     });
+                        },
+                      )
+                    : Container(
+                        height: 0,
+                      ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    try {
+                      if (await _requestPermission(Permission.storage)) {
+                        final http.Response response =
+                            await http.get(Uri.parse(model.img.toString()));
+                        if (response.statusCode == 200) {
+                          final Uint8List data = response.bodyBytes;
+                          final result =
+                              await ImageGallerySaver.saveImage(data);
+                          print(result);
+                          if (result['isSuccess'] == true) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Image downloaded')),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Failed to download image')),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to download image')),
+                          );
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to download image')),
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.red),
+                    child: Center(
+                      child: Icon(
+                        Icons.download,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -251,7 +324,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
           LIMIT: perPage.toString(),
           OFFSET: offset.toString(),
         };
-       print("get notification para${parameter}===========");
+        print("get notification para${parameter}===========");
         Response response =
             await post(getNotificationApi, headers: headers, body: parameter)
                 .timeout(Duration(seconds: timeOut));

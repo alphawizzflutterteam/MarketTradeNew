@@ -35,6 +35,7 @@ class _EditClientState extends State<EditClient> {
   String? department_id;
   ClientModel? clients;
   List<ClientsData> clientData = [];
+
   getClients() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     department_id = pref.getString('department');
@@ -47,8 +48,7 @@ class _EditClientState extends State<EditClient> {
       USER_ID: '${CUR_USERID}',
       'department_id': '${department_id.toString()}'
     });
-
-    print("this is refer request ${request.fields.toString()}");
+    print("this is refer request in edit client ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -189,196 +189,197 @@ class _EditClientState extends State<EditClient> {
                 },
                 controller: searchCtr,
                 decoration: InputDecoration(
-                    suffixIcon: Container(
-                      width: 20,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: colors.primary),
-                      child: Icon(Icons.search, color: Colors.white),
-                    ),
-                    hintText: "Search here",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+                  suffixIcon: Container(
+                    width: 20,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: colors.primary),
+                    child: Icon(Icons.search, color: Colors.white),
+                  ),
+                  hintText: "Search here",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
             ),
-            Container(
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    childAspectRatio: 3 / 5.8),
-                itemCount: clientData.length ?? 0,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      //  height: MediaQuery.of(context).size.height/1.0,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: colors.primary),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          InkWell(
-                            child: Padding(
-                              padding: EdgeInsets.all(0),
-                              child: new ClipRRect(
-                                borderRadius: BorderRadius.circular(0.0),
-                                child: new FadeInImage(
-                                  fadeInDuration: Duration(milliseconds: 150),
-                                  image: CachedNetworkImageProvider(
-                                      "${clients?.data?[index].photo?[0]}"),
-                                  height: 130.0,
-                                  width: double.infinity,
-                                  fit: BoxFit.fill,
-                                  imageErrorBuilder:
-                                      (context, error, stackTrace) =>
-                                          erroWidget(50),
-                                  placeholder: placeHolder(50),
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              if (clientData[index].photo?[0] != null) {
-                                final imageProvider = Image.network(
-                                        clientData[index].photo?[0] ?? '')
-                                    .image;
-                                showImageViewer(context, imageProvider,
-                                    onViewerDismissed: () {
-                                  print("dismissed");
-                                });
-                              }
-                            },
-                            onLongPress: () {
-                              if (clientData[index].photo?[0] != null)
-                                showDilaogBox(
-                                    clientData[index].photo?[0] ?? "");
-                            },
+            SizedBox(
+              height: 5,
+            ),
+            clients?.error == true
+                ? Center(
+                    child: Text(
+                      "No Data Found",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                    ),
+                  )
+                : clientData == null
+                    ? CircularProgressIndicator()
+                    : Container(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 5.0,
+                            childAspectRatio: 0.6,
                           ),
-                          const SizedBox(width: 20),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Firm:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: colors.blackTemp),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Owner:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: colors.blackTemp),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Number:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: colors.blackTemp),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Address:",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: colors.blackTemp),
-                                    ),
-                                  ],
+                          itemCount: clientData.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.redAccent),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "${clientData[index].nameOfFirm}",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: colors.blackTemp,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text("${clientData[index].ownerName}",
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        child: Center(
+                                          child: new ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(0.0),
+                                            child: new FadeInImage(
+                                              fadeInDuration:
+                                                  Duration(milliseconds: 150),
+                                              image: CachedNetworkImageProvider(
+                                                  "${clients?.data?[index].photo?[0]}"),
+                                              height: 110.0,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                              imageErrorBuilder: (context,
+                                                      error, stackTrace) =>
+                                                  erroWidget(100),
+                                              placeholder: placeHolder(50),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          if (clientData[index].photo?[0] !=
+                                              null) {
+                                            final imageProvider = Image.network(
+                                              clientData[index].photo?[0] ?? '',
+                                            ).image;
+                                            showImageViewer(
+                                                context, imageProvider,
+                                                onViewerDismissed: () {
+                                              print("dismissed");
+                                            });
+                                          }
+                                        },
+                                        onLongPress: () {
+                                          showDilaogBox(
+                                              clientData[index].photo![0] ??
+                                                  "");
+                                        },
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Firm:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            "${clientData[index].nameOfFirm}",
+                                            style: TextStyle(fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Owner:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            "${clientData[index].ownerName}",
+                                            style: TextStyle(fontSize: 13),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Mobile:',
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: colors.blackTemp)),
-                                    SizedBox(height: 10),
-                                    Text("${clientData[index].mobileOne}",
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "${clientData[index].mobileOne}",
+                                        style: TextStyle(fontSize: 13),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Address:',
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: colors.blackTemp)),
-                                    SizedBox(height: 10),
-                                    Container(
-                                        width: 50,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Container(
+                                        width: 180,
                                         child: Text(
                                           "${clientData[index].address}",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              color: colors.blackTemp),
-                                          maxLines: 2,
-                                        )),
-                                  ],
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Center(
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Client_form(
+                                                  model: clientData[index],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 70,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: colors.primary),
+                                            child: Center(
+                                              child: Text(
+                                                "View",
+                                                style: TextStyle(
+                                                    color: colors.whiteTemp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Client_form(
-                                          model: clientData[index])));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: colors.primary),
-                              child: Center(
-                                  child: Text(
-                                "Edit",
-                                style: TextStyle(
-                                    color: colors.whiteTemp,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                            ),
-                          ),
-                        ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
             // _catList(),
           ],
         ),
@@ -416,8 +417,9 @@ class _EditClientState extends State<EditClient> {
                             child: Container(
                               // height: MediaQuery.of(context).size.height/1.0,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: colors.primary),
-                                  borderRadius: BorderRadius.circular(5)),
+                                border: Border.all(color: colors.primary),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -499,18 +501,20 @@ class _EditClientState extends State<EditClient> {
                                             ),
                                             SizedBox(height: 10),
                                             Text(
-                                                "${clients?.data?[index].ownerName}",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: colors.blackTemp)),
+                                              "${clients?.data?[index].ownerName}",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: colors.blackTemp),
+                                            ),
                                             SizedBox(height: 10),
                                             Text(
-                                                "${clients?.data?[index].mobileOne}",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: colors.blackTemp)),
+                                              "${clients?.data?[index].mobileOne}",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: colors.blackTemp),
+                                            ),
                                           ],
                                         ),
                                       ],

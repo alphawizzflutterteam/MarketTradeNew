@@ -2,47 +2,42 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:omega_employee_management/Model/Section_Model.dart';
-import 'package:omega_employee_management/Provider/CategoryProvider.dart';
-import 'package:omega_employee_management/Provider/HomeProvider.dart';
-import 'package:omega_employee_management/Screen/HomePage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:omega_employee_management/Helper/ApiBaseHelper.dart';
-import 'package:omega_employee_management/Helper/Color.dart';
-import 'package:omega_employee_management/Helper/Session.dart';
-import 'package:omega_employee_management/Helper/String.dart';
-import 'package:omega_employee_management/Provider/SettingProvider.dart';
-import 'package:omega_employee_management/Provider/UserProvider.dart';
-import 'package:omega_employee_management/Screen/Customer_Support.dart';
-import 'package:omega_employee_management/Screen/MyTransactions.dart';
-import 'package:omega_employee_management/Screen/ReferEarn.dart';
-import 'package:omega_employee_management/Screen/Setting.dart';
-import 'package:omega_employee_management/Screen/Login.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:in_app_review/in_app_review.dart';
+import 'package:omega_employee_management/Helper/ApiBaseHelper.dart';
+import 'package:omega_employee_management/Helper/Color.dart';
+import 'package:omega_employee_management/Helper/Session.dart';
+import 'package:omega_employee_management/Helper/String.dart';
+import 'package:omega_employee_management/Model/Section_Model.dart';
+import 'package:omega_employee_management/Provider/CategoryProvider.dart';
+import 'package:omega_employee_management/Provider/HomeProvider.dart';
+import 'package:omega_employee_management/Provider/SettingProvider.dart';
+import 'package:omega_employee_management/Provider/UserProvider.dart';
+import 'package:omega_employee_management/Screen/Customer_Support.dart';
+import 'package:omega_employee_management/Screen/HomePage.dart';
+import 'package:omega_employee_management/Screen/Login.dart';
+import 'package:omega_employee_management/Screen/ReferEarn.dart';
+import 'package:omega_employee_management/Screen/Setting.dart';
 import 'package:omega_employee_management/Screen/SiteVisitForm.dart';
 import 'package:omega_employee_management/Screen/work_allotment/work_allotment_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Helper/Constant.dart';
 import '../Model/DeleteAccountModel.dart';
 import '../Provider/Theme.dart';
 import '../main.dart';
 import 'Example.dart';
 import 'Faqs.dart';
-import 'FeedbackForm.dart';
 import 'FeedbackList.dart';
 import 'Manage_Address.dart';
-import 'MyOrder.dart';
-import 'MySiteVisit.dart';
-import 'My_Wallet.dart';
 import 'NotificationLIst.dart';
 import 'Privacy_Policy.dart';
 
@@ -58,7 +53,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   var isDarkTheme;
   bool isDark = false;
   late ThemeNotifier themeNotifier;
-  List<String> langCode = ["en","hi", "zh", "es",  "ar", "ru", "ja", "de"];
+  List<String> langCode = ["en", "hi", "zh", "es", "ar", "ru", "ja", "de"];
   List<String?> themeList = [];
   List<String?> languageList = [];
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -85,18 +80,18 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   Animation? buttonSqueezeanimation;
   AnimationController? buttonController;
 
-  requestTraining() async{
+  requestTraining() async {
     var headers = {
       // 'Token': jwtToken.toString(),
       // 'Authorisedkey': authKey.toString(),
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(requestTrainingApi.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(requestTrainingApi.toString()));
     request.fields.addAll({
       USER_ID: '$CUR_USERID',
       'message': messageController.text.toString(),
-      'product_id': categoryValue != null ?
-          categoryValue.toString() : ""
+      'product_id': categoryValue != null ? categoryValue.toString() : ""
     });
 
     print("this is request training request ${request.fields.toString()}");
@@ -113,12 +108,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
       // animalList = finalResponse.data!;
       // });
       // print("this is operator list ----->>>> ${operatorList[0].name}");
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
-
 
   void getCat() {
     Map parameter = {
@@ -139,14 +132,12 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
               (data as List).map((data) => new Product.fromCat(data)).toList();
           if (popularList.length > 0) {
             Product pop =
-            new Product.popular("Popular", imagePath + "popular.svg");
+                new Product.popular("Popular", imagePath + "popular.svg");
             catList.insert(0, pop);
             context.read<CategoryProvider>().setSubList(popularList);
           }
         }
-      } else {
-
-      }
+      } else {}
 
       context.read<HomeProvider>().setCatLoading(false);
     }, onError: (error) {
@@ -154,7 +145,6 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
       context.read<HomeProvider>().setCatLoading(false);
     });
   }
-
 
   @override
   void initState() {
@@ -198,6 +188,17 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? get = prefs.getString(APP_THEME);
+    String? username = prefs.getString("usernamee");
+    String? email = prefs.getString("email");
+    String? MOBILE = prefs.getString("mobile");
+    String? image = prefs.getString("image");
+    UserProvider userProvider =
+        Provider.of<UserProvider>(this.context, listen: false);
+
+    userProvider.setName(username ?? "");
+    userProvider.setEmail(email ?? "");
+    userProvider.setMobile(MOBILE ?? "");
+    userProvider.setProfilePic(image ?? "");
 
     curTheme = themeList.indexOf(get == '' || get == DEFAULT_SYSTEM
         ? getTranslated(context, 'SYSTEM_DEFAULT')
@@ -226,20 +227,20 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   _getHeader() {
     return Padding(
-        padding: const EdgeInsetsDirectional.only(bottom: 10.0, top: 10),
-        child: Container(
-          padding: EdgeInsetsDirectional.only(
-            start: 10.0,
-          ),
-          child: Row(
-            children: [
-              Selector<UserProvider, String>(
-                  selector: (_, provider) => provider.profilePic,
-                  builder: (context, profileImage, child) {
-                    return getUserImage(
-                        profileImage, openChangeUserDetailsBottomSheet);
-                  }),
-              /*         Container(
+      padding: const EdgeInsetsDirectional.only(bottom: 10.0, top: 10),
+      child: Container(
+        padding: EdgeInsetsDirectional.only(
+          start: 10.0,
+        ),
+        child: Row(
+          children: [
+            Selector<UserProvider, String>(
+                selector: (_, provider) => provider.profilePic,
+                builder: (context, profileImage, child) {
+                  return getUserImage(
+                      profileImage, openChangeUserDetailsBottomSheet);
+                }),
+            /*         Container(
                 margin: EdgeInsetsDirectional.only(end: 20),
                 height: 80,
                 width: 80,
@@ -265,65 +266,61 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                       }),
                 ),
               ),*/
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Selector<UserProvider, String>(
-                      selector: (_, provider) => provider.curUserName,
-                      builder: (context, userName, child) {
-                        nameController = TextEditingController(text: userName);
-                        return Text(
-                          userName == ""
-                              ? getTranslated(context, 'GUEST')!
-                              : userName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.fontColor,
-                              ),
-                        );
-                      }),
-                  Selector<UserProvider, String>(
-                      selector: (_, provider) => provider.mob,
-                      builder: (context, userMobile, child) {
-                        return userMobile != ""
-                            ? Text(
-                                userMobile,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .fontColor,
-                                        fontWeight: FontWeight.normal),
-                              )
-                            : Container(
-                                height: 0,
-                              );
-                      }),
-                  Selector<UserProvider, String>(
-                      selector: (_, provider) => provider.email,
-                      builder: (context, userEmail, child) {
-                        emailController =
-                            TextEditingController(text: userEmail);
-                        return userEmail != ""
-                            ? Text(
-                                userEmail,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .fontColor,
-                                        fontWeight: FontWeight.normal),
-                              )
-                            : Container(height: 0);
-                      }),
-                  /* Consumer<UserProvider>(builder: (context, userProvider, _) {
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Selector<UserProvider, String>(
+                    selector: (_, provider) => provider.curUserName,
+                    builder: (context, userName, child) {
+                      nameController = TextEditingController(text: userName);
+                      return Text(
+                        userName == ""
+                            ? getTranslated(context, 'GUEST')!
+                            : userName,
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                              color: Theme.of(context).colorScheme.fontColor,
+                            ),
+                      );
+                    }),
+                Selector<UserProvider, String>(
+                    selector: (_, provider) => provider.mob,
+                    builder: (context, userMobile, child) {
+                      return userMobile != ""
+                          ? Text(
+                              userMobile,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor,
+                                      fontWeight: FontWeight.normal),
+                            )
+                          : Container(
+                              height: 0,
+                            );
+                    }),
+                Selector<UserProvider, String>(
+                    selector: (_, provider) => provider.email,
+                    builder: (context, userEmail, child) {
+                      emailController = TextEditingController(text: userEmail);
+                      return userEmail != ""
+                          ? Text(
+                              userEmail,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor,
+                                      fontWeight: FontWeight.normal),
+                            )
+                          : Container(height: 0);
+                    }),
+                /* Consumer<UserProvider>(builder: (context, userProvider, _) {
                     print("mobb**${userProvider.profilePic}");
                     return (userProvider.mob != "")
                         ? Text(
@@ -337,114 +334,119 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                             height: 0,
                           );
                   }),*/
-                  Consumer<UserProvider>(builder: (context, userProvider, _) {
-                    return userProvider.curUserName == ""
-                        ? Padding(
-                            padding: const EdgeInsetsDirectional.only(top: 7),
-                            child: InkWell(
-                              child: Text(
-                                  getTranslated(context, 'LOGIN_REGISTER_LBL')!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
+                Consumer<UserProvider>(builder: (context, userProvider, _) {
+                  return userProvider.curUserName == ""
+                      ? Padding(
+                          padding: const EdgeInsetsDirectional.only(top: 7),
+                          child: InkWell(
+                            child: Text(
+                              getTranslated(context, 'LOGIN_REGISTER_LBL')!,
+                              style:
+                                  Theme.of(context).textTheme.caption!.copyWith(
                                         color: colors.primary,
                                         decoration: TextDecoration.underline,
-                                      )),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginPage(),
-                                    ));
-                              },
-                            ))
-                        : Container();
-                  }),
-                ],
-              ),
-            ],
-          ),
-        ));
+                                      ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container();
+                }),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   List<Widget> getLngList(BuildContext ctx, StateSetter setModalState) {
-    return languageList.asMap().map(
+    return languageList
+        .asMap()
+        .map(
           (index, element) => MapEntry(
-              index, InkWell(
-                onTap: () {
-                  if (mounted)
-                    setState(() {
-                      selectLan = index;
-                      _changeLan(langCode[index], ctx);
-                    });
-                  setModalState(() {});
-                },
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            height: 25.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: selectLan == index
-                                    ? colors.grad2Color
-                                    : Theme.of(context).colorScheme.white,
-                                border: Border.all(color: colors.grad2Color),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: selectLan == index
-                                  ? Icon(
-                                      Icons.check,
-                                      size: 17.0,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .fontColor,
-                                    )
-                                  : Icon(
-                                      Icons.check_box_outline_blank,
-                                      size: 15.0,
-                                      color:
-                                          Theme.of(context).colorScheme.white,
-                                    ),
-                            ),
+            index,
+            InkWell(
+              onTap: () {
+                if (mounted)
+                  setState(() {
+                    selectLan = index;
+                    _changeLan(langCode[index], ctx);
+                  });
+                setModalState(() {});
+              },
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 25.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: selectLan == index
+                                ? colors.grad2Color
+                                : Theme.of(context).colorScheme.white,
+                            border: Border.all(color: colors.grad2Color),
                           ),
-                          Padding(
-                              padding: EdgeInsetsDirectional.only(
-                                start: 15.0,
-                              ),
-                              child: Text(
-                                languageList[index]!,
-                                style: Theme.of(this.context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .lightBlack),
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: selectLan == index
+                                ? Icon(
+                                    Icons.check,
+                                    size: 17.0,
+                                    color:
+                                        Theme.of(context).colorScheme.fontColor,
+                                  )
+                                : Icon(
+                                    Icons.check_box_outline_blank,
+                                    size: 15.0,
+                                    color: Theme.of(context).colorScheme.white,
+                                  ),
                           ),
-                        ],
-                      ),
-                      // index == languageList.length - 1
-                      //     ? Container(
-                      //         margin: EdgeInsetsDirectional.only(
-                      //           bottom: 10,
-                      //         ),
-                      //       )
-                      //     : Divider(
-                      //         color: Theme.of(context).colorScheme.lightBlack,
-                      //       ),
-                    ],
-                  ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.only(
+                            start: 15.0,
+                          ),
+                          child: Text(
+                            languageList[index]!,
+                            style: Theme.of(this.context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .lightBlack),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // index == languageList.length - 1
+                    //     ? Container(
+                    //         margin: EdgeInsetsDirectional.only(
+                    //           bottom: 10,
+                    //         ),
+                    //       )
+                    //     : Divider(
+                    //         color: Theme.of(context).colorScheme.lightBlack,
+                    //       ),
+                  ],
                 ),
               ),
+            ),
           ),
-        ).values.toList();
+        )
+        .values
+        .toList();
   }
 
   void _changeLan(String language, BuildContext ctx) async {
@@ -605,10 +607,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         // _getDrawerItem(getTranslated(context, 'SHARE_APP')!,
         //     'assets/images/pro_share.svg'),
         // CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
-        CUR_USERID == "" || CUR_USERID == null
-            ? Container()
-            : _getDrawerItem(getTranslated(context, 'DELETE')!,
-                'assets/images/delete.svg'),
+        // CUR_USERID == "" || CUR_USERID == null
+        //     ? Container()
+        //     : _getDrawerItem(
+        //         getTranslated(context, 'DELETE')!, 'assets/images/delete.svg'),
       ],
     );
   }
@@ -616,54 +618,52 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   deleteAccountDailog() async {
     await dialogAnimate(context,
         StatefulBuilder(builder: (BuildContext context, StateSetter setStater) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setStater) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  content: Text(
-                      getTranslated(context, 'DELETEACCOUNT')!,
-                      style: TextStyle(color: Colors.black)
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                        child: Text(
-                            getTranslated(context, 'NO')!,
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        }),
-                    TextButton(
-                        child: Text(
-                            getTranslated(context, 'YES')!,
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
-                        ),
-                        onPressed: () {
-                          deleteAccount();
-                          // Navigator.pop(context);
-                        })
-                  ],
-                );
-              });
-        }));
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setStater) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          content: Text(getTranslated(context, 'DELETEACCOUNT')!,
+              style: TextStyle(color: Colors.black)),
+          actions: <Widget>[
+            TextButton(
+                child: Text(getTranslated(context, 'NO')!,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                }),
+            TextButton(
+                child: Text(getTranslated(context, 'YES')!,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  deleteAccount();
+                  // Navigator.pop(context);
+                })
+          ],
+        );
+      });
+    }));
   }
 
   Future<DeleteAccountModel?> deleteAccount() async {
     var header = headers;
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/rename_market_track/app/v1/api/delete_user'));
-    request.fields.addAll({
-      'user_id': CUR_USERID.toString()
-    });
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://developmentalphawizz.com/rename_market_track/app/v1/api/delete_user'));
+    request.fields.addAll({'user_id': CUR_USERID.toString()});
     print("User id in delet account ${request.fields}");
     request.headers.addAll(header);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       print("delete accountt responseeeee $response");
       final str = await response.stream.bytesToString();
-      var data  = DeleteAccountModel.fromJson(json.decode(str));
+      var data = DeleteAccountModel.fromJson(json.decode(str));
       // setSnackbar(data.message.toString());
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
       return DeleteAccountModel.fromJson(json.decode(str));
     } else {
       return null;
@@ -707,54 +707,46 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           //   );
           //   //sendAndRetrieveMessage();
           // } else
-            if (title == getTranslated(context, 'MYFEEDBACK')) {
+          if (title == getTranslated(context, 'MYFEEDBACK')) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Example(),
                 ));
-          }
-          else
-            if (title == getTranslated(context, 'MYSITEVISITE')) {
+          } else if (title == getTranslated(context, 'MYSITEVISITE')) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => SiteVisitForm(),
                 ));
-          }
-          else if (title == getTranslated(context, 'MY_COMMISSION')) {
+          } else if (title == getTranslated(context, 'MY_COMMISSION')) {
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
             //       builder: (context) => MyLeadsAccounts(),
             //     ));
-          }
-          else if (title == getTranslated(context, 'MYFEEDBACKLIST')) {
+          } else if (title == getTranslated(context, 'MYFEEDBACKLIST')) {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Customer_feedback(),
-                ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => Customer_feedback(),
+              ),
             );
-          }
-            else if (title == getTranslated(context, 'NOTIFICATION')) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationList(),
-                ),
-              );
-            }
-          else if (title == getTranslated(context, 'MYEARNINGS')) {
+          } else if (title == getTranslated(context, 'NOTIFICATION')) {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>WorkallotmentScreen(),
-                ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotificationList(),
+              ),
             );
-
-          }
-          else if (title == getTranslated(context, 'SETTING')) {
+          } else if (title == getTranslated(context, 'MYEARNINGS')) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkallotmentScreen(),
+              ),
+            );
+          } else if (title == getTranslated(context, 'SETTING')) {
             CUR_USERID == null
                 ? Navigator.push(
                     context,
@@ -842,21 +834,17 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                     title: getTranslated(context, 'FAQS'),
                   ),
                 ));
-
-          }
-          else if (title == getTranslated(context, 'CHANGE_THEME_LBL')) {
+          } else if (title == getTranslated(context, 'CHANGE_THEME_LBL')) {
             openChangeThemeBottomSheet();
-          }
-          else if (title == "Request Training") {
+          } else if (title == "Request Training") {
             openRequestTrainingBottomSheet();
-          }
-          else if (title == getTranslated(context, 'LOGOUT')) {
+          } else if (title == getTranslated(context, 'LOGOUT')) {
             logOutDailog();
           }
-            // else if (title == getTranslated(context, 'DELETE')) {
-            //   deleteAccountDailog();
-            // }
-            else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
+          // else if (title == getTranslated(context, 'DELETE')) {
+          //   deleteAccountDailog();
+          // }
+          else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
             openChangePasswordBottomSheet();
           } else if (title == getTranslated(context, 'CHANGE_LANGUAGE_LBL')) {
             openChangeLanguageBottomSheet();
@@ -1027,7 +1015,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.setString('user_id', '');
                   SettingProvider settingProvider =
                       Provider.of<SettingProvider>(context, listen: false);
@@ -1170,58 +1159,118 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
     );
   }
 
+  StateSetter? checkoutState;
   void openChangeUserDetailsBottomSheet() {
     showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0))),
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Form(
-                key: _changeUserDetailsKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    bottomSheetHandle(),
-                    bottomsheetLabel("EDIT_PROFILE_LBL"),
-                    Selector<UserProvider, String>(
-                        selector: (_, provider) => provider.profilePic,
-                        builder: (context, profileImage, child) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: getUserImage(profileImage, _imgFromGallery),
-                          );
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+        builder: (builder) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            checkoutState = setState;
+            return Wrap(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Form(
+                    key: _changeUserDetailsKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        bottomSheetHandle(),
+                        bottomsheetLabel("EDIT_PROFILE_LBL"),
+                        Selector<UserProvider, String>(
+                            selector: (_, provider) => provider.profilePic,
+                            builder: (context, profileImage, child) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child:
+                                    getUserImage(profileImage, _imgFromGallery),
+                              );
+                            }),
+                        Selector<UserProvider, String>(
+                            selector: (_, provider) => provider.curUserName,
+                            builder: (context, userName, child) {
+                              return setNameField(userName);
+                            }),
+                        Selector<UserProvider, String>(
+                            selector: (_, provider) => provider.email,
+                            builder: (context, userEmail, child) {
+                              return setEmailField(userEmail);
+                            }),
+                        saveButton(getTranslated(context, "SAVE_LBL")!, () {
+                          validateAndSave(_changeUserDetailsKey);
                         }),
-                    Selector<UserProvider, String>(
-                        selector: (_, provider) => provider.curUserName,
-                        builder: (context, userName, child) {
-                          return setNameField(userName);
-                        }),
-                    Selector<UserProvider, String>(
-                        selector: (_, provider) => provider.email,
-                        builder: (context, userEmail, child) {
-                          return setEmailField(userEmail);
-                        }),
-                    saveButton(getTranslated(context, "SAVE_LBL")!, () {
-                      validateAndSave(_changeUserDetailsKey);
-                    }),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+              ],
+            );
+          });
+        });
+
+    // showModalBottomSheet(
+    //   shape: const RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.only(
+    //           topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0))),
+    //   isScrollControlled: true,
+    //   context: context,
+    //   builder: (context) {
+    //     return StatefulBuilder(
+    //       child:
+    //       Wrap(
+    //         children: [
+    //           Padding(
+    //             padding: EdgeInsets.only(
+    //                 bottom: MediaQuery.of(context).viewInsets.bottom),
+    //             child: Form(
+    //               key: _changeUserDetailsKey,
+    //               child: Column(
+    //                 mainAxisSize: MainAxisSize.max,
+    //                 children: [
+    //                   bottomSheetHandle(),
+    //                   bottomsheetLabel("EDIT_PROFILE_LBL"),
+    //                   Selector<UserProvider, String>(
+    //                       selector: (_, provider) => provider.profilePic,
+    //                       builder: (context, profileImage, child) {
+    //                         return Padding(
+    //                           padding:
+    //                               const EdgeInsets.symmetric(vertical: 10.0),
+    //                           child:
+    //                               getUserImage(profileImage, _imgFromGallery),
+    //                         );
+    //                       }),
+    //                   Selector<UserProvider, String>(
+    //                       selector: (_, provider) => provider.curUserName,
+    //                       builder: (context, userName, child) {
+    //                         return setNameField(userName);
+    //                       }),
+    //                   Selector<UserProvider, String>(
+    //                       selector: (_, provider) => provider.email,
+    //                       builder: (context, userEmail, child) {
+    //                         return setEmailField(userEmail);
+    //                       }),
+    //                   saveButton(getTranslated(context, "SAVE_LBL")!, () {
+    //                     validateAndSave(_changeUserDetailsKey);
+    //                   }),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
-  String?  categoryValue;
+  String? categoryValue;
   void openRequestTrainingBottomSheet() {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -1230,177 +1279,153 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-         return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-           return
-
-             Wrap(
-               alignment: WrapAlignment.center,
-               children: [
-
-                 Padding(
-                     padding: EdgeInsets.all(15),
-                     child: Text(
-                       "Request Training", style: TextStyle(color: Theme
-                         .of(context)
-                         .colorScheme
-                         .fontColor,
-                         fontSize: 24,
-                         fontWeight: FontWeight.w600),)),
-                 catList.isNotEmpty ?
-                 Padding(
-                     padding: const EdgeInsets.all(20),
-                     child: Container(
-                       padding: EdgeInsets.all(8),
-                       height: 50,
-                       width: MediaQuery
-                           .of(context)
-                           .size
-                           .width,
-                       decoration: BoxDecoration(
-                           color: Theme
-                               .of(context)
-                               .colorScheme
-                               .white,
-                           borderRadius: BorderRadius.circular(12),
-                           border: Border.all(color: Theme
-                               .of(context)
-                               .colorScheme
-                               .fontColor)
-                       ),
-                       child: DropdownButtonHideUnderline(
-                         child: DropdownButton(
-                           hint: Text('Select Product type'),
-                           // Not necessary for Option 1
-                           value: categoryValue,
-                           onChanged: (String? newValue) {
-                             setState(() {
-                               categoryValue = newValue;
-                             });
-                             print("this is category value $categoryValue");
-                           },
-                           items: catList.map((item) {
-                             return DropdownMenuItem(
-                               child: Text(
-                                 item.name!, style: TextStyle(color: Theme
-                                   .of(context)
-                                   .colorScheme
-                                   .fontColor),),
-                               value: item.id,
-                             );
-                           }).toList(),
-                         ),
-                       ),
-                     )
-                 )
-                     : SizedBox.shrink(),
-                 Padding(
-                   padding: const EdgeInsets.all(20),
-                   child: Container(
-                     padding:
-                     EdgeInsets.only(bottom: MediaQuery
-                         .of(context)
-                         .viewInsets
-                         .bottom),
-                     decoration: BoxDecoration(
-                       color: Theme
-                           .of(context)
-                           .colorScheme
-                           .white,
-                       borderRadius: BorderRadius.circular(10.0),
-                     ),
-                     child: Padding(
-                       padding:
-                       const EdgeInsets.symmetric(
-                           horizontal: 10.0, vertical: 5.0),
-                       child: TextFormField(
-                         //initialValue: nameController.text,
-                         style: TextStyle(
-                             color: Theme
-                                 .of(context)
-                                 .colorScheme
-                                 .fontColor,
-                             fontWeight: FontWeight.bold),
-                         controller: messageController,
-                         decoration: InputDecoration(
-                             label: Text(
-                               "Message",
-                               style: TextStyle(
-                                 color: Theme
-                                     .of(context)
-                                     .colorScheme
-                                     .primary,
-                               ),
-                             ),
-                             fillColor: Theme
-                                 .of(context)
-                                 .colorScheme
-                                 .primary,
-                             border: InputBorder.none),
-                         // validator: (val) => validateUserName(
-                         //     val!,
-                         //     getTranslated(context, 'USER_REQUIRED'),
-                         //     getTranslated(context, 'USER_LENGTH')),
-                       ),
-                     ),
-                   ),
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.only(bottom: 20.0, top: 10),
-                   child: ElevatedButton(onPressed: () {
-                     requestTraining();
-                   },
-                       style: ElevatedButton.styleFrom(backgroundColor: colors.primary,
-                           fixedSize: Size(MediaQuery
-                               .of(context)
-                               .size
-                               .width - 60, 50),
-                           shape: RoundedRectangleBorder(
-                               borderRadius: BorderRadius.circular(15
-                               ))),
-                       child: Text("Submit Request", style: TextStyle(
-                           fontWeight: FontWeight.w600, fontSize: 16
-                           , color: colors.whiteTemp),)),
-                 )
-                 // Padding(
-                 //   padding: EdgeInsets.only(
-                 //       bottom: MediaQuery.of(context).viewInsets.bottom),
-                 //   child: Form(
-                 //     key: _changeUserDetailsKey,
-                 //     child: Column(
-                 //       mainAxisSize: MainAxisSize.max,
-                 //       children: [
-                 //         bottomSheetHandle(),
-                 //         bottomsheetLabel("EDIT_PROFILE_LBL"),
-                 //         Selector<UserProvider, String>(
-                 //             selector: (_, provider) => provider.profilePic,
-                 //             builder: (context, profileImage, child) {
-                 //               return Padding(
-                 //                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                 //                 child: getUserImage(profileImage, _imgFromGallery),
-                 //               );
-                 //             }),
-                 //         Selector<UserProvider, String>(
-                 //             selector: (_, provider) => provider.curUserName,
-                 //             builder: (context, userName, child) {
-                 //               return setNameField(userName);
-                 //             }),
-                 //         Selector<UserProvider, String>(
-                 //             selector: (_, provider) => provider.email,
-                 //             builder: (context, userEmail, child) {
-                 //               return setEmailField(userEmail);
-                 //             }),
-                 //         saveButton(getTranslated(context, "SAVE_LBL")!, () {
-                 //           validateAndSave(_changeUserDetailsKey);
-                 //         }),
-                 //       ],
-                 //     ),
-                 //   ),
-                 // ),
-               ],
-             );
-         }
-         );
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Text(
+                    "Request Training",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.fontColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600),
+                  )),
+              catList.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                                color:
+                                    Theme.of(context).colorScheme.fontColor)),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: Text('Select Product type'),
+                            // Not necessary for Option 1
+                            value: categoryValue,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                categoryValue = newValue;
+                              });
+                              print("this is category value $categoryValue");
+                            },
+                            items: catList.map((item) {
+                              return DropdownMenuItem(
+                                child: Text(
+                                  item.name!,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor),
+                                ),
+                                value: item.id,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ))
+                  : SizedBox.shrink(),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
+                    child: TextFormField(
+                      //initialValue: nameController.text,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.fontColor,
+                          fontWeight: FontWeight.bold),
+                      controller: messageController,
+                      decoration: InputDecoration(
+                          label: Text(
+                            "Message",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          fillColor: Theme.of(context).colorScheme.primary,
+                          border: InputBorder.none),
+                      // validator: (val) => validateUserName(
+                      //     val!,
+                      //     getTranslated(context, 'USER_REQUIRED'),
+                      //     getTranslated(context, 'USER_LENGTH')),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0, top: 10),
+                child: ElevatedButton(
+                    onPressed: () {
+                      requestTraining();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.primary,
+                        fixedSize:
+                            Size(MediaQuery.of(context).size.width - 60, 50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15))),
+                    child: Text(
+                      "Submit Request",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: colors.whiteTemp),
+                    )),
+              )
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //       bottom: MediaQuery.of(context).viewInsets.bottom),
+              //   child: Form(
+              //     key: _changeUserDetailsKey,
+              //     child: Column(
+              //       mainAxisSize: MainAxisSize.max,
+              //       children: [
+              //         bottomSheetHandle(),
+              //         bottomsheetLabel("EDIT_PROFILE_LBL"),
+              //         Selector<UserProvider, String>(
+              //             selector: (_, provider) => provider.profilePic,
+              //             builder: (context, profileImage, child) {
+              //               return Padding(
+              //                 padding: const EdgeInsets.symmetric(vertical: 10.0),
+              //                 child: getUserImage(profileImage, _imgFromGallery),
+              //               );
+              //             }),
+              //         Selector<UserProvider, String>(
+              //             selector: (_, provider) => provider.curUserName,
+              //             builder: (context, userName, child) {
+              //               return setNameField(userName);
+              //             }),
+              //         Selector<UserProvider, String>(
+              //             selector: (_, provider) => provider.email,
+              //             builder: (context, userEmail, child) {
+              //               return setEmailField(userEmail);
+              //             }),
+              //         saveButton(getTranslated(context, "SAVE_LBL")!, () {
+              //           validateAndSave(_changeUserDetailsKey);
+              //         }),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          );
+        });
       },
     );
   }
@@ -1422,12 +1447,13 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         padding: const EdgeInsets.only(top: 30.0, bottom: 20),
         child: getHeading(labelName),
       );
+
   var image;
   void _imgFromGallery() async {
     var result = await FilePicker.platform.pickFiles();
     if (result != null) {
-       image = File(result.files.single.path!);
-
+      image = File(result.files.single.path!);
+      checkoutState!(() {});
     } else {
       // User canceled the picker
     }
@@ -1437,11 +1463,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
       try {
-
         var request = http.MultipartRequest("POST", (getUpdateUserApi));
         request.headers.addAll(headers);
         request.fields[USER_ID] = CUR_USERID!;
-        var pic = await http.MultipartFile.fromPath(IMAGE,image.path);
+        var pic = await http.MultipartFile.fromPath(IMAGE, image.path);
         request.files.add(pic);
         var response = await request.send();
         var responseData = await response.stream.toBytes();
@@ -1451,7 +1476,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         String? msg = getdata['message'];
         print("msg :$msg");
         print('kkkkkkkkkkkkkkk${request.fields}');
-        print(" detail : ${pic.field}, ${pic.length} , ${pic.filename} , ${pic.contentType} , ${pic.toString()}");
+        print(
+            " detail : ${pic.field}, ${pic.length} , ${pic.filename} , ${pic.contentType} , ${pic.toString()}");
         if (!error) {
           var data = getdata["data"];
           for (var i in data) {
@@ -1477,8 +1503,6 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
       }
     }
   }
-
-
 
   Widget setNameField(String userName) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
@@ -1554,9 +1578,6 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         ),
       );
 
-
-
-
   Widget saveButton(String title, VoidCallback? onBtnSelected) {
     return Row(
       children: [
@@ -1588,13 +1609,11 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   Future<bool> validateAndSave(GlobalKey<FormState> key) async {
     final form = key.currentState!;
-     setProfilePic(image);
+    setProfilePic(image);
     form.save();
     if (form.validate()) {
       if (key == _changePwdKey) {
-        await setUpdateUser(
-            CUR_USERID!,
-            passwordController.text,
+        await setUpdateUser(CUR_USERID!, passwordController.text,
             newpassController.text, "", "");
         passwordController.clear();
         newpassController.clear();

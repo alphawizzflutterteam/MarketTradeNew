@@ -56,7 +56,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet${formattedDate}"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -419,9 +419,10 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
       'Cookie': 'ci_session=ef29e61acfe01ba495d2b60947f70ae0b26cc807'
     };
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_client_type1'));
+      'POST',
+      Uri.parse(
+          'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_client_type1'),
+    );
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -850,6 +851,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .width /
                                                               2.2,
                                                       child: TextFormField(
+                                                        maxLength: 10,
                                                         keyboardType:
                                                             TextInputType
                                                                 .number,
@@ -862,6 +864,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         //controller: mobilecn,
                                                         decoration:
                                                             InputDecoration(
+                                                          counterText: "",
                                                           contentPadding:
                                                               EdgeInsets.only(
                                                                   bottom: 4,
@@ -1035,11 +1038,13 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                       bottom: 4,
                                                                       left: 3),
                                                               // hintText: '',
-                                                              border: OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -1150,7 +1155,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                       .black)),
                                                           child: Center(
                                                             child: Text(
-                                                              "${delearRetailerModel?.data?.contractor?[contractorIndex].address}",
+                                                              "${delearRetailerModel?.data?.contractor?[contractorIndex].address} Madhya Pradesh",
                                                               style: TextStyle(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -1396,6 +1401,10 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .width /
                                                               2.2,
                                                       child: TextFormField(
+                                                        maxLength: 10,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         onChanged: (value) {
                                                           enaginnerMobile =
                                                               value;
@@ -1403,6 +1412,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         // controller: ownerNameCtr,
                                                         decoration:
                                                             InputDecoration(
+                                                          counterText: "",
                                                           // hintText: '',
                                                           border: OutlineInputBorder(
                                                               borderRadius:
@@ -1678,7 +1688,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                       .black)),
                                                           child: Center(
                                                             child: Text(
-                                                              "${delearRetailerModel!.data!.engineer?[engineerIndex].address}",
+                                                              "${delearRetailerModel!.data!.engineer?[engineerIndex].address} Madhya Pradesh",
                                                               style: TextStyle(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -1922,14 +1932,18 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .width /
                                                               2.2,
                                                       child: TextFormField(
+                                                        maxLength: 10,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         onChanged: (value) {
                                                           architecMobile =
                                                               value;
                                                         },
-                                                        readOnly: true,
                                                         // controller: ownerNameCtr,
                                                         decoration:
                                                             InputDecoration(
+                                                          counterText: "",
                                                           // hintText: '',
                                                           border: OutlineInputBorder(
                                                               borderRadius:
@@ -2171,11 +2185,13 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         decoration:
                                                             InputDecoration(
                                                           // hintText: '',
-                                                          border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
                                                         ),
                                                       ),
                                                     )
@@ -2191,25 +2207,34 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .size
                                                                   .width /
                                                               2.2,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              color:
-                                                                  Colors.white,
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .black)),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            color: Colors.white,
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
                                                           child: Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 3),
                                                               child: Text(
-                                                                  "${delearRetailerModel?.data?.artitech?[architectIndex].address}",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w800))),
+                                                                "${delearRetailerModel?.data?.artitech?[architectIndex].address} Madhya Pradesh",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w800),
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -2356,7 +2381,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                               height: MediaQuery.of(context).size.height * .01,
                             ),
                             const Text(
-                              "Name Of Massion",
+                              "Name Of Mason",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -2441,13 +2466,17 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .width /
                                                               2.2,
                                                       child: TextFormField(
+                                                        maxLength: 10,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         onChanged: (value) {
                                                           messionMobile = value;
                                                         },
-                                                        controller:
-                                                            TextEditingController(),
+                                                        // controller: TextEditingController(),
                                                         decoration:
                                                             InputDecoration(
+                                                          counterText: "",
                                                           // hintText: '',
                                                           border: OutlineInputBorder(
                                                               borderRadius:
@@ -2701,7 +2730,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                                   .black)),
                                                       child: Center(
                                                         child: Text(
-                                                          "${delearRetailerModel?.data?.massion?[messionIndex].address}",
+                                                          "${delearRetailerModel?.data?.massion?[messionIndex].address} Madhya Pradesh",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontWeight:
@@ -2885,7 +2914,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             Container(
                               height: 50,
                               child: TextFormField(
-                                keyboardType: TextInputType.text,
+                                keyboardType: TextInputType.number,
                                 controller: siteSizeCtr,
                                 decoration: InputDecoration(
                                   hintText: '',
@@ -2981,7 +3010,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             //                 child: child!);
                             //           });
                             //       if (pickedDate != null) {
-                            //         String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            //         String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
                             //         setState(() {
                             //           execteddateCtr.text = formattedDate;
                             //         });
@@ -3009,7 +3038,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             //         });
                             //     if (pickedDate !=
                             //         null) {
-                            //       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            //       String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
                             //       setState(
                             //               () {
                             //             execteddateCtr.text = formattedDate;
@@ -3228,8 +3257,9 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   contact: mobileCtr.text,
                                   address: addressCtr.text,
                                   state: getListModel
-                                      ?.data?.states?[stateindex].name,
-                                  // district: getListModel!.data!.states![stateindex].cities?[nwIndex].city,
+                                      ?.data?.states?[stateindex].id,
+                                  district: getListModel!.data!
+                                      .states![stateindex].cities?[nwIndex].id,
                                   pincode: pinCodeController.text,
                                   sitesize: siteSizeCtr.text,
                                   expectedDate: execteddateCtr.text,

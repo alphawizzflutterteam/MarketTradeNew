@@ -114,9 +114,10 @@ updateLocation1(Position position) async {
   request.fields.addAll({
     'lat': position.latitude.toString(),
     'lng': position.longitude.toString(),
-    'user_id': "${userId}"
+    'user_id': CUR_USERID.toString(),
+    'address': '${currentAddress}'
   });
-  print("update location parameter ${request.fields}");
+  print("update location parameter in address ${request.fields}");
   request.headers.addAll(headers);
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
@@ -126,77 +127,75 @@ updateLocation1(Position position) async {
   }
 }
 
-// setIsCheckOut() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   prefs.setBool("checkIn", false);
-// }
-//
-// Future<void> checkOutNow(currentAddress) async {
-//   var headers = {
-//     'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
-//   };
-//   var request = http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
-//   request.fields.addAll({
-//     'user_id': CUR_USERID.toString(),
-//     'checkout_latitude': '${latitude}',
-//     'checkout_longitude': '${longitude}',
-//     'address': currentAddress,
-//     // 'redings': readingCtr.text
-//   });
-//
-//
-//   print("this is my check in request ${request.fields.toString()}");
-//   request.headers.addAll(headers);
-//   http.StreamedResponse response = await request.send();
-//   if (response.statusCode == 200) {
-//     var str = await response.stream.bytesToString();
-//     var result = json.decode(str);
-//
-//     if(result['data']['error'] == false) {
-//       setIsCheckOut();
-//       Fluttertoast.showToast(msg: result['data']['msg']);
-//     } else {
-//       Fluttertoast.showToast(msg: result['message']);
-//     }
-//     // var finalResponse = GetUserExpensesModel.fromJson(result);
-//     // final finalResponse = CheckInModel.fromJson(json.decode(Response));
-//   }
-//   else {
-//     print(response.reasonPhrase);
-//   }
-// }
+setIsCheckOut() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool("checkIn", false);
+}
+
+Future<void> checkOutNow(currentAddress) async {
+  var headers = {
+    'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
+  };
+  var request =
+      http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
+  request.fields.addAll({
+    'user_id': CUR_USERID.toString(),
+    'checkout_latitude': '${latitude}',
+    'checkout_longitude': '${longitude}',
+    'address': currentAddress,
+    // 'redings': readingCtr.text
+  });
+
+  print("this is my check in request ${request.fields.toString()}");
+  request.headers.addAll(headers);
+  http.StreamedResponse response = await request.send();
+  if (response.statusCode == 200) {
+    var str = await response.stream.bytesToString();
+    var result = json.decode(str);
+    if (result['data']['error'] == false) {
+      setIsCheckOut();
+      Fluttertoast.showToast(msg: result['data']['msg']);
+    } else {
+      Fluttertoast.showToast(msg: result['message']);
+    }
+    // var finalResponse = GetUserExpensesModel.fromJson(result);
+    // final finalResponse = CheckInModel.fromJson(json.decode(Response));
+  } else {
+    print(response.reasonPhrase);
+  }
+}
+
+String? currentAddress;
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String? locationTime = pref.getString('location_time');
+  print("location time in this service ${locationTime}");
+  int updateTime = int.parse(locationTime.toString());
+  print("location time in this service to here${updateTime}");
   // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
-
-  // For flutter prior to version 3.0.0
-  // We have to register the plugin manually
-
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.setString("hello", "world");
 
   /// OPTIONAL when use custom notification
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
     });
-
     service.on('setAsBackground').listen((event) {
       service.setAsBackgroundService();
     });
   }
-
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
 
   // bring to foreground
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
+  Timer.periodic(Duration(minutes: updateTime), (timer) async {
     if (service is AndroidServiceInstance) {
       if (await service.isForegroundService()) {
         /// OPTIONAL for use custom notification
@@ -214,7 +213,6 @@ void onStart(ServiceInstance service) async {
             ),
           ),
         );
-
         // if you don't using custom notification, uncomment this
         service.setForegroundNotificationInfo(
           title: "My App Service",
@@ -223,21 +221,23 @@ void onStart(ServiceInstance service) async {
       }
     }
     Position position = await Geolocator.getCurrentPosition();
-    // updateLocation1(position);
-    //
-    // List<Placemark> placemark = await placemarkFromCoordinates(
-    //     double.parse(position.latitude.toString()), double.parse(position.longitude.toString()),
-    //     localeIdentifier: "en");
-    // String currentAddress = "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
-    // // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
-    // var prefs = await SharedPreferences.getInstance();
-    // bool? isCheckIn = prefs.getBool("checkIn");
-    // if(isCheckIn ?? false){
-    //   checkOutNow(currentAddress);
-    // }
+    updateLocation1(position);
+
+    List<Placemark> placemark = await placemarkFromCoordinates(
+        double.parse(position.latitude.toString()),
+        double.parse(position.longitude.toString()),
+        localeIdentifier: "en");
+    currentAddress =
+        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+    print("addddddddddddddd ${currentAddress}");
+    // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
+    var prefs = await SharedPreferences.getInstance();
+    bool? isCheckIn = prefs.getBool("checkIn");
+    if (isCheckIn ?? false) {
+      checkOutNow(currentAddress);
+    }
 
     // }
-
     /// you can see this log in logcat
     print(
         'FLUTTER BACKGROUND SERVICE: ${DateTime.now()}  ${position.latitude}  ${position.longitude}');
@@ -348,11 +348,12 @@ class _CheckInScreenState extends State<CheckInScreen> {
   //   final box = GetStorage();
   //   String? userId = box.read('userid');
   //   print('_________this${userId}_______');
-  //  // print("User id"+prefs.getString("userid").toString()??"");
+  //   // print("User id"+prefs.getString("userid").toString()??"");
   //   var headers = {
   //     'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
   //   };
-  //   var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+  //   var request =
+  //       http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
   //   request.fields.addAll({
   //     'lat': latitude.toString(),
   //     'lng': longitude.toString(),
@@ -363,8 +364,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   //   http.StreamedResponse response = await request.send();
   //   if (response.statusCode == 200) {
   //     print(await response.stream.bytesToString());
-  //   }
-  //   else {
+  //   } else {
   //     print(response.reasonPhrase);
   //   }
   // }
@@ -432,14 +432,18 @@ class _CheckInScreenState extends State<CheckInScreen> {
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
-    var request =
-        http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+        checkInNowApi.toString(),
+      ),
+    );
     request.fields.addAll({
-      'user_id': uid ?? "",
+      'user_id': '$uid',
       // CUR_USERID.toString(),
       'checkin_latitude': '${latitude}',
       'checkin_longitude': '${longitude}',
-      'address': currentAddress.text,
+      'address': '${currentAddress.text}',
       'redings': readingCtr.text
     });
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
@@ -483,7 +487,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
     Future.delayed(Duration(milliseconds: 800), () {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Dashboard()),
+          MaterialPageRoute(
+            builder: (context) => Dashboard(),
+          ),
           (route) => false);
     });
   }
@@ -717,10 +723,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
     back();
   }
 
-  ///MULTI IMAGE PICKER FROM GALLERY CAMERA
-  ///
-  ///
-
   @override
   void initState() {
     // TODO: implement initState
@@ -738,7 +740,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet$formattedDate"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());

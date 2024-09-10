@@ -2,20 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
-import 'package:omega_employee_management/Screen/SendOtp.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
@@ -87,7 +86,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
     bool avail = await isNetworkAvailable();
     if (avail) {
       // if (referCode != null)
-        getRegisterUser();
+      getRegisterUser();
     } else {
       Future.delayed(Duration(seconds: 2)).then((_) async {
         if (mounted)
@@ -181,13 +180,12 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         PASSWORD: password,
         // COUNTRY_CODE: countrycode,
         REFERCODE: referCode,
-       // FRNDCODE: friendCode
+        // FRNDCODE: friendCode
       };
 
       Response response =
           await post(getUserSignUpApi, body: data, headers: headers)
               .timeout(Duration(seconds: timeOut));
-
 
       var getdata = json.decode(response.body);
       bool error = getdata["error"];
@@ -210,12 +208,14 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
 
         UserProvider userProvider = context.read<UserProvider>();
         userProvider.setName(name ?? "");
+        userProvider.setEmail(email ?? "");
+        print("user name and email is ${name} ${email}");
+        SettingProvider settingProvider = context.read<SettingProvider>();
+        settingProvider.saveUserDetail(id!, name, email, mobile, city, area,
+            address, pincode, latitude, longitude, "", context);
 
-        // SettingProvider settingProvider = context.read<SettingProvider>();
-        // settingProvider.saveUserDetail(id!, name, email, mobile, city, area,
-        //     address, pincode, latitude, longitude, "", context);
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
 
         // Navigator.pushNamedAndRemoveUntil(context, "/home", (r) => false);
       } else {
@@ -356,58 +356,56 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
     );
   }
 
-
   Widget setMono() {
     return Padding(
         padding: EdgeInsetsDirectional.only(
-        top: 10.0,
-        start: 15.0,
-        end: 15.0,
-    ),
-      child:
-      TextFormField(
-        keyboardType: TextInputType.number,
-        maxLength: 10,
-        controller: mobileController,
-        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-            color: Theme.of(context).colorScheme.fontColor,
-            fontWeight: FontWeight.normal),
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        validator: (val) => validateMob(
-            val!,
-            getTranslated(context, 'MOB_REQUIRED'),
-            getTranslated(context, 'VALID_MOB')),
-        onSaved: (String? value) {
-          mobile = value;
-        },
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          prefixIconConstraints: BoxConstraints(minWidth: 40, maxHeight: 25),
-          counterText: "",
-          hintText: getTranslated(context, 'MOBILEHINT_LBL'),
-          prefixIcon: Icon(
-            Icons.call,
-            color: Theme.of(context).colorScheme.fontColor,
-            size: 17,
-          ),
-          hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
-              color: Theme.of(context).colorScheme.fontColor,
-              fontWeight: FontWeight.normal),
-          // contentPadding:
-          // const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: Theme.of(context).colorScheme.lightWhite),
-          // ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: colors.primary),
-            borderRadius: BorderRadius.circular(7.0),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide:
-            BorderSide(color: Theme.of(context).colorScheme.lightWhite),
-          ),
-        ))
-      );
+          top: 10.0,
+          start: 15.0,
+          end: 15.0,
+        ),
+        child: TextFormField(
+            keyboardType: TextInputType.number,
+            maxLength: 10,
+            controller: mobileController,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                color: Theme.of(context).colorScheme.fontColor,
+                fontWeight: FontWeight.normal),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            validator: (val) => validateMob(
+                val!,
+                getTranslated(context, 'MOB_REQUIRED'),
+                getTranslated(context, 'VALID_MOB')),
+            onSaved: (String? value) {
+              mobile = value;
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              prefixIconConstraints:
+                  BoxConstraints(minWidth: 40, maxHeight: 25),
+              counterText: "",
+              hintText: getTranslated(context, 'MOBILEHINT_LBL'),
+              prefixIcon: Icon(
+                Icons.call,
+                color: Theme.of(context).colorScheme.fontColor,
+                size: 17,
+              ),
+              hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+                  color: Theme.of(context).colorScheme.fontColor,
+                  fontWeight: FontWeight.normal),
+              // contentPadding:
+              // const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              // focusedBorder: OutlineInputBorder(
+              //   borderSide: BorderSide(color: Theme.of(context).colorScheme.lightWhite),
+              // ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: colors.primary),
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.lightWhite),
+              ),
+            )));
   }
 
   setRefer() {
@@ -795,7 +793,6 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         height: 100,
         child: Image.asset(
           'assets/images/loginlogo.png',
-
         ),
       ),
     );

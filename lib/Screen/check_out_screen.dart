@@ -239,7 +239,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet$formattedDate"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());

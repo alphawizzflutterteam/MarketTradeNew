@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,7 +58,6 @@ class SettingProvider {
     if (!valueList.contains(query)) {
       if (valueList.length > 4) valueList.removeAt(0);
       valueList.add(query);
-
       _sharedPreferences.setStringList(key, valueList);
     }
   }
@@ -72,19 +71,12 @@ class SettingProvider {
   }
 
   Future<void> clearUserSession(BuildContext context) async {
-  /*  final waitList = <Future<void>>[];
-
-
-
+    /*  final waitList = <Future<void>>[];
     waitList.add(prefs.remove(ID));
     waitList.add(prefs.remove(NAME));
     waitList.add(prefs.remove(MOBILE));
     waitList.add(prefs.remove(EMAIL));*/
-
     CUR_USERID = null;
-
-
-
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     context.read<UserProvider>().setPincode('');
@@ -123,7 +115,6 @@ class SettingProvider {
     waitList.add(_sharedPreferences.setString(LATITUDE, latitude ?? ""));
     waitList.add(_sharedPreferences.setString(LONGITUDE, longitude ?? ""));
     waitList.add(_sharedPreferences.setString(IMAGE, image ?? ""));
-
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     userProvider.setName(name ?? "");

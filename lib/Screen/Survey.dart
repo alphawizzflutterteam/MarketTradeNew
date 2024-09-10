@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,12 +11,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
-import 'package:omega_employee_management/Screen/Dashboard.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 
 import '../Helper/Color.dart';
 import '../Model/DealingProductModel.dart';
 import '../Model/GravanceModel.dart';
+import 'Dashboard.dart';
 
 class Survey extends StatefulWidget {
   final List<DealingData>? modelList;
@@ -66,14 +67,10 @@ class _SurveyState extends State<Survey> {
   // List<int> sumsTemp = [];
   List<int> currentSums = [];
   // List<int> currentSumsTemp = [];
-
   TextEditingController rsp = TextEditingController();
   TextEditingController purchasingForm = TextEditingController();
-
   // List<List<TextEditingController>> wholeDataList = [] ;
-
   List dataList = [];
-
   List<List<List<TextEditingController>>> feedbackList = [];
   List<List<List<int>>> sumsTemp = [];
   List<List<List<int>>> currentSumsTemp = [];
@@ -117,6 +114,9 @@ class _SurveyState extends State<Survey> {
   }
 
   Future<void> feedback() async {
+    setState(() {
+      isLoading = true;
+    });
     var request = http.MultipartRequest(
         'POST', Uri.parse(customerFeedbackForm.toString()));
     request.fields.addAll({
@@ -132,10 +132,10 @@ class _SurveyState extends State<Survey> {
         'name': widget.name,
         'mobile': widget.contact,
         'email': widget.email,
-        'address': "Indore Madhya Pradesh",
+        'address': "${currentAddress.text}",
         'customer_type': widget.customerType,
         'credit_limit': widget.creditLimit,
-        'grivenance': gravance.toString(),
+        'grivenance': selectedName.toString(),
       }),
       'customer_dealing_in':
           widget.modelList!.map((product) => product.id).join(','),
@@ -150,10 +150,14 @@ class _SurveyState extends State<Survey> {
               'photos[]', "${imagePathList[i].toString()}"));
     }
     print('sssssssssssss${request.fields}');
+    log(request.fields.toString());
     print('${request.url}');
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      setState(() {
+        isLoading = false;
+      });
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
@@ -280,7 +284,7 @@ class _SurveyState extends State<Survey> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet${formattedDate}"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -289,7 +293,7 @@ class _SurveyState extends State<Survey> {
 
   Widget buildGridView() {
     return Container(
-      height: 170,
+      height: 160,
       child: GridView.builder(
         itemCount: imagePathList.length,
         gridDelegate:
@@ -302,7 +306,7 @@ class _SurveyState extends State<Survey> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: colors.primary)),
                 width: MediaQuery.of(context).size.width / 2.8,
-                height: 170,
+                height: 160,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child:
@@ -310,14 +314,14 @@ class _SurveyState extends State<Survey> {
                 ),
               ),
               Positioned(
-                bottom: 10,
+                bottom: 5,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: colors.primary),
                   ),
                   width: MediaQuery.of(context).size.width / 2.8,
-                  height: 70,
+                  height: 120,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
@@ -406,7 +410,8 @@ class _SurveyState extends State<Survey> {
   int? sumOfCurrentStock;
   String? gravance;
   bool isExpanded = false;
-
+  String? selectedName;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -424,11 +429,11 @@ class _SurveyState extends State<Survey> {
           ),
           centerTitle: true,
           backgroundColor: colors.primary,
-          title: Text("Feedback",
-              style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800)),
+          title: Text(
+            "Feedback",
+            style: TextStyle(
+                fontSize: 15, color: Colors.white, fontWeight: FontWeight.w800),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -482,13 +487,17 @@ class _SurveyState extends State<Survey> {
                               collapsedBackgroundColor: colors.whiteTemp,
                               key: Key(index.toString()),
                               initiallyExpanded: index == selectedIndex,
-                              title: Row(
+                              title: Column(
                                 children: [
-                                  Text("Product Name: ",
-                                      style: TextStyle(fontSize: 14)),
-                                  Text(
-                                    '${item?.name}',
-                                    style: TextStyle(fontSize: 14),
+                                  Row(
+                                    children: [
+                                      Text("Product Name: ",
+                                          style: TextStyle(fontSize: 14)),
+                                      Text(
+                                        '${item?.name}',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -580,7 +589,28 @@ class _SurveyState extends State<Survey> {
                                                     //         "jhjshjsajd ${sumOfMonthlySale}");
                                                     //   });
                                                     // },
-                                                    onSubmitted: (val) {
+                                                    // onSubmitted: (val) {
+                                                    //   setState(() {
+                                                    //     if (sumsTemp[index][i]
+                                                    //             [0] !=
+                                                    //         0) {
+                                                    //       sums[index] -=
+                                                    //           sumsTemp[index][i]
+                                                    //               [0];
+                                                    //     }
+                                                    //     sumsTemp[index][i][0] =
+                                                    //         int.parse(val);
+                                                    //
+                                                    //     sums[index] +=
+                                                    //         int.parse(val);
+                                                    //     sumOfMonthlySale =
+                                                    //         sums[index];
+                                                    //     print(
+                                                    //         "jhjshjsajd ${sumOfMonthlySale}");
+                                                    //   });
+                                                    //   // FocusScope.of(context).unfocus();
+                                                    // },
+                                                    onChanged: (val) {
                                                       setState(() {
                                                         if (sumsTemp[index][i]
                                                                 [0] !=
@@ -589,11 +619,17 @@ class _SurveyState extends State<Survey> {
                                                               sumsTemp[index][i]
                                                                   [0];
                                                         }
-                                                        sumsTemp[index][i][0] =
-                                                            int.parse(val);
-
-                                                        sums[index] +=
-                                                            int.parse(val);
+                                                        sumsTemp[index][i]
+                                                            [0] = val
+                                                                .isEmpty
+                                                            ? 0
+                                                            : int.parse(val);
+                                                        sums[index] =
+                                                            sums[index] +
+                                                                (val.isEmpty
+                                                                    ? 0
+                                                                    : int.parse(
+                                                                        val));
                                                         sumOfMonthlySale =
                                                             sums[index];
                                                         print(
@@ -620,29 +656,6 @@ class _SurveyState extends State<Survey> {
                                                       hintText: "Monthly Sale",
                                                       fillColor: Colors.white70,
                                                     ),
-                                                    // onEditingComplete: (){
-                                                    //   setState(() {
-                                                    //     sums[index] += int.parse(feedbackList[index][i][0].text);
-                                                    //     sumOfMonthlySale = sums[index];
-                                                    //     print("jhjshjsajd ${sumOfMonthlySale}");
-                                                    //   });
-                                                    // },
-                                                    // onSubmitted: (value) {
-                                                    //   totalMonthlySales += int.parse(value);
-                                                    //   setState(() {});
-                                                    //   print("printtttttttt ${totalMonthlySales}");
-                                                    //   // int total = 0;
-                                                    //   // for (int i = 0; i < 5; i++) {
-                                                    //   //   String text = monthlyControllers[i].text;
-                                                    //   //   if (text.isNotEmpty) {
-                                                    //   //     total += int.parse(text);
-                                                    //   //   }
-                                                    //   // }
-                                                    //   // setState(() {
-                                                    //   //   totalMonthlySales = total;
-                                                    //   //   print("total monthly sheet ${totalMonthlySales}");
-                                                    //   // });
-                                                    // },
                                                   ),
                                                 ),
                                               ],
@@ -671,7 +684,7 @@ class _SurveyState extends State<Survey> {
                                                     controller:
                                                         feedbackList[index][i]
                                                             [1],
-                                                    onSubmitted: (val) {
+                                                    onChanged: (val) {
                                                       setState(() {
                                                         if (sumsTemp[index][i]
                                                                 [1] !=
@@ -680,10 +693,16 @@ class _SurveyState extends State<Survey> {
                                                               sumsTemp[index][i]
                                                                   [1];
                                                         }
-                                                        sumsTemp[index][i][1] =
-                                                            int.parse(val);
+                                                        sumsTemp[index][i]
+                                                            [1] = val
+                                                                .isEmpty
+                                                            ? 0
+                                                            : int.parse(val);
                                                         currentSums[index] +=
-                                                            int.parse(val);
+                                                            val.isEmpty
+                                                                ? 0
+                                                                : int.parse(
+                                                                    val);
                                                         sumOfCurrentStock =
                                                             currentSums[index];
                                                         // feedbackList[index][i][0].text
@@ -916,11 +935,13 @@ class _SurveyState extends State<Survey> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      Text(sums[index].toString(),
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600)),
+                                      Text(
+                                        sums[index].toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600),
+                                      ),
                                     ],
                                   )
                                 : const SizedBox.shrink(),
@@ -938,11 +959,13 @@ class _SurveyState extends State<Survey> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      Text(currentSums[index].toString(),
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600)),
+                                      Text(
+                                        currentSums[index].toString(),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600),
+                                      ),
                                     ],
                                   )
                                 : const SizedBox.shrink()
@@ -976,7 +999,12 @@ class _SurveyState extends State<Survey> {
                         onChanged: (newValue) {
                           setState(() {
                             gravance = newValue;
-                            print("current indexxx ${gravance}");
+                            print("current indexxx ${gravance} ");
+                            selectedName = gravanceModel?.data
+                                ?.firstWhere((item) => item.id == newValue)
+                                .title;
+                            print(
+                                "Selected ID: $gravance, Selected Name: $selectedName");
                             // nwIndex = delearRetailerModel!.data!.indexWhere((element) => element.id == selected);
                             // currentIndex = selected;
                             // showTextField = true;
@@ -1304,54 +1332,67 @@ class _SurveyState extends State<Survey> {
             ],
           ),
         ),
-        bottomSheet: Container(
-          color: colors.whiteTemp,
-          height: 35,
-          child: InkWell(
-            onTap: () {
-              if (gravance == null || gravance == "") {
-                setSnackbar("Please select Grivenance", context);
-              } else if (imagePathList.isEmpty) {
-                Fluttertoast.showToast(msg: "Please upload image");
-              } else if (remarkCtr.text.isEmpty || remarkCtr.text == "") {
-                Fluttertoast.showToast(msg: "Please enter remark");
-              }
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
-              else {
-                for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
-                  for (int j = 0;
-                      j < (widget.modelList?[i].products?.length ?? 0);
-                      j++) {
-                    print('${widget.modelList?[i].products?.length}');
-                    dataList.add(
-                      json.encode({
-                        "brand_name": widget.modelList?[i].products?[j].name,
-                        "monthly_sale": feedbackList[i][j][0].text,
-                        "current_stock": feedbackList[i][j][1].text,
-                        "wps": feedbackList[i][j][2].text,
-                        "rsp": feedbackList[i][j][3].text,
-                        "purchasing_from": feedbackList[i][j][4].text
-                      }),
-                    );
-                  }
-                  print('${dataList}');
+        bottomSheet: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Container(
+            color: colors.whiteTemp,
+            height: 35,
+            child: InkWell(
+              onTap: () {
+                if (gravance == null || gravance == "") {
+                  setSnackbar("Please select Grievance", context);
+                } else if (imagePathList.isEmpty) {
+                  Fluttertoast.showToast(msg: "Please upload image");
+                } else if (remarkCtr.text.isEmpty || remarkCtr.text == "") {
+                  Fluttertoast.showToast(msg: "Please enter remark");
                 }
-                feedback();
-              }
-            },
-            child: Center(
-              child: Container(
-                height: 35,
-                width: MediaQuery.of(context).size.width / 1.8,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: colors.primary),
-                child: const Center(
-                    child: Text("Submit Feedback",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400))),
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
+                else {
+                  for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+                    for (int j = 0;
+                        j < (widget.modelList?[i].products?.length ?? 0);
+                        j++) {
+                      print('${widget.modelList?[i].products?.length}');
+                      dataList.add(
+                        json.encode({
+                          "cid": "${widget.modelList![i].products?[j].id}",
+                          "brand_name": widget.modelList?[i].products?[j].name,
+                          "monthly_sale": feedbackList[i][j][0].text,
+                          "current_stock": feedbackList[i][j][1].text,
+                          "wps": feedbackList[i][j][2].text,
+                          "rsp": feedbackList[i][j][3].text,
+                          "purchasing_from": feedbackList[i][j][4].text
+                        }),
+                      );
+                    }
+                    setState(() {
+                      isLoading = true;
+                    });
+                    print('${dataList}');
+                  }
+                  feedback();
+                }
+              },
+              child: Center(
+                child: Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: colors.primary),
+                  child: Center(
+                      child: isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text("Submit Feedback",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400))),
+                ),
               ),
             ),
           ),

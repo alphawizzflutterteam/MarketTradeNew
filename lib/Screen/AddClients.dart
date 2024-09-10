@@ -215,8 +215,8 @@ class _AddClientsState extends State<AddClients> {
   var dateFormate;
 
   String convertDateTimeDisplay(String date) {
-    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
-    final DateFormat serverFormater = DateFormat('yyyy-MM-dd');
+    final DateFormat displayFormater = DateFormat('dd-MM-yyyy');
+    final DateFormat serverFormater = DateFormat('dd-MM-yyyy');
     final DateTime displayDate = displayFormater.parse(date);
     final String formatted = serverFormater.format(displayDate);
     return formatted;
@@ -243,8 +243,10 @@ class _AddClientsState extends State<AddClients> {
       setState(() {
         String yourDate = picked.toString();
         _dateValue = convertDateTimeDisplay(yourDate);
+        print('date --- ${_dateValue} ${yourDate}');
         dateFormate =
-            DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
+            DateFormat("dd-MM-yyyy").format(DateTime.parse(_dateValue ?? ""));
+        print("date of birth ${_dateValue}");
       });
     setState(() {
       doBCtr = TextEditingController(text: _dateValue);
@@ -611,7 +613,7 @@ class _AddClientsState extends State<AddClients> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet$formattedDate"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -702,6 +704,12 @@ class _AddClientsState extends State<AddClients> {
   }
 
   bool isLoading = false;
+
+  bool validateEmail(String value) {
+    String pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1032,20 +1040,26 @@ class _AddClientsState extends State<AddClients> {
                     Card(
                       elevation: 3,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: emailcn,
-                          // validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return 'Please Enter Your Email';
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailcn,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please Enter Email ID';
+                          } else if (!validateEmail(value)) {
+                            return 'Please Enter Valid Email ID';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -1123,7 +1137,8 @@ class _AddClientsState extends State<AddClients> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
                           keyboardType: TextInputType.number,
                           maxLength: 10,
@@ -1156,8 +1171,27 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          onTap: () {
-                            _selectDate1();
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime(2100),
+                                builder: (context, child) {
+                                  return Theme(
+                                      data: Theme.of(context).copyWith(
+                                        colorScheme: const ColorScheme.light(
+                                            primary: colors.primary),
+                                      ),
+                                      child: child!);
+                                });
+                            if (pickedDate != null) {
+                              String formattedDate =
+                                  DateFormat('yyyy-MM-dd').format(pickedDate);
+                              setState(() {
+                                doBCtr.text = formattedDate;
+                              });
+                            }
                           },
                           keyboardType: TextInputType.none,
                           maxLength: 10,
@@ -1188,25 +1222,49 @@ class _AddClientsState extends State<AddClients> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
-                          onTap: () {
-                            _showAnniversaryDatePicker();
-                          },
-                          keyboardType: TextInputType.none,
-                          maxLength: 10,
-                          controller: doACtr,
-                          // validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return 'Please select Your Date of Anniversary';
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              counterText: "",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2100),
+                              builder: (context, child) {
+                                return Theme(
+                                    data: Theme.of(context).copyWith(
+                                      colorScheme: const ColorScheme.light(
+                                          primary: colors.primary),
+                                    ),
+                                    child: child!);
+                              });
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              doACtr.text = formattedDate;
+                            });
+                          }
+                          // _showAnniversaryDatePicker();
+                        },
+                        keyboardType: TextInputType.none,
+                        maxLength: 10,
+                        controller: doACtr,
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return 'Please select Your Date of Anniversary';
+                        //   }
+                        //   return null;
+                        // },
+                        decoration: InputDecoration(
+                          hintText: '',
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -1790,7 +1848,7 @@ class _AddClientsState extends State<AddClients> {
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                           keyboardType: TextInputType.text,
-                          maxLength: 12,
+                          maxLength: 19,
                           controller: udyogIdCtr,
                           // validator: (value) {
                           //   if (value!.isEmpty) {
@@ -1874,7 +1932,8 @@ class _AddClientsState extends State<AddClients> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
                         maxLength: 10,
                         keyboardType: TextInputType.number,
@@ -1886,10 +1945,12 @@ class _AddClientsState extends State<AddClients> {
                         //   return null;
                         // },
                         decoration: InputDecoration(
-                            counterText: "",
-                            hintText: '',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                          counterText: "",
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 15),
@@ -1911,7 +1972,6 @@ class _AddClientsState extends State<AddClients> {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: colors.primary),
                           onPressed: () {
-                            // print("hhhhhhhhhhhhhhhhhh");
                             // addClinets();
                             if (imagePathList.isEmpty ||
                                 imagePathList.length == "" ||

@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/MySiteVisitModel.dart';
+import '../Provider/UserProvider.dart';
 import 'MySideDetails.dart';
 
 class MySiteVisite extends StatefulWidget {
@@ -18,11 +21,15 @@ class MySiteVisite extends StatefulWidget {
 class _MySiteVisiteState extends State<MySiteVisite> {
   void initState() {
     super.initState();
-    getData(1);
+    getData();
   }
 
   MySiteVisitModel? getdata;
-  Future<void> getData(index) async {
+  String? department_id;
+
+  Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=bf12d5586296e8a180885fdf282632a583f96888'
     };
@@ -30,7 +37,9 @@ class _MySiteVisiteState extends State<MySiteVisite> {
         http.MultipartRequest('POST', Uri.parse(siteVisitFormList.toString()));
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
+      'department_id': '${department_id.toString()}'
     });
+    print("uuuuuuuuuuuuuu ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -64,7 +73,9 @@ class _MySiteVisiteState extends State<MySiteVisite> {
         ),
       ),
       body: getdata == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
           : getdata?.error == true
               ? Center(
                   child: Text(
@@ -141,45 +152,58 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
+                                                // Row(
+                                                //   children: [
+                                                //     const Text(
+                                                //       "Firm Name: ",
+                                                //       style: TextStyle(
+                                                //         fontSize: 14,
+                                                //         fontWeight:
+                                                //             FontWeight.bold,
+                                                //       ),
+                                                //     ),
+                                                //     Text(
+                                                //       "${getdata?.data?[index].nameOfFirm}",
+                                                //       style: const TextStyle(
+                                                //         fontSize: 14,
+                                                //         fontWeight:
+                                                //             FontWeight.w400,
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                // const SizedBox(
+                                                //   height: 5,
+                                                // ),
                                                 Row(
                                                   children: [
                                                     const Text(
-                                                      "Firm Name: ",
+                                                      "Visit By: ",
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      "${getdata?.data?[index].nameOfFirm}",
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Text("Visit By: ",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        )),
-                                                    Text(
-                                                      "${getdata?.data?[index].name}",
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
+                                                    Selector<UserProvider,
+                                                            String>(
+                                                        selector: (_,
+                                                                provider) =>
+                                                            provider
+                                                                .curUserName,
+                                                        builder: (context,
+                                                            userName, child) {
+                                                          return Text(
+                                                            userName,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          );
+                                                        }),
                                                   ],
                                                 ),
                                                 const SizedBox(
@@ -195,7 +219,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                                               FontWeight.bold),
                                                     ),
                                                     Text(
-                                                      "${getdata?.data?[index].date}",
+                                                      "${getdata?.data?[index].createdAt}",
                                                       style: const TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
@@ -279,7 +303,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                         Container(
                                           width: 220,
                                           child: Text(
-                                            "${getdata?.data?[index].address},${getdata?.data?[index].district},${getdata?.data?[index].state}",
+                                            "${getdata?.data?[index].address} ${getdata?.data?[index].district} ${getdata?.data?[index].state}",
                                             style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400,
@@ -293,40 +317,41 @@ class _MySiteVisiteState extends State<MySiteVisite> {
                                               MainAxisAlignment.end,
                                           children: [
                                             TextButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              MySiteDetails(
-                                                                  model: getdata
-                                                                          ?.data?[
-                                                                      index])));
-                                                },
-                                                child: Container(
-                                                    width: 50,
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                      color: colors.primary,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "View",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ))),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MySiteDetails(
+                                                            model: getdata
+                                                                ?.data?[index]),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 50,
+                                                padding: EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: colors.primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "View",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             );

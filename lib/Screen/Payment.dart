@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../Helper/AppBtn.dart';
@@ -38,7 +38,6 @@ bool codAllowed = true;
 String? bankName, bankNo, acName, acNo, exDetails;
 
 class StatePayment extends State<Payment> with TickerProviderStateMixin {
-
   bool _isLoading = true;
   String? startingDate;
 
@@ -160,7 +159,6 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: getSimpleAppBar(getTranslated(context, 'PAYMENT_METHOD_LBL')!,
@@ -458,7 +456,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
         if (mounted) selectedDate = index;
         selectedTime = null;
         selTime = null;
-        selDate = DateFormat('yyyy-MM-dd').format(date);
+        selDate = DateFormat('dd-MM-yyyy').format(date);
         timeModel.clear();
         DateTime cur = DateTime.now();
         DateTime tdDate = DateTime(cur.year, cur.month, cur.day);

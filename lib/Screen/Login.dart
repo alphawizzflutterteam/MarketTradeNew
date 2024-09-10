@@ -2,22 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:jaguar_jwt/jaguar_jwt.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
-import 'package:omega_employee_management/Provider/UserProvider.dart';
-import 'package:omega_employee_management/Screen/SendOtp.dart';
-import 'package:omega_employee_management/Screen/SignUp.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart';
 import 'package:omega_employee_management/Screen/Verify_Otp.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
@@ -29,7 +22,8 @@ class LoginPage extends StatefulWidget {
   _LoginPagePageState createState() => new _LoginPagePageState();
 }
 
-class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin {
+class _LoginPagePageState extends State<LoginPage>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
@@ -176,28 +170,19 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
     );
   }
 
-
-  String? token;
-
-  getToken() async {
-    var fcmToken = await FirebaseMessaging.instance.getToken();
-    setState(() {
-      token = fcmToken.toString();
-    });
-    print("FCM ID Is______________ $token");
-  }
-
   int? otp;
-  // Future<void>
+
   Future<void> getLoginUser() async {
-    var data = {MOBILE: mobile, 'fcm_id': token.toString(),
+    String? token = await FirebaseMessaging.instance.getToken();
+    var data = {
+      MOBILE: mobile, 'fcm_id': token,
       // PASSWORD: password
     };
     print("===========login parameter====${data}===========");
     Response response =
-        await post(getUserLoginApi, body: data, headers: headers).timeout(Duration(seconds: timeOut));
+        await post(getUserLoginApi, body: data, headers: headers)
+            .timeout(Duration(seconds: timeOut));
     var getdata = json.decode(response.body);
-
     bool error = getdata["error"];
     String? msg = getdata["message"];
     await buttonController!.reverse();
@@ -228,9 +213,16 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
       //     address, pincode, latitude, longitude, image, context);
       // setPrefrenceBool(ISFIRSTTIME, false);
       // Navigator.pushNamedAndRemoveUntil(context, "/home", (r) => false);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOtp(mobileNumber: mobile.toString(), otp: otp.toString())));
-    }
-    else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyOtp(
+            mobileNumber: mobile.toString(),
+            otp: otp.toString(),
+          ),
+        ),
+      );
+    } else {
       setSnackbar(msg!);
     }
   }
@@ -263,8 +255,7 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
   }
 
   setMobileNo() {
-    return
-      Container(
+    return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       padding: EdgeInsets.only(
         top: 30.0,
@@ -420,7 +411,7 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
                   context,
                   MaterialPageRoute(
                       builder: (context) => LoginPage(
-                            // title: getTranslated(context, 'FORGOT_PASS_TITLE'),
+                          // title: getTranslated(context, 'FORGOT_PASS_TITLE'),
                           )));
             },
             child: Text(
@@ -477,8 +468,8 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginPage(
-                              // title:
-                              //     getTranslated(context, 'FORGOT_PASS_TITLE'),
+                            // title:
+                            //     getTranslated(context, 'FORGOT_PASS_TITLE'),
                             )));
               },
               child: Text(getTranslated(context, 'FORGOT_PASSWORD_LBL')!,
@@ -505,8 +496,8 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => LoginPage(
-                    // title: getTranslated(context, 'SEND_OTP_TITLE'),
-                  ),
+                      // title: getTranslated(context, 'SEND_OTP_TITLE'),
+                      ),
                 ));
               },
               child: Text(
@@ -531,7 +522,6 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -591,64 +581,71 @@ class _LoginPagePageState extends State<LoginPage> with TickerProviderStateMixin
                     ),
                     setSignInLabel(),
                     Container(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  padding: EdgeInsets.only(
-                    top: 30.0,
-                  ),
-                  child: TextFormField(
-                    maxLength: 10,
-                    // onFieldSubmitted: (v) {
-                    //   FocusScope.of(context).requestFocus(passFocus);
-                    // },
-                    keyboardType: TextInputType.number,
-                    controller: mobileController,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.fontColor,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    //focusNode: monoFocus,
-                    textInputAction: TextInputAction.next,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) => validateMob(
-                        val!,
-                        getTranslated(context, 'MOB_REQUIRED'),
-                        getTranslated(context, 'VALID_MOB')),
-                    onSaved: (String? value) {
-                      mobile = value;
-                    },
-                    decoration: InputDecoration(
-                      counterText: "",
-                      prefixIcon: Icon(
-                        Icons.phone_android,
-                        color: Theme.of(context).colorScheme.fontColor,
-                        size: 20,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      padding: EdgeInsets.only(
+                        top: 30.0,
                       ),
-                      hintText: "Mobile Number",
-                      hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                      child: TextFormField(
+                        maxLength: 10,
+                        // onFieldSubmitted: (v) {
+                        //   FocusScope.of(context).requestFocus(passFocus);
+                        // },
+                        keyboardType: TextInputType.number,
+                        controller: mobileController,
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.fontColor,
-                          fontWeight: FontWeight.normal),
-                      filled: true,
-                      fillColor: Theme.of(context).colorScheme.white,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: colors.primary),
-                        borderRadius: BorderRadius.circular(7.0),
-                      ),
-                      prefixIconConstraints: BoxConstraints(
-                        minWidth: 40,
-                        maxHeight: 20,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Theme.of(context).colorScheme.lightBlack2),
-                        borderRadius: BorderRadius.circular(7.0),
+                          fontWeight: FontWeight.normal,
+                        ),
+                        //focusNode: monoFocus,
+                        textInputAction: TextInputAction.next,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (val) => validateMob(
+                            val!,
+                            getTranslated(context, 'MOB_REQUIRED'),
+                            getTranslated(context, 'VALID_MOB')),
+                        onSaved: (String? value) {
+                          mobile = value;
+                        },
+                        decoration: InputDecoration(
+                          counterText: "",
+                          prefixIcon: Icon(
+                            Icons.phone_android,
+                            color: Theme.of(context).colorScheme.fontColor,
+                            size: 20,
+                          ),
+                          hintText: "Mobile Number",
+                          hintStyle: Theme.of(this.context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.fontColor,
+                                  fontWeight: FontWeight.normal),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.white,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: colors.primary),
+                            borderRadius: BorderRadius.circular(7.0),
+                          ),
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 40,
+                            maxHeight: 20,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                    Theme.of(context).colorScheme.lightBlack2),
+                            borderRadius: BorderRadius.circular(7.0),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
                     // setMobileNo(),
                     // setPass(),
                     loginBtn(),

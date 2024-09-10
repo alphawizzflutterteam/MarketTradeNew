@@ -1,7 +1,13 @@
 import 'dart:async';
-import 'package:get_storage/get_storage.dart';
-import 'package:omega_employee_management/Screen/HomePage.dart';
+
 import 'package:country_code_picker/country_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Constant.dart';
 import 'package:omega_employee_management/Provider/CartProvider.dart';
@@ -11,58 +17,55 @@ import 'package:omega_employee_management/Provider/HomeProvider.dart';
 import 'package:omega_employee_management/Provider/ProductDetailProvider.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:omega_employee_management/Screen/Splash.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Helper/Demo_Localization.dart';
-import 'Helper/PushNotificationService.dart';
+import 'Helper/NotificationService.dart';
 import 'Helper/Session.dart';
 import 'Helper/String.dart';
-import 'Provider/Theme.dart';
 import 'Provider/SettingProvider.dart';
+import 'Provider/Theme.dart';
 import 'Provider/order_provider.dart';
 import 'Screen/Dashboard.dart';
 import 'Screen/check_In_screen.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description:
-    'This channel is used for important notifications.', // description
-    importance: Importance.high,
-    playSound: true);
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('A bg message just showed up :  ${message.messageId}');
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
 }
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   initializedDownload();
   await initializeService();
   await GetStorage.init();
-  FirebaseMessaging.onBackgroundMessage(myForgroundMessageHandler);
-
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+    apiKey: 'AIzaSyAkjU49Zag8PCTkulmKtpYJXKzAOYcleR8',
+    appId: "1:403580769762:android:8b53df17498d7bb12b55bb",
+    messagingSenderId: '403580769762',
+    projectId: "market-track-a861d",
+    storageBucket: "market-track-a861d.appspot.com",
+  ));
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  LocalNotificationService.initialize();
+  String? token = await FirebaseMessaging.instance.getToken();
+  print('${token}  tttt_______________token');
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Colors.transparent, // status bar color
   // ));
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
   runApp(
     ChangeNotifierProvider<ThemeNotifier>(
       create: (BuildContext context) {
@@ -136,116 +139,114 @@ class _MyAppState extends State<MyApp> {
       );
     } else {
       return MultiProvider(
-          providers: [
-            Provider<SettingProvider>(
-              create: (context) => SettingProvider(widget.sharedPreferences),
-            ),
-            ChangeNotifierProvider<UserProvider>(
-                create: (context) => UserProvider()),
-            ChangeNotifierProvider<HomeProvider>(
-                create: (context) => HomeProvider()),
-            ChangeNotifierProvider<CategoryProvider>(
-                create: (context) => CategoryProvider()),
-            ChangeNotifierProvider<ProductDetailProvider>(
-                create: (context) => ProductDetailProvider()),
-            ChangeNotifierProvider<FavoriteProvider>(
-                create: (context) => FavoriteProvider()),
-            ChangeNotifierProvider<OrderProvider>(
-                create: (context) => OrderProvider()),
-            ChangeNotifierProvider<CartProvider>(
-                create: (context) => CartProvider()),
-          ],
-          child: MaterialApp(
-            //scaffoldMessengerKey: rootScaffoldMessengerKey,
-            locale: _locale,
-            supportedLocales: [
-              Locale("en", "US"),
-              Locale("zh", "CN"),
-              Locale("es", "ES"),
-              Locale("hi", "IN"),
-              Locale("ar", "DZ"),
-              Locale("ru", "RU"),
-              Locale("ja", "JP"),
-              Locale("de", "DE")
-            ],
-            localizationsDelegates: [
-              CountryLocalizations.delegate,
-              DemoLocalization.delegate,
-              // GlobalMaterialLocalizations.delegate,
-              // GlobalWidgetsLocalizations.delegate,
-              // GlobalCupertinoLocalizations.delegate,
-            ],
-            localeResolutionCallback: (locale, supportedLocales) {
-              for (var supportedLocale in supportedLocales) {
-                if (supportedLocale.languageCode == locale!.languageCode &&
-                    supportedLocale.countryCode == locale.countryCode) {
-                  return supportedLocale;
-                }
-              }
-              return supportedLocales.first;
-            },
-            title: appName,
-
-            theme: ThemeData(
-              canvasColor: Theme.of(context).colorScheme.lightWhite,
-              cardColor: Theme.of(context).colorScheme.white,
-              dialogBackgroundColor: Theme.of(context).colorScheme.white,
-              iconTheme:
-                  Theme.of(context).iconTheme.copyWith(color: colors.primary),
-              primarySwatch: colors.primary_app,
-              primaryColor: Theme.of(context).colorScheme.lightWhite,
-              fontFamily: 'opensans',
-              brightness: Brightness.light,
-              textTheme: TextTheme(
-                      headline6: TextStyle(
-                        color: Theme.of(context).colorScheme.fontColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      subtitle1: TextStyle(
-                          color: Theme.of(context).colorScheme.fontColor,
-                          fontWeight: FontWeight.bold))
-                  .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
-            ),
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => Splash(),
-              '/home': (context) => Dashboard(),
-            },
-            darkTheme: ThemeData(
-              canvasColor: colors.darkColor,
-              cardColor: colors.darkColor2,
-              dialogBackgroundColor: colors.darkColor2,
-              primarySwatch: colors.primary_app,
-              primaryColor: colors.darkColor,
-              textSelectionTheme: TextSelectionThemeData(
-                  cursorColor: colors.darkIcon,
-                  selectionColor: colors.darkIcon,
-                  selectionHandleColor: colors.darkIcon),
-              toggleableActiveColor: colors.primary,
-              fontFamily: 'opensans',
-              brightness: Brightness.dark,
-              // accentColor: colors.darkIcon,
-              iconTheme:
-                  Theme.of(context).iconTheme.copyWith(color: colors.secondary),
-              textTheme: TextTheme(
-                      headline6: TextStyle(
-                        color: Theme.of(context).colorScheme.fontColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      subtitle1: TextStyle(
-                          color: Theme.of(context).colorScheme.fontColor,
-                          fontWeight: FontWeight.bold))
-                  .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
-            ),
-            themeMode: themeNotifier.getThemeMode(),
+        providers: [
+          Provider<SettingProvider>(
+            create: (context) => SettingProvider(widget.sharedPreferences),
           ),
+          ChangeNotifierProvider<UserProvider>(
+              create: (context) => UserProvider()),
+          ChangeNotifierProvider<HomeProvider>(
+              create: (context) => HomeProvider()),
+          ChangeNotifierProvider<CategoryProvider>(
+              create: (context) => CategoryProvider()),
+          ChangeNotifierProvider<ProductDetailProvider>(
+              create: (context) => ProductDetailProvider()),
+          ChangeNotifierProvider<FavoriteProvider>(
+              create: (context) => FavoriteProvider()),
+          ChangeNotifierProvider<OrderProvider>(
+              create: (context) => OrderProvider()),
+          ChangeNotifierProvider<CartProvider>(
+              create: (context) => CartProvider()),
+        ],
+        child: MaterialApp(
+          //scaffoldMessengerKey: rootScaffoldMessengerKey,
+          locale: _locale,
+          supportedLocales: [
+            Locale("en", "US"),
+            Locale("zh", "CN"),
+            Locale("es", "ES"),
+            Locale("hi", "IN"),
+            Locale("ar", "DZ"),
+            Locale("ru", "RU"),
+            Locale("ja", "JP"),
+            Locale("de", "DE")
+          ],
+          localizationsDelegates: [
+            CountryLocalizations.delegate,
+            DemoLocalization.delegate,
+            // GlobalMaterialLocalizations.delegate,
+            // GlobalWidgetsLocalizations.delegate,
+            // GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale!.languageCode &&
+                  supportedLocale.countryCode == locale.countryCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales.first;
+          },
+          title: appName,
+
+          theme: ThemeData(
+            canvasColor: Theme.of(context).colorScheme.lightWhite,
+            cardColor: Theme.of(context).colorScheme.white,
+            dialogBackgroundColor: Theme.of(context).colorScheme.white,
+            iconTheme:
+                Theme.of(context).iconTheme.copyWith(color: colors.primary),
+            primarySwatch: colors.primary_app,
+            primaryColor: Theme.of(context).colorScheme.lightWhite,
+            fontFamily: 'opensans',
+            brightness: Brightness.light,
+            textTheme: TextTheme(
+                    headline6: TextStyle(
+                      color: Theme.of(context).colorScheme.fontColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    subtitle1: TextStyle(
+                        color: Theme.of(context).colorScheme.fontColor,
+                        fontWeight: FontWeight.bold))
+                .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
+          ),
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => Splash(),
+            '/home': (context) => Dashboard(),
+          },
+          darkTheme: ThemeData(
+            canvasColor: colors.darkColor,
+            cardColor: colors.darkColor2,
+            dialogBackgroundColor: colors.darkColor2,
+            primarySwatch: colors.primary_app,
+            primaryColor: colors.darkColor,
+            textSelectionTheme: TextSelectionThemeData(
+                cursorColor: colors.darkIcon,
+                selectionColor: colors.darkIcon,
+                selectionHandleColor: colors.darkIcon),
+            toggleableActiveColor: colors.primary,
+            fontFamily: 'opensans',
+            brightness: Brightness.dark,
+            // accentColor: colors.darkIcon,
+            iconTheme:
+                Theme.of(context).iconTheme.copyWith(color: colors.secondary),
+            textTheme: TextTheme(
+                    headline6: TextStyle(
+                      color: Theme.of(context).colorScheme.fontColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    subtitle1: TextStyle(
+                        color: Theme.of(context).colorScheme.fontColor,
+                        fontWeight: FontWeight.bold))
+                .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
+          ),
+          themeMode: themeNotifier.getThemeMode(),
+        ),
       );
     }
   }
 }
-
-
 
 // import 'package:country_code_picker/country_localizations.dart';
 // import 'package:firebase_core/firebase_core.dart';

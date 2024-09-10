@@ -5,10 +5,12 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Helper/Color.dart';
@@ -54,6 +56,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
   List<TextEditingController> rspCtr = [];
   List<TextEditingController> wspCtr = [];
   List<TextEditingController> currentStockCtr = [];
+
   _launchMap(lat, lng) async {
     var url = '';
     if (Platform.isAndroid) {
@@ -83,6 +86,74 @@ class _Customer_feedbackState extends State<Customer_feedback> {
     } else {
       return status == PermissionStatus.granted;
     }
+  }
+
+  Future<void> downloadImage(String imageUrl) async {
+    // print("mmmmmmmm");
+    var response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final result = await ImageGallerySaver.saveImage(
+          Uint8List.fromList(response.bodyBytes));
+      Fluttertoast.showToast(msg: "Image saved to gallery");
+      print('Image saved to gallery: $result');
+    } else {
+      print('Failed to download image: ${response.statusCode}');
+    }
+  }
+
+  showDilaogBox(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you want to download Image?'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                child: Container(
+                  //  padding: EdgeInsets.all(16),
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: Center(
+                      child: Text(
+                    "Yes",
+                    style: TextStyle(color: colors.whiteTemp),
+                  )),
+                ),
+                onTap: () {
+                  downloadImage(imageUrl);
+                  Navigator.of(context).pop(); // Close the AlertDialog
+                  // getImageFromGallery();
+                },
+              ),
+              InkWell(
+                child: Container(
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: Center(
+                      child: Text(
+                    "No",
+                    style: TextStyle(color: colors.whiteTemp),
+                  )),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop(); // Close the AlertDialog
+                  //getImageFromCamera();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -122,76 +193,119 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                         width: MediaQuery.of(context).size.width / 1,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 15, right: 15, top: 10),
+                              left: 10, right: 15, top: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    final imageProvider = Image.network(
-                                            widget.model?.photo?.first ?? "")
-                                        .image;
-                                    showImageViewer(context, imageProvider,
-                                        onViewerDismissed: () {
-                                      print("dismissed");
-                                    });
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16)),
-                                        clipBehavior: Clip.hardEdge,
-                                        height: 180,
-                                        width: 300,
-                                        child: ClipRRect(
-                                          child: Image.network(
-                                            "${widget.model?.photo?.first}",
-                                            fit: BoxFit.fill,
+                              Container(
+                                height: 150,
+                                child: ListView.builder(
+                                  scrollDirection: Axis
+                                      .horizontal, // Scroll direction set to horizontal
+                                  itemCount: widget.model?.photo?.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Stack(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              if (widget.model?.photo?[index] !=
+                                                  null) {
+                                                final imageProvider =
+                                                    Image.network(widget.model
+                                                                    ?.photo?[
+                                                                index] ??
+                                                            '')
+                                                        .image;
+                                                showImageViewer(
+                                                    context, imageProvider,
+                                                    onViewerDismissed: () {
+                                                  print("dismissed");
+                                                });
+                                              }
+                                            },
+                                            onLongPress: () {
+                                              if (widget.model?.photo?[index] !=
+                                                  null)
+                                                showDilaogBox(widget
+                                                        .model?.photo?[index] ??
+                                                    "");
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: colors.primary)),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.8,
+                                              height: 170,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
+                                                child: Image.network(
+                                                  '${widget.model?.photo?[index]}',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 150,
-                                        right: 3,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            try {
-                                              if (await _requestPermission(
-                                                  Permission.storage)) {
-                                                final http.Response response =
-                                                    await http.get(Uri.parse(
-                                                        widget.model!.photo!
-                                                            .first));
-                                                if (response.statusCode ==
-                                                    200) {
-                                                  final Uint8List data =
-                                                      response.bodyBytes;
-                                                  final result =
-                                                      await ImageGallerySaver
-                                                          .saveImage(data);
-                                                  print(result);
-                                                  if (result['isSuccess'] ==
-                                                      true) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                          content: Text(
-                                                              'Image downloaded')),
-                                                    );
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                          content: Text(
-                                                              'Failed to download image')),
-                                                    );
+                                          Positioned(
+                                            top: 120,
+                                            right: 0,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                try {
+                                                  if (await _requestPermission(
+                                                      Permission.storage)) {
+                                                    final http.Response
+                                                        response =
+                                                        await http.get(
+                                                            Uri.parse(widget
+                                                                    .model!
+                                                                    .photo![
+                                                                index]));
+                                                    if (response.statusCode ==
+                                                        200) {
+                                                      final Uint8List data =
+                                                          response.bodyBytes;
+                                                      final result =
+                                                          await ImageGallerySaver
+                                                              .saveImage(data);
+                                                      print(result);
+                                                      if (result['isSuccess'] ==
+                                                          true) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  'Image downloaded')),
+                                                        );
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  'Failed to download image')),
+                                                        );
+                                                      }
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                            content: Text(
+                                                                'Failed to download image')),
+                                                      );
+                                                    }
                                                   }
-                                                } else {
+                                                } catch (e) {
+                                                  print(e);
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     SnackBar(
@@ -199,34 +313,27 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                             'Failed to download image')),
                                                   );
                                                 }
-                                              }
-                                            } catch (e) {
-                                              print(e);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        'Failed to download image')),
-                                              );
-                                            }
-                                          },
-                                          child: Container(
-                                            height: 30,
-                                            width: 30,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                                color: Colors.red),
-                                            child: Icon(
-                                              Icons.download,
-                                              size: 20,
-                                              color: Colors.white,
+                                              },
+                                              child: Container(
+                                                height: 30,
+                                                width: 30,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                    color: Colors.red),
+                                                child: Icon(
+                                                  Icons.download,
+                                                  size: 20,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               SizedBox(height: 10),
@@ -237,7 +344,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Firm Name:",
+                                      Text("Firm Address:",
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
@@ -245,11 +352,47 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text("${widget.model?.firmname ?? ""}",
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        child: Text(
+                                          "${widget.model?.refAddress ?? ""} ${widget.model?.refDist ?? ""}",
                                           style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.black))
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black,
+                                          ),
+                                          maxLines: 2,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Firm Name:",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "${widget.model?.firmname ?? ""}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -272,47 +415,6 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                               fontSize: 14,
                                               fontWeight: FontWeight.w200,
                                               color: Colors.black))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Address:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black)),
-                                      SizedBox(
-                                        width: 64,
-                                      ),
-                                      Text(
-                                        "${widget.model?.basicDetail?.address ?? ""}",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w200,
-                                            color: Colors.black),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      InkWell(
-                                          onTap: () {
-                                            _launchMap(
-                                              widget.model?.lat,
-                                              widget.model?.lng,
-                                              // orderItem.sellerLatitude,
-                                              // orderItem.sellerLongitude
-                                            );
-                                          },
-                                          child: Icon(
-                                            Icons.location_disabled,
-                                            color: colors.primary,
-                                          )),
                                     ],
                                   ),
                                   SizedBox(
@@ -348,11 +450,12 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                               fontWeight: FontWeight.w600,
                                               color: Colors.black)),
                                       Text(
-                                          "${widget.model?.basicDetail?.mobile ?? ""}",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.black))
+                                        "${widget.model?.basicDetail?.mobile ?? ""}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                      )
                                     ],
                                   ),
                                   SizedBox(
@@ -362,16 +465,20 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("User Name:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black)),
-                                      Text("${widget.model?.username ?? ""}",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.black))
+                                      Text(
+                                        "User Name:",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        "${widget.model?.username ?? ""}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -381,11 +488,13 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Date & Time:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black)),
+                                      Text(
+                                        "Date & Time:",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
                                       Text(
                                         "${widget.model?.date ?? ""}${widget.model?.time ?? ""}",
                                         style: TextStyle(
@@ -447,14 +556,60 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                     height: 5,
                                   ),
                                   Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Address:",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                      SizedBox(
+                                        width: 64,
+                                      ),
+                                      Text(
+                                        "${widget.model?.basicDetail?.address ?? ""}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          _launchMap(
+                                            widget.model?.lat,
+                                            widget.model?.lng,
+                                            // orderItem.sellerLatitude,
+                                            // orderItem.sellerLongitude
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.location_disabled,
+                                          color: colors.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Grievance:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black)),
+                                      Text(
+                                        "Grievance:",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
                                       Text(
                                         "${widget.model?.basicDetail?.grivenance ?? ""}",
                                         style: TextStyle(
@@ -490,7 +645,113 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: 5,
+                                  ),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          widget.model?.finalTotal?.length,
+                                      itemBuilder: (c, j) {
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Sum Of Monthly Sale Of ${widget.model?.finalTotal?[j].title}",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black),
+                                                ),
+                                                Text(
+                                                  "₹ ${widget.model?.finalTotal?[j].monthlySale}",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Sum Of Current Stock Of ${widget.model?.finalTotal?[j].title}",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black),
+                                                ),
+                                                Text(
+                                                  "₹ ${widget.model?.finalTotal?[j].currentStock}",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text(
+                                  //       "Sum of Monthly Sales: ",
+                                  //       style: TextStyle(
+                                  //           fontSize: 15,
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w600),
+                                  //     ),
+                                  //     Text(
+                                  //       "${widget.model?.totalMonthlySale}",
+                                  //       style: TextStyle(
+                                  //           fontSize: 15,
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w600),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text(
+                                  //       "Sum of Current Stock: ",
+                                  //       style: TextStyle(
+                                  //           fontSize: 15,
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w600),
+                                  //     ),
+                                  //     Text(
+                                  //       "${widget.model?.totalCurrentStock}",
+                                  //       style: TextStyle(
+                                  //           fontSize: 15,
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w600),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 5,
+                                  // ),
+                                  Divider(
+                                    color: Colors.black,
                                   ),
                                   ListView.builder(
                                       shrinkWrap: true,
@@ -511,285 +772,417 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                         purchasingFormCtr[i].text = widget.model
                                                 ?.survey?[i].purchasingFrom ??
                                             "";
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Brand Name:",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black),
-                                                ),
-                                                Text(
-                                                  "${widget.model?.survey?[i].brandName}",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .02,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("Monthly Sale:",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black)),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller: monthlyCtr[i],
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              top: 7, left: 5),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
+                                        return widget.model?.survey?[i].wps ==
+                                                    "" ||
+                                                widget.model?.survey?[i]
+                                                        .monthlySale ==
+                                                    "" ||
+                                                widget.model?.survey?[i]
+                                                        .currentStock ==
+                                                    "" ||
+                                                widget.model?.survey?[i].rsp ==
+                                                    "" ||
+                                                widget.model?.survey?[i]
+                                                        .purchasingFrom ==
+                                                    ""
+                                            ? SizedBox()
+                                            : Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Product Name:",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.black),
                                                       ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 10),
-                                                      hintText: "",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .02,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("Current Stock: ",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black)),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller:
-                                                        currentStockCtr[i],
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              top: 7, left: 5),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
+                                                      Text(
+                                                        "${widget.model?.survey?[i].cid}",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.black),
                                                       ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 10),
-                                                      hintText: "",
-                                                      fillColor: Colors.white70,
-                                                    ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .02,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("WPS:",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black)),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller: wspCtr[i],
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              top: 7, left: 5),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
+                                                  SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            .02,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            "Brand Name:",
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          Text(
+                                                            "${widget.model?.survey?[i].brandName}",
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 10),
-                                                      hintText: "",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .02,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("RSP:",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black)),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller: rspCtr[i],
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              top: 7, left: 5),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .01,
                                                       ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 10),
-                                                      hintText: "",
-                                                      fillColor: Colors.white70,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .02,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("Purchasing From: ",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black)),
-                                                Container(
-                                                  height: 30,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.9,
-                                                  child: TextField(
-                                                    readOnly: true,
-                                                    controller:
-                                                        purchasingFormCtr[i],
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              top: 7, left: 5),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            "Monthly Sale:",
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          Container(
+                                                            height: 30,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.9,
+                                                            child: TextField(
+                                                              readOnly: true,
+                                                              controller:
+                                                                  monthlyCtr[i],
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        top: 7,
+                                                                        left:
+                                                                            5),
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        10),
+                                                                hintText: "",
+                                                                fillColor: Colors
+                                                                    .white70,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      filled: true,
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 10),
-                                                      hintText: "",
-                                                      fillColor: Colors.white70,
-                                                    ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .02,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                              "Current Stock: ",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .black)),
+                                                          Container(
+                                                            height: 30,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.9,
+                                                            child: TextField(
+                                                              readOnly: true,
+                                                              controller:
+                                                                  currentStockCtr[
+                                                                      i],
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        top: 7,
+                                                                        left:
+                                                                            5),
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        10),
+                                                                hintText: "",
+                                                                fillColor: Colors
+                                                                    .white70,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .02,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text("WPS:",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .black)),
+                                                          Container(
+                                                            height: 30,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.9,
+                                                            child: TextField(
+                                                              readOnly: true,
+                                                              controller:
+                                                                  wspCtr[i],
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        top: 7,
+                                                                        left:
+                                                                            5),
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        10),
+                                                                hintText: "",
+                                                                fillColor: Colors
+                                                                    .white70,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .02,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text("RSP:",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .black)),
+                                                          Container(
+                                                            height: 30,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.9,
+                                                            child: TextField(
+                                                              readOnly: true,
+                                                              controller:
+                                                                  rspCtr[i],
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        top: 7,
+                                                                        left:
+                                                                            5),
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        10),
+                                                                hintText: "",
+                                                                fillColor: Colors
+                                                                    .white70,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .02,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                              "Purchasing From: ",
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .black)),
+                                                          Container(
+                                                            height: 30,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.9,
+                                                            child: TextField(
+                                                              readOnly: true,
+                                                              controller:
+                                                                  purchasingFormCtr[
+                                                                      i],
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        top: 7,
+                                                                        left:
+                                                                            5),
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        10),
+                                                                hintText: "",
+                                                                fillColor: Colors
+                                                                    .white70,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Divider(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                          ],
-                                        );
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                ],
+                                              );
                                       }),
                                   SizedBox(
                                     height: 5,
@@ -1033,7 +1426,11 @@ class _Customer_feedbackState extends State<Customer_feedback> {
   }
 
   GetFeedbackModel? getdata;
+  String? department_id;
+
   Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=bf12d5586296e8a180885fdf282632a583f96888'
     };
@@ -1041,7 +1438,10 @@ class _Customer_feedbackState extends State<Customer_feedback> {
         'POST',
         Uri.parse(
             'https://developmentalphawizz.com/rename_market_track/app/v1/api/customer_feedback_lists'));
-    request.fields.addAll({'user_id': '${CUR_USERID}'});
+    request.fields.addAll({
+      'user_id': '${CUR_USERID}',
+      'department_id': '${department_id.toString()}'
+    });
     print("customerrr feedbackk ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();

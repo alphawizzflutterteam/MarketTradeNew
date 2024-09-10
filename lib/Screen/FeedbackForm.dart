@@ -57,7 +57,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet${formattedDate}"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -449,6 +449,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
     );
   }
 
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -532,6 +534,119 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .01,
                     ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: DropdownButtonHideUnderline(
+                    //         child: DropdownButton2<ChapterData>(
+                    //           isExpanded: true,
+                    //           hint: Text(
+                    //             'Dealer & Retailer',
+                    //             style: TextStyle(
+                    //               fontSize: 14,
+                    //               color: Theme.of(context).hintColor,
+                    //             ),
+                    //           ),
+                    //           items: delearRetailerModel?.data
+                    //               ?.map((item) => DropdownMenuItem<ChapterData>(
+                    //                     value: item,
+                    //                     child: Text(
+                    //                       item.nameOfFirm ?? '',
+                    //                       style: TextStyle(
+                    //                         fontSize: 14,
+                    //                       ),
+                    //                     ),
+                    //                   ))
+                    //               .toList(),
+                    //           value: selected,
+                    //           onChanged: (newValue) {
+                    //             setState(() {
+                    //               selected = newValue;
+                    //               print("current indexxx ${selected}");
+                    //               nwIndex = delearRetailerModel!.data!
+                    //                   .indexWhere(
+                    //                       (element) => element.id == selected);
+                    //               // currentIndex = selected;
+                    //               showTextField = true;
+                    //             });
+                    //           },
+                    //           buttonStyleData: ButtonStyleData(
+                    //               padding: EdgeInsets.symmetric(horizontal: 16),
+                    //               height: 50,
+                    //               width: 200,
+                    //               decoration: BoxDecoration(
+                    //                   borderRadius: BorderRadius.circular(6),
+                    //                   border: Border.all(
+                    //                     color: Colors.grey,
+                    //                   ))),
+                    //           dropdownStyleData: DropdownStyleData(
+                    //               maxHeight: 200,
+                    //               decoration: BoxDecoration(
+                    //                   borderRadius: BorderRadius.circular(10),
+                    //                   border: Border.all(color: Colors.black))),
+                    //           menuItemStyleData: const MenuItemStyleData(
+                    //             height: 40,
+                    //           ),
+                    //           dropdownSearchData: DropdownSearchData(
+                    //             searchController: searchController,
+                    //             searchInnerWidgetHeight: 50,
+                    //             searchInnerWidget: Container(
+                    //               height: 55,
+                    //               padding: const EdgeInsets.only(
+                    //                 top: 8,
+                    //                 bottom: 4,
+                    //                 right: 8,
+                    //                 left: 8,
+                    //               ),
+                    //               child: Column(
+                    //                 children: [
+                    //                   Expanded(
+                    //                     child: TextFormField(
+                    //                       // keyboardType: TextInputType.number,
+                    //                       expands: true,
+                    //                       maxLines: null,
+                    //                       maxLength: 6,
+                    //                       controller: searchController,
+                    //                       decoration: InputDecoration(
+                    //                         isDense: true,
+                    //                         contentPadding:
+                    //                             const EdgeInsets.symmetric(
+                    //                           horizontal: 10,
+                    //                           vertical: 8,
+                    //                         ),
+                    //                         hintText: 'Search for category...',
+                    //                         hintStyle:
+                    //                             const TextStyle(fontSize: 12),
+                    //                         counterText: '',
+                    //                         counterStyle:
+                    //                             TextStyle(fontSize: 0),
+                    //                         border: OutlineInputBorder(
+                    //                           borderRadius:
+                    //                               BorderRadius.circular(8),
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //             searchMatchFn: (item, searchValue) {
+                    //               return item.value!.nameOfFirm
+                    //                   .toString()
+                    //                   .contains(searchValue);
+                    //             },
+                    //           ),
+                    //           //This to clear the search value when you close the menu
+                    //           onMenuStateChange: (isOpen) {
+                    //             if (!isOpen) {
+                    //               searchController.clear();
+                    //             }
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Container(
                       height: 60,
                       child: Card(
@@ -719,12 +834,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                           fontWeight: FontWeight.w800)),
                                   SizedBox(width: 10),
                                   Container(
+                                    width: 290,
                                     child: Text(
                                         "${delearRetailerModel?.data?[nwIndex].address},${delearRetailerModel?.data?[nwIndex].statename},${delearRetailerModel?.data?[nwIndex].city},${delearRetailerModel?.data?[nwIndex].pinCode}",
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w800),
-                                        maxLines: 2,
+                                        maxLines: 4,
                                         overflow: TextOverflow.ellipsis),
                                   ),
                                 ],

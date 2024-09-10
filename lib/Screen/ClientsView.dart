@@ -127,6 +127,8 @@ class _ClientsViewState extends State<ClientsView> {
   void initState() {
     super.initState();
     debugPrint("++++===========${widget.model?.district}");
+    debugPrint(
+        "++++lat lng===========${widget.model?.lat} ${widget.model?.lng}");
     getData();
     namecn.text = '${widget.model?.nameOfFirm}';
     ownernamecn.text = '${widget.model?.ownerName}';
@@ -1523,14 +1525,14 @@ class _ClientsViewState extends State<ClientsView> {
                           keyboardType: TextInputType.text,
                           // maxLength: 10,
                           controller: routeCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter route";
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "please enter route";
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
-                              hintText: '',
+                              hintText: 'Route',
                               counterText: "",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
@@ -1555,14 +1557,14 @@ class _ClientsViewState extends State<ClientsView> {
                           keyboardType: TextInputType.text,
                           // maxLength: 10,
                           controller: marketCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter market";
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "please enter market";
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
-                              hintText: '',
+                              hintText: 'Market',
                               counterText: "",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
@@ -1587,14 +1589,14 @@ class _ClientsViewState extends State<ClientsView> {
                           keyboardType: TextInputType.text,
                           // maxLength: 10,
                           controller: landmarkCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter landmark";
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "please enter landmark";
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
-                              hintText: '',
+                              hintText: 'Landmark',
                               counterText: "",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
@@ -1619,14 +1621,14 @@ class _ClientsViewState extends State<ClientsView> {
                           keyboardType: TextInputType.text,
                           // maxLength: 10,
                           controller: udyogIdCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter udyog Id ";
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "please enter udyog Id ";
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
-                              hintText: '',
+                              hintText: 'Udyog Id Number',
                               counterText: "",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
@@ -1650,10 +1652,10 @@ class _ClientsViewState extends State<ClientsView> {
                           readOnly: true,
                           keyboardType: TextInputType.text,
                           controller: pancn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {}
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                               hintText: '4545385838',
                               counterText: "",
@@ -2603,16 +2605,18 @@ class _ClientsViewState extends State<ClientsView> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                  content: Text(
-                                                      'Failed to download image')),
+                                                content: Text(
+                                                    'Failed to download image'),
+                                              ),
                                             );
                                           }
                                         } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
-                                                content: Text(
-                                                    'Failed to download image')),
+                                              content: Text(
+                                                  'Failed to download image'),
+                                            ),
                                           );
                                         }
                                       }
@@ -2621,8 +2625,9 @@ class _ClientsViewState extends State<ClientsView> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                            content: Text(
-                                                'Failed to download image')),
+                                          content:
+                                              Text('Failed to download image'),
+                                        ),
                                       );
                                     }
                                   },
@@ -2639,7 +2644,7 @@ class _ClientsViewState extends State<ClientsView> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -2700,17 +2705,20 @@ class _ClientsViewState extends State<ClientsView> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          controller: creditcn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '9999',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        controller: creditcn,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '9999',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -2728,30 +2736,31 @@ class _ClientsViewState extends State<ClientsView> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          controller: currentAddresscn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              suffixIcon: InkWell(
-                                  onTap: () {
-                                    _launchMap(
-                                      widget.model?.lat,
-                                      widget.model?.lng,
-                                      // orderItem.sellerLatitude,
-                                      // orderItem.sellerLongitude
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.location_disabled_outlined,
-                                    color: colors.primary,
-                                  )),
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        controller: currentAddresscn,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                _launchMap(
+                                  widget.model?.lat,
+                                  widget.model?.lng,
+                                );
+                              },
+                              child: Icon(
+                                Icons.location_disabled_outlined,
+                                color: colors.primary,
+                              )),
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -2769,17 +2778,20 @@ class _ClientsViewState extends State<ClientsView> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          controller: creaetDateTimecn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        controller: creaetDateTimecn,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -2797,17 +2809,20 @@ class _ClientsViewState extends State<ClientsView> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          controller: departmentCtr,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        controller: departmentCtr,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -2823,19 +2838,23 @@ class _ClientsViewState extends State<ClientsView> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          controller: cratedBycn,
-                          validator: (value) {
-                            if (value!.isEmpty) {}
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        readOnly: true,
+                        keyboardType: TextInputType.text,
+                        controller: cratedBycn,
+                        validator: (value) {
+                          if (value!.isEmpty) {}
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Created By',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,

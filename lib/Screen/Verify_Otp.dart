@@ -1,19 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Constant.dart';
 import 'package:omega_employee_management/Helper/cropped_container.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:omega_employee_management/Screen/Set_Password.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart';
 import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,12 +22,13 @@ import 'SignUp.dart';
 
 class VerifyOtp extends StatefulWidget {
   final String? mobileNumber, countryCode, title;
-   String? otp;
-    VerifyOtp(
+  String? otp;
+  VerifyOtp(
       {Key? key,
       required String this.mobileNumber,
       this.countryCode,
-      this.title,this.otp})
+      this.title,
+      this.otp})
       : assert(mobileNumber != null),
         super(key: key);
   @override
@@ -60,14 +57,14 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
       mobileno,
       city,
       area,
-  department_id,
-  location_time,
+      department_id,
+      location_time,
       pincode,
       address,
       latitude,
       longitude,
       image,
-  leadsCount;
+      leadsCount;
 
   @override
   void initState() {
@@ -120,14 +117,13 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         setSnackbar(getTranslated(context, 'OTPWR')!);
       }
     } else {
-      if (mounted) setState(() {
-      });
+      if (mounted) setState(() {});
       Future.delayed(Duration(seconds: 60)).then((_) async {
         bool avail = await isNetworkAvailable();
         if (avail) {
           if (_isClickable)
-             // _onVerifyCode();
-          getVerifyOtp();
+            // _onVerifyCode();
+            getVerifyOtp();
           else {
             setSnackbar(getTranslated(context, 'OTPWR')!);
           }
@@ -163,10 +159,10 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
     ));
   }
 
-  void getVerifyOtp(){
+  void getVerifyOtp() {
     if (widget.otp.toString() == otp.toString()) {
       SettingProvider settingsProvider =
-      Provider.of<SettingProvider>(context, listen: false);
+          Provider.of<SettingProvider>(context, listen: false);
 
       setSnackbar(getTranslated(context, 'OTPMSG')!);
       settingsProvider.setPrefrence(MOBILE, widget.mobileNumber!);
@@ -176,8 +172,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => SignUp()));
         });
-      } else if (widget.title ==
-          getTranslated(context, 'FORGOT_PASS_TITLE')) {
+      } else if (widget.title == getTranslated(context, 'FORGOT_PASS_TITLE')) {
         Future.delayed(Duration(seconds: 2)).then((_) {
           Navigator.pushReplacement(
               context,
@@ -186,40 +181,31 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
                       SetPass(mobileNumber: widget.mobileNumber!)));
         });
       }
-    }else{
-
-    }
+    } else {}
   }
 
   Future<void> sendOtpUser() async {
     try {
       var data = {MOBILE: widget.mobileNumber};
-      Response response =
-      await post(sendOtpApi, body: data, headers: headers)
+      Response response = await post(sendOtpApi, body: data, headers: headers)
           .timeout(Duration(seconds: timeOut));
-
       var getdata = json.decode(response.body);
-
       bool? error = getdata["error"];
       String? msg = getdata["message"];
       print("this is send otp data $sendOtpApi and $getdata");
       await buttonController!.reverse();
-
       SettingProvider settingsProvider =
-      Provider.of<SettingProvider>(context, listen: false);
-
+          Provider.of<SettingProvider>(context, listen: false);
       // if (widget.title == getTranslated(context, 'SEND_OTP_TITLE')) {
       if (!error!) {
-        int oTp = getdata["data"];
+        int oTp = getdata["data"]["otp"];
         setState(() {
-         widget.otp = oTp.toString();
+          widget.otp = oTp.toString();
         });
         print("navigation");
-        // setSnackbar(otp.toString());
-
+        setSnackbar(otp.toString());
         // settingsProvider.setPrefrence(MOBILE, mobile!);
         // settingsProvider.setPrefrence(COUNTRY_CODE, countrycode!);
-
         // Future.delayed(Duration(seconds: 1)).then((_) {
         //   Navigator.pushReplacement(
         //       context,
@@ -263,12 +249,9 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
     try {
       var data = {
         MOBILE: widget.mobileNumber,
-      'otp': otp != null || otp != ""?
-      otp.toString()
-          : widget.otp.toString()
+        'otp': otp != null || otp != "" ? otp.toString() : widget.otp.toString()
       };
-      Response response =
-      await post(verifyOtpApi, body: data, headers: headers)
+      Response response = await post(verifyOtpApi, body: data, headers: headers)
           .timeout(Duration(seconds: timeOut));
 
       var getdata = json.decode(response.body);
@@ -279,12 +262,13 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
       await buttonController!.reverse();
 
       SettingProvider settingsProvider =
-      Provider.of<SettingProvider>(context, listen: false);
+          Provider.of<SettingProvider>(context, listen: false);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       // if (widget.title == getTranslated(context, 'SEND_OTP_TITLE')) {
       if (!error!) {
         setSnackbar(msg!);
         var i = getdata["data"];
+        debugPrint("lllll $i");
         debugPrint("lllll $i");
         id = i[ID];
         username = i[USERNAME];
@@ -296,27 +280,33 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         pincode = i[PINCODE];
         latitude = i[LATITUDE];
         longitude = i[LONGITUDE];
-        department_id =i['department'];
-        location_time =i['location_time'];
+        department_id = i['department'];
+        location_time = i['location_time'];
         image = i[IMAGE];
         CUR_USERID = id;
-        print("User id"+id.toString());
+        print("User id" + id.toString());
         final box = GetStorage();
         box.write('user_id', '${id}');
         prefs.setString("user_id", "$id");
+        prefs.setString("usernamee", "$username");
+        prefs.setString("email", "$email");
         prefs.setString('department', '${department_id}');
         prefs.setString('location_time', '${location_time}');
-        print("location time and id here ${department_id} ${location_time}");
+        print(
+            "location time and id here ${department_id} ${location_time} name ${username} email ${email}");
         // CUR_USERNAME = username;
-        UserProvider userProvider = Provider.of<UserProvider>(this.context, listen: false);
+        UserProvider userProvider =
+            Provider.of<UserProvider>(this.context, listen: false);
         userProvider.setName(username ?? "");
         userProvider.setEmail(email ?? "");
         userProvider.setProfilePic(image ?? "");
-        SettingProvider settingProvider = Provider.of<SettingProvider>(context, listen: false);
+        SettingProvider settingProvider =
+            Provider.of<SettingProvider>(context, listen: false);
         settingProvider.saveUserDetail(id!, username, email, mobile, city, area,
             address, pincode, latitude, longitude, image, context);
         // Navigator.pushNamedAndRemoveUntil(context, "/home", (r) => false);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CheckInScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CheckInScreen()));
       } else {
         setSnackbar(msg!);
       }
@@ -582,7 +572,6 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -642,9 +631,10 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
                       monoVarifyText(),
                       otpText(),
                       mobText(),
-                      Text("OTP- ${widget.otp}", style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600
-                      ),
+                      Text(
+                        "OTP- ${widget.otp}",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       otpLayout(),
                       verifyBtn(),
@@ -676,9 +666,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         height: 100,
         child: Image.asset(
           'assets/images/homelogo.png',
-
         ),
-
       ),
     );
   }

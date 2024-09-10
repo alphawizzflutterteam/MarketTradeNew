@@ -53,6 +53,7 @@ import 'Product_Detail.dart';
 import 'SectionList.dart';
 import 'SiteVisitForm.dart';
 import 'ViewCounterVisitForm.dart';
+import 'check_In_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -180,10 +181,8 @@ class _HomePageState extends State<HomePage>
       // categoryValue != null ?
       //     categoryValue.toString() : ""
     });
-
-    print("this is refer request..... ${request.fields.toString()}");
+    print("this is refer request in..... ${request.fields.toString()}");
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String str = await response.stream.bytesToString();
@@ -192,6 +191,7 @@ class _HomePageState extends State<HomePage>
       setState(() {
         isCheckedIn = status;
       });
+      print("ssssssssssssssss ${status}");
       // var finalResponse = GetUserExpensesModel.fromJson(result);
       // setState(() {
       //   userExpenses = finalResponse.data!;
@@ -380,37 +380,50 @@ class _HomePageState extends State<HomePage>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // ElevatedButton(
-                //   onPressed: () async {
-                //   var result = await   Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInScreen()));
-                //   if(result != null){
-                //     setState(() {
-                //       getUserCheckInStatus();
-                //     });
-                //   }
-                //   }, child: Text("CHECK-IN",
-                //   ),
-                // style: ElevatedButton.styleFrom(
-                //   elevation: 0,
-                //   shape: StadiumBorder(),
-                //   fixedSize: Size(150, 40),
-                //   backgroundColor: colors.blackTemp.withOpacity(0.8)
-                // ),),
-                // SizedBox(width: 20,),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CheckOutScreen()));
-                  },
-                  child: Text("CHECK-OUT"),
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: StadiumBorder(),
-                      fixedSize: Size(150, 40),
-                      backgroundColor: colors.blackTemp.withOpacity(0.8)),
-                ),
+                isCheckedIn
+                    ? ElevatedButton(
+                        onPressed: () async {
+                          var result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckOutScreen(),
+                            ),
+                          );
+                          if (result != null) {
+                            setState(() {
+                              getUserCheckInStatus();
+                            });
+                          }
+                        },
+                        child: Text(
+                          "CHECK-OUT",
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: StadiumBorder(),
+                          fixedSize: Size(150, 40),
+                          backgroundColor: colors.blackTemp.withOpacity(0.8),
+                        ),
+                      )
+                    :
+                    // SizedBox(width: 20,),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckInScreen(),
+                            ),
+                          );
+                        },
+                        child: Text("CHECK-OUT"),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: StadiumBorder(),
+                          fixedSize: Size(150, 40),
+                          backgroundColor: colors.blackTemp.withOpacity(0.8),
+                        ),
+                      ),
               ],
             ),
           ),
@@ -2064,20 +2077,18 @@ class _HomePageState extends State<HomePage>
     UserProvider user = Provider.of<UserProvider>(context, listen: false);
     SettingProvider setting =
         Provider.of<SettingProvider>(context, listen: false);
-
     user.setUserId(setting.userId);
-
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
       getClients();
       getPermission();
       getSetting();
       getSlider();
-      getCat();
+      // getCat();
       getUserCheckInStatus();
       // getSeller();
       // getSection();
-      getOfferImages();
+      // getOfferImages();
       setCatid();
     } else {
       if (mounted)
@@ -2190,11 +2201,9 @@ class _HomePageState extends State<HomePage>
     //print("")
     Map parameter = Map();
     if (CUR_USERID != null) parameter = {USER_ID: CUR_USERID};
-
     apiBaseHelper.postAPICall(getSettingApi, parameter).then((getdata) async {
       bool error = getdata["error"];
       String? msg = getdata["message"];
-
       if (!error) {
         var data = getdata["data"]["system_settings"][0];
         cartBtnList = data["cart_btn_on_list"] == "1" ? true : false;
@@ -2215,7 +2224,7 @@ class _HomePageState extends State<HomePage>
           ISFLAT_DEL = false;
 
         if (CUR_USERID != null) {
-          REFER_CODE = getdata['data']['user_data'][0]['referral_code'];
+          // REFER_CODE = getdata['data']['user_data'][0]['referral_code'];
 
           context
               .read<UserProvider>()
@@ -2231,7 +2240,6 @@ class _HomePageState extends State<HomePage>
               .setBalance(getdata["data"]["user_data"][0]["balance"]);
           leadsCount = getdata["data"]["total_leads"];
           myEarnings = getdata["data"]["user_data"][0]["balance"];
-
           _getFav();
           _getCart("0");
         }

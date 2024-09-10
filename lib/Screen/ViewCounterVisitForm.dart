@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
@@ -52,13 +53,16 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
         ),
       ),
       body: getdata == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
           : getdata?.error == true
               ? Center(
                   child: Text(
-                  "No Data Found",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                ))
+                    "No Data Found",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                )
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
@@ -141,7 +145,7 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text("Firm Name:",
+                                                Text("Firm:",
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
@@ -168,7 +172,7 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  "Owner Name:",
+                                                  "Owner:",
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
@@ -176,14 +180,15 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                                       color: Colors.black),
                                                 ),
                                                 SizedBox(
-                                                    child: Text(
-                                                        "${getdata?.data?[index].basicDetail?.name ?? ""}",
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w200,
-                                                            color:
-                                                                Colors.black)))
+                                                  child: Text(
+                                                    "${getdata?.data?[index].basicDetail?.name ?? ""}",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -322,11 +327,11 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.3,
+                                                  0.5,
                                               child: Container(
                                                 width: 100,
                                                 child: Text(
-                                                  "${getdata?.data?[index].basicDetail?.address ?? ""}",
+                                                  "${getdata?.data?[index].basicDetail?.address ?? ""} ${getdata?.data?[index].pinCode ?? ""}",
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
@@ -337,7 +342,7 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                                       TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -352,19 +357,22 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
                                                               ?.data?[index])));
                                         },
                                         child: Container(
-                                            height: 35,
-                                            width: 80,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: colors.primary),
-                                            child: Center(
-                                                child: Text("View",
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w600)))),
+                                          height: 35,
+                                          width: 80,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: colors.primary),
+                                          child: Center(
+                                            child: Text(
+                                              "View",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -484,7 +492,11 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
   }
 
   GetFeedbackModel? getdata;
+  String? department_id;
+
   Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=bf12d5586296e8a180885fdf282632a583f96888'
     };
@@ -492,7 +504,10 @@ class _ViewCounterVisitFormState extends State<ViewCounterVisitForm> {
         'POST',
         Uri.parse(
             'https://developmentalphawizz.com/rename_market_track/app/v1/api/customer_feedback_lists'));
-    request.fields.addAll({'user_id': '${CUR_USERID}'});
+    request.fields.addAll({
+      'user_id': '${CUR_USERID}',
+      'department_id': '${department_id.toString()}'
+    });
     print("customerrr feedbackk ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();

@@ -1,26 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Constant.dart';
-import 'package:omega_employee_management/Helper/PushNotificationService.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:omega_employee_management/Screen/Product_Detail.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart';
-import 'package:omega_employee_management/Screen/check_out_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Add_Address.dart';
 import 'HomePage.dart';
-import 'SiteVisitForm.dart';
 import 'myprofile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -38,6 +37,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getUserCheckInStatus();
     locationTimeUpdate();
     // debugPrint("mmmmm"+(DateTime.now().minute).toString());
     // Navigator.push(context,
@@ -51,8 +51,8 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     //                   ));
     // }
     getCurrentLoc();
-    SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -63,18 +63,18 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
       length: 2,
       vsync: this,
     );
-    if(widget.selectedIndex != null){
+    if (widget.selectedIndex != null) {
       setState(() {
         _selBottom = widget.selectedIndex!;
       });
     }
 
-    final pushNotificationService = PushNotificationService(
-        context: context, tabController: _tabController);
-    pushNotificationService.initialise();
+    // final pushNotificationService = PushNotificationService(
+    //     context: context, tabController: _tabController);
+    // pushNotificationService.initialise();
 
     _tabController.addListener(
-          () {
+      () {
         // Future.delayed(Duration(seconds: 0)).then(
         //   (value) {
         //     if (_tabController.index == 3) {
@@ -91,7 +91,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         //   },
         // );
         setState(
-              () {
+          () {
             _selBottom = _tabController.index;
           },
         );
@@ -112,13 +112,14 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         return Future.error('Location Not Available');
       }
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     // var loc = Provider.of<LocationProvider>(context, listen: false);
     latitude = position.latitude.toString();
     longitude = position.longitude.toString();
     setState(() {
-      longitude_Global=latitude;
-      lattitudee_Global=longitude;
+      longitude_Global = latitude;
+      lattitudee_Global = longitude;
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
@@ -129,13 +130,13 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
       setState(() {
         pinController.text = placemark[0].postalCode!;
         currentAddress.text =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+            "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
         // loc.lng = position.longitude.toString();
         //loc.lat = position.latitude.toString();
         setState(() {
-          currentlocation_Global=currentAddress.text.toString();
+          currentlocation_Global = currentAddress.text.toString();
         });
         print('Latitudeee${latitude}');
         print('Longitudee${longitude}');
@@ -149,25 +150,27 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         });
       }
     }
-    // updateLocationPeriodically();
+    updateLocationPeriodically();
   }
 
-
- String? locationTime;
+  String? locationTime;
   locationTimeUpdate() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     locationTime = pref.getString('location_time');
     print("location timeee ${locationTime}");
   }
 
-
   updateLocationPeriodically() {
     Timer.periodic(Duration(minutes: int.parse(locationTime!)), (timer) async {
-      Position position =  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);;
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       if (position != null) {
-        print("Updated Location: ${position.latitude}, ${position.longitude}");
+        print("Location lat lng: ${position.latitude}, ${position.longitude}");
       }
       // updateLocation();
+      if (isCheckedIn == false) {
+        updateLocation();
+      } else {}
     });
   }
 
@@ -183,23 +186,57 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   //   });
   // }
 
+  bool? isCheckedIn;
+
+  getUserCheckInStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+        getUserCheckStatusApi.toString(),
+      ),
+    );
+    request.fields.addAll({
+      USER_ID: '$uid',
+    });
+    print("this issss refer request in..... ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      bool status = result['data'];
+      setState(() {
+        isCheckedIn = status;
+      });
+      print("status of user is ${status}");
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   updateLocation() async {
     var headers = {
       'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
     request.fields.addAll({
       'lat': latitude.toString(),
       'lng': longitude.toString(),
-      'user_id': "${CUR_USERID}"
+      'user_id': '${CUR_USERID}',
+      'address': '${currentAddress.text}'
     });
-    print("update location parameter ${request.fields}");
+    print("update location parameter in dashboard ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -208,7 +245,7 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
     FirebaseDynamicLinks.instance.onLink;
 
     final PendingDynamicLinkData? data =
-    await FirebaseDynamicLinks.instance.getInitialLink();
+        await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri? deepLink = data?.link;
     if (deepLink != null) {
       if (deepLink.queryParameters.length > 0) {
@@ -235,7 +272,8 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
         // if (CUR_USERID != null) parameter[USER_ID] = CUR_USERID;
         Response response =
-        await post(getProductApi, headers: headers, body: parameter).timeout(Duration(seconds: timeOut));
+            await post(getProductApi, headers: headers, body: parameter)
+                .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
@@ -250,13 +288,13 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ProductDetail(
-                index: list ? int.parse(id) : index,
-                model: list
-                    ? items[0]
-                    : sectionList[secPos].productList![index],
-                secPos: secPos,
-                list: list,
-              )));
+                    index: list ? int.parse(id) : index,
+                    model: list
+                        ? items[0]
+                        : sectionList[secPos].productList![index],
+                    secPos: secPos,
+                    list: list,
+                  )));
         } else {
           if (msg != "Products Not Found !") setSnackbar(msg, context);
         }
@@ -288,25 +326,29 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
         }
         return true;
       },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.lightWhite,
-        appBar: _getAppBar(),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            HomePage(),
-            // SiteVisitForm(),
-            // UserExpensesScreen(),
-            // AllCategory(),
-            // Sale(),
-            // Cart(
-            //   fromBottom: tru     e,
-            // ),
-            MyProfile(),
-          ],
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.lightWhite,
+          appBar: _getAppBar(),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              HomePage(),
+              // SiteVisitForm(),
+              // UserExpensesScreen(),
+              // AllCategory(),
+              // Sale(),
+              // Cart(
+              //   fromBottom: tru     e,
+              // ),
+              MyProfile(),
+            ],
+          ),
+          //fragments[_selBottom],
+          bottomNavigationBar: _getBottomBar(),
         ),
-        //fragments[_selBottom],
-        bottomNavigationBar: _getBottomBar(),
       ),
     );
   }
@@ -325,18 +367,18 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
       centerTitle: _selBottom == 0 ? true : false,
       title: _selBottom == 0
           ? Image.asset(
-        'assets/images/homelogo.png',
-        //height: 40,
-        //   width: 200,
-        height: 90,
-        //s
-        // width: 45,
-      )
+              'assets/images/homelogo.png',
+              //height: 40,
+              //   width: 200,
+              height: 90,
+              //s
+              // width: 45,
+            )
           : Text(
-        title!,
-        style: TextStyle(
-            color: colors.primary, fontWeight: FontWeight.normal),
-      ),
+              title!,
+              style: TextStyle(
+                  color: colors.primary, fontWeight: FontWeight.normal),
+            ),
       // leading: _selBottom == 0
       //     ? InkWell(
       //         child: Center(
@@ -418,149 +460,147 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
 
   Widget _getBottomBar() {
     return Material(
-        color: Theme.of(context).colorScheme.white,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Theme.of(context).colorScheme.black26, blurRadius: 10)
-            ],
-          ),
-          child: TabBar(
-            onTap: (_) {
-              if (_tabController.index == 2) {
-                if (CUR_USERID == null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                  _tabController.animateTo(0);
-                }
-              }
-            },
-            controller: _tabController,
-            tabs: [
-              Tab(
-                icon: _selBottom == 0
-                    ? SvgPicture.asset(
-                  imagePath + "sel_home.svg",
-                  color: colors.primary,
-                )
-                    : SvgPicture.asset(
-                  imagePath + "desel_home.svg",
-                  color: colors.primary,
-                ),
-                text:
-                _selBottom == 0 ? getTranslated(context, 'HOME_LBL') : null,
-              ),
-              // Tab(
-              //   icon: _selBottom == 1
-              //       ? Icon(
-              //       Icons.assignment
-              //   )
-              //       : Icon(Icons.assignment_outlined),
-              //   text:
-              //   _selBottom == 1 ? getTranslated(context, 'MY_LEADS') : null,
-              // ),
-              // Tab(
-              //   icon: _selBottom == 1
-              //       ? SvgPicture.asset(
-              //           imagePath + "category01.svg",
-              //           color: colors.primary,
-              //         )
-              //       : SvgPicture.asset(
-              //           imagePath + "category.svg",
-              //           color: colors.primary,
-              //         ),
-              //   text:
-              //       _selBottom == 1 ? getTranslated(context, 'category') : null,
-              // ),
-              // Tab(
-              //   icon: _selBottom == 2
-              //       ? SvgPicture.asset(
-              //           imagePath + "sale02.svg",
-              //           color: colors.primary,
-              //         )
-              //       : SvgPicture.asset(
-              //           imagePath + "sale.svg",
-              //           color: colors.primary,
-              //         ),
-              //   text: _selBottom == 2 ? getTranslated(context, 'SALE') : null,
-              // ),
-              // Tab(
-              //   icon: Selector<UserProvider, String>(
-              //     builder: (context, data, child) {
-              //       return Stack(
-              //         children: [
-              //           Center(
-              //             child: _selBottom == 3
-              //                 ? SvgPicture.asset(
-              //                     imagePath + "cart01.svg",
-              //                     color: colors.primary,
-              //                   )
-              //                 : SvgPicture.asset(
-              //                     imagePath + "cart.svg",
-              //                     color: colors.primary,
-              //                   ),
-              //           ),
-              //           (data != null && data.isNotEmpty && data != "0")
-              //               ? new Positioned.directional(
-              //                   bottom: _selBottom == 3 ? 6 : 20,
-              //                   textDirection: Directionality.of(context),
-              //                   end: 0,
-              //                   child: Container(
-              //                     decoration: BoxDecoration(
-              //                         shape: BoxShape.circle,
-              //                         color: colors.primary),
-              //                     child: new Center(
-              //                       child: Padding(
-              //                         padding: EdgeInsets.all(3),
-              //                         child: new Text(
-              //                           data,
-              //                           style: TextStyle(
-              //                               fontSize: 7,
-              //                               fontWeight: FontWeight.bold,
-              //                               color: Theme.of(context)
-              //                                   .colorScheme
-              //                                   .white),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 )
-              //               : Container()
-              //         ],
-              //       );
-              //     },
-              //     selector: (_, homeProvider) => homeProvider.curCartCount,
-              //   ),
-              //   text: _selBottom == 3 ? getTranslated(context, 'CART') : null,
-              // ),
-              Tab(
-                icon: _selBottom == 1
-                    ? SvgPicture.asset(
-                  imagePath + "profile01.svg",
-                  color: colors.primary,
-                )
-                    : SvgPicture.asset(
-                  imagePath + "profile.svg",
-                  color: colors.primary,
-                ),
-                text:
-                _selBottom == 1 ? getTranslated(context, 'ACCOUNT') : null,
-              ),
-            ],
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(color: colors.primary, width: 5.0),
-              insets: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 70.0),
-            ),
-            labelColor: colors.primary,
-            labelStyle: TextStyle(fontSize: 8 , fontWeight: FontWeight.w600),
-          ),
+      color: Theme.of(context).colorScheme.white,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.white,
+          boxShadow: [
+            BoxShadow(
+                color: Theme.of(context).colorScheme.black26, blurRadius: 10)
+          ],
         ),
+        child: TabBar(
+          onTap: (_) {
+            if (_tabController.index == 2) {
+              if (CUR_USERID == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+                _tabController.animateTo(0);
+              }
+            }
+          },
+          controller: _tabController,
+          tabs: [
+            Tab(
+              icon: _selBottom == 0
+                  ? SvgPicture.asset(
+                      imagePath + "sel_home.svg",
+                      color: colors.primary,
+                    )
+                  : SvgPicture.asset(
+                      imagePath + "desel_home.svg",
+                      color: colors.primary,
+                    ),
+              text: _selBottom == 0 ? getTranslated(context, 'HOME_LBL') : null,
+            ),
+            // Tab(
+            //   icon: _selBottom == 1
+            //       ? Icon(
+            //       Icons.assignment
+            //   )
+            //       : Icon(Icons.assignment_outlined),
+            //   text:
+            //   _selBottom == 1 ? getTranslated(context, 'MY_LEADS') : null,
+            // ),
+            // Tab(
+            //   icon: _selBottom == 1
+            //       ? SvgPicture.asset(
+            //           imagePath + "category01.svg",
+            //           color: colors.primary,
+            //         )
+            //       : SvgPicture.asset(
+            //           imagePath + "category.svg",
+            //           color: colors.primary,
+            //         ),
+            //   text:
+            //       _selBottom == 1 ? getTranslated(context, 'category') : null,
+            // ),
+            // Tab(
+            //   icon: _selBottom == 2
+            //       ? SvgPicture.asset(
+            //           imagePath + "sale02.svg",
+            //           color: colors.primary,
+            //         )
+            //       : SvgPicture.asset(
+            //           imagePath + "sale.svg",
+            //           color: colors.primary,
+            //         ),
+            //   text: _selBottom == 2 ? getTranslated(context, 'SALE') : null,
+            // ),
+            // Tab(
+            //   icon: Selector<UserProvider, String>(
+            //     builder: (context, data, child) {
+            //       return Stack(
+            //         children: [
+            //           Center(
+            //             child: _selBottom == 3
+            //                 ? SvgPicture.asset(
+            //                     imagePath + "cart01.svg",
+            //                     color: colors.primary,
+            //                   )
+            //                 : SvgPicture.asset(
+            //                     imagePath + "cart.svg",
+            //                     color: colors.primary,
+            //                   ),
+            //           ),
+            //           (data != null && data.isNotEmpty && data != "0")
+            //               ? new Positioned.directional(
+            //                   bottom: _selBottom == 3 ? 6 : 20,
+            //                   textDirection: Directionality.of(context),
+            //                   end: 0,
+            //                   child: Container(
+            //                     decoration: BoxDecoration(
+            //                         shape: BoxShape.circle,
+            //                         color: colors.primary),
+            //                     child: new Center(
+            //                       child: Padding(
+            //                         padding: EdgeInsets.all(3),
+            //                         child: new Text(
+            //                           data,
+            //                           style: TextStyle(
+            //                               fontSize: 7,
+            //                               fontWeight: FontWeight.bold,
+            //                               color: Theme.of(context)
+            //                                   .colorScheme
+            //                                   .white),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 )
+            //               : Container()
+            //         ],
+            //       );
+            //     },
+            //     selector: (_, homeProvider) => homeProvider.curCartCount,
+            //   ),
+            //   text: _selBottom == 3 ? getTranslated(context, 'CART') : null,
+            // ),
+            Tab(
+              icon: _selBottom == 1
+                  ? SvgPicture.asset(
+                      imagePath + "profile01.svg",
+                      color: colors.primary,
+                    )
+                  : SvgPicture.asset(
+                      imagePath + "profile.svg",
+                      color: colors.primary,
+                    ),
+              text: _selBottom == 1 ? getTranslated(context, 'ACCOUNT') : null,
+            ),
+          ],
+          indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(color: colors.primary, width: 5.0),
+            insets: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 70.0),
+          ),
+          labelColor: colors.primary,
+          labelStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.w600),
+        ),
+      ),
     );
   }
 

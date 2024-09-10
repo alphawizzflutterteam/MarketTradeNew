@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -143,7 +144,12 @@ class _SiteSurveyState extends State<SiteSurvey> {
   TextEditingController execteddateCtr = TextEditingController();
   TextEditingController remarkCtr = TextEditingController();
   String? selectDate;
+  bool isLoading = false;
+
   siteSurvey() async {
+    setState(() {
+      isLoading = true;
+    });
     var headers = {
       'Cookie': 'ci_session=1320aad94f004f819d6b7fcd7da8a40903f7ce60'
     };
@@ -175,7 +181,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
       'current_status': '${widget.sitesize}',
       'product_used': widget.modelList!.map((product) => product.id).join(','),
       'survey': dataList.toString(),
-      'expected_order_date': '${widget.expectedDate}',
+      'expected_order_date': execteddateCtr.text,
       'remarks': remarkCtr.text,
       'contractor_name': '${widget.contractorName}',
       'contractor_address': '${widget.contractorAddress}',
@@ -186,7 +192,9 @@ class _SiteSurveyState extends State<SiteSurvey> {
       'massion_name': '${widget.missionName}',
       'massion_address': '${widget.architecAddress}'
     });
+    log(request.fields.toString());
     print("add coustomer survey parameter ${request.fields}");
+
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
       print("imageeeeeeeeeeeee ${imagePathList[i].toString()}");
       imagePathList[i] == ""
@@ -202,6 +210,9 @@ class _SiteSurveyState extends State<SiteSurvey> {
       print(
         await response.stream.bytesToString(),
       );
+      setState(() {
+        isLoading = false;
+      });
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
@@ -289,7 +300,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = new DateFormat('dd-MM-yyyy');
     formattedDate = formatter.format(now);
     print("datedetet${formattedDate}"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -436,12 +447,14 @@ class _SiteSurveyState extends State<SiteSurvey> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back_ios, color: Colors.black),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white),
           ),
           centerTitle: true,
-          backgroundColor: Colors.white,
-          title: Text("Customer Survey Form",
-              style: TextStyle(fontSize: 15, color: Colors.black)),
+          backgroundColor: colors.primary,
+          title: Text(
+            "Customer Survey Form",
+            style: TextStyle(fontSize: 15, color: Colors.white),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -456,7 +469,6 @@ class _SiteSurveyState extends State<SiteSurvey> {
                   itemCount: widget.modelList?.length ?? 0,
                   itemBuilder: (context, index) {
                     var item = widget.modelList?[index];
-
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -851,7 +863,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                                             String
                                                                 formattedDate =
                                                                 DateFormat(
-                                                                        'yyyy-MM-dd')
+                                                                        'dd-MM-yyyy')
                                                                     .format(
                                                                         pickedDate);
                                                             feedbackList[index]
@@ -956,10 +968,12 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 5),
-                                        child: Text(sumsTwo[index].toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black)),
+                                        child: Text(
+                                          sumsTwo[index].toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black),
+                                        ),
                                       )
                                     ],
                                   )
@@ -991,9 +1005,11 @@ class _SiteSurveyState extends State<SiteSurvey> {
                         controller: execteddateCtr,
                         keyboardType: TextInputType.none,
                         decoration: InputDecoration(
-                            hintText: 'Select Expected Order Date',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                          hintText: 'Select Expected Order Date',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                               context: context,
@@ -1711,7 +1727,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
           //                                                                         child: child!);
           //                                                                   });
           //                                                           if (pickedDate != null) {
-          //                                                             String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          //                                                             String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           //                                                             feedbackList[index][i][4].text = formattedDate;
           //                                                             setState(
           //                                                                 () {
@@ -1829,56 +1845,68 @@ class _SiteSurveyState extends State<SiteSurvey> {
           //   ],
           // ),
         ),
-        bottomSheet: Container(
-          color: colors.whiteTemp,
-          height: 35,
-          child: InkWell(
-            onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
-              if (execteddateCtr.text.isEmpty || execteddateCtr.text == "") {
-                Fluttertoast.showToast(
-                    msg: "Please select expected order date");
-              } else if (remarkCtr.text.isEmpty || remarkCtr.text == "") {
-                Fluttertoast.showToast(msg: "Please enter remark");
-              } else if (imagePathList.isEmpty) {
-                Fluttertoast.showToast(msg: "Please upload image");
-              } else {
-                for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
-                  for (int j = 0;
-                      j < (widget.modelList?[i].products?.length ?? 0);
-                      j++) {
-                    dataList.add(json.encode({
-                      "brand_name": widget.modelList?[i].name,
-                      "total_consumption": feedbackList[i][i][0].text,
-                      "further_consumption": feedbackList[i][j][1].text,
-                      "purchase_price": feedbackList[i][j][2].text,
-                      "purchasing_from": feedbackList[i][j][3].text,
-                      "last_purchase_date": feedbackList[i][j][4].text
-                      // "monthly_sale": feedbackList[i][j][0].text,
-                      // "current_stock": feedbackList[i][j][1].text,
-                      // "wps": feedbackList[i][j][2].text,
-                      // "rsp": feedbackList[i][j][3].text,
-                      // "purchasing_from": feedbackList[i][j][4].text
-                    }));
+        bottomSheet: Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: Container(
+            color: colors.whiteTemp,
+            height: 35,
+            child: InkWell(
+              onTap: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => Survey()));
+                if (execteddateCtr.text.isEmpty || execteddateCtr.text == "") {
+                  Fluttertoast.showToast(
+                      msg: "Please select expected order date");
+                } else if (remarkCtr.text.isEmpty || remarkCtr.text == "") {
+                  Fluttertoast.showToast(msg: "Please enter remark");
+                } else if (imagePathList.isEmpty) {
+                  Fluttertoast.showToast(msg: "Please upload image");
+                } else {
+                  for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+                    for (int j = 0;
+                        j < (widget.modelList?[i].products?.length ?? 0);
+                        j++) {
+                      dataList.add(
+                        json.encode({
+                          "cid": "${widget.modelList![i].products?[j].id}",
+                          "brand_name": widget.modelList?[i].products?[j].name,
+                          "total_consumption": feedbackList[i][j][0].text,
+                          "further_consumption": feedbackList[i][j][1].text,
+                          "purchase_price": feedbackList[i][j][2].text,
+                          "purchasing_from": feedbackList[i][j][3].text,
+                          "last_purchase_date": feedbackList[i][j][4].text
+                          // "monthly_sale": feedbackList[i][j][0].text,
+                          // "current_stock": feedbackList[i][j][1].text,
+                          // "wps": feedbackList[i][j][2].text,
+                          // "rsp": feedbackList[i][j][3].text,
+                          // "purchasing_from": feedbackList[i][j][4].text
+                        }),
+                      );
+                    }
                   }
+                  siteSurvey();
                 }
-                siteSurvey();
-              }
-            },
-            child: Center(
-              child: Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width / 1.8,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: colors.primary),
-                child: const Center(
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400),
+              },
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: colors.primary),
+                  child: Center(
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            "Submit",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                          ),
                   ),
                 ),
               ),
