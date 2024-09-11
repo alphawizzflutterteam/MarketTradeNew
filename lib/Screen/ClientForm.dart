@@ -661,6 +661,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -676,6 +677,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Model/ClientModel.dart';
+import '../Model/DepartmentModel.dart';
 import '../Model/GetListModel.dart';
 import 'Add_Address.dart';
 
@@ -704,6 +706,12 @@ class _Client_formState extends State<Client_form> {
       });
     }
   }
+
+  ClientStatus? temp_selected_Status;
+  States? temp_selected_State;
+  Cities? temp_select_district;
+
+  final TextEditingController searchController = TextEditingController();
 
   // void _showImagePicker(BuildContext context) {
   //   showModalBottomSheet(
@@ -781,12 +789,7 @@ class _Client_formState extends State<Client_form> {
   @override
   void initState() {
     super.initState();
-    getState();
-    fetchState();
-    getCurrentLoc();
-    convertDateTimeDispla();
-    print(
-        "statusss=====${widget.model?.status} id is${widget.model?.id}===========");
+    getDepartment();
     namecn.text = '${widget.model?.nameOfFirm}';
     ownernamecn.text = '${widget.model?.ownerName}';
     addresscn.text = '${widget.model?.address}';
@@ -811,9 +814,87 @@ class _Client_formState extends State<Client_form> {
     // panImage!.path =  "${widget.model?.panImg}" ?? "";
     selected_District = '${widget.model?.district}';
     voterCtr.text = '${widget.model?.voterNumber}';
+    getState().then((value) {
+      print('dsfgsgsdfg${widget.model?.state}');
+      // getListModel!.data!.states
+
+      getListModel?.data?.states?.forEach((element) {
+        if (element.id.toString() == widget.model?.state.toString()) {
+          temp_selected_State = element;
+          setState(() {});
+        }
+      });
+      getListModel?.data?.clientStatus?.forEach((element) {
+        if (element.id == widget.model?.status) {
+          temp_selected_Status = element;
+          setState(() {});
+        }
+      });
+      stateindex = getListModel!.data!.states!
+          .indexWhere((element) => element.id == selected_State);
+      setState(() {});
+      getListModel?.data?.states?[stateindex].cities?.forEach((element) {
+        if (element.id == widget.model?.district) {
+          temp_select_district = element;
+        }
+      });
+      // getListModel?.data?.clientStatus?.forEach((element) {
+      //   if(element.id == widget.model?.status)
+      //   {
+      //     temp_selected_Status=element;
+      //     setState(() {
+      //
+      //     });
+      //
+      //   }
+      // });
+    });
+    fetchState().then((value) {
+      getList?.data?.customerType?.forEach((element) {
+        if (element.id.toString() == widget.model?.customerType.toString()) {
+          customerType = element;
+          setState(() {});
+        }
+      });
+    });
+    getCurrentLoc();
+    convertDateTimeDispla();
+    print(
+        "statusss=====${widget.model?.status} id is${widget.model?.id}===========");
+
     // staffcn.text='${widget.model?.}';
     // stateId='${widget.model?.state}';
     getImages();
+  }
+
+  DepartmentModel? departmentModel;
+  getDepartment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getDep.toString()));
+    request.fields.addAll({
+      USER_ID: '${uid}',
+    });
+    print("this is refer  get departmet request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("permission");
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = DepartmentModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
+      setState(() {
+        departmentModel = finalResponse;
+        department_id = departmentModel?.data?.first.department.toString();
+        print("deeeeeeeeeeeeee ${department_id}");
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 
   getImages() {
@@ -1273,6 +1354,8 @@ class _Client_formState extends State<Client_form> {
     }
   }
 
+  CustomerType? customerType;
+
   _getFromCameraGst() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera,
@@ -1414,7 +1497,7 @@ class _Client_formState extends State<Client_form> {
   }
 
   GetListModel? getListModel;
-  getState() async {
+  Future<void> getState() async {
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
@@ -1480,11 +1563,12 @@ class _Client_formState extends State<Client_form> {
                   width: MediaQuery.of(context).size.width / 2.8,
                   height: 170,
                   child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Image.network(
-                        '${apiImages[index]}',
-                        fit: BoxFit.cover,
-                      )),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Image.network(
+                      '${apiImages[index]}',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
               // Positioned(
@@ -1524,7 +1608,29 @@ class _Client_formState extends State<Client_form> {
                     color: Colors.red.withOpacity(0.7),
                   ),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 124, left: 3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${widget.model?.createdAt}",
+                      style: TextStyle(fontSize: 10, color: Colors.red),
+                    ),
+                    Text(
+                      "${widget.model?.lat},${widget.model?.lng}",
+                      style: TextStyle(fontSize: 10, color: Colors.red),
+                    ),
+                    Text(
+                      "${widget.model?.currentAddress}",
+                      style: TextStyle(fontSize: 10, color: Colors.red),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -1593,37 +1699,149 @@ class _Client_formState extends State<Client_form> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
                     ),
-                    Card(
-                      elevation: 6,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButtonFormField<String?>(
-                        value: selected_Status,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                          } else {
-                            return null;
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_Status = newValue;
-                          });
-                        },
-                        items: getList?.data?.clientStatus?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          hintText: 'Select Status',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<ClientStatus>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select Status',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getListModel?.data?.clientStatus
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: temp_selected_Status,
+                              onChanged: (value) {
+                                temp_selected_Status = value;
+                                selected_Status = value?.id ?? '';
+                                setState(() {});
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                    // Card(
+                    //   elevation: 6,
+                    //   shape: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: DropdownButtonFormField<String?>(
+                    //     value: selected_Status,
+                    //     validator: (value) {
+                    //       if (value == null || value.isEmpty) {
+                    //       } else {
+                    //         return null;
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_Status = newValue;
+                    //       });
+                    //     },
+                    //     items: getList?.data?.clientStatus?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(10)),
+                    //       hintText: 'Select Status',
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: MediaQuery.of(context).size.height * .02),
                     // const Text("Staff",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     // SizedBox(height: MediaQuery.of(context).size.height*.02,),
@@ -1664,7 +1882,7 @@ class _Client_formState extends State<Client_form> {
                         decoration: InputDecoration(
                           hintText: 'name',
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
@@ -1745,44 +1963,281 @@ class _Client_formState extends State<Client_form> {
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    Card(
-                      elevation: 3,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_State,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_State = newValue;
-                            stateindex = getListModel!.data!.states!.indexWhere(
-                                (element) => element.id == selected_State);
-                            // getListModel?.data?.states?.map((items) {
-                            //   if(items.id == newValue) {
-                            //     cities = items.cities;
-                            //   }
-                            // });
-                            var name = print("aaaaa ${selected_State}");
-                            // print("current indexxx ${selected}");
-                            // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
-                            // currentIndex = selected;
-                            // showTextField = true;
-                          });
-                        },
-                        items: getListModel?.data?.states?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 5, left: 10),
-                          border: InputBorder.none,
-                          hintText: 'Select State',
-                        ),
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
-                    // SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                    // Text("District",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<States>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select state',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getListModel?.data?.states
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: temp_selected_State,
+                              onChanged: (value) {
+                                temp_selected_State = value;
+                                selected_State = value?.id ?? '';
+                                setState(() {});
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Card(
+                    //   elevation: 3,
+                    //   shape: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_State,
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_State = newValue;
+                    //         stateindex = getListModel!.data!.states!.indexWhere(
+                    //             (element) => element.id == selected_State);
+                    //         // getListModel?.data?.states?.map((items) {
+                    //         //   if(items.id == newValue) {
+                    //         //     cities = items.cities;
+                    //         //   }
+                    //         // });
+                    //         var name = print("aaaaa ${selected_State}");
+                    //         // print("current indexxx ${selected}");
+                    //         // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
+                    //         // currentIndex = selected;
+                    //         // showTextField = true;
+                    //       });
+                    //     },
+                    //     items: getListModel?.data?.states?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.only(top: 5, left: 10),
+                    //       border: InputBorder.none,
+                    //       hintText: 'Select State',
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .02,
+                    ),
+                    Text(
+                      "District",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<Cities>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select District',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items:
+                                  getListModel?.data?.states?[stateindex].cities
+                                      ?.map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item.city ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
+                              value: temp_select_district,
+                              onChanged: (value) {
+                                temp_select_district = value;
+                                selected_District = value?.id ?? '';
+                                setState(() {});
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.city
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     // Card(elevation: 3,
                     //   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     //   child: DropdownButtonFormField<String>(
@@ -1862,7 +2317,7 @@ class _Client_formState extends State<Client_form> {
                         decoration: InputDecoration(
                           hintText: 'hfg@gmail.com',
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                         ),
                       ),
@@ -2168,8 +2623,10 @@ class _Client_formState extends State<Client_form> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
+                          maxLength: 10,
                           keyboardType: TextInputType.text,
                           controller: pancn,
                           decoration: InputDecoration(
@@ -2205,6 +2662,7 @@ class _Client_formState extends State<Client_form> {
                                     //    Center(child: Image.asset('assets/img.png')),),
                                     Image.network(
                                         '${widget.model?.panImg}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (panImage != null) {
@@ -2246,7 +2704,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     SizedBox(
@@ -2265,6 +2748,7 @@ class _Client_formState extends State<Client_form> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
+                          maxLength: 15,
                           keyboardType: TextInputType.text,
                           controller: gstcn,
                           // validator: (value) {
@@ -2304,6 +2788,7 @@ class _Client_formState extends State<Client_form> {
                                     //    Center(child: Image.asset('assets/img.png')),),
                                     Image.network(
                                         '${widget.model?.gstImg}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (gstImage != null) {
@@ -2345,7 +2830,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
@@ -2370,6 +2880,7 @@ class _Client_formState extends State<Client_form> {
                                         fit: BoxFit.fill)
                                     : Image.network(
                                         '${widget.model?.gstImgTwo}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (gstOne != null) {
@@ -2410,7 +2921,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
@@ -2435,6 +2971,7 @@ class _Client_formState extends State<Client_form> {
                                         fit: BoxFit.fill)
                                     : Image.network(
                                         '${widget.model?.gstImgThree}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (gstTwo != null) {
@@ -2475,7 +3012,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     const Text(
@@ -2530,6 +3092,7 @@ class _Client_formState extends State<Client_form> {
                                     //    Center(child: Image.asset('assets/img.png')),),
                                     Image.network(
                                         '${widget.model?.aadharImg}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (aadharImage != null) {
@@ -2571,7 +3134,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
@@ -2597,6 +3185,7 @@ class _Client_formState extends State<Client_form> {
                                         fit: BoxFit.fill)
                                     : Image.network(
                                         '${widget.model?.aadharBack}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (aadharBack != null) {
@@ -2638,7 +3227,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     Text(
@@ -2695,6 +3309,7 @@ class _Client_formState extends State<Client_form> {
                                     //    Center(child: Image.asset('assets/img.png')),),
                                     Image.network(
                                         '${widget.model?.voterIdFrontImage}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (voterIdImage != null) {
@@ -2738,7 +3353,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
@@ -2763,6 +3403,7 @@ class _Client_formState extends State<Client_form> {
                                         fit: BoxFit.fill)
                                     : Image.network(
                                         '${widget.model?.voterIdBackImage}',
+                                        fit: BoxFit.fill,
                                       )),
                             onTap: () {
                               if (voterIdBackImage != null) {
@@ -2806,7 +3447,32 @@ class _Client_formState extends State<Client_form> {
                                   ),
                                 ),
                               )
-                            : SizedBox()
+                            : SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 105, left: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.model?.createdAt}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                              Text(
+                                "${widget.model?.currentAddress}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                       ]),
                     ),
                     const Text(
@@ -2817,38 +3483,150 @@ class _Client_formState extends State<Client_form> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
                     ),
-                    Card(
-                      elevation: 6,
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_Customer,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                          } else {
-                            return null;
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_Customer = newValue;
-                          });
-                        },
-                        items: getList?.data?.customerType?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          hintText: 'Select Customer Type',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<CustomerType>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select Customer Type',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getList?.data?.customerType
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: customerType,
+                              onChanged: (value) {
+                                customerType = value;
+                                setState(() {
+                                  selected_Customer = value?.id;
+                                });
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                    // Card(
+                    //   elevation: 6,
+                    //   shape: OutlineInputBorder(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_Customer,
+                    //     validator: (value) {
+                    //       if (value == null || value.isEmpty) {
+                    //       } else {
+                    //         return null;
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_Customer = newValue;
+                    //       });
+                    //     },
+                    //     items: getList?.data?.customerType?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(10)),
+                    //       hintText: 'Select Customer Type',
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
                     ),
@@ -2976,9 +3754,9 @@ class _Client_formState extends State<Client_form> {
     }
   }
 
+  String? department_id;
+
   Future<void> update() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
     };

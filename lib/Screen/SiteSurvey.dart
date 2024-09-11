@@ -27,7 +27,7 @@ class SiteSurvey extends StatefulWidget {
   final String? time;
   final String? pincode;
   // final String? date;
-  // final String? remark;
+  final String? status;
   // List<String>? image;
   final String? address;
   final String? state;
@@ -64,7 +64,7 @@ class SiteSurvey extends StatefulWidget {
       this.expectedDate,
       this.sitesize,
       // this.image,
-      // this.remark,
+      this.status,
       this.address,
       this.creditLimit,
       this.district,
@@ -163,6 +163,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
       'time': '${widget.time}',
       'lat': latitude.toString(),
       'lng': longitude.toString(),
+      'current_address': '${currentAddress.text}',
       'customer_name': '${widget.name}',
       'customer_mobile': '${widget.contact}',
       'address': '${widget.address}',
@@ -178,7 +179,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
       'massion_id': '${widget.mession}',
       'massion_mobile': '${widget.messionMobile}',
       'site_sqr_feet': '${widget.sitesize}',
-      'current_status': '${widget.sitesize}',
+      'current_status': '${widget.status}',
       'product_used': widget.modelList!.map((product) => product.id).join(','),
       'survey': dataList.toString(),
       'expected_order_date': execteddateCtr.text,

@@ -913,7 +913,7 @@ class _ClientsViewState extends State<ClientsView> {
               //   ),
               // ),
               Positioned(
-                top: 140,
+                top: 120,
                 right: 35,
                 child: InkWell(
                   onTap: () async {
@@ -949,17 +949,49 @@ class _ClientsViewState extends State<ClientsView> {
                       );
                     }
                   },
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.red),
-                    child: Icon(
-                      Icons.download,
-                      size: 20,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "${widget.model?.createdAt}",
+                              style: TextStyle(fontSize: 10, color: Colors.red),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 14),
+                              child: Text(
+                                "${widget.model?.lat},${widget.model?.lng}",
+                                style:
+                                    TextStyle(fontSize: 10, color: Colors.red),
+                              ),
+                            ),
+                            Text(
+                              "${widget.model?.currentAddress}",
+                              style: TextStyle(fontSize: 10, color: Colors.red),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.red),
+                          child: Icon(
+                            Icons.download,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )
@@ -1694,7 +1726,8 @@ class _ClientsViewState extends State<ClientsView> {
                               height: 150,
                               width: 150,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
+                                border: Border.all(color: Colors.black),
+                              ),
                               child: panImage != null
                                   ? Image.file(
                                       panImage!.absolute,
@@ -1708,7 +1741,7 @@ class _ClientsViewState extends State<ClientsView> {
                                     ),
                             ),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -1758,20 +1791,54 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -1790,7 +1857,8 @@ class _ClientsViewState extends State<ClientsView> {
                     Card(
                       elevation: 6,
                       shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: TextFormField(
                           readOnly: true,
                           keyboardType: TextInputType.text,
@@ -1832,23 +1900,24 @@ class _ClientsViewState extends State<ClientsView> {
                         child: Stack(
                           children: [
                             Container(
-                                height: 150,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black)),
-                                child: gstImage != null
-                                    ? Image.file(
-                                        gstImage!.absolute,
-                                        fit: BoxFit.fill,
-                                      )
-                                    :
-                                    //    Center(child: Image.asset('assets/img.png')),),
-                                    Image.network(
-                                        '${widget.model?.gstImg}',
-                                        fit: BoxFit.fill,
-                                      )),
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: gstImage != null
+                                  ? Image.file(
+                                      gstImage!.absolute,
+                                      fit: BoxFit.fill,
+                                    )
+                                  :
+                                  //    Center(child: Image.asset('assets/img.png')),),
+                                  Image.network(
+                                      '${widget.model?.gstImg}',
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -1898,17 +1967,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -1957,7 +2060,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         fit: BoxFit.fill,
                                       )),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -2007,17 +2110,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -2066,7 +2203,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         fit: BoxFit.fill,
                                       )),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -2116,17 +2253,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -2206,7 +2377,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         fit: BoxFit.fill,
                                       )),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -2256,17 +2427,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -2315,7 +2520,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         fit: BoxFit.fill,
                                       )),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -2365,17 +2570,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -2457,7 +2696,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         fit: BoxFit.fill,
                                       )),
                             Positioned(
-                              top: 120,
+                              top: 105,
                               right: 0,
                               child: InkWell(
                                 onTap: () async {
@@ -2507,17 +2746,51 @@ class _ClientsViewState extends State<ClientsView> {
                                     );
                                   }
                                 },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
-                                  child: Icon(
-                                    Icons.download,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "${widget.model?.createdAt}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 14),
+                                          child: Text(
+                                            "${widget.model?.lat},${widget.model?.lng}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.model?.currentAddress}",
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.red),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -2577,7 +2850,7 @@ class _ClientsViewState extends State<ClientsView> {
                                       ),
                               ),
                               Positioned(
-                                top: 120,
+                                top: 105,
                                 right: 0,
                                 child: InkWell(
                                   onTap: () async {
@@ -2631,17 +2904,53 @@ class _ClientsViewState extends State<ClientsView> {
                                       );
                                     }
                                   },
-                                  child: Container(
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.red),
-                                    child: Icon(
-                                      Icons.download,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "${widget.model?.createdAt}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 14),
+                                            child: Text(
+                                              "${widget.model?.lat},${widget.model?.lng}",
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                          Text(
+                                            "${widget.model?.currentAddress}",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15),
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.red),
+                                          child: Icon(
+                                            Icons.download,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

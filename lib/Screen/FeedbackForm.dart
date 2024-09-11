@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
@@ -149,6 +150,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   }
 
   String? selected;
+  ChapterData? chapterData;
   int nwIndex = 0;
   var currentIndex;
   final picker = ImagePicker();
@@ -647,39 +649,152 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     //     ),
                     //   ],
                     // ),
-                    Container(
-                      height: 60,
-                      child: Card(
-                        elevation: 2,
-                        shape: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: DropdownButtonFormField<String>(
-                          value: selected,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selected = newValue;
-                              print("current indexxx ${selected}");
-                              nwIndex = delearRetailerModel!.data!.indexWhere(
-                                  (element) => element.id == selected);
-                              // currentIndex = selected;
-                              showTextField = true;
-                            });
-                          },
-                          items: delearRetailerModel?.data?.map((items) {
-                            return DropdownMenuItem(
-                              value: items.id,
-                              child: Text(items.nameOfFirm.toString()),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(bottom: 5, left: 10),
-                            border: InputBorder.none,
-                            hintText: 'Select Dealer & Retailer',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<ChapterData>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select Dealer & Retailer',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: delearRetailerModel?.data?.map((item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item.nameOfFirm.toString() ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ))
+                                  .toList(),
+                              value: chapterData,
+                              onChanged: (value) {
+                                chapterData = value;
+                                setState(() {
+                                  selected = value?.id;
+                                  print("current indexxx ${selected}");
+                                  nwIndex = delearRetailerModel!.data!.indexWhere(
+                                          (element) => element.id == selected);
+                                  // currentIndex = selected;
+                                  showTextField = true;
+                                });
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding:
+                                  EdgeInsets.symmetric(horizontal: 16,vertical: 5),
+                                  height: 50,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border:
+                                      Border.all(color: Colors.black,))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 300,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border:
+                                      Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText:
+                                            'Search  ...',
+                                            hintStyle:
+                                            const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                            TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.nameOfFirm.toString().toLowerCase().contains(searchValue) ?? false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
+                    // Container(
+                    //   height: 60,
+                    //   child: Card(
+                    //     elevation: 2,
+                    //     shape: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(10)),
+                    //     child: DropdownButtonFormField<String>(
+                    //       value: selected,
+                    //       onChanged: (newValue) {
+                    //         setState(() {
+                    //           selected = newValue;
+                    //           print("current indexxx ${selected}");
+                    //           nwIndex = delearRetailerModel!.data!.indexWhere(
+                    //               (element) => element.id == selected);
+                    //           // currentIndex = selected;
+                    //           showTextField = true;
+                    //         });
+                    //       },
+                    //       items: delearRetailerModel?.data?.map((items) {
+                    //         return DropdownMenuItem(
+                    //           value: items.id,
+                    //           child: Text(items.nameOfFirm.toString()),
+                    //         );
+                    //       }).toList(),
+                    //       decoration: InputDecoration(
+                    //         contentPadding:
+                    //             EdgeInsets.only(bottom: 5, left: 10),
+                    //         border: InputBorder.none,
+                    //         hintText: 'Select Dealer & Retailer',
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: 5),
                     selected != null
                         ?

@@ -241,8 +241,8 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  2.8,
-                                              height: 170,
+                                                  2.6,
+                                              height: 180,
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(10)),
@@ -254,7 +254,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 120,
+                                            top: 105,
                                             right: 0,
                                             child: InkWell(
                                               onTap: () async {
@@ -314,19 +314,62 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                   );
                                                 }
                                               },
-                                              child: Container(
-                                                height: 30,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30),
-                                                    color: Colors.red),
-                                                child: Icon(
-                                                  Icons.download,
-                                                  size: 20,
-                                                  color: Colors.white,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 0, bottom: 5),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          "${widget.model?.createdAt}",
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 14),
+                                                          child: Text(
+                                                            "${widget.model?.lat},${widget.model?.lng}",
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                color:
+                                                                    Colors.red),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "${widget.model?.basicDetail?.address}",
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.red),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 30,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        color: Colors.red),
+                                                    child: Icon(
+                                                      Icons.download,
+                                                      size: 20,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           )
@@ -364,7 +407,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                             fontWeight: FontWeight.w200,
                                             color: Colors.black,
                                           ),
-                                          maxLines: 2,
+                                          maxLines: 4,
                                         ),
                                       )
                                     ],

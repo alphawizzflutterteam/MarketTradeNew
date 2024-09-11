@@ -65,7 +65,6 @@ class _MySiteDetailsState extends State<MySiteDetails> {
   Future<void> downloadImage(String imageUrl) async {
     // print("mmmmmmmm");
     var response = await http.get(Uri.parse(imageUrl));
-
     if (response.statusCode == 200) {
       final result = await ImageGallerySaver.saveImage(
           Uint8List.fromList(response.bodyBytes));
@@ -260,8 +259,8 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                                       border:
                                           Border.all(color: colors.primary)),
                                   width:
-                                      MediaQuery.of(context).size.width / 2.8,
-                                  height: 170,
+                                      MediaQuery.of(context).size.width / 2.6,
+                                  height: 180,
                                   child: ClipRRect(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
@@ -273,7 +272,7 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                                 ),
                               ),
                               Positioned(
-                                top: 120,
+                                top: 105,
                                 right: 0,
                                 child: InkWell(
                                   onTap: () async {
@@ -324,17 +323,54 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                                       );
                                     }
                                   },
-                                  child: Container(
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.red),
-                                    child: Icon(
-                                      Icons.download,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0, bottom: 5),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "${widget.model?.createdAt}",
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.red),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 14),
+                                              child: Text(
+                                                "${widget.model?.lat},${widget.model?.lng}",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                            Text(
+                                              "${widget.model?.currentAddress}",
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.red),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.download,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               )
@@ -345,11 +381,11 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text("Name:  ${widget.model?.name}",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  Text(
+                    "Name:  ${widget.model?.name}",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  ),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
-
                   Text("Date & Time:  ${widget.model?.createdAt}",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
@@ -391,6 +427,19 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                               fontSize: 15, fontWeight: FontWeight.w800),
                         ),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
+                  widget.model?.currentStatus == null ||
+                          widget.model?.currentStatus == ""
+                      ? Text(
+                          "Current Status:  NA",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w800),
+                        )
+                      : Text(
+                          "Current Status:  ${widget.model?.currentStatus}",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w800),
+                        ),
+                  SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.contractorName == null ||
                           widget.model?.contractorName == ""
                       ? Text(
@@ -427,8 +476,10 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.engineerMobile == null ||
                           widget.model?.engineerMobile == ""
-                      ? Text("Engineer Mobile:  NA",
-                          style: TextStyle(fontSize: 15))
+                      ? Text(
+                          "Engineer Mobile:  NA",
+                          style: TextStyle(fontSize: 15),
+                        )
                       : Text(
                           "Engineer Mobile:  ${widget.model?.engineerMobile}",
                           style: TextStyle(fontSize: 15)),
@@ -443,25 +494,29 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.architectName == null ||
                           widget.model?.architectName == ""
-                      ? Text("Arti-tech Name:  NA",
-                          style: TextStyle(fontSize: 15))
-                      : Text("Arti-tech Name:  ${widget.model?.architectName}",
+                      ? Text(
+                          "Architech Name:  NA",
+                          style: TextStyle(fontSize: 15),
+                        )
+                      : Text("Architech Name:  ${widget.model?.architectName}",
                           style: TextStyle(fontSize: 15)),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.artitechMobile == null ||
                           widget.model?.artitechMobile == ""
-                      ? Text("Arti-tech Mobile:  NA",
+                      ? Text("Architech Mobile:  NA",
                           style: TextStyle(fontSize: 15))
                       : Text(
-                          "Arti-tech Mobile:  ${widget.model?.artitechMobile}",
+                          "Architech Mobile:  ${widget.model?.artitechMobile}",
                           style: TextStyle(fontSize: 15)),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.architectAddress == null ||
                           widget.model?.architectAddress == ""
-                      ? Text("Arti-tech Address:  NA",
-                          style: TextStyle(fontSize: 15))
+                      ? Text(
+                          "Architech Address:  NA",
+                          style: TextStyle(fontSize: 15),
+                        )
                       : Text(
-                          "Arti-tech Address:  ${widget.model?.architectAddress}",
+                          "Architech Address:  ${widget.model?.architectAddress}",
                           style: TextStyle(fontSize: 15)),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   widget.model?.massionName == null ||
@@ -495,7 +550,8 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Address:  ${widget.model?.address}",
+                      Text(
+                          "Address:  ${widget.model?.address} ${widget.model?.district}",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w800)),
                       InkWell(
@@ -506,18 +562,10 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                           );
                         },
                         child: Icon(Icons.location_disabled),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
-                  Text(
-                    "Survey Details:- ",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .02),
                   ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -570,6 +618,13 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                         );
                       }),
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
+                  Text(
+                    "Survey Details:- ",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black),
+                  ),
                   Divider(
                     color: Colors.black,
                   ),

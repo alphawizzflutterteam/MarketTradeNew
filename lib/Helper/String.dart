@@ -5,6 +5,7 @@ final Uri getSliderApi = Uri.parse(baseUrl + 'get_slider_images');
 final Uri getCatApi = Uri.parse(baseUrl + 'get_categories');
 final Uri getClientApi = Uri.parse(baseUrl + 'get_referrals');
 final Uri getPermissionApi = Uri.parse(baseUrl + 'permissions');
+final Uri getDep = Uri.parse(baseUrl + 'get_user');
 final Uri getListsApi = Uri.parse(baseUrl + 'get_lists');
 final Uri addNewClient = Uri.parse(baseUrl + 'add_new_client');
 final Uri clientType = Uri.parse(baseUrl + 'get_client_type');
@@ -16,7 +17,7 @@ final Uri GetDealingProduct = Uri.parse(baseUrl + 'get_product_categories');
 final Uri getSectionApi = Uri.parse(baseUrl + 'get_sections');
 final Uri getSettingApi = Uri.parse(baseUrl + 'get_settings');
 final Uri getSubcatApi =
-Uri.parse(baseUrl + 'get_subcategories_by_category_id');
+    Uri.parse(baseUrl + 'get_subcategories_by_category_id');
 final Uri getProductApi = Uri.parse(baseUrl + 'get_products');
 final Uri getSubCatBySellerId = Uri.parse(baseUrl + 'sub_cat');
 final Uri manageCartApi = Uri.parse(baseUrl + 'manage_cart');
@@ -31,7 +32,8 @@ final Uri verifyOtpApi = Uri.parse(baseUrl + 'verify_otp');
 final Uri referFormApi = Uri.parse(baseUrl + 'referral_form');
 final Uri referralListApi = Uri.parse(baseUrl + 'refferal_list');
 final Uri withdrawRequestApi = Uri.parse(baseUrl + 'withdrawl_request');
-final Uri withdrawlRequestsListApi = Uri.parse(baseUrl + 'get_withdrawl_request');
+final Uri withdrawlRequestsListApi =
+    Uri.parse(baseUrl + 'get_withdrawl_request');
 final Uri transactionsListApi = Uri.parse(baseUrl + 'transactions');
 final Uri requestTrainingApi = Uri.parse(baseUrl + 'tranning_request');
 final Uri referralCommissionApi = Uri.parse(baseUrl + 'user_commission');
@@ -86,7 +88,7 @@ final Uri getMsgApi = Uri.parse(baseUrl + 'get_messages');
 final Uri setBankProofApi = Uri.parse(baseUrl + 'send_bank_transfer_proof');
 final Uri checkDeliverableApi = Uri.parse(baseUrl + "is_product_delivarable");
 final Uri checkCartDelApi =
-Uri.parse(baseUrl + 'check_cart_products_delivarable');
+    Uri.parse(baseUrl + 'check_cart_products_delivarable');
 
 final String ISFIRSTTIME = 'isfirst$appName';
 final String HISTORYLIST = '$appName+historyList';

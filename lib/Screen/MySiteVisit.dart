@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
+import '../Model/DepartmentModel.dart';
 import '../Model/MySiteVisitModel.dart';
 import '../Provider/UserProvider.dart';
 import 'MySideDetails.dart';
@@ -21,15 +22,44 @@ class MySiteVisite extends StatefulWidget {
 class _MySiteVisiteState extends State<MySiteVisite> {
   void initState() {
     super.initState();
-    getData();
+    getDepartment();
+  }
+
+  DepartmentModel? departmentModel;
+  getDepartment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getDep.toString()));
+    request.fields.addAll({
+      USER_ID: '${uid}',
+    });
+    print("this is department request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("permission");
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = DepartmentModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
+      setState(() {
+        departmentModel = finalResponse;
+        department_id = departmentModel?.data?.first.department.toString();
+        print("deeeeeeeeeeeeee ${department_id}");
+        getData();
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 
   MySiteVisitModel? getdata;
   String? department_id;
 
   Future<void> getData() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=bf12d5586296e8a180885fdf282632a583f96888'
     };
@@ -39,7 +69,7 @@ class _MySiteVisiteState extends State<MySiteVisite> {
       'user_id': '${CUR_USERID}',
       'department_id': '${department_id.toString()}'
     });
-    print("uuuuuuuuuuuuuu ${request.fields}");
+    print("customer survey form ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {

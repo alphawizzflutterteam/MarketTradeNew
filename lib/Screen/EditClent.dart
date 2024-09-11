@@ -15,6 +15,7 @@ import '../Helper/Color.dart';
 import '../Helper/Session.dart';
 import '../Helper/String.dart';
 import '../Model/ClientModel.dart';
+import '../Model/DepartmentModel.dart';
 import '../Provider/HomeProvider.dart';
 import 'ClientForm.dart';
 
@@ -29,6 +30,7 @@ class _EditClientState extends State<EditClient> {
   @override
   void initState() {
     super.initState();
+    getDepartment();
     getClients();
   }
 
@@ -37,8 +39,6 @@ class _EditClientState extends State<EditClient> {
   List<ClientsData> clientData = [];
 
   getClients() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
     };
@@ -161,6 +161,36 @@ class _EditClientState extends State<EditClient> {
     );
   }
 
+  DepartmentModel? departmentModel;
+  getDepartment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getDep.toString()));
+    request.fields.addAll({
+      USER_ID: '${uid}',
+    });
+    print("this is refer  get departmet request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("permission");
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = DepartmentModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
+      setState(() {
+        departmentModel = finalResponse;
+        department_id = departmentModel?.data?.first.department.toString();
+        print("deeeeeeeeeeeeee ${department_id}");
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   TextEditingController searchCtr = TextEditingController();
 
   @override
@@ -251,7 +281,7 @@ class _EditClientState extends State<EditClient> {
                                                   Duration(milliseconds: 150),
                                               image: CachedNetworkImageProvider(
                                                   "${clients?.data?[index].photo?[0]}"),
-                                              height: 110.0,
+                                              height: 100.0,
                                               width: double.infinity,
                                               fit: BoxFit.cover,
                                               imageErrorBuilder: (context,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,10 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
     getState();
     dealingProduct();
   }
+
+  Cities? temp_select_district;
+  States? temp_selected_State;
+  final TextEditingController searchController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -69,7 +74,12 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
   }
 
   List<String> statusString = ["Pending", "Cancel", "Progress"];
+  Dealers1? contractorType;
+  Dealers1? engineerType;
+  Dealers1? artitechType;
+  Dealers1? massionype;
   String? selectedContractor;
+
   String? selectedStatus;
   String? selectedEngineer;
   String? selectedArchitec;
@@ -651,83 +661,353 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedState,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedState = newValue;
-                                      // print("current indexxx ${selected}");
-                                      stateindex = getListModel!.data!.states!
-                                          .indexWhere((element) =>
-                                              element.id == selectedState);
-                                      // currentIndex = selected;
-                                      // showTextField = true;
-                                    });
-                                  },
-                                  items:
-                                      getListModel?.data?.states?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.name.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: 'Select State',
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<States>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select state',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: getListModel?.data?.states
+                                          ?.map((item) => DropdownMenuItem(
+                                                value: item,
+                                                child: Text(
+                                                  item.name ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: temp_selected_State,
+                                      onChanged: (value) {
+                                        temp_selected_State = value;
+                                        // selected_State = value?.id ?? '';
+                                        setState(() {
+                                          selectedState = value?.id;
+                                          // print("current indexxx ${selected}");
+                                          stateindex = getListModel!
+                                              .data!.states!
+                                              .indexWhere((element) =>
+                                                  element.id == selectedState);
+                                          // currentIndex = selected;
+                                          // showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.name
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedState,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedState = newValue;
+                            //           // print("current indexxx ${selected}");
+                            //           stateindex = getListModel!.data!.states!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedState);
+                            //           // currentIndex = selected;
+                            //           // showTextField = true;
+                            //         });
+                            //       },
+                            //       items:
+                            //           getListModel?.data?.states?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.name.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: 'Select State',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: 10,
+                            ),
+
                             const Text(
                               "District",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedDistrict,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedDistrict = newValue;
-                                      // print("current indexxx ${selected}");
-                                      nwIndex = getListModel!
-                                          .data!.states![stateindex].cities!
-                                          .indexWhere((element) =>
-                                              element.id == selectedDistrict);
-                                      // currentIndex = selected;
-                                      // showTextField = true;
-                                    });
-                                  },
-                                  items: getListModel
-                                      ?.data?.states?[stateindex].cities
-                                      ?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.city.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: 'Select District',
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<Cities>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select District',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: getListModel
+                                          ?.data?.states?[stateindex].cities
+                                          ?.map((item) => DropdownMenuItem(
+                                                value: item,
+                                                child: Text(
+                                                  item.city ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: temp_select_district,
+                                      onChanged: (value) {
+                                        temp_select_district = value;
+                                        selectedDistrict = value?.id ?? '';
+                                        setState(() {});
+                                        print('id------${value}');
+
+                                        setState(() {
+                                          // selectedDistrict = newValue;
+                                          // print("current indexxx ${selected}");
+                                          nwIndex = getListModel!
+                                              .data!.states![stateindex].cities!
+                                              .indexWhere((element) =>
+                                                  element.id ==
+                                                  selectedDistrict);
+                                          // currentIndex = selected;
+                                          // showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.city
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedDistrict,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedDistrict = newValue;
+                            //           // print("current indexxx ${selected}");
+                            //           nwIndex = getListModel!
+                            //               .data!.states![stateindex].cities!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedDistrict);
+                            //           // currentIndex = selected;
+                            //           // showTextField = true;
+                            //         });
+                            //       },
+                            //       items: getListModel
+                            //           ?.data?.states?[stateindex].cities
+                            //           ?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.city.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: 'Select District',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
@@ -739,6 +1019,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
+
                             Container(
                               height: 40,
                               child: TextFormField(
@@ -766,41 +1047,171 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedContractor,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedContractor = newValue;
-                                      contractorIndex = delearRetailerModel!
-                                          .data!.contractor!
-                                          .indexWhere((element) =>
-                                              element.id == selectedContractor);
-                                      // currentIndex = selected;
-                                      showTextField = true;
-                                    });
-                                  },
-                                  items: delearRetailerModel?.data?.contractor
-                                      ?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.ownerName.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: '',
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<Dealers1>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items:
+                                          delearRetailerModel?.data?.contractor
+                                              ?.map((item) => DropdownMenuItem(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.ownerName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      value: contractorType,
+                                      onChanged: (value) {
+                                        contractorType = value;
+                                        setState(() {
+                                          selectedContractor = value?.id;
+                                          contractorIndex = delearRetailerModel!
+                                              .data!.contractor!
+                                              .indexWhere((element) =>
+                                                  element.id ==
+                                                  selectedContractor);
+                                          // currentIndex = selected;
+                                          showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.ownerName
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedContractor,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedContractor = newValue;
+                            //           contractorIndex = delearRetailerModel!
+                            //               .data!.contractor!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedContractor);
+                            //           // currentIndex = selected;
+                            //           showTextField = true;
+                            //         });
+                            //       },
+                            //       items: delearRetailerModel?.data?.contractor
+                            //           ?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.ownerName.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: '',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(height: 5),
                             selectedContractor != null
                                 ? selectedContractor == "9090"
@@ -855,11 +1266,13 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         keyboardType:
                                                             TextInputType
                                                                 .number,
-                                                        // onChanged: (value) {
-                                                        //   // String mobileContractor = value ;
-                                                        //   contractorMobile =
-                                                        //       value;
-                                                        // },
+                                                        onChanged: (value) {
+                                                          // String mobileContractor = value ;
+                                                          contractorMobile =
+                                                              value;
+                                                          print(
+                                                              "seeeeeeeeeee ${contractorMobile}");
+                                                        },
                                                         // readOnly: true,
                                                         //controller: mobilecn,
                                                         decoration:
@@ -1306,7 +1719,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       )
                                 : SizedBox(),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * .01,
+                              height: MediaQuery.of(context).size.height * .02,
                             ),
                             const Text(
                               "Name Of Engineer",
@@ -1316,42 +1729,167 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedEngineer,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedEngineer = newValue;
-                                      engineerIndex = delearRetailerModel!
-                                          .data!.engineer!
-                                          .indexWhere((element) =>
-                                              element.id == selectedEngineer);
-                                      // currentIndex = selected;
-                                      showTextField = true;
-                                    });
-                                  },
-                                  items: delearRetailerModel?.data?.engineer
-                                      ?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.ownerName.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: '',
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<Dealers1>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: delearRetailerModel?.data?.engineer
+                                          ?.map((item) => DropdownMenuItem(
+                                                value: item,
+                                                child: Text(
+                                                  item.ownerName ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: engineerType,
+                                      onChanged: (value) {
+                                        engineerType = value;
+                                        setState(() {
+                                          selectedEngineer = value?.id;
+                                          engineerIndex = delearRetailerModel!
+                                              .data!.engineer!
+                                              .indexWhere((element) =>
+                                                  element.id ==
+                                                  selectedEngineer);
+                                          // currentIndex = selected;
+                                          showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.ownerName
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                            SizedBox(height: 5),
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedEngineer,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedEngineer = newValue;
+                            //           engineerIndex = delearRetailerModel!
+                            //               .data!.engineer!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedEngineer);
+                            //           // currentIndex = selected;
+                            //           showTextField = true;
+                            //         });
+                            //       },
+                            //       items: delearRetailerModel?.data?.engineer
+                            //           ?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.ownerName.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: '',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            SizedBox(height: 10),
                             selectedEngineer != null
                                 ? selectedEngineer == "907"
                                     ? SizedBox()
@@ -1408,17 +1946,21 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         onChanged: (value) {
                                                           enaginnerMobile =
                                                               value;
+                                                          print(
+                                                              "kdksskjsdkf ${enaginnerMobile}");
                                                         },
                                                         // controller: ownerNameCtr,
                                                         decoration:
                                                             InputDecoration(
                                                           counterText: "",
                                                           // hintText: '',
-                                                          border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
                                                         ),
                                                       ),
                                                     )
@@ -1839,7 +2381,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       )
                                 : SizedBox(),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * .01,
+                              height: MediaQuery.of(context).size.height * .02,
                             ),
                             const Text(
                               "Name Of Arti-tech",
@@ -1849,41 +2391,169 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedArchitec,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedArchitec = newValue;
-                                      architectIndex = delearRetailerModel!
-                                          .data!.artitech!
-                                          .indexWhere((element) =>
-                                              element.id == selectedArchitec);
-                                      // currentIndex = selected;
-                                      showTextField = true;
-                                    });
-                                  },
-                                  items: delearRetailerModel?.data?.artitech
-                                      ?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.ownerName.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: '',
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<Dealers1>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: delearRetailerModel?.data?.artitech
+                                          ?.map((item) => DropdownMenuItem(
+                                                value: item,
+                                                child: Text(
+                                                  item.ownerName ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: artitechType,
+                                      onChanged: (value) {
+                                        artitechType = value;
+                                        setState(() {
+                                          selectedArchitec = value?.id;
+                                          architectIndex = delearRetailerModel!
+                                              .data!.artitech!
+                                              .indexWhere((element) =>
+                                                  element.id ==
+                                                  selectedArchitec);
+                                          // currentIndex = selected;
+                                          showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.ownerName
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedArchitec,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedArchitec = newValue;
+                            //           architectIndex = delearRetailerModel!
+                            //               .data!.artitech!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedArchitec);
+                            //           // currentIndex = selected;
+                            //           showTextField = true;
+                            //         });
+                            //       },
+                            //       items: delearRetailerModel?.data?.artitech
+                            //           ?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.ownerName.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: '',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(height: 5),
                             selectedArchitec != null
                                 ? selectedArchitec == "906"
@@ -2378,7 +3048,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       )
                                 : SizedBox(),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * .01,
+                              height: MediaQuery.of(context).size.height * .02,
                             ),
                             const Text(
                               "Name Of Mason",
@@ -2388,41 +3058,172 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .01,
                             ),
-                            Container(
-                              height: 60,
-                              child: Card(
-                                elevation: 2,
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedMession,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedMession = newValue;
-                                      messionIndex = delearRetailerModel!
-                                          .data!.massion!
-                                          .indexWhere((element) =>
-                                              element.id == selectedMession);
-                                      // currentIndex = selected;
-                                      showTextField = true;
-                                    });
-                                  },
-                                  items: delearRetailerModel?.data?.massion
-                                      ?.map((items) {
-                                    return DropdownMenuItem(
-                                      value: items.id,
-                                      child: Text(items.ownerName.toString()),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 5, left: 10),
-                                    border: InputBorder.none,
-                                    hintText: '',
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<Dealers1>(
+                                      isExpanded: true,
+
+                                      hint: Text(
+                                        'Select',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      items: delearRetailerModel?.data?.massion
+                                          ?.map((item) => DropdownMenuItem(
+                                                value: item,
+                                                child: Text(
+                                                  item.ownerName ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: massionype,
+                                      onChanged: (value) {
+                                        massionype = value;
+                                        setState(() {
+                                          selectedMession = value?.id;
+                                          messionIndex = delearRetailerModel!
+                                              .data!.massion!
+                                              .indexWhere((element) =>
+                                                  element.id ==
+                                                  selectedMession);
+                                          // currentIndex = selected;
+                                          showTextField = true;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          height: 50,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ))),
+                                      dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black))),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData(
+                                        searchController: searchController,
+                                        searchInnerWidgetHeight: 50,
+                                        searchInnerWidget: Container(
+                                          height: 55,
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  // keyboardType: TextInputType.number,
+                                                  expands: true,
+                                                  maxLines: null,
+                                                  maxLength: 6,
+                                                  controller: searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search  ...',
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    counterText: '',
+                                                    counterStyle:
+                                                        TextStyle(fontSize: 0),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return item.value?.ownerName
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(searchValue) ??
+                                              false;
+                                        },
+                                      ),
+                                      //This to clear the search value when you close the menu
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchController.clear();
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            // Container(
+                            //   height: 60,
+                            //   child: Card(
+                            //     elevation: 2,
+                            //     shape: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: DropdownButtonFormField<String>(
+                            //       value: selectedMession,
+                            //       onChanged: (newValue) {
+                            //         setState(() {
+                            //           selectedMession = newValue;
+                            //           messionIndex = delearRetailerModel!
+                            //               .data!.massion!
+                            //               .indexWhere((element) =>
+                            //                   element.id == selectedMession);
+                            //           // currentIndex = selected;
+                            //           showTextField = true;
+                            //         });
+                            //       },
+                            //       items: delearRetailerModel?.data?.massion
+                            //           ?.map((items) {
+                            //         return DropdownMenuItem(
+                            //           value: items.id,
+                            //           child: Text(items.ownerName.toString()),
+                            //         );
+                            //       }).toList(),
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.only(top: 5, left: 10),
+                            //         border: InputBorder.none,
+                            //         hintText: '',
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(height: 5),
                             selectedMession != null
                                 ? selectedMession == "902"
@@ -3264,7 +4065,12 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                   sitesize: siteSizeCtr.text,
                                   expectedDate: execteddateCtr.text,
                                   missionName: missionNameCtr.text,
-                                  missionAddress: missionAddressCtr.text,
+                                  missionAddress:
+                                      missionAddressCtr.text == null ||
+                                              missionAddressCtr.text == ""
+                                          ? missionAddressCtr.text
+                                          : delearRetailerModel?.data
+                                              ?.massion?[messionIndex].address,
                                   mession: selectedMession,
                                   messionMobile: delearRetailerModel
                                                   ?.data
@@ -3296,7 +4102,14 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                           ?.contractor?[contractorIndex]
                                           .mobileOne,
                                   contractorName: contractorNameCtr.text,
-                                  contractorAddress: contractorAddressCtr.text,
+                                  contractorAddress:
+                                      contractorAddressCtr.text == null ||
+                                              contractorAddressCtr.text == ""
+                                          ? contractorAddressCtr.text
+                                          : delearRetailerModel
+                                              ?.data
+                                              ?.contractor?[contractorIndex]
+                                              .address,
                                   engineer: selectedEngineer,
                                   engineerMobile: delearRetailerModel
                                                   ?.data
@@ -3312,7 +4125,14 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       : delearRetailerModel?.data
                                           ?.engineer?[engineerIndex].mobileOne,
                                   engineerName: engineerNameCtr.text,
-                                  engineerAddress: engineerAddressCtr.text,
+                                  engineerAddress:
+                                      engineerAddressCtr.text == null ||
+                                              engineerAddressCtr.text == ""
+                                          ? engineerAddressCtr.text
+                                          : delearRetailerModel
+                                              ?.data
+                                              ?.engineer?[engineerIndex]
+                                              .address,
                                   architec: selectedArchitec,
                                   architecMobile: delearRetailerModel
                                                   ?.data
@@ -3328,11 +4148,18 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                       : delearRetailerModel?.data
                                           ?.artitech?[architectIndex].mobileOne,
                                   architecName: artitechNameCtr.text,
-                                  architecAddress: artitechAddressCtr.text,
+                                  architecAddress:
+                                      artitechAddressCtr.text == null ||
+                                              artitechAddressCtr.text == ""
+                                          ? artitechAddressCtr.text
+                                          : delearRetailerModel
+                                              ?.data
+                                              ?.artitech?[architectIndex]
+                                              .address,
                                   // creditLimit: widget.creditLimit,
                                   //customerType: widget.customerType,
                                   // date: dateCtr.text,
-                                  // status:
+                                  status: statusSiteCtr.text,
                                   time: timeCtr.text,
                                   // image: imagePathList,
                                   // remark: remarkCtr.text,
@@ -3340,6 +4167,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                 ),
                               ),
                             );
+
                             // if(namecn.text.isEmpty || siteSizeCtr.text.isEmpty || selectedStatus!.isEmpty || mobileCtr.text.isEmpty || _imageFile!.path.isEmpty) {
                             //   Fluttertoast.showToast(msg: "All Fields Required");
                             // } else{

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
+import '../Model/DepartmentModel.dart';
 import '../Model/GetListModel.dart';
 import 'Add_Address.dart';
 
@@ -29,6 +31,7 @@ int count = 0;
 class _AddClientsState extends State<AddClients> {
   void initState() {
     super.initState();
+    getDepartment();
     getCurrentLoc();
     getState();
     convertDateTimeDispla();
@@ -59,9 +62,15 @@ class _AddClientsState extends State<AddClients> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selected_Status;
+  ClientStatus? temp_selected_Status;
+  States? temp_selected_State;
   String? selected_stuff;
   String? selected_State;
+  // String? temp_selected_State;
+  // String? temp_selected_Status;
+  CustomerType? customerType;
   List<Cities>? cities = [];
+  Cities? temp_select_district;
   String? selected_District;
   int nwIndex = 0;
   String? selectedDistrict;
@@ -197,6 +206,36 @@ class _AddClientsState extends State<AddClients> {
       },
     );
     setState(() {});
+  }
+
+  DepartmentModel? departmentModel;
+  getDepartment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getDep.toString()));
+    request.fields.addAll({
+      USER_ID: '${uid}',
+    });
+    print("this is refer  get departmet request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("permission");
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = DepartmentModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
+      setState(() {
+        departmentModel = finalResponse;
+        department_id = departmentModel?.data?.first.department.toString();
+        print("deeeeeeeeeeeeee ${department_id}");
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 
   final picker = ImagePicker();
@@ -464,8 +503,6 @@ class _AddClientsState extends State<AddClients> {
   String? department_id;
 
   addClinets() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    department_id = pref.getString('department');
     var headers = {
       'Cookie': 'ci_session=3350434c72c5fbc8f5a7e422a38423adace3eaf8'
     };
@@ -711,6 +748,7 @@ class _AddClientsState extends State<AddClients> {
     return regExp.hasMatch(value);
   }
 
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -778,31 +816,143 @@ class _AddClientsState extends State<AddClients> {
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .02),
-                    Card(
-                      elevation: 3,
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_Status,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_Status = newValue;
-                          });
-                        },
-                        items: getListModel?.data?.clientStatus?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 5, left: 10),
-                          border: InputBorder.none,
-                          hintText: 'Select Status',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<ClientStatus>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select Status',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getListModel?.data?.clientStatus
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: temp_selected_Status,
+                              onChanged: (value) {
+                                temp_selected_Status = value;
+                                selected_Status = value?.id ?? '';
+                                setState(() {});
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                    // Card(
+                    //   elevation: 3,
+                    //   shape: OutlineInputBorder(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_Status,
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_Status = newValue;
+                    //       });
+                    //     },
+                    //     items: getListModel?.data?.clientStatus?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.only(top: 5, left: 10),
+                    //       border: InputBorder.none,
+                    //       hintText: 'Select Status',
+                    //     ),
+                    //   ),
+                    // ),
                     // SizedBox(height: MediaQuery.of(context).size.height*.02,),
                     // Text("Staff",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                     // Card(elevation: 3,
@@ -895,18 +1045,21 @@ class _AddClientsState extends State<AddClients> {
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: addresscn,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter address';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              hintText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)))),
+                        keyboardType: TextInputType.text,
+                        controller: addresscn,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter address';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
@@ -916,43 +1069,167 @@ class _AddClientsState extends State<AddClients> {
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    Card(
-                      elevation: 3,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_State,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_State = newValue;
-                            stateindex = getListModel!.data!.states!.indexWhere(
-                                (element) => element.id == selected_State);
-                            // getListModel?.data?.states?.map((items) {
-                            //   if(items.id == newValue) {
-                            //     cities = items.cities;
-                            //   }
-                            // });
-                            var name = print(
-                                "aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
-                            // print("current indexxx ${selected}");
-                            // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
-                            // currentIndex = selected;
-                            // showTextField = true;
-                          });
-                        },
-                        items: getListModel?.data?.states?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 5, left: 10),
-                          border: InputBorder.none,
-                          hintText: 'Select State',
-                        ),
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<States>(
+                              isExpanded: true,
+                              hint: Text(
+                                'Select state',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getListModel?.data?.states
+                                  ?.map(
+                                    (item) => DropdownMenuItem(
+                                      value: item,
+                                      child: Text(
+                                        item.name ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: temp_selected_State,
+                              onChanged: (value) {
+                                temp_selected_State = value;
+                                selected_State = value?.id ?? '';
+                                setState(() {
+                                  // selected_State = newValue;
+                                  stateindex = getListModel!.data!.states!
+                                      .indexWhere((element) =>
+                                          element.id == selected_State);
+                                });
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 5),
+                                height: 60,
+                                // width: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Card(
+                    //   elevation: 3,
+                    //   shape: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_State,
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_State = newValue;
+                    //         stateindex = getListModel!.data!.states!.indexWhere(
+                    //             (element) => element.id == selected_State);
+                    //         // getListModel?.data?.states?.map((items) {
+                    //         //   if(items.id == newValue) {
+                    //         //     cities = items.cities;
+                    //         //   }
+                    //         // });
+                    //         var name = print(
+                    //             "aaaaaaaaaaaaaaaaaaaaaaa${selected_State}");
+                    //         // print("current indexxx ${selected}");
+                    //         // stateindex = getListModel!.data!.states!.indexWhere((element) => element.id == selectedState);
+                    //         // currentIndex = selected;
+                    //         // showTextField = true;
+                    //       });
+                    //     },
+                    //     items: getListModel?.data?.states?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.only(top: 5, left: 10),
+                    //       border: InputBorder.none,
+                    //       hintText: 'Select State',
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
                     ),
@@ -961,39 +1238,156 @@ class _AddClientsState extends State<AddClients> {
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    Card(
-                      elevation: 3,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_District,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_District = newValue;
-                            nwIndex = getListModel!
-                                .data!.states![stateindex].cities!
-                                .indexWhere((element) =>
-                                    element.id == selectedDistrict);
-                            // print("current indexxx ${selected}");
-                            // nwIndex = getListModel!.data!.states![stateindex].cities!.indexWhere((element) => element.id == selectedDistrict)!;
-                            // currentIndex = selected;
-                            // showTextField = true;
-                          });
-                        },
-                        items: getListModel?.data?.states?[stateindex].cities
-                            ?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.city.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 5, left: 10),
-                          border: InputBorder.none,
-                          hintText: 'Select District',
-                        ),
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<Cities>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select District',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items:
+                                  getListModel?.data?.states?[stateindex].cities
+                                      ?.map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item.city ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
+                              value: temp_select_district,
+                              onChanged: (value) {
+                                temp_select_district = value;
+                                selected_District = value?.id ?? '';
+                                setState(() {});
+                                print('id------${value}');
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.city
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Card(
+                    //   elevation: 3,
+                    //   shape: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_District,
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_District = newValue;
+                    //         nwIndex = getListModel!
+                    //             .data!.states![stateindex].cities!
+                    //             .indexWhere((element) =>
+                    //                 element.id == selectedDistrict);
+                    //         // print("current indexxx ${selected}");
+                    //         // nwIndex = getListModel!.data!.states![stateindex].cities!.indexWhere((element) => element.id == selectedDistrict)!;
+                    //         // currentIndex = selected;
+                    //         // showTextField = true;
+                    //       });
+                    //     },
+                    //     items: getListModel?.data?.states?[stateindex].cities
+                    //         ?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.city.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.only(top: 5, left: 10),
+                    //       border: InputBorder.none,
+                    //       hintText: 'Select District',
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: MediaQuery.of(context).size.height * .02),
                     Text(
                       "Pincode",
@@ -1887,37 +2281,149 @@ class _AddClientsState extends State<AddClients> {
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .02),
-                    Card(
-                      elevation: 6,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButtonFormField<String>(
-                        value: selected_Customer,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please Enter Customer Type';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            selected_Customer = newValue;
-                          });
-                        },
-                        items: getListModel?.data?.customerType?.map((items) {
-                          return DropdownMenuItem(
-                            value: items.id,
-                            child: Text(items.name.toString()),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          hintText: 'Select Customer Type',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<CustomerType>(
+                              isExpanded: true,
+
+                              hint: Text(
+                                'Select Customer Type',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: getListModel?.data?.customerType
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              value: customerType,
+                              onChanged: (value) {
+                                customerType = value;
+                                setState(() {
+                                  selected_Customer = value?.id;
+                                });
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  height: 60,
+                                  // width: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
+                              dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black))),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: searchController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          // keyboardType: TextInputType.number,
+                                          expands: true,
+                                          maxLines: null,
+                                          maxLength: 6,
+                                          controller: searchController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search  ...',
+                                            hintStyle:
+                                                const TextStyle(fontSize: 12),
+                                            counterText: '',
+                                            counterStyle:
+                                                TextStyle(fontSize: 0),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value?.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  searchController.clear();
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                    // Card(
+                    //   elevation: 6,
+                    //   shape: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: DropdownButtonFormField<String>(
+                    //     value: selected_Customer,
+                    //     validator: (value) {
+                    //       if (value == null || value.isEmpty) {
+                    //         return 'Please Enter Customer Type';
+                    //       } else {
+                    //         return null;
+                    //       }
+                    //     },
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         selected_Customer = newValue;
+                    //       });
+                    //     },
+                    //     items: getListModel?.data?.customerType?.map((items) {
+                    //       return DropdownMenuItem(
+                    //         value: items.id,
+                    //         child: Text(items.name.toString()),
+                    //       );
+                    //     }).toList(),
+                    //     decoration: InputDecoration(
+                    //       border: OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(10)),
+                    //       hintText: 'Select Customer Type',
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * .02,
                     ),
