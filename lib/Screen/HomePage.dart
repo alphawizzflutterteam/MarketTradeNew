@@ -2198,7 +2198,6 @@ class _HomePageState extends State<HomePage>
 
   void getSetting() {
     CUR_USERID = context.read<SettingProvider>().userId;
-    //print("")
     Map parameter = Map();
     if (CUR_USERID != null) parameter = {USER_ID: CUR_USERID};
     apiBaseHelper.postAPICall(getSettingApi, parameter).then((getdata) async {
@@ -2206,9 +2205,9 @@ class _HomePageState extends State<HomePage>
       String? msg = getdata["message"];
       if (!error) {
         var data = getdata["data"]["system_settings"][0];
-        cartBtnList = data["cart_btn_on_list"] == "1" ? true : false;
-        refer = data["is_refer_earn_on"] == "1" ? true : false;
-        CUR_CURRENCY = data["currency"];
+        // cartBtnList = data["cart_btn_on_list"] == "1" ? true : false;
+        refer = false; // data["is_refer_earn_on"] == "0" ? true : false;
+        // CUR_CURRENCY = data["currency"];
         RETURN_DAYS = data['max_product_return_days'];
         MAX_ITEMS = data["max_items_cart"];
         MIN_AMT = data['min_amount'];
@@ -2217,15 +2216,12 @@ class _HomePageState extends State<HomePage>
         extendImg = data["expand_product_images"] == "1" ? true : false;
         String? del = data["area_wise_delivery_charge"];
         MIN_ALLOW_CART_AMT = data[MIN_CART_AMT];
-
         if (del == "0")
           ISFLAT_DEL = true;
         else
           ISFLAT_DEL = false;
-
         if (CUR_USERID != null) {
           // REFER_CODE = getdata['data']['user_data'][0]['referral_code'];
-
           context
               .read<UserProvider>()
               .setPincode(getdata["data"]["user_data"][0][PINCODE]);
@@ -2243,7 +2239,6 @@ class _HomePageState extends State<HomePage>
           _getFav();
           _getCart("0");
         }
-
         UserProvider user = Provider.of<UserProvider>(context, listen: false);
         SettingProvider setting =
             Provider.of<SettingProvider>(context, listen: false);

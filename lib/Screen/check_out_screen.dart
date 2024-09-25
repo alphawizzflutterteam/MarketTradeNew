@@ -17,6 +17,7 @@ import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Helper/String.dart';
+import 'Login.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({Key? key}) : super(key: key);
@@ -503,131 +504,165 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colors.white70,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        // leading: IconButton(onPressed: (){
-        //   Navigator.pop(context);
-        // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 210,
-                width: 210,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    "assets/images/checkout.png",
-                    fit: BoxFit.cover,
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: colors.white70,
+        // appBar: AppBar(
+        //   automaticallyImplyLeading: false,
+        //   elevation: 0,
+        //   backgroundColor: Colors.transparent,
+        //   // leading: IconButton(onPressed: (){
+        //   //   Navigator.pop(context);
+        //   // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+        // ),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 210,
+                  width: 210,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      "assets/images/checkout.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Checking Out.....",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: colors.whiteTemp),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              currentAddress.text == "" || currentAddress.text == null
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "Locating...",
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Checking Out.....",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: colors.whiteTemp),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                currentAddress.text == "" || currentAddress.text == null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "Locating...",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      )
+                    : Text(
+                        "${currentAddress.text}",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
-                    )
-                  : Text(
-                      "${currentAddress.text}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                SizedBox(height: 15),
+                uploadMultiImmage(),
+                // uploadMultiImage()
+                SizedBox(height: 10),
+                Container(
+                  height: 40,
+                  width: 145,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: TextFormField(
+                    maxLength: 6,
+                    controller: readingCtr,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                      counterText: "",
+                      border: InputBorder.none,
+                      hintText: "Add Odometer Stop Reading",
+                      hintStyle:
+                          TextStyle(fontSize: 12, color: colors.whiteTemp),
                     ),
-              SizedBox(height: 15),
-              uploadMultiImmage(),
-              // uploadMultiImage()
-              SizedBox(height: 10),
-              Container(
-                height: 40,
-                width: 145,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colors.primary),
-                child: TextFormField(
-                  maxLength: 6,
-                  controller: readingCtr,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 10, bottom: 10),
-                    counterText: "",
-                    border: InputBorder.none,
-                    hintText: "Add Odometer Stop Reading",
-                    hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                height: 45,
-                width: 220,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: StadiumBorder(),
-                      fixedSize: Size(350, 40),
-                      backgroundColor: colors.primary.withOpacity(0.8)),
-                  onPressed: () async {
-                    // await checkOutNow();
-                    if (latitude == "" || latitude == 0 || latitude == null) {
-                      setSnackbar(
-                          "Please wait fetching your current location...",
-                          context);
-                    } else if (_imageFile == null) {
-                      setSnackbar("Please select a image", context);
-                    } else if (readingCtr.text.isEmpty) {
-                      setSnackbar(
-                          "Please enter Odometer start reading", context);
-                    } else {
-                      // setState(() {
-                      //   isLoading = true;
-                      // });
-                      checkOutNow();
-                    }
-                  },
-                  child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text('CHECK OUT NOW'),
+                SizedBox(height: 20),
+                Container(
+                  height: 45,
+                  width: 220,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: StadiumBorder(),
+                        fixedSize: Size(350, 40),
+                        backgroundColor: colors.primary.withOpacity(0.8)),
+                    onPressed: () async {
+                      // await checkOutNow();
+                      if (latitude == "" || latitude == 0 || latitude == null) {
+                        setSnackbar(
+                            "Please wait fetching your current location...",
+                            context);
+                      } else if (_imageFile == null) {
+                        setSnackbar("Please select a image", context);
+                      } else if (readingCtr.text.isEmpty) {
+                        setSnackbar(
+                            "Please enter Odometer start reading", context);
+                      } else {
+                        // setState(() {
+                        //   isLoading = true;
+                        // });
+                        checkOutNow();
+                      }
+                    },
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text('CHECK OUT NOW'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+      onWillPop: () async {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Confirm Exit"),
+                content: const Text("Are you sure you want to exit this app?"),
+                actions: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.secondary),
+                    child: const Text("YES"),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.secondary),
+                    child: const Text("NO"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+        return true;
+      },
     );
   }
 }

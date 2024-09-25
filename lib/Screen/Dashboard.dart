@@ -161,16 +161,16 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   updateLocationPeriodically() {
-    Timer.periodic(Duration(minutes: int.parse(locationTime!)), (timer) async {
+    Timer.periodic(Duration(seconds: 30), (timer) async {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       if (position != null) {
         print("Location lat lng: ${position.latitude}, ${position.longitude}");
       }
-      // updateLocation();
-      if (isCheckedIn == false) {
-        updateLocation();
-      } else {}
+      updateLocation();
+      // if (isCheckedIn == false) {
+      //
+      // } else {}
     });
   }
 

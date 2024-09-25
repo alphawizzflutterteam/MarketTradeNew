@@ -31,7 +31,6 @@ class _EditClientState extends State<EditClient> {
   void initState() {
     super.initState();
     getDepartment();
-    getClients();
   }
 
   String? department_id;
@@ -185,6 +184,7 @@ class _EditClientState extends State<EditClient> {
         departmentModel = finalResponse;
         department_id = departmentModel?.data?.first.department.toString();
         print("deeeeeeeeeeeeee ${department_id}");
+        getClients();
       });
     } else {
       print(response.reasonPhrase);

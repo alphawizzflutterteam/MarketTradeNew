@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
+import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Helper/String.dart';
@@ -114,7 +116,7 @@ updateLocation1(Position position) async {
   request.fields.addAll({
     'lat': position.latitude.toString(),
     'lng': position.longitude.toString(),
-    'user_id': CUR_USERID.toString(),
+    'user_id': userId.toString(),
     'address': '${currentAddress}'
   });
   print("update location parameter in address ${request.fields}");
@@ -195,7 +197,7 @@ void onStart(ServiceInstance service) async {
   });
 
   // bring to foreground
-  Timer.periodic(Duration(minutes: updateTime), (timer) async {
+  Timer.periodic(Duration(seconds: 30), (timer) async {
     if (service is AndroidServiceInstance) {
       if (await service.isForegroundService()) {
         /// OPTIONAL for use custom notification
@@ -223,19 +225,19 @@ void onStart(ServiceInstance service) async {
     Position position = await Geolocator.getCurrentPosition();
     updateLocation1(position);
 
-    List<Placemark> placemark = await placemarkFromCoordinates(
-        double.parse(position.latitude.toString()),
-        double.parse(position.longitude.toString()),
-        localeIdentifier: "en");
-    currentAddress =
-        "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
-    print("addddddddddddddd ${currentAddress}");
-    // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
-    var prefs = await SharedPreferences.getInstance();
-    bool? isCheckIn = prefs.getBool("checkIn");
-    if (isCheckIn ?? false) {
-      checkOutNow(currentAddress);
-    }
+    // List<Placemark> placemark = await placemarkFromCoordinates(
+    //     double.parse(position.latitude.toString()),
+    //     double.parse(position.longitude.toString()),
+    //     localeIdentifier: "en");
+    // currentAddress =
+    //     "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
+    // print("addddddddddddddd ${currentAddress}");
+    // // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
+    // var prefs = await SharedPreferences.getInstance();
+    // bool? isCheckIn = prefs.getBool("checkIn");
+    // if (isCheckIn ?? false) {
+    //   checkOutNow(currentAddress);
+    // }
 
     // }
     /// you can see this log in logcat
@@ -749,130 +751,163 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colors.white70,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        // leading: IconButton(onPressed: (){
-        //   Navigator.pop(context);
-        // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 200,
-                width: 200,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "assets/images/checkin.png",
-                      fit: BoxFit.cover,
-                    )),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Checking in.....",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: colors.whiteTemp),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              currentAddress.text == "" || currentAddress.text == null
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "Locating...",
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: colors.white70,
+        // appBar: AppBar(
+        //   automaticallyImplyLeading: false,
+        //   elevation: 0,
+        //   backgroundColor: Colors.transparent,
+        //   // leading: IconButton(onPressed: (){
+        //   //   Navigator.pop(context);
+        //   // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+        // ),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 200,
+                  width: 200,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        "assets/images/checkin.png",
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Checking in.....",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: colors.whiteTemp),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                currentAddress.text == "" || currentAddress.text == null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "Locating...",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      )
+                    : Text(
+                        "${currentAddress.text}",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
-                    )
-                  : Text(
-                      "${currentAddress.text}",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
+                SizedBox(height: 15),
+                uploadMultiImmage(),
+                // uploadMultiImage()
+                SizedBox(height: 10),
+                Container(
+                  height: 40,
+                  width: 145,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colors.primary),
+                  child: TextFormField(
+                    maxLength: 6,
+                    controller: readingCtr,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                      counterText: "",
+                      border: InputBorder.none,
+                      hintText: "Add Odometer Start Reading",
+                      hintStyle:
+                          TextStyle(fontSize: 12, color: colors.whiteTemp),
                     ),
-              SizedBox(height: 15),
-              uploadMultiImmage(),
-              // uploadMultiImage()
-              SizedBox(height: 10),
-              Container(
-                height: 40,
-                width: 145,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: colors.primary),
-                child: TextFormField(
-                  maxLength: 6,
-                  controller: readingCtr,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 10, bottom: 10),
-                    counterText: "",
-                    border: InputBorder.none,
-                    hintText: "Add Odometer Start Reading",
-                    hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                height: 45,
-                width: 220,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: StadiumBorder(),
-                      fixedSize: Size(350, 40),
-                      backgroundColor: colors.primary.withOpacity(0.8)),
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                    if (latitude == null ||
-                        longitude == null ||
-                        _imageFile == null) {
-                      setSnackbar("Please select a image", context);
-                    } else if (readingCtr.text.isEmpty) {
-                      setSnackbar(
-                          "Please enter Odometer start reading", context);
-                    } else {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      checkInNow();
-                    }
-                  },
-                  child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text('CHECK IN NOW'),
+                SizedBox(height: 20),
+                Container(
+                  height: 45,
+                  width: 220,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: StadiumBorder(),
+                        fixedSize: Size(350, 40),
+                        backgroundColor: colors.primary.withOpacity(0.8)),
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+                      if (latitude == null ||
+                          longitude == null ||
+                          _imageFile == null) {
+                        setSnackbar("Please select a image", context);
+                      } else if (readingCtr.text.isEmpty) {
+                        setSnackbar(
+                            "Please enter Odometer start reading", context);
+                      } else {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        checkInNow();
+                      }
+                    },
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text('CHECK IN NOW'),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-            ],
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
+      onWillPop: () async {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Confirm Exit"),
+                content: const Text("Are you sure you want to exit this app?"),
+                actions: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.secondary),
+                    child: const Text("YES"),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.secondary),
+                    child: const Text("NO"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+        return true;
+      },
     );
   }
 }
