@@ -1,4 +1,4 @@
-final String appName = 'Market Track';
+final String appName = 'MarketTrack';
 
 final String packageName = 'com.aimbiz.referral';
 final String androidLink = 'https://play.google.com/store/apps/details?id=';
@@ -17,11 +17,11 @@ const int perPage = 10;
 // final String baseUrl ='https://rekoindia.com/app/v1/api/';
 // final String baseUrl= 'https://developmentalphawizz.com/referral_management/app/v1/api/';
 
-final String baseUrl = 'https://developmentalphawizz.com/rename_market_track/app/v1/api/';
+final String baseUrl = 'https://businesstrack.co.in/app/v1/api/';
 
 // final String baseUrl = 'https://omegaemp.com/app/v1/api/';
-    //'https://admin.aimmoney.in/app/v1/api/';
-    //'https://developmentalphawizz.com/reko/app/v1/api/';
+//'https://admin.aimmoney.in/app/v1/api/';
+//'https://developmentalphawizz.com/reko/app/v1/api/';
 
 // final String jwtKey = "78084f1698c9fcff5a668b68dcd103db39be2605";
 

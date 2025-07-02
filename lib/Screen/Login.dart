@@ -16,6 +16,7 @@ import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
 import '../Helper/Session.dart';
+import 'SignUp.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -494,11 +495,15 @@ class _LoginPagePageState extends State<LoginPage>
                   fontWeight: FontWeight.normal)),
           InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => LoginPage(
-                      // title: getTranslated(context, 'SEND_OTP_TITLE'),
-                      ),
-                ));
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => SignUp()));
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (BuildContext context) => LoginPage(
+                //         // title: getTranslated(context, 'SEND_OTP_TITLE'),
+                //         ),
+                //   ),
+                // );
               },
               child: Text(
                 getTranslated(context, 'SIGN_UP_LBL')!,
@@ -649,7 +654,7 @@ class _LoginPagePageState extends State<LoginPage>
                     // setMobileNo(),
                     // setPass(),
                     loginBtn(),
-                    // termAndPolicyTxt(),
+                    termAndPolicyTxt(),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.10,
                     ),

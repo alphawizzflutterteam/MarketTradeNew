@@ -607,10 +607,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         // _getDrawerItem(getTranslated(context, 'SHARE_APP')!,
         //     'assets/images/pro_share.svg'),
         // CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
-        // CUR_USERID == "" || CUR_USERID == null
-        //     ? Container()
-        //     : _getDrawerItem(
-        //         getTranslated(context, 'DELETE')!, 'assets/images/delete.svg'),
+        CUR_USERID == "" || CUR_USERID == null
+            ? Container()
+            : _getDrawerItem(
+                getTranslated(context, 'DELETE')!, 'assets/images/delete.svg'),
       ],
     );
   }
@@ -649,10 +649,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   Future<DeleteAccountModel?> deleteAccount() async {
     var header = headers;
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/delete_user'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/delete_user'));
     request.fields.addAll({'user_id': CUR_USERID.toString()});
     print("User id in delet account ${request.fields}");
     request.headers.addAll(header);
@@ -840,11 +838,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
             openRequestTrainingBottomSheet();
           } else if (title == getTranslated(context, 'LOGOUT')) {
             logOutDailog();
-          }
-          // else if (title == getTranslated(context, 'DELETE')) {
-          //   deleteAccountDailog();
-          // }
-          else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
+          } else if (title == getTranslated(context, 'DELETE')) {
+            deleteAccountDailog();
+          } else if (title == getTranslated(context, 'CHANGE_PASS_LBL')) {
             openChangePasswordBottomSheet();
           } else if (title == getTranslated(context, 'CHANGE_LANGUAGE_LBL')) {
             openChangeLanguageBottomSheet();

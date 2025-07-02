@@ -109,9 +109,10 @@ class _MySiteVisiteState extends State<MySiteVisite> {
           : getdata?.error == true
               ? Center(
                   child: Text(
-                  "No Data Found",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                ))
+                    "No Data Found",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                )
               : SingleChildScrollView(
                   child: Column(
                     children: [

@@ -103,8 +103,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
     var headers = {
       'Cookie': 'ci_session=4f8360fd4e4e40e498783ef6638c6f55e6bc9fca'
     };
-    var request =
-        http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
+    var request = http.Request('POST', Uri.parse("${GetDealingProduct}"));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -113,7 +112,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
       setState(() {
         dealingProductModel = finalresult;
         print(
-            "========dealingg=======${dealingProductModel} ${finalresult}  ${results}===========");
+            "========dealingg is herrerre=======${dealingProductModel} ${finalresult}  ${results}===========");
       });
     } else {
       print(response.reasonPhrase);
@@ -428,10 +427,9 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
     var headers = {
       'Cookie': 'ci_session=ef29e61acfe01ba495d2b60947f70ae0b26cc807'
     };
-    var request = http.MultipartRequest(
+    var request = http.Request(
       'POST',
-      Uri.parse(
-          'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_client_type1'),
+      Uri.parse('https://businesstrack.co.in/app/v1/api/get_client_type1'),
     );
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -465,11 +463,11 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
   GetListModel? getListModel;
 
   getState() async {
+    print("adssssssssss");
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
-    var request =
-        http.MultipartRequest('GET', Uri.parse(getListsApi.toString()));
+    var request = http.Request('GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -478,6 +476,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
       var finalResponse = GetListModel.fromJson(result);
       setState(() {
         getListModel = finalResponse;
+        print("list data is ${getListModel?.data?.states}");
       });
     } else {
       print(response.reasonPhrase);
@@ -1067,7 +1066,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                               ?.map((item) => DropdownMenuItem(
                                                     value: item,
                                                     child: Text(
-                                                      item.ownerName ?? '',
+                                                      item.nameOfFirm ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 14,
                                                       ),
@@ -1156,7 +1155,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                           ),
                                         ),
                                         searchMatchFn: (item, searchValue) {
-                                          return item.value?.ownerName
+                                          return item.value?.nameOfFirm
                                                   .toString()
                                                   .toLowerCase()
                                                   .contains(searchValue) ??

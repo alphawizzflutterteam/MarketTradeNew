@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.staff.management">
+    package="com.market.track">
     <!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
     <!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
     </queries>
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Market Track"
+        android:label="MarketTrack"
         android:usesCleartextTraffic="true">
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB7F5pGTk1Yqwj5_ayYsVBcFtVyx29C0MM"/>
 

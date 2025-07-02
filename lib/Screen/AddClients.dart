@@ -89,8 +89,7 @@ class _AddClientsState extends State<AddClients> {
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
-    var request =
-        http.MultipartRequest('GET', Uri.parse(getListsApi.toString()));
+    var request = http.Request('GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {

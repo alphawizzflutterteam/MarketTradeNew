@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,7 +18,6 @@ import 'package:omega_employee_management/Screen/check_In_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Helper/String.dart';
-import 'Login.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({Key? key}) : super(key: key);
@@ -646,8 +646,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         backgroundColor: colors.secondary),
                     child: const Text("YES"),
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      // checkOutNow();
+                      SystemNavigator.pop();
                     },
                   ),
                   ElevatedButton(

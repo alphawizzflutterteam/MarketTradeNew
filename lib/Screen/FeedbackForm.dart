@@ -77,7 +77,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
     };
     var request =
         http.MultipartRequest('POST', Uri.parse(clientType.toString()));
-    request.fields.addAll({'client_type': '1,2'});
+    request.fields.addAll({'client_type': ""});
 
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -217,8 +217,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
     var headers = {
       'Cookie': 'ci_session=4f8360fd4e4e40e498783ef6638c6f55e6bc9fca'
     };
-    var request =
-        http.MultipartRequest('POST', Uri.parse(GetDealingProduct.toString()));
+    var request = http.Request('POST', Uri.parse("${GetDealingProduct}"));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -663,15 +662,16 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                   color: Theme.of(context).hintColor,
                                 ),
                               ),
-                              items: delearRetailerModel?.data?.map((item) => DropdownMenuItem(
-                                value: item,
-                                child: Text(
-                                  item.nameOfFirm.toString() ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ))
+                              items: delearRetailerModel?.data
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item.nameOfFirm.toString() ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
                                   .toList(),
                               value: chapterData,
                               onChanged: (value) {
@@ -679,27 +679,28 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                 setState(() {
                                   selected = value?.id;
                                   print("current indexxx ${selected}");
-                                  nwIndex = delearRetailerModel!.data!.indexWhere(
+                                  nwIndex = delearRetailerModel!.data!
+                                      .indexWhere(
                                           (element) => element.id == selected);
                                   // currentIndex = selected;
                                   showTextField = true;
                                 });
                               },
                               buttonStyleData: ButtonStyleData(
-                                  padding:
-                                  EdgeInsets.symmetric(horizontal: 16,vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
                                   height: 50,
                                   // width: 200,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      border:
-                                      Border.all(color: Colors.black,))),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ))),
                               dropdownStyleData: DropdownStyleData(
                                   maxHeight: 300,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      border:
-                                      Border.all(color: Colors.black))),
+                                      border: Border.all(color: Colors.black))),
                               menuItemStyleData: const MenuItemStyleData(
                                 height: 40,
                               ),
@@ -726,20 +727,19 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                           decoration: InputDecoration(
                                             isDense: true,
                                             contentPadding:
-                                            const EdgeInsets.symmetric(
+                                                const EdgeInsets.symmetric(
                                               horizontal: 10,
                                               vertical: 8,
                                             ),
-                                            hintText:
-                                            'Search  ...',
+                                            hintText: 'Search  ...',
                                             hintStyle:
-                                            const TextStyle(fontSize: 12),
+                                                const TextStyle(fontSize: 12),
                                             counterText: '',
                                             counterStyle:
-                                            TextStyle(fontSize: 0),
+                                                TextStyle(fontSize: 0),
                                             border: OutlineInputBorder(
                                               borderRadius:
-                                              BorderRadius.circular(8),
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                         ),
@@ -748,7 +748,11 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                   ),
                                 ),
                                 searchMatchFn: (item, searchValue) {
-                                  return item.value?.nameOfFirm.toString().toLowerCase().contains(searchValue) ?? false;
+                                  return item.value?.nameOfFirm
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(searchValue) ??
+                                      false;
                                 },
                               ),
                               //This to clear the search value when you close the menu

@@ -276,7 +276,7 @@ class _SplashScreen extends State<Splash> {
     setState(() {
       uid = prefs.getString('user_id');
     });
-    // debugPrint("fffffff"+uid.toString());
+    debugPrint("fffffff" + uid.toString());
     if (uid == null || uid == "") {
       Future.delayed(Duration(seconds: 3), () {
         Navigator.pushReplacement(

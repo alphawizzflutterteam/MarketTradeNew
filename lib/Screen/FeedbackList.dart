@@ -704,17 +704,19 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  "Sum Of Monthly Sale Of ${widget.model?.finalTotal?[j].title}",
+                                                  "Sum Of Monthly Sale Of ${widget.model?.finalTotal?[j].title}"
+                                                      .toUpperCase(),
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       color: Colors.black),
                                                 ),
                                                 Text(
-                                                  "₹ ${widget.model?.finalTotal?[j].monthlySale}",
+                                                  "₹ ${widget.model?.finalTotal?[j].monthlySale}"
+                                                      .toUpperCase(),
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       color: Colors.black),
@@ -730,9 +732,10 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  "Sum Of Current Stock Of ${widget.model?.finalTotal?[j].title}",
+                                                  "Sum Of Current Stock Of ${widget.model?.finalTotal?[j].title}"
+                                                      .toUpperCase(),
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       color: Colors.black),
@@ -740,7 +743,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                 Text(
                                                   "₹ ${widget.model?.finalTotal?[j].currentStock}",
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       color: Colors.black),
@@ -750,49 +753,6 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                           ],
                                         );
                                       }),
-                                  // Row(
-                                  //   mainAxisAlignment:
-                                  //       MainAxisAlignment.spaceBetween,
-                                  //   children: [
-                                  //     Text(
-                                  //       "Sum of Monthly Sales: ",
-                                  //       style: TextStyle(
-                                  //           fontSize: 15,
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.w600),
-                                  //     ),
-                                  //     Text(
-                                  //       "${widget.model?.totalMonthlySale}",
-                                  //       style: TextStyle(
-                                  //           fontSize: 15,
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.w600),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // Row(
-                                  //   mainAxisAlignment:
-                                  //       MainAxisAlignment.spaceBetween,
-                                  //   children: [
-                                  //     Text(
-                                  //       "Sum of Current Stock: ",
-                                  //       style: TextStyle(
-                                  //           fontSize: 15,
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.w600),
-                                  //     ),
-                                  //     Text(
-                                  //       "${widget.model?.totalCurrentStock}",
-                                  //       style: TextStyle(
-                                  //           fontSize: 15,
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.w600),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 5,
-                                  // ),
                                   Divider(
                                     color: Colors.black,
                                   ),
@@ -1234,98 +1194,6 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                               ),
                             ],
                           ),
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: [
-                          //     Text("User Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.01),
-                          //     TextFormField(
-                          //         readOnly: true,
-                          //         keyboardType: TextInputType.text,
-                          //         controller: namecn,
-                          //         decoration: InputDecoration(hintText: 'hfg', border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02),
-                          //     Text("Date",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                          //     TextFormField(
-                          //         readOnly: true,
-                          //         keyboardType: TextInputType.text,
-                          //         controller: datecn,
-                          //         decoration: InputDecoration(border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Time",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                          //     TextFormField(
-                          //         readOnly: true,
-                          //         keyboardType: TextInputType.text,
-                          //         controller: timecn,
-                          //         decoration: InputDecoration(border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          //     // SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     // Text("Firm Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     // SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                          //     // TextFormField(
-                          //     //     readOnly: true,
-                          //     //     keyboardType: TextInputType.text,
-                          //     //     controller: firmnamecn,
-                          //     //     decoration: InputDecoration(border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Remark",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.01,),
-                          //     TextFormField(
-                          //         readOnly: true,
-                          //         keyboardType: TextInputType.text,
-                          //         controller: remarkcn,
-                          //         decoration: InputDecoration(border: OutlineInputBorder(borderRadius:  BorderRadius.circular(10)))),
-                          //     SizedBox(height: 5,),
-                          //     Text("Address: ${getdata?.data?[index].basicDetail?.address}",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Basic Details:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Name: ${getdata?.data?[index].basicDetail?.name}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Mobile: ${getdata?.data?[index].basicDetail?.mobile}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("email: ${getdata?.data?[index].basicDetail?.email}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Address: ${getdata?.data?[index].basicDetail?.address}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Customer Type: ${getdata?.data?[index].basicDetail?.customerType}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("Credit Limit: ${getdata?.data?[index].basicDetail?.creditLimit}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.03,),
-                          //     Text("Customer Dealing:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                          //     Text("ID & Name",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     Text("1  ${getdata?.data?[index].customerDealingIn?[0].name}",style: TextStyle(fontSize: 15),),
-                          //     // Text("2  ${getdata?.data?[index].customerDealingIn[0].name}",style: TextStyle(fontSize: 15),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.03,),
-                          //     Text("Survey:-",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                          //     SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //     ListView.builder(
-                          //         shrinkWrap: true,
-                          //         itemCount: getdata?.data?[index].survey?.length,
-                          //         physics: NeverScrollableScrollPhysics(),
-                          //         itemBuilder: (_,i){
-                          //           return Column(
-                          //             crossAxisAlignment: CrossAxisAlignment.start,
-                          //             children: [
-                          //               Text("Brand Name: ${getdata?.data?[index].survey?[i].brandName}",style: TextStyle(fontSize: 14,),),
-                          //               SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //               Text("Monthly Sale: ${getdata?.data?[index].survey?[i].monthlySale}",style: TextStyle(fontSize: 14,),),
-                          //               SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //               Text("Current Stock: ${getdata?.data?[index].survey?[i].currentStock}",style: TextStyle(fontSize: 14,),),
-                          //               SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //               Text("WPS: ${getdata?.data?[index].survey?[i].wps}",style: TextStyle(fontSize: 14,),),
-                          //               SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //               Text("RSP: ${getdata?.data?[index].survey?[i].rsp}",style: TextStyle(fontSize: 14,),),
-                          //               SizedBox(height: MediaQuery.of(context).size.height*.02,),
-                          //               Text("Purchasing From: ${getdata?.data?[index].survey?[i].purchasingFrom}",style: TextStyle(fontSize: 15),),
-                          //             ],
-                          //           );
-                          //         }),
-                          //   ],
-                          // ),
-                          // SizedBox(height: MediaQuery.of(context).size.height*.03,),
                         ),
                       ),
                     ),
@@ -1480,7 +1348,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/customer_feedback_lists'));
+            'https://businesstrack.co.in/app/v1/api/customer_feedback_lists'));
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
       'department_id': '${department_id.toString()}'

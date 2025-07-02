@@ -231,6 +231,10 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
             SizedBox(
               height: 5,
             ),
+            clients == null
+                ? Center(
+              child: CircularProgressIndicator(),
+            ):
             clients?.error == true
                 ? Center(
                     child: Text(
@@ -698,10 +702,8 @@ class _AddGeoScreenState extends State<AddGeoScreen> {
     var headers = {
       'Cookie': 'ci_session=26b532a5b5bb9103195c77bf41a94bc7c6f931bc'
     };
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/update_geo_tag'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/update_geo_tag'));
     request.fields.addAll({
       'id': id.toString(),
       'lat': latitude.toString(),

@@ -110,10 +110,8 @@ class _AddPhotoState extends State<AddPhoto> {
     var headers = {
       'Cookie': 'ci_session=a668203a30aa21277b05b1ffb48275800e081571'
     };
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/update_photo'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/update_photo'));
     request.fields.addAll({
       'id': id.toString(),
       'user_id': '${CUR_USERID}',
@@ -328,414 +326,427 @@ class _AddPhotoState extends State<AddPhoto> {
             SizedBox(
               height: 10,
             ),
-            clients?.error == true
+            clients == null
                 ? Center(
-                    child: Text(
-                    "No Data Found",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
-                  ))
-                : clientData == null
-                    ? CircularProgressIndicator()
-                    : Container(
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 5.0,
-                            childAspectRatio: 0.6,
-                          ),
-                          itemCount: clientData.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 5),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.redAccent),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        child: Center(
-                                          child: new ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(0.0),
-                                            child: new FadeInImage(
-                                              fadeInDuration:
-                                                  Duration(milliseconds: 150),
-                                              image: CachedNetworkImageProvider(
-                                                  "${clients?.data?[index].photo?[0]}"),
-                                              height: 110.0,
-                                              width: double.infinity,
-                                              fit: BoxFit.cover,
-                                              imageErrorBuilder: (context,
-                                                      error, stackTrace) =>
-                                                  erroWidget(100),
-                                              placeholder: placeHolder(50),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          if (clientData[index].photo?[0] !=
-                                              null) {
-                                            final imageProvider = Image.network(
-                                              clientData[index].photo?[0] ?? '',
-                                            ).image;
-                                            showImageViewer(
-                                                context, imageProvider,
-                                                onViewerDismissed: () {
-                                              print("dismissed");
-                                            });
-                                          }
-                                        },
-                                        onLongPress: () {
-                                          //  print("download image");
-
-                                          showDilaogBox(
-                                              clientData[index].photo![0] ??
-                                                  "");
-                                          //  downloadImage(clientData?[index].photo!?[0] ?? "");
-                                        },
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Firm:',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "${clientData[index].nameOfFirm}",
-                                            style: TextStyle(fontSize: 13),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Owner:',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "${clientData[index].ownerName}",
-                                            style: TextStyle(fontSize: 13),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Mobile:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text("${clientData[index].mobileOne}"),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Address:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                        width: 180,
-                                        child: Text(
-                                          "${clientData[index].address}",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 3,
-                                          style: TextStyle(fontSize: 13),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Center(
-                                          child: InkWell(
-                                        onTap: () {
-                                          imageUpload(
-                                            clients?.data?[index].id.toString(),
-                                          );
-                                          // addPhotoDialog(
-                                          //     context,
-                                          //     clients?.data?[index].id
-                                          //             .toString() ??
-                                          //         "");
-                                          // _getFromCamera(
-                                          //     clientData[index].id.toString() ??
-                                          //         "");
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: colors.primary),
-                                          child: Center(
-                                            child: Text(
-                                              "Add",
-                                              style: TextStyle(
-                                                  color: colors.whiteTemp,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                                      SizedBox(
-                                        height: 3,
-                                      )
-                                    ],
-                                  ),
-                                ),
+                    child: CircularProgressIndicator(),
+                  )
+                : clients?.error == true
+                    ? Center(
+                        child: Text(
+                        "No Data Found",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 15),
+                      ))
+                    : clientData == null
+                        ? CircularProgressIndicator()
+                        : Container(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 5.0,
+                                childAspectRatio: 0.6,
                               ),
-                            );
+                              itemCount: clientData.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 5, right: 5),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(color: Colors.redAccent),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          InkWell(
+                                            child: Center(
+                                              child: new ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(0.0),
+                                                child: new FadeInImage(
+                                                  fadeInDuration: Duration(
+                                                      milliseconds: 150),
+                                                  image: CachedNetworkImageProvider(
+                                                      "${clients?.data?[index].photo?[0]}"),
+                                                  height: 110.0,
+                                                  width: double.infinity,
+                                                  fit: BoxFit.cover,
+                                                  imageErrorBuilder: (context,
+                                                          error, stackTrace) =>
+                                                      erroWidget(100),
+                                                  placeholder: placeHolder(50),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              if (clientData[index].photo?[0] !=
+                                                  null) {
+                                                final imageProvider =
+                                                    Image.network(
+                                                  clientData[index].photo?[0] ??
+                                                      '',
+                                                ).image;
+                                                showImageViewer(
+                                                    context, imageProvider,
+                                                    onViewerDismissed: () {
+                                                  print("dismissed");
+                                                });
+                                              }
+                                            },
+                                            onLongPress: () {
+                                              //  print("download image");
 
-                            //   Padding(
-                            //   padding: const EdgeInsets.all(5.0),
-                            //   child: Container(
-                            //     //  height: MediaQuery.of(context).size.height/1.0,
-                            //     decoration: BoxDecoration(
-                            //         border: Border.all(color: colors.primary),
-                            //         borderRadius: BorderRadius.circular(5)),
-                            //     child: Column(
-                            //       mainAxisAlignment: MainAxisAlignment.center,
-                            //       crossAxisAlignment: CrossAxisAlignment.center,
-                            //       mainAxisSize: MainAxisSize.min,
-                            //       children: <Widget>[
-                            //         InkWell(
-                            //           child: new ClipRRect(
-                            //             borderRadius:
-                            //                 BorderRadius.circular(0.0),
-                            //             child: new FadeInImage(
-                            //               fadeInDuration:
-                            //                   Duration(milliseconds: 150),
-                            //               image: CachedNetworkImageProvider(
-                            //                   "${clients?.data?[index].photo?[0]}"),
-                            //               height: 110.0,
-                            //               width: double.infinity,
-                            //               fit: BoxFit.cover,
-                            //               imageErrorBuilder:
-                            //                   (context, error, stackTrace) =>
-                            //                       erroWidget(50),
-                            //               placeholder: placeHolder(50),
-                            //             ),
-                            //           ),
-                            //           onTap: () {
-                            //             // print("download image");
-                            //             // downloadImage(clientData?[index].photo!?[0] ?? "");
-                            //             if (clientData[index].photo?[0] !=
-                            //                 null) {
-                            //               final imageProvider = Image.network(
-                            //                       clientData[index].photo?[0] ??
-                            //                           '')
-                            //                   .image;
-                            //               showImageViewer(
-                            //                   context, imageProvider,
-                            //                   onViewerDismissed: () {
-                            //                 print("dismissed");
-                            //               });
-                            //             }
-                            //           },
-                            //           onLongPress: () {
-                            //             //  print("download image");
-                            //
-                            //             showDilaogBox(
-                            //                 clientData[index].photo![0] ?? "");
-                            //             //  downloadImage(clientData?[index].photo!?[0] ?? "");
-                            //           },
-                            //         ),
-                            //         // const SizedBox(width: 20),
-                            //         Padding(
-                            //           padding: const EdgeInsets.only(
-                            //               left: 5.0, right: 5),
-                            //           child: Row(
-                            //             mainAxisAlignment:
-                            //                 MainAxisAlignment.spaceBetween,
-                            //             children: [
-                            //               Row(
-                            //                 mainAxisAlignment:
-                            //                     MainAxisAlignment.spaceBetween,
-                            //                 children: [
-                            //                   Column(
-                            //                     crossAxisAlignment:
-                            //                         CrossAxisAlignment.start,
-                            //                     children: [
-                            //                       Text(
-                            //                         'Firm:',
-                            //                         style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold),
-                            //                       ),
-                            //                       Text(
-                            //                           "${clientData[index].nameOfFirm}"),
-                            //                     ],
-                            //                   ),
-                            //                   Column(
-                            //                     crossAxisAlignment:
-                            //                         CrossAxisAlignment.end,
-                            //                     children: [
-                            //                       Text(
-                            //                         'Owner:',
-                            //                         style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold),
-                            //                       ),
-                            //                       Text(
-                            //                           "${clientData[index].ownerName}"),
-                            //                     ],
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //               SizedBox(height: 8),
-                            //               Text(
-                            //                 'Mobile:',
-                            //                 style: TextStyle(
-                            //                     fontWeight: FontWeight.bold),
-                            //               ),
-                            //               Text(
-                            //                   "${clientData[index].mobileOne}"),
-                            //               SizedBox(height: 8),
-                            //               Text(
-                            //                 'Address:',
-                            //                 style: TextStyle(
-                            //                     fontWeight: FontWeight.bold),
-                            //               ),
-                            //               Text("${clientData[index].address}"),
-                            //               Spacer(),
-                            //               // Column(
-                            //               //   crossAxisAlignment:
-                            //               //       CrossAxisAlignment.start,
-                            //               //   children: [
-                            //               //     Text(
-                            //               //       "Firm:",
-                            //               //       style: TextStyle(
-                            //               //           fontSize: 11,
-                            //               //           fontWeight: FontWeight.w400,
-                            //               //           color: colors.blackTemp),
-                            //               //     ),
-                            //               //     SizedBox(
-                            //               //       height: 18,
-                            //               //     ),
-                            //               //     Text(
-                            //               //       "Owner:",
-                            //               //       style: TextStyle(
-                            //               //           fontSize: 11,
-                            //               //           fontWeight: FontWeight.w400,
-                            //               //           color: colors.blackTemp),
-                            //               //     ),
-                            //               //     SizedBox(
-                            //               //       height: 15,
-                            //               //     ),
-                            //               //     Text(
-                            //               //       "Mobile:",
-                            //               //       style: TextStyle(
-                            //               //           fontSize: 11,
-                            //               //           fontWeight: FontWeight.w400,
-                            //               //           color: colors.blackTemp),
-                            //               //     ),
-                            //               //     SizedBox(
-                            //               //       height: 15,
-                            //               //     ),
-                            //               //     Text(
-                            //               //       "Address:",
-                            //               //       style: TextStyle(
-                            //               //           fontSize: 11,
-                            //               //           fontWeight: FontWeight.w400,
-                            //               //           color: colors.blackTemp),
-                            //               //     ),
-                            //               //   ],
-                            //               // ),
-                            //               // Column(
-                            //               //   crossAxisAlignment:
-                            //               //       CrossAxisAlignment.end,
-                            //               //   children: [
-                            //               //     Text(
-                            //               //       "${clientData[index].nameOfFirm}",
-                            //               //       style: TextStyle(
-                            //               //           fontSize: 11,
-                            //               //           fontWeight: FontWeight.w400,
-                            //               //           color: colors.blackTemp,
-                            //               //           overflow:
-                            //               //               TextOverflow.ellipsis),
-                            //               //     ),
-                            //               //     SizedBox(height: 10),
-                            //               //     Text(
-                            //               //         "${clientData[index].ownerName}",
-                            //               //         style: TextStyle(
-                            //               //             fontSize: 11,
-                            //               //             fontWeight:
-                            //               //                 FontWeight.w400,
-                            //               //             color: colors.blackTemp)),
-                            //               //     SizedBox(height: 10),
-                            //               //     Text(
-                            //               //         "${clientData[index].mobileOne}",
-                            //               //         style: TextStyle(
-                            //               //             fontSize: 11,
-                            //               //             fontWeight:
-                            //               //                 FontWeight.w400,
-                            //               //             color: colors.blackTemp)),
-                            //               //     SizedBox(height: 10),
-                            //               //     Container(
-                            //               //       width: 90,
-                            //               //       child: Text(
-                            //               //         "${clientData[index].address}${clientData[index].pinCode}",
-                            //               //         style: TextStyle(
-                            //               //             fontSize: 11,
-                            //               //             fontWeight:
-                            //               //                 FontWeight.w400,
-                            //               //             color: colors.blackTemp),
-                            //               //         maxLines: 3,
-                            //               //       ),
-                            //               //     ),
-                            //               //   ],
-                            //               // ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //         SizedBox(height: 5),
-                            //         InkWell(
-                            //           onTap: () {
-                            //             Navigator.push(
-                            //                 context,
-                            //                 MaterialPageRoute(
-                            //                     builder: (context) =>
-                            //                         ClientsView(
-                            //                             model: clientData[
-                            //                                 index])));
-                            //           },
-                            //           child: Container(
-                            //             height: 30,
-                            //             width: 70,
-                            //             decoration: BoxDecoration(
-                            //                 borderRadius:
-                            //                     BorderRadius.circular(5),
-                            //                 color: colors.primary),
-                            //             child: Center(
-                            //                 child: Text(
-                            //               "View",
-                            //               style: TextStyle(
-                            //                   color: colors.whiteTemp,
-                            //                   fontWeight: FontWeight.bold),
-                            //             )),
-                            //           ),
-                            //         )
-                            //       ],
-                            //     ),
-                            //   ),
-                            // );
-                          },
-                        ),
-                      ),
+                                              showDilaogBox(
+                                                  clientData[index].photo![0] ??
+                                                      "");
+                                              //  downloadImage(clientData?[index].photo!?[0] ?? "");
+                                            },
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Firm:',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "${clientData[index].nameOfFirm}",
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Owner:',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "${clientData[index].ownerName}",
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            'Mobile:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                              "${clientData[index].mobileOne}"),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            'Address:',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Container(
+                                            width: 180,
+                                            child: Text(
+                                              "${clientData[index].address}",
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                              style: TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Center(
+                                              child: InkWell(
+                                            onTap: () {
+                                              imageUpload(
+                                                clients?.data?[index].id
+                                                    .toString(),
+                                              );
+                                              // addPhotoDialog(
+                                              //     context,
+                                              //     clients?.data?[index].id
+                                              //             .toString() ??
+                                              //         "");
+                                              // _getFromCamera(
+                                              //     clientData[index].id.toString() ??
+                                              //         "");
+                                            },
+                                            child: Container(
+                                              height: 40,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: colors.primary),
+                                              child: Center(
+                                                child: Text(
+                                                  "Add",
+                                                  style: TextStyle(
+                                                      color: colors.whiteTemp,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                          SizedBox(
+                                            height: 3,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+
+                                //   Padding(
+                                //   padding: const EdgeInsets.all(5.0),
+                                //   child: Container(
+                                //     //  height: MediaQuery.of(context).size.height/1.0,
+                                //     decoration: BoxDecoration(
+                                //         border: Border.all(color: colors.primary),
+                                //         borderRadius: BorderRadius.circular(5)),
+                                //     child: Column(
+                                //       mainAxisAlignment: MainAxisAlignment.center,
+                                //       crossAxisAlignment: CrossAxisAlignment.center,
+                                //       mainAxisSize: MainAxisSize.min,
+                                //       children: <Widget>[
+                                //         InkWell(
+                                //           child: new ClipRRect(
+                                //             borderRadius:
+                                //                 BorderRadius.circular(0.0),
+                                //             child: new FadeInImage(
+                                //               fadeInDuration:
+                                //                   Duration(milliseconds: 150),
+                                //               image: CachedNetworkImageProvider(
+                                //                   "${clients?.data?[index].photo?[0]}"),
+                                //               height: 110.0,
+                                //               width: double.infinity,
+                                //               fit: BoxFit.cover,
+                                //               imageErrorBuilder:
+                                //                   (context, error, stackTrace) =>
+                                //                       erroWidget(50),
+                                //               placeholder: placeHolder(50),
+                                //             ),
+                                //           ),
+                                //           onTap: () {
+                                //             // print("download image");
+                                //             // downloadImage(clientData?[index].photo!?[0] ?? "");
+                                //             if (clientData[index].photo?[0] !=
+                                //                 null) {
+                                //               final imageProvider = Image.network(
+                                //                       clientData[index].photo?[0] ??
+                                //                           '')
+                                //                   .image;
+                                //               showImageViewer(
+                                //                   context, imageProvider,
+                                //                   onViewerDismissed: () {
+                                //                 print("dismissed");
+                                //               });
+                                //             }
+                                //           },
+                                //           onLongPress: () {
+                                //             //  print("download image");
+                                //
+                                //             showDilaogBox(
+                                //                 clientData[index].photo![0] ?? "");
+                                //             //  downloadImage(clientData?[index].photo!?[0] ?? "");
+                                //           },
+                                //         ),
+                                //         // const SizedBox(width: 20),
+                                //         Padding(
+                                //           padding: const EdgeInsets.only(
+                                //               left: 5.0, right: 5),
+                                //           child: Row(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             children: [
+                                //               Row(
+                                //                 mainAxisAlignment:
+                                //                     MainAxisAlignment.spaceBetween,
+                                //                 children: [
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.start,
+                                //                     children: [
+                                //                       Text(
+                                //                         'Firm:',
+                                //                         style: TextStyle(
+                                //                             fontWeight:
+                                //                                 FontWeight.bold),
+                                //                       ),
+                                //                       Text(
+                                //                           "${clientData[index].nameOfFirm}"),
+                                //                     ],
+                                //                   ),
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.end,
+                                //                     children: [
+                                //                       Text(
+                                //                         'Owner:',
+                                //                         style: TextStyle(
+                                //                             fontWeight:
+                                //                                 FontWeight.bold),
+                                //                       ),
+                                //                       Text(
+                                //                           "${clientData[index].ownerName}"),
+                                //                     ],
+                                //                   ),
+                                //                 ],
+                                //               ),
+                                //               SizedBox(height: 8),
+                                //               Text(
+                                //                 'Mobile:',
+                                //                 style: TextStyle(
+                                //                     fontWeight: FontWeight.bold),
+                                //               ),
+                                //               Text(
+                                //                   "${clientData[index].mobileOne}"),
+                                //               SizedBox(height: 8),
+                                //               Text(
+                                //                 'Address:',
+                                //                 style: TextStyle(
+                                //                     fontWeight: FontWeight.bold),
+                                //               ),
+                                //               Text("${clientData[index].address}"),
+                                //               Spacer(),
+                                //               // Column(
+                                //               //   crossAxisAlignment:
+                                //               //       CrossAxisAlignment.start,
+                                //               //   children: [
+                                //               //     Text(
+                                //               //       "Firm:",
+                                //               //       style: TextStyle(
+                                //               //           fontSize: 11,
+                                //               //           fontWeight: FontWeight.w400,
+                                //               //           color: colors.blackTemp),
+                                //               //     ),
+                                //               //     SizedBox(
+                                //               //       height: 18,
+                                //               //     ),
+                                //               //     Text(
+                                //               //       "Owner:",
+                                //               //       style: TextStyle(
+                                //               //           fontSize: 11,
+                                //               //           fontWeight: FontWeight.w400,
+                                //               //           color: colors.blackTemp),
+                                //               //     ),
+                                //               //     SizedBox(
+                                //               //       height: 15,
+                                //               //     ),
+                                //               //     Text(
+                                //               //       "Mobile:",
+                                //               //       style: TextStyle(
+                                //               //           fontSize: 11,
+                                //               //           fontWeight: FontWeight.w400,
+                                //               //           color: colors.blackTemp),
+                                //               //     ),
+                                //               //     SizedBox(
+                                //               //       height: 15,
+                                //               //     ),
+                                //               //     Text(
+                                //               //       "Address:",
+                                //               //       style: TextStyle(
+                                //               //           fontSize: 11,
+                                //               //           fontWeight: FontWeight.w400,
+                                //               //           color: colors.blackTemp),
+                                //               //     ),
+                                //               //   ],
+                                //               // ),
+                                //               // Column(
+                                //               //   crossAxisAlignment:
+                                //               //       CrossAxisAlignment.end,
+                                //               //   children: [
+                                //               //     Text(
+                                //               //       "${clientData[index].nameOfFirm}",
+                                //               //       style: TextStyle(
+                                //               //           fontSize: 11,
+                                //               //           fontWeight: FontWeight.w400,
+                                //               //           color: colors.blackTemp,
+                                //               //           overflow:
+                                //               //               TextOverflow.ellipsis),
+                                //               //     ),
+                                //               //     SizedBox(height: 10),
+                                //               //     Text(
+                                //               //         "${clientData[index].ownerName}",
+                                //               //         style: TextStyle(
+                                //               //             fontSize: 11,
+                                //               //             fontWeight:
+                                //               //                 FontWeight.w400,
+                                //               //             color: colors.blackTemp)),
+                                //               //     SizedBox(height: 10),
+                                //               //     Text(
+                                //               //         "${clientData[index].mobileOne}",
+                                //               //         style: TextStyle(
+                                //               //             fontSize: 11,
+                                //               //             fontWeight:
+                                //               //                 FontWeight.w400,
+                                //               //             color: colors.blackTemp)),
+                                //               //     SizedBox(height: 10),
+                                //               //     Container(
+                                //               //       width: 90,
+                                //               //       child: Text(
+                                //               //         "${clientData[index].address}${clientData[index].pinCode}",
+                                //               //         style: TextStyle(
+                                //               //             fontSize: 11,
+                                //               //             fontWeight:
+                                //               //                 FontWeight.w400,
+                                //               //             color: colors.blackTemp),
+                                //               //         maxLines: 3,
+                                //               //       ),
+                                //               //     ),
+                                //               //   ],
+                                //               // ),
+                                //             ],
+                                //           ),
+                                //         ),
+                                //         SizedBox(height: 5),
+                                //         InkWell(
+                                //           onTap: () {
+                                //             Navigator.push(
+                                //                 context,
+                                //                 MaterialPageRoute(
+                                //                     builder: (context) =>
+                                //                         ClientsView(
+                                //                             model: clientData[
+                                //                                 index])));
+                                //           },
+                                //           child: Container(
+                                //             height: 30,
+                                //             width: 70,
+                                //             decoration: BoxDecoration(
+                                //                 borderRadius:
+                                //                     BorderRadius.circular(5),
+                                //                 color: colors.primary),
+                                //             child: Center(
+                                //                 child: Text(
+                                //               "View",
+                                //               style: TextStyle(
+                                //                   color: colors.whiteTemp,
+                                //                   fontWeight: FontWeight.bold),
+                                //             )),
+                                //           ),
+                                //         )
+                                //       ],
+                                //     ),
+                                //   ),
+                                // );
+                              },
+                            ),
+                          ),
             // _catList(),
           ],
         ),

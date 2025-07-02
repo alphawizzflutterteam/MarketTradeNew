@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -21,7 +20,6 @@ import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Screen/Dashboard.dart';
-import 'package:omega_employee_management/Screen/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Helper/String.dart';
@@ -107,7 +105,11 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 
 updateLocation1(Position position) async {
   final box = GetStorage();
-  String? userId = box.read('userid');
+  // String? userId = box.read('userid');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? uid = prefs.getString("user_id");
+
   var headers = {
     'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
   };
@@ -116,10 +118,9 @@ updateLocation1(Position position) async {
   request.fields.addAll({
     'lat': position.latitude.toString(),
     'lng': position.longitude.toString(),
-    'user_id': userId.toString(),
-    'address': '${currentAddress}'
+    'user_id': "${uid}"
   });
-  print("update location parameter in address ${request.fields}");
+  print("update location parameter ${request.fields}");
   request.headers.addAll(headers);
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
@@ -129,75 +130,77 @@ updateLocation1(Position position) async {
   }
 }
 
-setIsCheckOut() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setBool("checkIn", false);
-}
-
-Future<void> checkOutNow(currentAddress) async {
-  var headers = {
-    'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
-  };
-  var request =
-      http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
-  request.fields.addAll({
-    'user_id': CUR_USERID.toString(),
-    'checkout_latitude': '${latitude}',
-    'checkout_longitude': '${longitude}',
-    'address': currentAddress,
-    // 'redings': readingCtr.text
-  });
-
-  print("this is my check in request ${request.fields.toString()}");
-  request.headers.addAll(headers);
-  http.StreamedResponse response = await request.send();
-  if (response.statusCode == 200) {
-    var str = await response.stream.bytesToString();
-    var result = json.decode(str);
-    if (result['data']['error'] == false) {
-      setIsCheckOut();
-      Fluttertoast.showToast(msg: result['data']['msg']);
-    } else {
-      Fluttertoast.showToast(msg: result['message']);
-    }
-    // var finalResponse = GetUserExpensesModel.fromJson(result);
-    // final finalResponse = CheckInModel.fromJson(json.decode(Response));
-  } else {
-    print(response.reasonPhrase);
-  }
-}
-
-String? currentAddress;
+// setIsCheckOut() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   prefs.setBool("checkIn", false);
+// }
+//
+// Future<void> checkOutNow(currentAddress) async {
+//   var headers = {
+//     'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
+//   };
+//   var request = http.MultipartRequest('POST', Uri.parse(checkOutNowApi.toString()));
+//   request.fields.addAll({
+//     'user_id': CUR_USERID.toString(),
+//     'checkout_latitude': '${latitude}',
+//     'checkout_longitude': '${longitude}',
+//     'address': currentAddress,
+//     // 'redings': readingCtr.text
+//   });
+//
+//
+//   print("this is my check in request ${request.fields.toString()}");
+//   request.headers.addAll(headers);
+//   http.StreamedResponse response = await request.send();
+//   if (response.statusCode == 200) {
+//     var str = await response.stream.bytesToString();
+//     var result = json.decode(str);
+//
+//     if(result['data']['error'] == false) {
+//       setIsCheckOut();
+//       Fluttertoast.showToast(msg: result['data']['msg']);
+//     } else {
+//       Fluttertoast.showToast(msg: result['message']);
+//     }
+//     // var finalResponse = GetUserExpensesModel.fromJson(result);
+//     // final finalResponse = CheckInModel.fromJson(json.decode(Response));
+//   }
+//   else {
+//     print(response.reasonPhrase);
+//   }
+// }
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  String? locationTime = pref.getString('location_time');
-  print("location time in this service ${locationTime}");
-  int updateTime = int.parse(locationTime.toString());
-  print("location time in this service to here${updateTime}");
   // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
+
+  // For flutter prior to version 3.0.0
+  // We have to register the plugin manually
+
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.setString("hello", "world");
 
   /// OPTIONAL when use custom notification
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
     });
+
     service.on('setAsBackground').listen((event) {
       service.setAsBackgroundService();
     });
   }
+
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
 
   // bring to foreground
-  Timer.periodic(Duration(seconds: 30), (timer) async {
+  Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (service is AndroidServiceInstance) {
       if (await service.isForegroundService()) {
         /// OPTIONAL for use custom notification
@@ -215,6 +218,7 @@ void onStart(ServiceInstance service) async {
             ),
           ),
         );
+
         // if you don't using custom notification, uncomment this
         service.setForegroundNotificationInfo(
           title: "My App Service",
@@ -224,22 +228,20 @@ void onStart(ServiceInstance service) async {
     }
     Position position = await Geolocator.getCurrentPosition();
     updateLocation1(position);
-
+    //
     // List<Placemark> placemark = await placemarkFromCoordinates(
-    //     double.parse(position.latitude.toString()),
-    //     double.parse(position.longitude.toString()),
+    //     double.parse(position.latitude.toString()), double.parse(position.longitude.toString()),
     //     localeIdentifier: "en");
-    // currentAddress =
-    //     "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
-    // print("addddddddddddddd ${currentAddress}");
+    // String currentAddress = "${placemark[0].street}, ${placemark[0].subLocality}, ${placemark[0].locality}";
     // // if(DateTime.now().hour == "21" &&DateTime.now().minute == "1"){
     // var prefs = await SharedPreferences.getInstance();
     // bool? isCheckIn = prefs.getBool("checkIn");
-    // if (isCheckIn ?? false) {
+    // if(isCheckIn ?? false){
     //   checkOutNow(currentAddress);
     // }
 
     // }
+
     /// you can see this log in logcat
     print(
         'FLUTTER BACKGROUND SERVICE: ${DateTime.now()}  ${position.latitude}  ${position.longitude}');
@@ -350,12 +352,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
   //   final box = GetStorage();
   //   String? userId = box.read('userid');
   //   print('_________this${userId}_______');
-  //   // print("User id"+prefs.getString("userid").toString()??"");
+  //  // print("User id"+prefs.getString("userid").toString()??"");
   //   var headers = {
   //     'Cookie': 'ci_session=62f533d7ea1e427426f49c952c6f72cc384b47c7'
   //   };
-  //   var request =
-  //       http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
+  //   var request = http.MultipartRequest('POST', Uri.parse(updateLiveLocation.toString()));
   //   request.fields.addAll({
   //     'lat': latitude.toString(),
   //     'lng': longitude.toString(),
@@ -366,7 +367,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
   //   http.StreamedResponse response = await request.send();
   //   if (response.statusCode == 200) {
   //     print(await response.stream.bytesToString());
-  //   } else {
+  //   }
+  //   else {
   //     print(response.reasonPhrase);
   //   }
   // }
@@ -434,18 +436,14 @@ class _CheckInScreenState extends State<CheckInScreen> {
     var headers = {
       'Cookie': 'ci_session=3515d88c5cab45d32a201da39275454c5d051af2'
     };
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(
-        checkInNowApi.toString(),
-      ),
-    );
+    var request =
+        http.MultipartRequest('POST', Uri.parse(checkInNowApi.toString()));
     request.fields.addAll({
-      'user_id': '$uid',
+      'user_id': uid ?? "",
       // CUR_USERID.toString(),
       'checkin_latitude': '${latitude}',
       'checkin_longitude': '${longitude}',
-      'address': '${currentAddress.text}',
+      'address': currentAddress.text,
       'redings': readingCtr.text
     });
     for (var i = 0; i < (imagePathList.length ?? 0); i++) {
@@ -489,9 +487,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     Future.delayed(Duration(milliseconds: 800), () {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-            builder: (context) => Dashboard(),
-          ),
+          MaterialPageRoute(builder: (context) => Dashboard()),
           (route) => false);
     });
   }
@@ -562,7 +558,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   Widget buildGridView() {
     return Container(
-      height: 190,
+      height: 195,
       child: GridView.builder(
         itemCount: imagePathList.length,
         gridDelegate:
@@ -575,7 +571,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: colors.primary)),
                 width: MediaQuery.of(context).size.width / 2.8,
-                height: 190,
+                height: 185,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child:
@@ -590,7 +586,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     border: Border.all(color: colors.primary),
                   ),
                   width: MediaQuery.of(context).size.width / 2.8,
-                  height: 65,
+                  height: 70,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
@@ -725,6 +721,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
     back();
   }
 
+  ///MULTI IMAGE PICKER FROM GALLERY CAMERA
+  ///
+  ///
+
   @override
   void initState() {
     // TODO: implement initState
@@ -742,7 +742,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   convertDateTimeDispla() {
     var now = new DateTime.now();
-    var formatter = new DateFormat('dd-MM-yyyy');
+    var formatter = new DateFormat('yyyy-MM-dd');
     formattedDate = formatter.format(now);
     print("datedetet$formattedDate"); // 2016-01-25
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
@@ -751,163 +751,130 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        backgroundColor: colors.white70,
-        // appBar: AppBar(
-        //   automaticallyImplyLeading: false,
-        //   elevation: 0,
-        //   backgroundColor: Colors.transparent,
-        //   // leading: IconButton(onPressed: (){
-        //   //   Navigator.pop(context);
-        //   // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
-        // ),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 200,
-                  width: 200,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        "assets/images/checkin.png",
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Checking in.....",
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: colors.whiteTemp),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                currentAddress.text == "" || currentAddress.text == null
-                    ? Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          "Locating...",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      )
-                    : Text(
-                        "${currentAddress.text}",
+    return Scaffold(
+      backgroundColor: colors.white70,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        // leading: IconButton(onPressed: (){
+        //   Navigator.pop(context);
+        // }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 200,
+                width: 200,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      "assets/images/checkin.png",
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Checking in.....",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: colors.whiteTemp),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              currentAddress.text == "" || currentAddress.text == null
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        "Locating...",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
-                SizedBox(height: 15),
-                uploadMultiImmage(),
-                // uploadMultiImage()
-                SizedBox(height: 10),
-                Container(
-                  height: 40,
-                  width: 145,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: colors.primary),
-                  child: TextFormField(
-                    maxLength: 6,
-                    controller: readingCtr,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10, bottom: 10),
-                      counterText: "",
-                      border: InputBorder.none,
-                      hintText: "Add Odometer Start Reading",
-                      hintStyle:
-                          TextStyle(fontSize: 12, color: colors.whiteTemp),
+                    )
+                  : Text(
+                      "${currentAddress.text}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
+              SizedBox(height: 15),
+              uploadMultiImmage(),
+              // uploadMultiImage()
+              SizedBox(height: 10),
+              Container(
+                height: 40,
+                width: 145,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: colors.primary),
+                child: TextFormField(
+                  maxLength: 6,
+                  controller: readingCtr,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 10, bottom: 10),
+                    counterText: "",
+                    border: InputBorder.none,
+                    hintText: "Add Odometer Start Reading",
+                    hintStyle: TextStyle(fontSize: 12, color: colors.whiteTemp),
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
-                  height: 45,
-                  width: 220,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        shape: StadiumBorder(),
-                        fixedSize: Size(350, 40),
-                        backgroundColor: colors.primary.withOpacity(0.8)),
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
-                      if (latitude == null ||
-                          longitude == null ||
-                          _imageFile == null) {
-                        setSnackbar("Please select a image", context);
-                      } else if (readingCtr.text.isEmpty) {
-                        setSnackbar(
-                            "Please enter Odometer start reading", context);
-                      } else {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        checkInNow();
-                      }
-                    },
-                    child: isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text('CHECK IN NOW'),
-                  ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                height: 45,
+                width: 220,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: StadiumBorder(),
+                      fixedSize: Size(350, 40),
+                      backgroundColor: colors.primary.withOpacity(0.8)),
+                  onPressed: () {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+                    if (latitude == null ||
+                        longitude == null ||
+                        _imageFile == null) {
+                      setSnackbar("Please select a image", context);
+                    } else if (readingCtr.text.isEmpty) {
+                      setSnackbar(
+                          "Please enter Odometer start reading", context);
+                    } else {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      checkInNow();
+                    }
+                  },
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text('CHECK IN NOW'),
                 ),
-                SizedBox(height: 20),
-              ],
-            ),
+              ),
+              SizedBox(height: 20),
+            ],
           ),
         ),
       ),
-      onWillPop: () async {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Confirm Exit"),
-                content: const Text("Are you sure you want to exit this app?"),
-                actions: <Widget>[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.secondary),
-                    child: const Text("YES"),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.secondary),
-                    child: const Text("NO"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-        return true;
-      },
     );
   }
 }

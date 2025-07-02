@@ -153,10 +153,8 @@ class _SiteSurveyState extends State<SiteSurvey> {
     var headers = {
       'Cookie': 'ci_session=1320aad94f004f819d6b7fcd7da8a40903f7ce60'
     };
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/site_visit_form'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/site_visit_form'));
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
       'date': execteddateCtr.text,
@@ -1015,7 +1013,7 @@ class _SiteSurveyState extends State<SiteSurvey> {
                           DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
+                              firstDate: DateTime.now(),
                               lastDate: DateTime(2100),
                               builder: (context, child) {
                                 return Theme(
@@ -1060,7 +1058,8 @@ class _SiteSurveyState extends State<SiteSurvey> {
                       decoration: InputDecoration(
                         hintText: '',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),

@@ -2,9 +2,28 @@
   "project_info": {
     "project_number": "403580769762",
     "project_id": "market-track-a861d",
-    "storage_bucket": "market-track-a861d.appspot.com"
+    "storage_bucket": "market-track-a861d.firebasestorage.app"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403580769762:android:ffffd90e2b15428f2b55bb",
+        "android_client_info": {
+          "package_name": "com.market.track"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkjU49Zag8PCTkulmKtpYJXKzAOYcleR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:403580769762:android:8b53df17498d7bb12b55bb",

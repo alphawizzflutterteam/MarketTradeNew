@@ -50,10 +50,10 @@ void main() async {
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyAkjU49Zag8PCTkulmKtpYJXKzAOYcleR8',
-    appId: "1:403580769762:android:8b53df17498d7bb12b55bb",
+    appId: "1:403580769762:android:ffffd90e2b15428f2b55bb",
     messagingSenderId: '403580769762',
     projectId: "market-track-a861d",
-    storageBucket: "market-track-a861d.appspot.com",
+    storageBucket: "market-track-a861d.firebasestorage.app",
   ));
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations([

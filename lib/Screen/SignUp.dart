@@ -177,12 +177,12 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         MOBILE: mobile,
         NAME: name,
         EMAIL: email,
-        PASSWORD: password,
+        PASSWORD: '12345678',
         // COUNTRY_CODE: countrycode,
-        REFERCODE: referCode,
+        REFERCODE: '23244',
         // FRNDCODE: friendCode
       };
-
+      print("sign up para ${data}");
       Response response =
           await post(getUserSignUpApi, body: data, headers: headers)
               .timeout(Duration(seconds: timeOut));
@@ -233,11 +233,11 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Align(
         alignment: Alignment.center,
-        child: Text(getTranslated(context, 'SIGN_UP_LBL')!,
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                color: colors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 25)),
+        child: Text(
+          getTranslated(context, 'SIGN_UP_LBL')!,
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+              color: colors.primary, fontWeight: FontWeight.bold, fontSize: 25),
+        ),
       ),
     );
   }
@@ -764,7 +764,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
                       setUserName(),
                       setEmail(),
                       setMono(),
-                      setPass(),
+                      // setPass(),
                       // setRefer(),
                       //showPass(),
                       verifyBtn(),

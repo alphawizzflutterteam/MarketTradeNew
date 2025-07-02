@@ -1,18 +1,9 @@
 // import 'dart:async';
 // import 'dart:convert';
-// import 'dart:io';
 //
-// import 'package:omega_employee_management/Screen/SignUp.dart';
 // import 'package:country_code_picker/country_code_picker.dart';
-// import 'package:omega_employee_management/Helper/String.dart';
-// import 'package:omega_employee_management/Helper/cropped_container.dart';
-// import 'package:omega_employee_management/Provider/SettingProvider.dart';
-// import 'package:omega_employee_management/Screen/Privacy_Policy.dart';
-// import 'package:omega_employee_management/Screen/Verify_Otp.dart';
-// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:http/http.dart';
 // import 'package:provider/provider.dart';
 //
@@ -20,17 +11,22 @@
 // import '../Helper/Color.dart';
 // import '../Helper/Constant.dart';
 // import '../Helper/Session.dart';
+// import '../Helper/String.dart';
+// import '../Helper/cropped_container.dart';
+// import '../Provider/SettingProvider.dart';
+// import 'Privacy_Policy.dart';
+// import 'Verify_Otp.dart';
 //
-// class Login extends StatefulWidget {
+// class SendOtp extends StatefulWidget {
 //   String? title;
 //
-//   Login({Key? key, this.title}) : super(key: key);
+//   SendOtp({Key? key, this.title}) : super(key: key);
 //
 //   @override
-//   _LoginState createState() => _LoginState();
+//   _SendOtpState createState() => _SendOtpState();
 // }
 //
-// class _LoginState extends State<Login> with TickerProviderStateMixin {
+// class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
 //   bool visible = false;
 //   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 //   final mobileController = TextEditingController();
@@ -140,23 +136,22 @@
 //     try {
 //       var data = {MOBILE: mobile};
 //       Response response =
-//           await post(sendOtpApi, body: data, headers: headers).timeout(Duration(seconds: timeOut));
+//           await post(getVerifyUserApi, body: data, headers: headers)
+//               .timeout(Duration(seconds: timeOut));
 //
 //       var getdata = json.decode(response.body);
 //
 //       bool? error = getdata["error"];
 //       String? msg = getdata["message"];
-//       print("this is send otp data $sendOtpApi and $getdata");
 //       await buttonController!.reverse();
 //
 //       SettingProvider settingsProvider =
 //           Provider.of<SettingProvider>(context, listen: false);
 //
-//       // if (widget.title == getTranslated(context, 'SEND_OTP_TITLE')) {
+//       if (widget.title == getTranslated(context, 'SEND_OTP_TITLE')) {
 //         if (!error!) {
-//           print("navigation");
 //           int otp = getdata["data"];
-//            // setSnackbar(otp.toString());
+//           // setSnackbar(otp.toString());
 //
 //           // settingsProvider.setPrefrence(MOBILE, mobile!);
 //           // settingsProvider.setPrefrence(COUNTRY_CODE, countrycode!);
@@ -168,32 +163,32 @@
 //                     builder: (context) => VerifyOtp(
 //                           mobileNumber: mobile!,
 //                           countryCode: countrycode,
-//                           otp: otp.toString(),
-//                      title: getTranslated(context, 'SEND_OTP_TITLE'),
+//                           // otp: otp,
+//                           title: getTranslated(context, 'SEND_OTP_TITLE'),
 //                         )));
 //           });
 //         } else {
 //           setSnackbar(msg!);
 //         }
-//       // }
-//       // if (widget.title == getTranslated(context, 'FORGOT_PASS_TITLE')) {
-//       //   if (error!) {
-//       //     settingsProvider.setPrefrence(MOBILE, mobile!);
-//       //     settingsProvider.setPrefrence(COUNTRY_CODE, countrycode!);
-//       //     Future.delayed(Duration(seconds: 1)).then((_) {
-//       //       Navigator.pushReplacement(
-//       //           context,
-//       //           MaterialPageRoute(
-//       //               builder: (context) => VerifyOtp(
-//       //                     mobileNumber: mobile!,
-//       //                     countryCode: countrycode,
-//       //                     title: getTranslated(context, 'FORGOT_PASS_TITLE'),
-//       //                   )));
-//       //     });
-//       //   } else {
-//       //     setSnackbar(getTranslated(context, 'FIRSTSIGNUP_MSG')!);
-//       //   }
-//       // }
+//       }
+//       if (widget.title == getTranslated(context, 'FORGOT_PASS_TITLE')) {
+//         if (error!) {
+//           settingsProvider.setPrefrence(MOBILE, mobile!);
+//           settingsProvider.setPrefrence(COUNTRY_CODE, countrycode!);
+//           Future.delayed(Duration(seconds: 1)).then((_) {
+//             Navigator.pushReplacement(
+//                 context,
+//                 MaterialPageRoute(
+//                     builder: (context) => VerifyOtp(
+//                           mobileNumber: mobile!,
+//                           countryCode: countrycode,
+//                           title: getTranslated(context, 'FORGOT_PASS_TITLE'),
+//                         )));
+//           });
+//         } else {
+//           setSnackbar(getTranslated(context, 'FIRSTSIGNUP_MSG')!);
+//         }
+//       }
 //     } on TimeoutException catch (_) {
 //       setSnackbar(getTranslated(context, 'somethingMSg')!);
 //       await buttonController!.reverse();
@@ -328,10 +323,9 @@
 //
 //   Widget verifyBtn() {
 //     return AppBtn(
-//         title:
-//         // widget.title == getTranslated(context, 'SEND_OTP_TITLE') ?
-//         getTranslated(context, 'SEND_OTP'),
-//             // : getTranslated(context, 'GET_PASSWORD'),
+//         title: widget.title == getTranslated(context, 'SEND_OTP_TITLE')
+//             ? getTranslated(context, 'SEND_OTP')
+//             : getTranslated(context, 'GET_PASSWORD'),
 //         btnAnim: buttonSqueezeanimation,
 //         btnCntrl: buttonController,
 //         onBtnSelected: () async {
@@ -404,23 +398,23 @@
 //         : Container();
 //   }
 //
-//   backBtn() {
-//     return Platform.isIOS
-//         ? Container(
-//             padding: EdgeInsets.only(top: 20.0, left: 10.0),
-//             alignment: Alignment.topLeft,
-//             child: Card(
-//               elevation: 0,
-//               child: Padding(
-//                 padding: const EdgeInsets.only(right: 4.0),
-//                 child: InkWell(
-//                   child: Icon(Icons.keyboard_arrow_left, color: colors.primary),
-//                   onTap: () => Navigator.of(context).pop(),
-//                 ),
-//               ),
-//             ))
-//         : Container();
-//   }
+//   // backBtn() {
+//   //   return Platform.isIOS
+//   //       ? Container(
+//   //           padding: EdgeInsets.only(top: 20.0, left: 10.0),
+//   //           alignment: Alignment.topLeft,
+//   //           child: Card(
+//   //             elevation: 0,
+//   //             child: Padding(
+//   //               padding: const EdgeInsets.only(right: 4.0),
+//   //               child: InkWell(
+//   //                 child: Icon(Icons.keyboard_arrow_left, color: colors.primary),
+//   //                 onTap: () => Navigator.of(context).pop(),
+//   //               ),
+//   //             ),
+//   //           ))
+//   //       : Container();
+//   // }
 //
 //   @override
 //   void initState() {
@@ -456,7 +450,7 @@
 //         body: _isNetworkAvail
 //             ? Stack(
 //                 children: [
-//                   backBtn(),
+//                   // backBtn(),
 //                   Container(
 //                     width: double.infinity,
 //                     height: double.infinity,
@@ -524,12 +518,11 @@
 //                         child: Align(
 //                           alignment: Alignment.topLeft,
 //                           child: Text(
-//                             getTranslated(context, 'LOGIN_LBL')!,
-//                             // widget.title ==
-//                             //         getTranslated(context, 'SEND_OTP_TITLE')
-//                             //     ? getTranslated(context, 'SIGN_UP_LBL')!
-//                             //     : getTranslated(
-//                             //         context, 'FORGOT_PASSWORDTITILE')!,
+//                             widget.title ==
+//                                     getTranslated(context, 'SEND_OTP_TITLE')
+//                                 ? getTranslated(context, 'SIGN_UP_LBL')!
+//                                 : getTranslated(
+//                                     context, 'FORGOT_PASSWORDTITILE')!,
 //                             style: const TextStyle(
 //                               color: colors.primary,
 //                               fontSize: 30,
@@ -544,7 +537,6 @@
 //                       verifyCodeTxt(),
 //                       setCodeWithMono(),
 //                       verifyBtn(),
-//                       dontHaveAccount(),
 //                       termAndPolicyTxt(),
 //                       SizedBox(
 //                         height: MediaQuery.of(context).size.height * 0.10,
@@ -556,38 +548,6 @@
 //             ),
 //           ),
 //         ),
-//       ),
-//     );
-//   }
-//
-//   Widget dontHaveAccount() {
-//     return Padding(
-//       padding: EdgeInsetsDirectional.only(
-//           bottom: 30.0, start: 25.0, end: 25.0, top: 10.0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Text(
-//             getTranslated(context, 'DONT_HAVE_AN_ACC')!,
-//             style: Theme.of(context).textTheme.caption!.copyWith(
-//                 color: Theme.of(context).colorScheme.fontColor,
-//                 fontWeight: FontWeight.normal),
-//           ),
-//           InkWell(
-//               onTap: () async {
-//                 await buttonController!.reverse();
-//                 Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-//                 // sendOtpUser();
-//                 // checkNetworkOtp();
-//               },
-//               child: Text(
-//                 getTranslated(context, 'SIGN_UP_LBL')!,
-//                 style: Theme.of(context).textTheme.caption!.copyWith(
-//                     color: Theme.of(context).colorScheme.fontColor,
-//                     decoration: TextDecoration.underline,
-//                     fontWeight: FontWeight.normal),
-//               ))
-//         ],
 //       ),
 //     );
 //   }

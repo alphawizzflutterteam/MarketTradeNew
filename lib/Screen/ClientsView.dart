@@ -758,8 +758,7 @@ class _ClientsViewState extends State<ClientsView> {
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
-    var request =
-        http.MultipartRequest('GET', Uri.parse(getListsApi.toString()));
+    var request = http.Request('GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -3205,9 +3204,7 @@ class _ClientsViewState extends State<ClientsView> {
       'Cookie': 'ci_session=87296a4980f29999f28fd3ac8756e4f69277cda7'
     };
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_lists'));
+        'POST', Uri.parse('https://businesstrack.co.in/app/v1/api/get_lists'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {

@@ -588,7 +588,7 @@
 //     var headers = {
 //       'Cookie': 'ci_session=87296a4980f29999f28fd3ac8756e4f69277cda7'
 //     };
-//     var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/rename_market_track/app/v1/api/get_lists'));
+//     var request = http.MultipartRequest('POST', Uri.parse('https://businesstrack.co.in/app/v1/api/get_lists'));
 //
 //     request.headers.addAll(headers);
 //
@@ -610,7 +610,7 @@
 //     var headers = {
 //       'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
 //     };
-//     var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/rename_market_track/app/v1/api/add_new_client'));
+//     var request = http.MultipartRequest('POST', Uri.parse('https://businesstrack.co.in/app/v1/api/add_new_client'));
 //     request.fields.addAll({
 //       'user_id': '2',
 //       'name_of_firm': namecn.text,
@@ -790,6 +790,7 @@ class _Client_formState extends State<Client_form> {
   void initState() {
     super.initState();
     getDepartment();
+    print("adddressss ${widget.model?.address}");
     namecn.text = '${widget.model?.nameOfFirm}';
     ownernamecn.text = '${widget.model?.ownerName}';
     addresscn.text = '${widget.model?.address}';
@@ -1501,8 +1502,7 @@ class _Client_formState extends State<Client_form> {
     var headers = {
       'Cookie': 'ci_session=81cd74eabcb3683af924161dd1dcd833b8da1ff6'
     };
-    var request =
-        http.MultipartRequest('GET', Uri.parse(getListsApi.toString()));
+    var request = http.Request('GET', Uri.parse(getListsApi.toString()));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -3738,9 +3738,7 @@ class _Client_formState extends State<Client_form> {
       'Cookie': 'ci_session=87296a4980f29999f28fd3ac8756e4f69277cda7'
     };
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/get_lists'));
+        'POST', Uri.parse('https://businesstrack.co.in/app/v1/api/get_lists'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -3760,10 +3758,8 @@ class _Client_formState extends State<Client_form> {
     var headers = {
       'Cookie': 'ci_session=7e079301704afa2c89541d74dff4365aadc746ac'
     };
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://developmentalphawizz.com/rename_market_track/app/v1/api/add_new_client'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/add_new_client'));
     request.fields.addAll({
       'user_id': '${CUR_USERID}',
       'name_of_firm': namecn.text,
@@ -3800,11 +3796,21 @@ class _Client_formState extends State<Client_form> {
       // 'gst_img_three': '${gstTwo.toString()}',
       'create_by': '${CUR_USERID}',
       'voter_number': '${voterCtr.text}',
-      for (var i = 0; i < imagePathList.length; i++)
-        'photo[]': imagePathList[i],
-      for (var i = 0; i < apiImages.length; i++) 'photos[]': apiImages[i],
+      'current_address': "${currentAddress.text}",
+      // for (var i = 0; i < imagePathList.length; i++)
+      //   'photos[]': imagePathList[i],
+      // for (var i = 0; i < apiImages.length; i++) 'photos[]': apiImages[i],
     });
     print("update parara ${request.fields}");
+
+    for (var i = 0; i < imagePathList.length; i++) {
+      print('Imageeee $imagePathList');
+      imagePathList.isEmpty
+          ? null
+          : request.files.add(
+              await http.MultipartFile.fromPath('photos[]', imagePathList[i]));
+    }
+
     gstImage != null
         ? request.files.add(
             await http.MultipartFile.fromPath('gst_img', gstImage?.path ?? ""))
