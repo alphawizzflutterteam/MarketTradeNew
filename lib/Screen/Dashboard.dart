@@ -15,7 +15,6 @@ import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
 import 'package:omega_employee_management/Screen/Login.dart';
-import 'package:omega_employee_management/Screen/Product_Detail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Add_Address.dart';
@@ -286,15 +285,15 @@ class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
           items =
               (data as List).map((data) => new Product.fromJson(data)).toList();
 
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProductDetail(
-                    index: list ? int.parse(id) : index,
-                    model: list
-                        ? items[0]
-                        : sectionList[secPos].productList![index],
-                    secPos: secPos,
-                    list: list,
-                  )));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => ProductDetail(
+          //           index: list ? int.parse(id) : index,
+          //           model: list
+          //               ? items[0]
+          //               : sectionList[secPos].productList![index],
+          //           secPos: secPos,
+          //           list: list,
+          //         )));
         } else {
           if (msg != "Products Not Found !") setSnackbar(msg, context);
         }

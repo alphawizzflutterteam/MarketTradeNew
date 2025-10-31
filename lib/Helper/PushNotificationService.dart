@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:omega_employee_management/Screen/MyOrder.dart';
@@ -15,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Screen/Chat.dart';
 import '../Screen/Customer_Support.dart';
-import '../Screen/My_Wallet.dart';
-import '../Screen/Product_Detail.dart';
 import '../Screen/Splash.dart';
 import '../main.dart';
 import 'Constant.dart';
@@ -69,10 +67,11 @@ class PushNotificationService {
           Future.delayed(Duration.zero, () {
             tabController.animateTo(1);
           });
-        } else if (pay[0] == "wallet") {
-          Navigator.push(
-              context, (MaterialPageRoute(builder: (context) => MyWallet())));
-        } else if (pay[0] == 'order') {
+        }
+        // else if (pay[0] == "wallet") {
+        //   Navigator.push(context, (MaterialPageRoute(builder: (context) => MyWallet())));
+        // }
+        else if (pay[0] == 'order') {
           Navigator.push(
               context, (MaterialPageRoute(builder: (context) => MyOrder())));
         } else if (pay[0] == "ticket_message") {
@@ -175,10 +174,12 @@ class PushNotificationService {
           Future.delayed(Duration.zero, () {
             tabController.animateTo(1);
           });
-        } else if (type == "wallet") {
-          Navigator.push(
-              context, (MaterialPageRoute(builder: (context) => MyWallet())));
-        } else if (type == 'order') {
+        }
+        // else if (type == "wallet") {
+        //   Navigator.push(
+        //       context, (MaterialPageRoute(builder: (context) => MyWallet())));
+        // }
+        else if (type == 'order') {
           Navigator.push(
               context, (MaterialPageRoute(builder: (context) => MyOrder())));
         } else if (type == "ticket_message") {
@@ -218,10 +219,12 @@ class PushNotificationService {
           Future.delayed(Duration.zero, () {
             tabController.animateTo(1);
           });
-        } else if (type == "wallet") {
-          Navigator.push(
-              context, (MaterialPageRoute(builder: (context) => MyWallet())));
-        } else if (type == 'order') {
+        }
+        // else if (type == "wallet") {
+        //   Navigator.push(
+        //       context, (MaterialPageRoute(builder: (context) => MyWallet())));
+        // }
+        else if (type == 'order') {
           Navigator.push(
               context, (MaterialPageRoute(builder: (context) => MyOrder())));
         } else if (type == "ticket_message") {
@@ -291,13 +294,13 @@ class PushNotificationService {
         items =
             (data as List).map((data) => new Product.fromJson(data)).toList();
 
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductDetail(
-                  index: int.parse(id),
-                  model: items[0],
-                  secPos: secPos,
-                  list: list,
-                )));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => ProductDetail(
+        //           index: int.parse(id),
+        //           model: items[0],
+        //           secPos: secPos,
+        //           list: list,
+        //         )));
       } else {}
     } catch (Exception) {}
   }

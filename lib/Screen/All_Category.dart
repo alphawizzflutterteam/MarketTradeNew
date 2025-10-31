@@ -1,18 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omega_employee_management/Helper/Color.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:omega_employee_management/Provider/CategoryProvider.dart';
 import 'package:omega_employee_management/Provider/HomeProvider.dart';
-import 'package:omega_employee_management/Screen/SubCategory.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../Helper/Session.dart';
 import '../Model/Section_Model.dart';
 import 'HomePage.dart';
-import 'ProductList.dart';
 
 class AllCategory extends StatefulWidget {
   @override
@@ -214,16 +211,16 @@ class _AllCategoryState extends State<AllCategory> {
                   catList[index].subList!.length == 0) {
                 print("kjhasdashjkdkashjdksahdsahdk");
                 context1.read<CategoryProvider>().setSubList([]);
-                Navigator.push(
-                    context1,
-                    MaterialPageRoute(
-                      builder: (context) => ProductList(
-                        name: catList[index].name,
-                        id: catList[index].id,
-                        tag: false,
-                        fromSeller: false,
-                      ),
-                    ));
+                // Navigator.push(
+                //     context1,
+                //     MaterialPageRoute(
+                //       builder: (context) => ProductList(
+                //         name: catList[index].name,
+                //         id: catList[index].id,
+                //         tag: false,
+                //         fromSeller: false,
+                //       ),
+                //     ));
               } else {
                 context1
                     .read<CategoryProvider>()
@@ -279,51 +276,50 @@ class _AllCategoryState extends State<AllCategory> {
             popularList.length > 0) {
           if (popularList[index].subList == null ||
               popularList[index].subList!.length == 0) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductList(
-                    name: popularList[index].name,
-                    id: popularList[index].id,
-                    tag: false,
-                    fromSeller: false,
-                  ),
-                ));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => ProductList(
+            //         name: popularList[index].name,
+            //         id: popularList[index].id,
+            //         tag: false,
+            //         fromSeller: false,
+            //       ),
+            //     ));
           } else {
-
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SubCategory(
-                    subList: popularList[index].subList,
-                    title: popularList[index].name ?? "",
-                    catId: popularList[index].id,
-                  ),
-                ));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => SubCategory(
+            //         subList: popularList[index].subList,
+            //         title: popularList[index].name ?? "",
+            //         catId: popularList[index].id,
+            //       ),
+            //     ));
           }
         } else if (subList[index].subList == null ||
             subList[index].subList!.length == 0) {
           print(StackTrace.current);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductList(
-                  name: subList[index].name,
-                  id: subList[index].id,
-                  tag: false,
-                  fromSeller: false,
-                ),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => ProductList(
+          //         name: subList[index].name,
+          //         id: subList[index].id,
+          //         tag: false,
+          //         fromSeller: false,
+          //       ),
+          //     ));
         } else {
           print(StackTrace.current);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SubCategory(
-                  subList: subList[index].subList,
-                  title: subList[index].name ?? "",
-                ),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => SubCategory(
+          //         subList: subList[index].subList,
+          //         title: subList[index].name ?? "",
+          //       ),
+          //     ));
         }
       },
     );

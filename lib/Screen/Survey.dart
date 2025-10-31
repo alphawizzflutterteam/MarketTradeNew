@@ -388,10 +388,8 @@ class _SurveyState extends State<Survey> {
     var headers = {
       'Cookie': 'ci_session=ef29e61acfe01ba495d2b60947f70ae0b26cc807'
     };
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://businesstrack.co.in/app/v1/api/grivenance_list'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://businesstrack.co.in/app/v1/api/grivenance_list'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -569,47 +567,6 @@ class _SurveyState extends State<Survey> {
                                                     controller:
                                                         feedbackList[index][i]
                                                             [0],
-                                                    // onTapOutside: (val) {
-                                                    //     setState(() {
-                                                    //       sums[index] +=
-                                                    //           int.parse(val);
-                                                    //       sumOfMonthlySale =
-                                                    //           sums[index];
-                                                    //       print(
-                                                    //           "jhjshjsajd ${sumOfMonthlySale}");
-                                                    //     });
-                                                    // },
-                                                    // onEditingComplete: () {
-                                                    //   setState(() {
-                                                    //     sums[index] +=
-                                                    //         int.parse(feedbackList[index][i][0].text);
-                                                    //     sumOfMonthlySale =
-                                                    //         sums[index];
-                                                    //     print(
-                                                    //         "jhjshjsajd ${sumOfMonthlySale}");
-                                                    //   });
-                                                    // },
-                                                    // onSubmitted: (val) {
-                                                    //   setState(() {
-                                                    //     if (sumsTemp[index][i]
-                                                    //             [0] !=
-                                                    //         0) {
-                                                    //       sums[index] -=
-                                                    //           sumsTemp[index][i]
-                                                    //               [0];
-                                                    //     }
-                                                    //     sumsTemp[index][i][0] =
-                                                    //         int.parse(val);
-                                                    //
-                                                    //     sums[index] +=
-                                                    //         int.parse(val);
-                                                    //     sumOfMonthlySale =
-                                                    //         sums[index];
-                                                    //     print(
-                                                    //         "jhjshjsajd ${sumOfMonthlySale}");
-                                                    //   });
-                                                    //   // FocusScope.of(context).unfocus();
-                                                    // },
                                                     onChanged: (val) {
                                                       setState(() {
                                                         if (sumsTemp[index][i]

@@ -108,6 +108,9 @@ class _SiteSurveyState extends State<SiteSurvey> {
 
   // List<List<TextEditingController>> wholeDataList = [] ;
 
+  int? sumOfExpectedCunsumption;
+  int? sumOfFurtherCunsumption;
+
   List dataList = [];
   int sum = 0;
   int sumTwo = 0;
@@ -119,27 +122,38 @@ class _SiteSurveyState extends State<SiteSurvey> {
     convertDateTimeDispla();
 
     for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
+      List<List<TextEditingController>> wholeDataList = [];
+      List<List<int>> wholeDataListTemp = [];
+      for (int j = 0; j < (widget.modelList?[i].products?.length ?? 0); j++) {
+        List<TextEditingController> commenController = [];
+        List<int> commenControllerTemp = [];
+        commenController.add(TextEditingController());
+        commenController.add(TextEditingController());
+        commenController.add(TextEditingController());
+        commenController.add(TextEditingController());
+        commenController.add(TextEditingController());
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        commenControllerTemp.add(0);
+        wholeDataList.add(commenController);
+        wholeDataListTemp.add(commenControllerTemp);
+      }
+      feedbackList.add(wholeDataList);
+      sumsTemp.add(wholeDataListTemp);
+    }
+    for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
       sums.add(sum);
     }
 
     for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
       sumsTwo.add(sumTwo);
     }
-
-    for (int i = 0; i < (widget.modelList?.length ?? 0); i++) {
-      List<List<TextEditingController>> wholeDataList = [];
-      for (int j = 0; j < (widget.modelList?[i].products?.length ?? 0); j++) {
-        List<TextEditingController> commenController = [];
-        commenController.add(TextEditingController());
-        commenController.add(TextEditingController());
-        commenController.add(TextEditingController());
-        commenController.add(TextEditingController());
-        commenController.add(TextEditingController());
-        wholeDataList.add(commenController);
-      }
-      feedbackList.add(wholeDataList);
-    }
   }
+
+  List<List<List<int>>> sumsTemp = [];
+  List<List<List<int>>> currentSumsTemp = [];
 
   TextEditingController execteddateCtr = TextEditingController();
   TextEditingController remarkCtr = TextEditingController();
@@ -559,64 +573,119 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                                           .width /
                                                       2.9,
                                                   child: TextField(
-                                                      controller:
-                                                          feedbackList[index][i]
-                                                              [0],
-                                                      keyboardType:
-                                                          TextInputType.number,
-                                                      // onEditingComplete: (){
-                                                      //   sum += int.parse(feedbackList[index][i][0].text);
-                                                      //   feedbackList[index][i][0].clear();
-                                                      // },
+                                                    controller:
+                                                        feedbackList[index][i]
+                                                            [0],
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    // onEditingComplete: (){
+                                                    //   sum += int.parse(feedbackList[index][i][0].text);
+                                                    //   feedbackList[index][i][0].clear();
+                                                    // },
 
-                                                      decoration:
-                                                          InputDecoration(
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                top: 7,
-                                                                left: 5),
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      5.0),
-                                                        ),
-                                                        filled: true,
-                                                        hintStyle: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 10),
-                                                        hintText:
-                                                            "Expected Consumption",
-                                                        fillColor:
-                                                            Colors.white70,
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              top: 7, left: 5),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
                                                       ),
-                                                      onSubmitted: (val) {
-                                                        setState(() {
-                                                          sums[index] +=
-                                                              int.parse(val);
-                                                        });
-                                                      }
-                                                      //     (value) {
-                                                      //   totalMonthlySales +=
-                                                      //       int.parse(
-                                                      //           value);
-                                                      //   setState(() {});
-                                                      //   print(
-                                                      //       "printtttttttt ${totalMonthlySales}");
-                                                      //   // int total = 0;
-                                                      //   // for (int i = 0; i < 5; i++) {
-                                                      //   //   String text = monthlyControllers[i].text;
-                                                      //   //   if (text.isNotEmpty) {
-                                                      //   //     total += int.parse(text);
-                                                      //   //   }
-                                                      //   // }
-                                                      //   // setState(() {
-                                                      //   //   totalMonthlySales = total;
-                                                      //   //   print("total monthly sheet ${totalMonthlySales}");
-                                                      //   // });
-                                                      // },
-                                                      ),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10),
+                                                      hintText:
+                                                          "Expected Consumption",
+                                                      fillColor: Colors.white70,
+                                                    ),
+                                                    // onChanged: (val) {
+                                                    //   setState(() {
+                                                    //     sums[index] +=
+                                                    //         int.parse(val);
+                                                    //   });
+                                                    // }
+
+                                                    onChanged: (val) {
+                                                      print(
+                                                          "dggdgddgdg ${feedbackList[index][i][0].text}");
+                                                      setState(() {
+                                                        if (sumsTemp[index][i]
+                                                                [0] !=
+                                                            0) {
+                                                          sums[index] -=
+                                                              sumsTemp[index][i]
+                                                                  [0];
+                                                        }
+                                                        sumsTemp[index][i]
+                                                            [0] = val
+                                                                .isEmpty
+                                                            ? 0
+                                                            : int.parse(val);
+                                                        sums[index] =
+                                                            sums[index] +
+                                                                (val.isEmpty
+                                                                    ? 0
+                                                                    : int.parse(
+                                                                        val));
+                                                        sumOfExpectedCunsumption =
+                                                            sums[index];
+                                                      });
+                                                      print(
+                                                          "jhjshjsajd ${sumOfExpectedCunsumption}");
+                                                      // FocusScope.of(context).unfocus();
+                                                    },
+
+                                                    // onChanged: (val) {
+                                                    //   setState(() {
+                                                    //     if (sumsTemp[index][i]
+                                                    //             [0] !=
+                                                    //         0) {
+                                                    //       sums[index] -=
+                                                    //           sumsTemp[index][i]
+                                                    //               [0];
+                                                    //     }
+                                                    //     sumsTemp[index][i]
+                                                    //         [0] = val
+                                                    //             .isEmpty
+                                                    //         ? 0
+                                                    //         : int.parse(val);
+                                                    //     sums[index] =
+                                                    //         sums[index] +
+                                                    //             (val.isEmpty
+                                                    //                 ? 0
+                                                    //                 : int.parse(
+                                                    //                     val));
+                                                    //     sumOfExpectedCunsumption =
+                                                    //         sums[index];
+                                                    //     print(
+                                                    //         "jhjshjsajd ${sumOfExpectedCunsumption}");
+                                                    //   });
+                                                    //   // FocusScope.of(context).unfocus();
+                                                    // },
+
+                                                    //     (value) {
+                                                    //   totalMonthlySales +=
+                                                    //       int.parse(
+                                                    //           value);
+                                                    //   setState(() {});
+                                                    //   print(
+                                                    //       "printtttttttt ${totalMonthlySales}");
+                                                    //   // int total = 0;
+                                                    //   // for (int i = 0; i < 5; i++) {
+                                                    //   //   String text = monthlyControllers[i].text;
+                                                    //   //   if (text.isNotEmpty) {
+                                                    //   //     total += int.parse(text);
+                                                    //   //   }
+                                                    //   // }
+                                                    //   // setState(() {
+                                                    //   //   totalMonthlySales = total;
+                                                    //   //   print("total monthly sheet ${totalMonthlySales}");
+                                                    //   // });
+                                                    // },
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -670,18 +739,35 @@ class _SiteSurveyState extends State<SiteSurvey> {
                                                           "Fruther Consumption",
                                                       fillColor: Colors.white70,
                                                     ),
-                                                    onSubmitted: (val) {
-                                                      setState(() {
-                                                        sumsTwo[index] +=
-                                                            int.parse(val);
-                                                      });
+                                                    // onChanged: (val) {
+                                                    //   setState(() {
+                                                    //     sumsTwo[index] +=
+                                                    //         int.parse(val);
+                                                    //   });
+                                                    // },
 
-                                                      // currentSales +=
-                                                      //     int.parse(
-                                                      //         val);
-                                                      // setState(() {});
-                                                      // print(
-                                                      //     "printtttttttt ${currentSales}");
+                                                    onChanged: (val) {
+                                                      setState(() {
+                                                        if (sumsTemp[index][i]
+                                                                [1] !=
+                                                            0) {
+                                                          sumsTwo[index] -=
+                                                              sumsTemp[index][i]
+                                                                  [1];
+                                                        }
+                                                        sumsTemp[index][i]
+                                                            [1] = val
+                                                                .isEmpty
+                                                            ? 0
+                                                            : int.parse(val);
+                                                        sumsTwo[index] += val
+                                                                .isEmpty
+                                                            ? 0
+                                                            : int.parse(val);
+                                                        sumOfFurtherCunsumption =
+                                                            sumsTwo[index];
+                                                        // feedbackList[index][i][0].text
+                                                      });
                                                     },
                                                   ),
                                                 ),
