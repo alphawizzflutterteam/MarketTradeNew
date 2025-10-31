@@ -1154,11 +1154,11 @@ class _AddPhotoState extends State<AddPhoto> {
   File? gstTwo;
 
   _getFromCameraPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+        // source: ImageSource.camera,
+        // maxHeight: 100,
+        // maxWidth: 100,
+        // imageQuality: 40);
     if (pickedFile != null) {
       checkoutState!(() {
         panImage = File(pickedFile.path);
@@ -1168,11 +1168,12 @@ class _AddPhotoState extends State<AddPhoto> {
   }
 
   _getFromCameraGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 100,
+    //     maxWidth: 100,
+    //     imageQuality: 40);
     if (pickedFile != null) {
       checkoutState!(() {
         gstImage = File(pickedFile.path);
@@ -1182,11 +1183,12 @@ class _AddPhotoState extends State<AddPhoto> {
   }
 
   _getFromCameraGstOne() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 100,
+    //     maxWidth: 100,
+    //     imageQuality: 40);
     if (pickedFile != null) {
       checkoutState!(() {
         gstOne = File(pickedFile.path);
@@ -1196,11 +1198,11 @@ class _AddPhotoState extends State<AddPhoto> {
   }
 
   _getFromCameraGstTwo() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // source: ImageSource.camera,
+    //     maxHeight: 100,
+    //     maxWidth: 100,
+    //     imageQuality: 40);
     if (pickedFile != null) {
       checkoutState!(() {
         gstTwo = File(pickedFile.path);

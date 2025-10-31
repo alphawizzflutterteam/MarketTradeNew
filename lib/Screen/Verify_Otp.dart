@@ -486,7 +486,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         ),
         child: Center(
           child: Text(getTranslated(context, 'MOBILE_NUMBER_VARIFICATION')!,
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: colors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 25)),
@@ -498,7 +498,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         padding: EdgeInsetsDirectional.only(top: 30.0, start: 20.0, end: 20.0),
         child: Center(
           child: Text(getTranslated(context, 'SENT_VERIFY_CODE_TO_NO_LBL')!,
-              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.fontColor,
                   fontWeight: FontWeight.normal)),
         ));
@@ -510,7 +510,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
           bottom: 10.0, start: 20.0, end: 20.0, top: 10.0),
       child: Center(
         child: Text("Number- ${widget.mobileNumber}",
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.fontColor,
                 fontWeight: FontWeight.normal)),
       ),
@@ -550,7 +550,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
         children: [
           Text(
             getTranslated(context, 'DIDNT_GET_THE_CODE')!,
-            style: Theme.of(context).textTheme.caption!.copyWith(
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: Theme.of(context).colorScheme.fontColor,
                 fontWeight: FontWeight.normal),
           ),
@@ -562,7 +562,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
               },
               child: Text(
                 getTranslated(context, 'RESEND_OTP')!,
-                style: Theme.of(context).textTheme.caption!.copyWith(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: Theme.of(context).colorScheme.fontColor,
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.normal),

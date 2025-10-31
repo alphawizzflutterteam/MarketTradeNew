@@ -397,11 +397,12 @@ class _AddClientsState extends State<AddClients> {
   }
 
   _getFromCameraPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 100,
+    //     maxWidth: 100,
+    //     imageQuality: 40);
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -411,11 +412,12 @@ class _AddClientsState extends State<AddClients> {
   }
 
   _getFromCameraGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 100,
+    //     maxWidth: 100,
+    //     imageQuality: 40);
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
@@ -425,11 +427,11 @@ class _AddClientsState extends State<AddClients> {
   }
 
   _getFromCameraGstOne() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // source: ImageSource.camera,
+    // maxHeight: 100,
+    // maxWidth: 100,
+    // imageQuality: 40);
     if (pickedFile != null) {
       setState(() {
         gstOne = File(pickedFile.path);
@@ -439,11 +441,11 @@ class _AddClientsState extends State<AddClients> {
   }
 
   _getFromCameraGstTwo() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 100,
-        maxWidth: 100,
-        imageQuality: 40);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // source: ImageSource.camera,
+    // maxHeight: 100,
+    // maxWidth: 100,
+    // imageQuality: 40);
     if (pickedFile != null) {
       setState(() {
         gstTwo = File(pickedFile.path);
@@ -474,8 +476,9 @@ class _AddClientsState extends State<AddClients> {
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
-        double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+      double.parse(latitude!), double.parse(longitude!),
+      // localeIdentifier: "en"
+    );
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
       setState(() {

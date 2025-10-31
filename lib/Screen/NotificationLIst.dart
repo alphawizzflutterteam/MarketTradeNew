@@ -7,7 +7,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:omega_employee_management/Model/Notification_Model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -269,7 +269,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                         if (response.statusCode == 200) {
                           final Uint8List data = response.bodyBytes;
                           final result =
-                              await ImageGallerySaver.saveImage(data);
+                              await ImageGallerySaverPlus.saveImage(data);
                           print(result);
                           if (result['isSuccess'] == true) {
                             ScaffoldMessenger.of(context).showSnackBar(

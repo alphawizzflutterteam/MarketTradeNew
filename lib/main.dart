@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:country_code_picker/country_localizations.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -190,6 +189,7 @@ class _MyAppState extends State<MyApp> {
           title: appName,
 
           theme: ThemeData(
+            useMaterial3: false,
             canvasColor: Theme.of(context).colorScheme.lightWhite,
             cardColor: Theme.of(context).colorScheme.white,
             dialogBackgroundColor: Theme.of(context).colorScheme.white,
@@ -200,11 +200,11 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'opensans',
             brightness: Brightness.light,
             textTheme: TextTheme(
-                    headline6: TextStyle(
+                    titleLarge: TextStyle(
                       color: Theme.of(context).colorScheme.fontColor,
                       fontWeight: FontWeight.w600,
                     ),
-                    subtitle1: TextStyle(
+                    titleMedium: TextStyle(
                         color: Theme.of(context).colorScheme.fontColor,
                         fontWeight: FontWeight.bold))
                 .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
@@ -216,30 +216,76 @@ class _MyAppState extends State<MyApp> {
             '/home': (context) => Dashboard(),
           },
           darkTheme: ThemeData(
+            useMaterial3: false,
             canvasColor: colors.darkColor,
             cardColor: colors.darkColor2,
-            dialogBackgroundColor: colors.darkColor2,
             primarySwatch: colors.primary_app,
             primaryColor: colors.darkColor,
             textSelectionTheme: TextSelectionThemeData(
                 cursorColor: colors.darkIcon,
                 selectionColor: colors.darkIcon,
                 selectionHandleColor: colors.darkIcon),
-            toggleableActiveColor: colors.primary,
             fontFamily: 'opensans',
             brightness: Brightness.dark,
             // accentColor: colors.darkIcon,
             iconTheme:
                 Theme.of(context).iconTheme.copyWith(color: colors.secondary),
             textTheme: TextTheme(
-                    headline6: TextStyle(
+                    titleLarge: TextStyle(
                       color: Theme.of(context).colorScheme.fontColor,
                       fontWeight: FontWeight.w600,
                     ),
-                    subtitle1: TextStyle(
+                    titleMedium: TextStyle(
                         color: Theme.of(context).colorScheme.fontColor,
                         fontWeight: FontWeight.bold))
                 .apply(bodyColor: Theme.of(context).colorScheme.fontColor),
+            dialogTheme: DialogThemeData(backgroundColor: colors.darkColor2),
+            checkboxTheme: CheckboxThemeData(
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return null;
+                }
+                if (states.contains(MaterialState.selected)) {
+                  return colors.primary;
+                }
+                return null;
+              }),
+            ),
+            radioTheme: RadioThemeData(
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return null;
+                }
+                if (states.contains(MaterialState.selected)) {
+                  return colors.primary;
+                }
+                return null;
+              }),
+            ),
+            switchTheme: SwitchThemeData(
+              thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return null;
+                }
+                if (states.contains(MaterialState.selected)) {
+                  return colors.primary;
+                }
+                return null;
+              }),
+              trackColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return null;
+                }
+                if (states.contains(MaterialState.selected)) {
+                  return colors.primary;
+                }
+                return null;
+              }),
+            ),
           ),
           themeMode: themeNotifier.getThemeMode(),
         ),

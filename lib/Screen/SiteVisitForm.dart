@@ -120,9 +120,8 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
   }
 
   _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -132,9 +131,8 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
   }
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -1349,7 +1347,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Name:",
@@ -1414,7 +1412,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Address:",
@@ -2022,7 +2020,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Name:",
@@ -2087,7 +2085,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Address:",
@@ -2680,7 +2678,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Name:",
@@ -2745,7 +2743,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Address:",
@@ -2891,7 +2889,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       left: 3),
                                                               child: Text(
                                                                 "${delearRetailerModel?.data?.artitech?[architectIndex].address} Madhya Pradesh",
@@ -3336,7 +3334,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Name:",
@@ -3401,7 +3399,7 @@ class _SiteVisitFormState extends State<SiteVisitForm> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10),
                                                           child: Text(
                                                             "Address:",

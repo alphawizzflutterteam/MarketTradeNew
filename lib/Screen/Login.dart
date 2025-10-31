@@ -248,7 +248,7 @@ class _LoginPagePageState extends State<LoginPage>
           alignment: Alignment.center,
           child: new Text(
             getTranslated(context, 'SIGNIN_LBL')!,
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.fontColor,
                 fontWeight: FontWeight.bold),
           ),
@@ -290,7 +290,7 @@ class _LoginPagePageState extends State<LoginPage>
             size: 20,
           ),
           hintText: "Mobile Number",
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           filled: true,
@@ -347,7 +347,7 @@ class _LoginPagePageState extends State<LoginPage>
             size: 17,
           ),
           hintText: getTranslated(context, 'MOBILEHINT_LBL'),
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           filled: true,
@@ -425,7 +425,7 @@ class _LoginPagePageState extends State<LoginPage>
             ),
           ),
           hintText: getTranslated(context, "PASSHINT_LBL")!,
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           //filled: true,
@@ -474,7 +474,7 @@ class _LoginPagePageState extends State<LoginPage>
                             )));
               },
               child: Text(getTranslated(context, 'FORGOT_PASSWORD_LBL')!,
-                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       color: Theme.of(context).colorScheme.fontColor,
                       fontWeight: FontWeight.normal)),
             ),
@@ -490,7 +490,7 @@ class _LoginPagePageState extends State<LoginPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(getTranslated(context, 'DONT_HAVE_AN_ACC')!,
-              style: Theme.of(context).textTheme.caption!.copyWith(
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.fontColor,
                   fontWeight: FontWeight.normal)),
           InkWell(
@@ -507,7 +507,7 @@ class _LoginPagePageState extends State<LoginPage>
               },
               child: Text(
                 getTranslated(context, 'SIGN_UP_LBL')!,
-                style: Theme.of(context).textTheme.caption!.copyWith(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: Theme.of(context).colorScheme.fontColor,
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.normal),
@@ -623,7 +623,7 @@ class _LoginPagePageState extends State<LoginPage>
                           hintText: "Mobile Number",
                           hintStyle: Theme.of(this.context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
                                   color:
                                       Theme.of(context).colorScheme.fontColor,

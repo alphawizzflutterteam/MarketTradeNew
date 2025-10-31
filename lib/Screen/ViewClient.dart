@@ -6,7 +6,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -132,7 +132,7 @@ class _ViewClientState extends State<ViewClient> {
     var response = await http.get(Uri.parse(imageUrl));
 
     if (response.statusCode == 200) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes));
       Fluttertoast.showToast(msg: "Image saved to gallery");
       print('Image saved to gallery: $result');

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:omega_employee_management/Helper/String.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -93,7 +93,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
     var response = await http.get(Uri.parse(imageUrl));
 
     if (response.statusCode == 200) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes));
       Fluttertoast.showToast(msg: "Image saved to gallery");
       print('Image saved to gallery: $result');
@@ -273,7 +273,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                       final Uint8List data =
                                                           response.bodyBytes;
                                                       final result =
-                                                          await ImageGallerySaver
+                                                          await ImageGallerySaverPlus
                                                               .saveImage(data);
                                                       print(result);
                                                       if (result['isSuccess'] ==
@@ -332,7 +332,7 @@ class _Customer_feedbackState extends State<Customer_feedback> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 14),
                                                           child: Text(
                                                             "${widget.model?.lat},${widget.model?.lng}",

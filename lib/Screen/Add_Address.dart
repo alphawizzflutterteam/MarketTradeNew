@@ -278,7 +278,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             },
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
             decoration: InputDecoration(
                 label: Text(getTranslated(context, "NAME_LBL")!),
@@ -316,7 +316,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             focusNode: monoFocus,
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
             validator: (val) => validateMob(
                 val!,
@@ -367,7 +367,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                       getTranslated(context, 'AREASELECT_LBL')!,
                       style: Theme.of(this.context)
                           .textTheme
-                          .subtitle1!
+                          .titleMedium!
                           .copyWith(
                               color: Theme.of(context).colorScheme.fontColor),
                     ),
@@ -452,7 +452,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                       getTranslated(context, 'CITYSELECT_LBL')!,
                       style: Theme.of(this.context)
                           .textTheme
-                          .subtitle1!
+                          .titleMedium!
                           .copyWith(
                               color: Theme.of(context).colorScheme.fontColor),
                     ),
@@ -540,7 +540,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     areaSearchList[index].name!,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ),
@@ -581,7 +581,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     citySearchLIst[index].name!,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ),
@@ -620,7 +620,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                           children: [
                             Text(
                               getTranslated(context, 'CITYSELECT_LBL')!,
-                              style: Theme.of(context).textTheme.caption,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
                                 selCityPos != null && selCityPos != -1
@@ -673,7 +673,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                           children: [
                             Text(
                               getTranslated(context, 'AREASELECT_LBL')!,
-                              style: Theme.of(context).textTheme.caption,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
                                 selAreaPos != null && selAreaPos != -1
@@ -720,7 +720,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                   textCapitalization: TextCapitalization.sentences,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle2!
+                      .titleSmall!
                       .copyWith(color: Theme.of(context).colorScheme.fontColor),
                   focusNode: addFocus,
                   controller: addressC,
@@ -817,7 +817,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               controller: pincodeC,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(color: Theme.of(context).colorScheme.fontColor),
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               onSaved: (String? value) {
@@ -958,7 +958,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       controller: landmarkC,
       style: Theme.of(context)
           .textTheme
-          .subtitle2!
+          .titleSmall!
           .copyWith(color: Theme.of(context).colorScheme.fontColor),
       validator: (val) =>
           validateField(val!, getTranslated(context, 'FIELD_REQUIRED')),
@@ -989,7 +989,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             controller: stateC,
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
             readOnly: false,
             //validator: validateField,
@@ -1030,7 +1030,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             readOnly: false,
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
             onSaved: (String? value) {
               country = value;
@@ -1337,7 +1337,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
           },
           title: Text(
             getTranslated(context, 'DEFAULT_ADD')!,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
                 color: Theme.of(context).colorScheme.lightBlack,
                 fontWeight: FontWeight.bold),
           ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -66,7 +66,7 @@ class _MySiteDetailsState extends State<MySiteDetails> {
     // print("mmmmmmmm");
     var response = await http.get(Uri.parse(imageUrl));
     if (response.statusCode == 200) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes));
       Fluttertoast.showToast(msg: "Image saved to gallery");
       print('Image saved to gallery: $result');
@@ -286,7 +286,7 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                                           final Uint8List data =
                                               response.bodyBytes;
                                           final result =
-                                              await ImageGallerySaver.saveImage(
+                                              await ImageGallerySaverPlus.saveImage(
                                                   data);
                                           print(result);
                                           if (result['isSuccess'] == true) {

@@ -121,7 +121,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
       setState(() {
@@ -234,9 +235,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
   }
 
   _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    //   source: ImageSource.gallery,
+    // );
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -246,9 +247,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
   }
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);

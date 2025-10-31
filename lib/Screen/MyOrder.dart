@@ -474,7 +474,7 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
                               "$proStatus on $sDate",
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2!
+                                  .titleSmall!
                                   .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -487,7 +487,7 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
                                   name,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2!
+                                      .titleSmall!
                                       .copyWith(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -508,23 +508,23 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
               )
             ]),
           ]),
-          onTap: () async {
-            FocusScope.of(context).unfocus();
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OrderDetail(model: searchList[index])),
-            );
-            if (mounted && result == "update") {
-              setState(() {
-                _isLoading = true;
-                offset = 0;
-                total = 0;
-                searchList.clear();
-                getOrder();
-              });
-            }
-          },
+          // onTap: () async {
+          //   FocusScope.of(context).unfocus();
+          //   final result = await Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => OrderDetail(model: searchList[index])),
+          //   );
+          //   if (mounted && result == "update") {
+          //     setState(() {
+          //       _isLoading = true;
+          //       offset = 0;
+          //       total = 0;
+          //       searchList.clear();
+          //       getOrder();
+          //     });
+          //   }
+          // },
         ),
       );
     } else {
@@ -603,7 +603,7 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
                           EdgeInsetsDirectional.only(top: 19.0, bottom: 16.0),
                       child: Text(
                         getTranslated(context, 'FILTER')!,
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Theme.of(context).colorScheme.fontColor),
                       )),
                   Divider(color: Theme.of(context).colorScheme.lightBlack),
@@ -633,7 +633,7 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
                       child: Text(capitalize(statusList[index]),
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
                                   color: Theme.of(context)
                                       .colorScheme

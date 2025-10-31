@@ -1,7 +1,6 @@
 import 'dart:async';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:omega_employee_management/Screen/SendOtp.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:omega_employee_management/Screen/Cart.dart';
 import 'package:omega_employee_management/Screen/Favorite.dart';
@@ -15,7 +14,6 @@ import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'Color.dart';
 import 'Constant.dart';
 import 'Demo_Localization.dart';
@@ -29,21 +27,28 @@ setPrefrenceBool(String key, bool value) async {
 }
 
 Future<bool> isNetworkAvailable() async {
-  var connectivityResult = await (Connectivity().checkConnectivity());
-  if (connectivityResult == ConnectivityResult.mobile) {
+  print("check network");
+  var connectivityResults = await Connectivity().checkConnectivity();
+  print("connectivityResult: $connectivityResults");
+
+  if (connectivityResults.contains(ConnectivityResult.mobile)) {
+    print("connected to mobile data");
     return true;
-  } else if (connectivityResult == ConnectivityResult.wifi) {
+  } else if (connectivityResults.contains(ConnectivityResult.wifi)) {
+    print("connected to wifi");
     return true;
   }
+
+  print("no internet connection");
   return false;
 }
 
 back() {
   return BoxDecoration(
     color: colors.black54,
-      // image: new DecorationImage(
-      // image: new AssetImage("assets/images/doodle.png"),
-      //   fit: BoxFit.fill),
+    // image: new DecorationImage(
+    // image: new AssetImage("assets/images/doodle.png"),
+    //   fit: BoxFit.fill),
     gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -98,7 +103,7 @@ getAppBar(
 ) {
   return AppBar(
     titleSpacing: 0,
-    backgroundColor:colors.whiteTemp,
+    backgroundColor: colors.whiteTemp,
     leading: Builder(
       builder: (BuildContext context) {
         return Container(
@@ -276,7 +281,7 @@ noIntText(BuildContext context) {
       child: Text(getTranslated(context, 'NO_INTERNET')!,
           style: Theme.of(context)
               .textTheme
-              .headline5!
+              .headlineSmall!
               .copyWith(color: colors.primary, fontWeight: FontWeight.normal)));
 }
 
@@ -285,7 +290,7 @@ noIntDec(BuildContext context) {
     padding: EdgeInsetsDirectional.only(top: 30.0, start: 30.0, end: 30.0),
     child: Text(getTranslated(context, 'NO_INTERNET_DISC')!,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline6!.copyWith(
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: Theme.of(context).colorScheme.lightBlack2,
               fontWeight: FontWeight.normal,
             )),
@@ -409,62 +414,64 @@ Widget shimmer(BuildContext context) {
       child: SingleChildScrollView(
         child: Column(
           children: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-              .map((_) => Padding(
-                    padding: const EdgeInsetsDirectional.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 80.0,
-                          height: 80.0,
-                          color: Theme.of(context).colorScheme.white,
+              .map(
+                (_) => Padding(
+                  padding: const EdgeInsetsDirectional.only(bottom: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 80.0,
+                        height: 80.0,
+                        color: Theme.of(context).colorScheme.white,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 18.0,
+                              color: Theme.of(context).colorScheme.white,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 8.0,
+                              color: Theme.of(context).colorScheme.white,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                            ),
+                            Container(
+                              width: 100.0,
+                              height: 8.0,
+                              color: Theme.of(context).colorScheme.white,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                            ),
+                            Container(
+                              width: 20.0,
+                              height: 8.0,
+                              color: Theme.of(context).colorScheme.white,
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 18.0,
-                                color: Theme.of(context).colorScheme.white,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                height: 8.0,
-                                color: Theme.of(context).colorScheme.white,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                              ),
-                              Container(
-                                width: 100.0,
-                                height: 8.0,
-                                color: Theme.of(context).colorScheme.white,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                              ),
-                              Container(
-                                width: 20.0,
-                                height: 8.0,
-                                color: Theme.of(context).colorScheme.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-          ).toList(),
+                ),
+              )
+              .toList(),
         ),
       ),
     ),

@@ -119,7 +119,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
 
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
@@ -167,11 +168,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   bool isImages1 = false;
 
   File? _imageFile;
+  final picker = ImagePicker();
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    //   source: ImageSource.camera,
+    // );
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -437,13 +439,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
+      // aspectRatioPresets: [
+      //   CropAspectRatioPreset.square,
+      //   CropAspectRatioPreset.ratio3x2,
+      //   CropAspectRatioPreset.original,
+      //   CropAspectRatioPreset.ratio4x3,
+      //   CropAspectRatioPreset.ratio16x9
+      // ],
     );
     Navigator.pop(context);
     if (i == 1) {
@@ -460,13 +462,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void getCropImage1(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
+      // aspectRatioPresets: [
+      //   CropAspectRatioPreset.square,
+      //   CropAspectRatioPreset.ratio3x2,
+      //   CropAspectRatioPreset.original,
+      //   CropAspectRatioPreset.ratio4x3,
+      //   CropAspectRatioPreset.ratio16x9
+      // ],
     );
     Navigator.pop(context);
     if (i == 1) {

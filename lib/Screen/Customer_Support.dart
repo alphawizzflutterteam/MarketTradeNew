@@ -191,7 +191,7 @@ class _CustomerSupportState extends State<CustomerSupport>
       isDense: true,
       hint: new Text(
         getTranslated(context, 'SELECT_TYPE')!,
-        style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+        style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
             color: Theme.of(context).colorScheme.fontColor,
             fontWeight: FontWeight.normal),
       ),
@@ -214,7 +214,7 @@ class _CustomerSupportState extends State<CustomerSupport>
       value: type,
       style: Theme.of(context)
           .textTheme
-          .subtitle2!
+          .titleSmall!
           .copyWith(color: Theme.of(context).colorScheme.fontColor),
       onChanged: (String? newValue) {
         if (mounted)
@@ -296,7 +296,7 @@ class _CustomerSupportState extends State<CustomerSupport>
         },
         decoration: InputDecoration(
           hintText: getTranslated(context, 'EMAILHINT_LBL'),
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           filled: true,
@@ -339,7 +339,7 @@ class _CustomerSupportState extends State<CustomerSupport>
         },
         decoration: InputDecoration(
           hintText: getTranslated(context, 'TITLE'),
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           filled: true,
@@ -382,7 +382,7 @@ class _CustomerSupportState extends State<CustomerSupport>
         },
         decoration: InputDecoration(
           hintText: getTranslated(context, 'DESCRIPTION'),
-          hintStyle: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           filled: true,
@@ -726,7 +726,7 @@ class _CustomerSupportState extends State<CustomerSupport>
         isDense: true,
         hint: new Text(
           getTranslated(context, 'SELECT_TYPE')!,
-          style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
         ),
@@ -749,7 +749,7 @@ class _CustomerSupportState extends State<CustomerSupport>
         value: status,
         style: Theme.of(context)
             .textTheme
-            .subtitle2!
+            .titleSmall!
             .copyWith(color: Theme.of(context).colorScheme.fontColor),
         onChanged: (String? newValue) {
           if (mounted)

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -279,11 +278,12 @@ class _CheckInScreenState extends State<CheckInScreen> {
   var finalResult;
 
   File? _imageFile;
+  final picker = ImagePicker();
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // );
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -395,7 +395,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
       setState(() {
@@ -701,13 +702,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9,
-      ],
+      // aspectRatioPresets: [
+      //   CropAspectRatioPreset.square,
+      //   CropAspectRatioPreset.ratio3x2,
+      //   CropAspectRatioPreset.original,
+      //   CropAspectRatioPreset.ratio4x3,
+      //   CropAspectRatioPreset.ratio16x9,
+      // ],
     );
     Navigator.pop(context);
     if (i == 1) {

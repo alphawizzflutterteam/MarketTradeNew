@@ -146,7 +146,7 @@ class _AllCategoryState extends State<AllCategory> {
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context1).textTheme.caption!.copyWith(
+                    style: Theme.of(context1).textTheme.bodySmall!.copyWith(
                         color: data == index
                             ? colors.primary
                             : Theme.of(context).colorScheme.fontColor),
@@ -197,7 +197,7 @@ class _AllCategoryState extends State<AllCategory> {
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context1).textTheme.caption!.copyWith(
+                    style: Theme.of(context1).textTheme.bodySmall!.copyWith(
                         color: data == index
                             ? colors.primary
                             : Theme.of(context).colorScheme.fontColor),
@@ -266,7 +266,7 @@ class _AllCategoryState extends State<AllCategory> {
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context)
                 .textTheme
-                .caption!
+                .bodySmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
           )
         ],

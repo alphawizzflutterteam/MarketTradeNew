@@ -668,7 +668,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:omega_employee_management/Helper/String.dart';
@@ -1292,9 +1292,10 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.gallery,
+    // );
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -1304,11 +1305,7 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 400,
-        maxWidth: 400,
-        imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -1318,9 +1315,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromGalleryPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -1330,11 +1326,12 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 400,
-        maxWidth: 400,
-        imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 400,
+    //     maxWidth: 400,
+    //     imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -1344,9 +1341,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromGalleryGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
@@ -1358,11 +1354,8 @@ class _Client_formState extends State<Client_form> {
   CustomerType? customerType;
 
   _getFromCameraGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
@@ -1372,11 +1365,7 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraGstOne() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         gstOne = File(pickedFile.path);
@@ -1386,11 +1375,11 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraGstTwo() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // source: ImageSource.camera,
+    // maxHeight: 640,
+    // maxWidth: 400,
+    // imageQuality: 80);
     if (pickedFile != null) {
       setState(() {
         gstTwo = File(pickedFile.path);
@@ -1400,9 +1389,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromGalleryAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         aadharImage = File(pickedFile.path);
@@ -1412,11 +1400,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         aadharImage = File(pickedFile.path);
@@ -1426,11 +1411,12 @@ class _Client_formState extends State<Client_form> {
   }
 
   getFromCameraAdharBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 640,
+    //     maxWidth: 400,
+    //     imageQuality: 80);
     if (pickedFile != null) {
       setState(() {
         aadharBack = File(pickedFile.path);
@@ -1440,11 +1426,12 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraVoteIdFront() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.camera,
+    //     maxHeight: 640,
+    //     maxWidth: 400,
+    //     imageQuality: 80);
     if (pickedFile != null) {
       setState(() {
         voterIdImage = File(pickedFile.path);
@@ -1454,11 +1441,8 @@ class _Client_formState extends State<Client_form> {
   }
 
   _getFromCameraVoterIdBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         voterIdBackImage = File(pickedFile.path);
@@ -4011,8 +3995,9 @@ class _Client_formState extends State<Client_form> {
     });
 
     List<Placemark> placemark = await placemarkFromCoordinates(
-        double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+      double.parse(latitude!), double.parse(longitude!),
+      // localeIdentifier: "en"
+    );
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
       setState(() {
@@ -4041,7 +4026,7 @@ class _Client_formState extends State<Client_form> {
     var response = await http.get(Uri.parse(imageUrl));
 
     if (response.statusCode == 200) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes));
       Fluttertoast.showToast(msg: "Image saved to gallery");
       print('Image saved to gallery: $result');

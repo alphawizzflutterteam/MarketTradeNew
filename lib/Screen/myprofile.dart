@@ -27,9 +27,8 @@ import 'package:omega_employee_management/Screen/Setting.dart';
 import 'package:omega_employee_management/Screen/SiteVisitForm.dart';
 import 'package:omega_employee_management/Screen/work_allotment/work_allotment_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Helper/Constant.dart';
 import '../Model/DeleteAccountModel.dart';
 import '../Provider/Theme.dart';
@@ -277,7 +276,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                         userName == ""
                             ? getTranslated(context, 'GUEST')!
                             : userName,
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
                               color: Theme.of(context).colorScheme.fontColor,
                             ),
                       );
@@ -290,7 +289,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                               userMobile,
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2!
+                                  .titleSmall!
                                   .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -310,7 +309,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                               userEmail,
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2!
+                                  .titleSmall!
                                   .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -341,7 +340,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                             child: Text(
                               getTranslated(context, 'LOGIN_REGISTER_LBL')!,
                               style:
-                                  Theme.of(context).textTheme.caption!.copyWith(
+                                  Theme.of(context).textTheme.bodySmall!.copyWith(
                                         color: colors.primary,
                                         decoration: TextDecoration.underline,
                                       ),
@@ -420,7 +419,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                             languageList[index]!,
                             style: Theme.of(this.context)
                                 .textTheme
-                                .subtitle1!
+                                .titleMedium!
                                 .copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -762,19 +761,21 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                     MaterialPageRoute(
                       builder: (context) => LoginPage(),
                     ))
-                : Navigator.push(
+                :
+            Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReferEarn(
+                      builder: (context) => PrivacyPolicy(
                           // home: true,
                           ),
-                    ));
-          } else if (title == getTranslated(context, 'REFEREARN')) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReferEarn(),
-                ));
+                    )
+            );
+          // } else if (title == getTranslated(context, 'REFEREARN')) {
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => ReferEarn(),
+          //       ));
           } else if (title == getTranslated(context, 'CONTACT_LBL')) {
             Navigator.push(
                 context,
@@ -899,7 +900,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                                 themeList[index]!,
                                 style: Theme.of(ctx)
                                     .textTheme
-                                    .subtitle1!
+                                    .titleMedium!
                                     .copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -988,14 +989,14 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
             getTranslated(context, 'LOGOUTTXT')!,
             style: Theme.of(this.context)
                 .textTheme
-                .subtitle1!
+                .titleMedium!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
           ),
           actions: <Widget>[
             new TextButton(
                 child: Text(
                   getTranslated(context, 'NO')!,
-                  style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                  style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
                       color: Theme.of(context).colorScheme.lightBlack,
                       fontWeight: FontWeight.bold),
                 ),
@@ -1005,7 +1006,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
             new TextButton(
                 child: Text(
                   getTranslated(context, 'YES')!,
-                  style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                  style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
                       color: Theme.of(context).colorScheme.fontColor,
                       fontWeight: FontWeight.bold),
                 ),
@@ -1626,7 +1627,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   Widget getHeading(String title) {
     return Text(
       getTranslated(context, title)!,
-      style: Theme.of(context).textTheme.headline6!.copyWith(
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.fontColor),
     );

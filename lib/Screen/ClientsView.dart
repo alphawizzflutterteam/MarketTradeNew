@@ -1,18 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/ClientModel.dart';
@@ -550,9 +548,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -562,11 +559,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -576,9 +570,10 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromGalleryPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // source: ImageSource.gallery,
+    // );
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -588,11 +583,7 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraPan() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         panImage = File(pickedFile.path);
@@ -602,9 +593,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromGalleryGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
@@ -614,11 +604,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraGst() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstImage = File(pickedFile.path);
@@ -628,11 +615,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraGstOne() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstOne = File(pickedFile.path);
@@ -642,11 +626,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraGstTwo() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         gstTwo = File(pickedFile.path);
@@ -656,9 +637,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromGalleryAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         aadharImage = File(pickedFile.path);
@@ -668,11 +648,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraAdhar() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         aadharImage = File(pickedFile.path);
@@ -682,11 +659,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   getFromCameraAdharBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         aadharBack = File(pickedFile.path);
@@ -696,11 +670,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraVoteIdFront() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         voterIdImage = File(pickedFile.path);
@@ -710,11 +681,8 @@ class _ClientsViewState extends State<ClientsView> {
   }
 
   _getFromCameraVoterIdBack() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxHeight: 640,
-        maxWidth: 400,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         voterIdBackImage = File(pickedFile.path);
@@ -787,7 +755,7 @@ class _ClientsViewState extends State<ClientsView> {
     var response = await http.get(Uri.parse(imageUrl));
 
     if (response.statusCode == 200) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes));
       Fluttertoast.showToast(msg: "Image saved to gallery");
       print('Image saved to gallery: $result');
@@ -923,7 +891,7 @@ class _ClientsViewState extends State<ClientsView> {
                         if (response.statusCode == 200) {
                           final Uint8List data = response.bodyBytes;
                           final result =
-                              await ImageGallerySaver.saveImage(data);
+                              await ImageGallerySaverPlus.saveImage(data);
                           print(result);
                           if (result['isSuccess'] == true) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -1754,7 +1722,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -1930,7 +1898,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2073,7 +2041,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2216,7 +2184,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2390,7 +2358,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2533,7 +2501,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2709,7 +2677,7 @@ class _ClientsViewState extends State<ClientsView> {
                                         final Uint8List data =
                                             response.bodyBytes;
                                         final result =
-                                            await ImageGallerySaver.saveImage(
+                                            await ImageGallerySaverPlus.saveImage(
                                                 data);
                                         print(result);
                                         if (result['isSuccess'] == true) {
@@ -2863,7 +2831,7 @@ class _ClientsViewState extends State<ClientsView> {
                                           final Uint8List data =
                                               response.bodyBytes;
                                           final result =
-                                              await ImageGallerySaver.saveImage(
+                                              await ImageGallerySaverPlus.saveImage(
                                                   data);
                                           print(result);
                                           if (result['isSuccess'] == true) {

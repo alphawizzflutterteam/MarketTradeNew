@@ -216,7 +216,8 @@ class _SplashScreen extends State<Splash> {
 
     List<Placemark> placeMark = await placemarkFromCoordinates(
         double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
     setState(() {
       currentAddress =
           "${placeMark[0].street}, ${placeMark[0].subLocality}, ${placeMark[0].locality}";

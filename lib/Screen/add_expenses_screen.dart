@@ -253,13 +253,13 @@ bool isLoading =false;
   void getCropImage(BuildContext context, int i, var image) async {
     CroppedFile? croppedFile = await ImageCropper.platform.cropImage(
       sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
+      // aspectRatioPresets: [
+      //   CropAspectRatioPreset.square,
+      //   CropAspectRatioPreset.ratio3x2,
+      //   CropAspectRatioPreset.original,
+      //   CropAspectRatioPreset.ratio4x3,
+      //   CropAspectRatioPreset.ratio16x9
+      // ],
     );
     Navigator.pop(context);
     if (i == 1) {
@@ -631,7 +631,8 @@ bool isLoading =false;
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         double.parse(latitude.toString()), double.parse(longitude.toString()),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
 
     pinController.text = placemark[0].postalCode!;
     if (mounted) {

@@ -140,7 +140,7 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                         getTranslated(context, 'CHANGE_PASS_LBL')!,
                         style: Theme.of(this.context)
                             .textTheme
-                            .subtitle2!
+                            .titleSmall!
                             .copyWith(
                                 color: Theme.of(context).colorScheme.lightBlack,
                                 fontWeight: FontWeight.bold),
@@ -177,9 +177,10 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                           getTranslated(context, 'CHANGE_LANGUAGE_LBL')!,
                           style: Theme.of(this.context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.lightBlack,
+                                  color:
+                                      Theme.of(context).colorScheme.lightBlack,
                                   fontWeight: FontWeight.bold),
                         )),
                     Spacer(),
@@ -213,9 +214,10 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                           getTranslated(context, 'CHANGE_THEME_LBL')!,
                           style: Theme.of(this.context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.lightBlack,
+                                  color:
+                                      Theme.of(context).colorScheme.lightBlack,
                                   fontWeight: FontWeight.bold),
                         )),
                     Spacer(),
@@ -248,9 +250,10 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                       child: Text(getTranslated(context, 'PRIVACY')!,
                           style: Theme.of(this.context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.lightBlack,
+                                  color:
+                                      Theme.of(context).colorScheme.lightBlack,
                                   fontWeight: FontWeight.bold))),
                   Spacer(),
                   Padding(
@@ -289,9 +292,10 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                       child: Text(getTranslated(context, 'TERM')!,
                           style: Theme.of(this.context)
                               .textTheme
-                              .subtitle2!
+                              .titleSmall!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.lightBlack,
+                                  color:
+                                      Theme.of(context).colorScheme.lightBlack,
                                   fontWeight: FontWeight.bold))),
                   Spacer(),
                   Padding(
@@ -336,10 +340,14 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                               getTranslated(context, 'CHANGE_PASS_LBL')!,
                               style: Theme.of(this.context)
                                   .textTheme
-                                  .subtitle1!
-                                  .copyWith(color: Theme.of(context).colorScheme.fontColor),
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor),
                             )),
-                        Divider(color: Theme.of(context).colorScheme.lightBlack),
+                        Divider(
+                            color: Theme.of(context).colorScheme.lightBlack),
                         Form(
                             key: _formkey,
                             child: new Column(
@@ -361,9 +369,11 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                               context, 'CUR_PASS_LBL'),
                                           hintStyle: Theme.of(this.context)
                                               .textTheme
-                                              .subtitle1!
+                                              .titleMedium!
                                               .copyWith(
-                                                  color: Theme.of(context).colorScheme.lightBlack,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .lightBlack,
                                                   fontWeight:
                                                       FontWeight.normal),
                                           suffixIcon: IconButton(
@@ -371,7 +381,9 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                                 ? Icons.visibility
                                                 : Icons.visibility_off),
                                             iconSize: 20,
-                                            color: Theme.of(context).colorScheme.lightBlack,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .lightBlack,
                                             onPressed: () {
                                               setStater(() {
                                                 _showPassword = !_showPassword;
@@ -401,9 +413,11 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                               context, 'NEW_PASS_LBL'),
                                           hintStyle: Theme.of(this.context)
                                               .textTheme
-                                              .subtitle1!
+                                              .titleMedium!
                                               .copyWith(
-                                                  color: Theme.of(context).colorScheme.lightBlack,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .lightBlack,
                                                   fontWeight:
                                                       FontWeight.normal),
                                           suffixIcon: IconButton(
@@ -411,7 +425,9 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                                 ? Icons.visibility
                                                 : Icons.visibility_off),
                                             iconSize: 20,
-                                            color: Theme.of(context).colorScheme.lightBlack,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .lightBlack,
                                             onPressed: () {
                                               setStater(() {
                                                 _showPassword = !_showPassword;
@@ -447,9 +463,11 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                               context, 'CONFIRMPASSHINT_LBL'),
                                           hintStyle: Theme.of(this.context)
                                               .textTheme
-                                              .subtitle1!
+                                              .titleMedium!
                                               .copyWith(
-                                                  color: Theme.of(context).colorScheme.lightBlack,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .lightBlack,
                                                   fontWeight:
                                                       FontWeight.normal),
                                           suffixIcon: IconButton(
@@ -457,7 +475,9 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                                                 ? Icons.visibility
                                                 : Icons.visibility_off),
                                             iconSize: 20,
-                                            color: Theme.of(context).colorScheme.lightBlack,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .lightBlack,
                                             onPressed: () {
                                               setStater(() {
                                                 _showPassword = !_showPassword;
@@ -479,7 +499,7 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                       getTranslated(context, 'CANCEL')!,
                       style: Theme.of(this.context)
                           .textTheme
-                          .subtitle2!
+                          .titleSmall!
                           .copyWith(
                               color: Theme.of(context).colorScheme.lightBlack,
                               fontWeight: FontWeight.bold),
@@ -492,7 +512,7 @@ class StateSetting extends State<Setting> with TickerProviderStateMixin {
                       getTranslated(context, 'SAVE_LBL')!,
                       style: Theme.of(this.context)
                           .textTheme
-                          .subtitle2!
+                          .titleSmall!
                           .copyWith(
                               color: Theme.of(context).colorScheme.fontColor,
                               fontWeight: FontWeight.bold),

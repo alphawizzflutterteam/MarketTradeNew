@@ -40,7 +40,7 @@ class StateSuccess extends State<OrderSuccess> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 getTranslated(context, 'ORD_PLC')!,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             Text(
@@ -66,7 +66,7 @@ class StateSuccess extends State<OrderSuccess> {
                     ),
                     child: Text(getTranslated(context, 'CONTINUE_SHOPPING')!,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: Theme.of(context).colorScheme.white,
                             fontWeight: FontWeight.normal))),
                 onPressed: () {

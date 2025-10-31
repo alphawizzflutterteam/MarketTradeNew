@@ -145,7 +145,7 @@ class _CompareListState extends State<CompareList> {
                                 getTranslated(context, 'OUT_OF_STOCK_LBL')!,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .subtitle2!
+                                    .titleSmall!
                                     .copyWith(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold),
@@ -191,7 +191,7 @@ class _CompareListState extends State<CompareList> {
                                 "" +
                                 model.prVarientList![model.selVarient!].price!
                             : "",
-                        style: Theme.of(context).textTheme.overline!.copyWith(
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                             decoration: TextDecoration.lineThrough,
                             letterSpacing: 1),
                       ),
@@ -281,7 +281,7 @@ class _CompareListState extends State<CompareList> {
       dense: true,
       title: Text(
         getTranslated(context, 'GAURANTEE')!,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }
@@ -296,7 +296,7 @@ class _CompareListState extends State<CompareList> {
       dense: true,
       title: Text(
         getTranslated(context, 'RETURNABLE')!,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }
@@ -307,7 +307,7 @@ class _CompareListState extends State<CompareList> {
       dense: true,
       title: Text(
         getTranslated(context, 'CANCELLABLE')!,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
         overflow: TextOverflow.ellipsis,
       ),
     );
@@ -319,7 +319,7 @@ class _CompareListState extends State<CompareList> {
       dense: true,
       title: Text(
         getTranslated(context, 'WARRENTY')!,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }
@@ -330,7 +330,7 @@ class _CompareListState extends State<CompareList> {
       dense: true,
       title: Text(
         getTranslated(context, 'MADE_IN')!,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }

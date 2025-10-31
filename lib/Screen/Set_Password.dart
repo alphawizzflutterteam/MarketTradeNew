@@ -164,7 +164,7 @@ class _LoginPageState extends State<SetPass> with TickerProviderStateMixin {
           alignment: Alignment.topLeft,
           child: Text(
             getTranslated(context, 'FORGOT_PASSWORDTITILE')!,
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: colors.primary,
                 fontSize: 30,
                 fontWeight: FontWeight.bold),
@@ -184,7 +184,7 @@ class _LoginPageState extends State<SetPass> with TickerProviderStateMixin {
         child: TextFormField(
           keyboardType: TextInputType.text,
           obscureText: true,
-          style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           controller: passwordController,
@@ -231,7 +231,7 @@ class _LoginPageState extends State<SetPass> with TickerProviderStateMixin {
         child: TextFormField(
           keyboardType: TextInputType.text,
           obscureText: true,
-          style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+          style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           controller: confirmpassController,

@@ -99,7 +99,7 @@ class _Write_ReviewState extends State<Write_Review> {
       child: Text(
         getTranslated(context, 'REVIEW_OPINION')!,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.subtitle1!,
+        style: Theme.of(context).textTheme.titleMedium!,
       ),
     );
   }
@@ -109,7 +109,7 @@ class _Write_ReviewState extends State<Write_Review> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
         child: TextField(
           controller: commentTextController,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.titleSmall,
           keyboardType: TextInputType.multiline,
           maxLines: 5,
           decoration: InputDecoration(
@@ -118,7 +118,7 @@ class _Write_ReviewState extends State<Write_Review> {
             hintText: getTranslated(context, 'REVIEW_HINT_LBL'),
             hintStyle: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.lightBlack2.withOpacity(0.7)),
           ),
         ));
@@ -253,7 +253,7 @@ class _Write_ReviewState extends State<Write_Review> {
       getTranslated(context, title)!,
       style: Theme.of(context)
           .textTheme
-          .headline6!
+          .titleLarge!
           .copyWith(fontWeight: FontWeight.bold),
     );
   }

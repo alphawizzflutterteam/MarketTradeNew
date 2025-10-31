@@ -170,13 +170,11 @@ class _SurveyState extends State<Survey> {
   bool flag = true;
   bool expand = true;
   File? _imageFile;
+  final picker = ImagePicker();
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxWidth: 300,
-        maxHeight: 500,
-        imageQuality: 80);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -216,7 +214,8 @@ class _SurveyState extends State<Survey> {
 
     List<Placemark> placemark = await placemarkFromCoordinates(
         double.parse(latitude!), double.parse(longitude!),
-        localeIdentifier: "en");
+        // localeIdentifier: "en"
+    );
     pinController.text = placemark[0].postalCode!;
     if (mounted) {
       setState(() {

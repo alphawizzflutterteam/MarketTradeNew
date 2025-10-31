@@ -235,7 +235,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         alignment: Alignment.center,
         child: Text(
           getTranslated(context, 'SIGN_UP_LBL')!,
-          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: colors.primary, fontWeight: FontWeight.bold, fontSize: 25),
         ),
       ),
@@ -278,7 +278,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
             size: 17,
           ),
           hintText: getTranslated(context, 'NAMEHINT_LBL'),
-          hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           // filled: true,
@@ -335,7 +335,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
             size: 17,
           ),
           hintText: getTranslated(context, 'EMAILHINT_LBL'),
-          hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           // filled: true,
@@ -367,7 +367,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
             keyboardType: TextInputType.number,
             maxLength: 10,
             controller: mobileController,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
                 color: Theme.of(context).colorScheme.fontColor,
                 fontWeight: FontWeight.normal),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -389,7 +389,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
                 color: Theme.of(context).colorScheme.fontColor,
                 size: 17,
               ),
-              hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+              hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.fontColor,
                   fontWeight: FontWeight.normal),
               // contentPadding:
@@ -436,7 +436,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
             size: 17,
           ),
           hintText: getTranslated(context, 'REFER'),
-          hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+          hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: Theme.of(context).colorScheme.fontColor,
               fontWeight: FontWeight.normal),
           // filled: true,
@@ -496,7 +496,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
             //   size: 17,
             // ),
             hintText: getTranslated(context, 'PASSHINT_LBL'),
-            hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+            hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
                 color: Theme.of(context).colorScheme.fontColor,
                 fontWeight: FontWeight.normal),
             // filled: true,
@@ -565,7 +565,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(getTranslated(context, 'ALREADY_A_CUSTOMER')!,
-              style: Theme.of(context).textTheme.caption!.copyWith(
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.fontColor,
                   fontWeight: FontWeight.normal)),
           InkWell(
@@ -576,7 +576,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
               },
               child: Text(
                 getTranslated(context, 'LOG_IN_LBL')!,
-                style: Theme.of(context).textTheme.caption!.copyWith(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: Theme.of(context).colorScheme.fontColor,
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.normal),

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +11,6 @@ import 'package:omega_employee_management/Helper/String.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -226,9 +224,9 @@ class _ChatState extends State<Chat> {
         Directory target = await getApplicationDocumentsDirectory();
         _filePath = target.path.toString();
       } else {
-        Directory? downloadsDirectory =
-            await (DownloadsPathProvider.downloadsDirectory);
-        _filePath = downloadsDirectory!.path.toString();
+        // Directory? downloadsDirectory =
+        // await (DownloadsPathProvider.downloadsDirectory);
+        // _filePath = downloadsDirectory!.path.toString();
       }
 
       String fileName = url!.substring(url.lastIndexOf("/") + 1);
@@ -244,7 +242,7 @@ class _ChatState extends State<Chat> {
       }
 
       if (hasExisted) {
-        final _openFile = await OpenFilex.open(_filePath + "/" + fileName);
+        // final _openFile = await OpenFilex.open(_filePath + "/" + fileName);
       } else if (downloadlist.containsKey(mid)) {
         setSnackbar(getTranslated(context, 'Downloading')!);
       } else {
@@ -291,9 +289,9 @@ class _ChatState extends State<Chat> {
       Directory target = await getApplicationDocumentsDirectory();
       _filePath = target.path.toString();
     } else {
-      Directory? downloadsDirectory =
-          await (DownloadsPathProvider.downloadsDirectory);
-      _filePath = downloadsDirectory!.path.toString();
+      // Directory? downloadsDirectory =
+      // await (DownloadsPathProvider.downloadsDirectory);
+      // _filePath = downloadsDirectory!.path.toString();
     }
   }
 

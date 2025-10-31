@@ -29,7 +29,7 @@ import 'package:omega_employee_management/Screen/AddClients.dart';
 import 'package:omega_employee_management/Screen/AddPhoto.dart';
 import 'package:omega_employee_management/Screen/ViewClient.dart';
 import 'package:omega_employee_management/Screen/check_out_screen.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -1118,7 +1118,7 @@ class _HomePageState extends State<HomePage>
                   title,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle2!
+                      .titleSmall!
                       .copyWith(color: colors.blackTemp),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -1140,7 +1140,7 @@ class _HomePageState extends State<HomePage>
             children: [
               Expanded(
                 child: Text(sectionList[index].shortDesc ?? "",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Theme.of(context).colorScheme.fontColor)),
               ),
               TextButton(
@@ -1150,7 +1150,7 @@ class _HomePageState extends State<HomePage>
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
                 child: Text(
                   getTranslated(context, 'SHOP_NOW')!,
-                  style: Theme.of(context).textTheme.caption!.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.fontColor,
                       fontWeight: FontWeight.bold),
                 ),
@@ -1523,7 +1523,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 child: Text(
                   sectionList[secPos].productList![index].name!,
-                  style: Theme.of(context).textTheme.caption!.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.lightBlack),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -1561,7 +1561,7 @@ class _HomePageState extends State<HomePage>
                                 : "",
                             style: Theme.of(context)
                                 .textTheme
-                                .overline!
+                                .labelSmall!
                                 .copyWith(
                                     decoration: TextDecoration.lineThrough,
                                     letterSpacing: 0),
@@ -1572,7 +1572,7 @@ class _HomePageState extends State<HomePage>
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .overline!
+                                    .labelSmall!
                                     .copyWith(
                                         color: colors.primary,
                                         letterSpacing: 0)),
@@ -1663,7 +1663,7 @@ class _HomePageState extends State<HomePage>
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context)
                 .textTheme
-                .caption!
+                .bodySmall!
                 .copyWith(color: Theme.of(context).colorScheme.fontColor),
           )
         ],
@@ -2254,8 +2254,8 @@ class _HomePageState extends State<HomePage>
           String version = packageInfo.version;
 
           final Version currentVersion = Version.parse(version);
-          final Version latestVersionAnd = Version.parse(verionAnd);
-          final Version latestVersionIos = Version.parse(verionIOS);
+          final Version latestVersionAnd = Version.parse(verionAnd.toString());
+          final Version latestVersionIos = Version.parse(verionIOS.toString());
 
           if ((Platform.isAndroid && latestVersionAnd > currentVersion) ||
               (Platform.isIOS && latestVersionIos > currentVersion))
@@ -2351,14 +2351,14 @@ class _HomePageState extends State<HomePage>
           getTranslated(context, 'UPDATE_AVAIL')!,
           style: Theme.of(this.context)
               .textTheme
-              .subtitle1!
+              .titleMedium!
               .copyWith(color: Theme.of(context).colorScheme.fontColor),
         ),
         actions: <Widget>[
           new TextButton(
               child: Text(
                 getTranslated(context, 'NO')!,
-                style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.lightBlack,
                     fontWeight: FontWeight.bold),
               ),
@@ -2368,7 +2368,7 @@ class _HomePageState extends State<HomePage>
           new TextButton(
               child: Text(
                 getTranslated(context, 'YES')!,
-                style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
+                style: Theme.of(this.context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.fontColor,
                     fontWeight: FontWeight.bold),
               ),
@@ -2652,7 +2652,7 @@ class _HomePageState extends State<HomePage>
                                 },
                                 style: Theme.of(context)
                                     .textTheme
-                                    .subtitle2!
+                                    .titleSmall!
                                     .copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -3021,7 +3021,7 @@ class _HomePageState extends State<HomePage>
                                     sellerList[index].seller_name!,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .caption!
+                                        .bodySmall!
                                         .copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme

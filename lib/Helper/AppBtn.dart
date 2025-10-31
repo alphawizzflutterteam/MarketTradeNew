@@ -44,7 +44,7 @@ class AppBtn extends StatelessWidget {
               style: Theme
                   .of(context)
                   .textTheme
-                  .headline6!
+                  .titleLarge!
                   .copyWith(color: colors.whiteTemp, fontWeight: FontWeight.normal))
               : new CircularProgressIndicator(
             valueColor: new AlwaysStoppedAnimation<Color>(colors.whiteTemp),

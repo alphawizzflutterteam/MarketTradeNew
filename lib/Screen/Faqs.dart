@@ -37,7 +37,6 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
   bool isLoadingmore = true;
   ScrollController controller = new ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -69,10 +68,11 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
     if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
       if (this.mounted) {
-         if (mounted) setState(() {
-          isLoadingmore = true;
-          getFaqs();
-        });
+        if (mounted)
+          setState(() {
+            isLoadingmore = true;
+            getFaqs();
+          });
       }
     }
   }
@@ -106,7 +106,7 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
                           builder: (BuildContext context) => super.widget));
                 } else {
                   await buttonController!.reverse();
-                   if (mounted) setState(() {});
+                  if (mounted) setState(() {});
                 }
               });
             },
@@ -119,7 +119,6 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         key: _scaffoldKey,
         appBar: getSimpleAppBar(widget.title!, context),
         body: _isNetworkAvail ? _showForm(context) : noInternet(context));
@@ -131,15 +130,15 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
         child: _isLoading
             ? shimmer(context)
             : ListView.builder(
-          controller: controller,
-          itemCount: faqsList.length,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return (index == faqsList.length && isLoadingmore)
-                ? Center(child: CircularProgressIndicator())
-                : listItem(index);
-          },
-        ));
+                controller: controller,
+                itemCount: faqsList.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return (index == faqsList.length && isLoadingmore)
+                      ? Center(child: CircularProgressIndicator())
+                      : listItem(index);
+                },
+              ));
   }
 
   listItem(int index) {
@@ -148,10 +147,11 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
         child: InkWell(
           borderRadius: BorderRadius.circular(4),
           onTap: () {
-             if (mounted) setState(() {
-              selectedIndex = index;
-              flag = !flag;
-            });
+            if (mounted)
+              setState(() {
+                selectedIndex = index;
+                flag = !flag;
+              });
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -164,52 +164,59 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
                         faqsList[index].question!,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle1!
-                            .copyWith(color: Theme.of(context).colorScheme.lightBlack),
+                            .titleMedium!
+                            .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.lightBlack),
                       )),
-                     selectedIndex != index || flag
-                      ?
-                     Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0),
-                              child: Text(
-                                faqsList[index].answer!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                    color: Theme.of(context).colorScheme.black.withOpacity(0.7)),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                          ),
-                      ),
-                        Icon(Icons.keyboard_arrow_down)
-                         ],
-                        )
-                      : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0),
+                  selectedIndex != index || flag
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   faqsList[index].answer!,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2!
+                                      .titleSmall!
                                       .copyWith(
-                                      color: Theme.of(context).colorScheme.black.withOpacity(0.7)),
-                                ))),
-                        Icon(Icons.keyboard_arrow_up)
-                      ]),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .black
+                                              .withOpacity(0.7)),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            Icon(Icons.keyboard_arrow_down)
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                              Expanded(
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Text(
+                                        faqsList[index].answer!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .black
+                                                    .withOpacity(0.7)),
+                                      ))),
+                              Icon(Icons.keyboard_arrow_up)
+                            ]),
                 ]),
           ),
         ));
@@ -235,22 +242,24 @@ class StateFaqs extends State<Faqs> with TickerProviderStateMixin {
             setSnackbar(msg!);
           }
         }
-         if (mounted) setState(() {
-          _isLoading = false;
-        });
+        if (mounted)
+          setState(() {
+            _isLoading = false;
+          });
       } on TimeoutException catch (_) {
-        setSnackbar( getTranslated(context,'somethingMSg')!);
+        setSnackbar(getTranslated(context, 'somethingMSg')!);
       }
     } else {
-       if (mounted) setState(() {
-        _isLoading = false;
-        _isNetworkAvail = false;
-      });
+      if (mounted)
+        setState(() {
+          _isLoading = false;
+          _isNetworkAvail = false;
+        });
     }
   }
 
   setSnackbar(String msg) {
-  ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
       content: new Text(
         msg,
         textAlign: TextAlign.center,
