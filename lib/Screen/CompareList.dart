@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:omega_employee_management/Helper/Session.dart';
 import 'package:omega_employee_management/Model/Section_Model.dart';
 import 'package:omega_employee_management/Provider/ProductDetailProvider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
-import 'Product_Detail.dart';
 
 class CompareList extends StatefulWidget {
   @override
@@ -255,19 +254,19 @@ class _CompareListState extends State<CompareList> {
             ),
             onTap: () {
               Product? model = compareList[index];
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                    // transitionDuration: Duration(seconds: 1),
-                    pageBuilder: (_, __, ___) => ProductDetail(
-                          model: model,
-                          // updateParent: updateSectionList,
-                          //  updateHome: widget.updateHome,
-                          secPos: index,
-                          index: index,
-                          list: true,
-                        )),
-              );
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //       // transitionDuration: Duration(seconds: 1),
+              //       pageBuilder: (_, __, ___) => ProductDetail(
+              //             model: model,
+              //             // updateParent: updateSectionList,
+              //             //  updateHome: widget.updateHome,
+              //             secPos: index,
+              //             index: index,
+              //             list: true,
+              //           )),
+              // );
             },
           ),
         ),

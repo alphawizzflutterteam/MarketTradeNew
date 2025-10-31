@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-import 'package:omega_employee_management/Helper/Constant.dart';
-import 'package:omega_employee_management/Helper/Session.dart';
-import 'package:omega_employee_management/Provider/SettingProvider.dart';
-import 'package:omega_employee_management/Screen/Map.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+import 'package:omega_employee_management/Helper/Constant.dart';
+import 'package:omega_employee_management/Helper/Session.dart';
+import 'package:omega_employee_management/Screen/Map.dart';
+
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/String.dart';
 import '../Model/User.dart';
-import 'Cart.dart';
 
 class AddAddress extends StatefulWidget {
   final bool? update;
@@ -113,38 +112,39 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     stateC = new TextEditingController();
     countryC = new TextEditingController();
     landmarkC = new TextEditingController();
-
-    if (widget.update!) {
-      User item = addressList[widget.index!];
-
-      mobileC!.text = item.mobile!;
-      nameC!.text = item.name!;
-      altMobC!.text = item.altMob!;
-      landmarkC!.text = item.landmark!;
-      pincodeC!.text = item.pincode!;
-      addressC!.text = item.address!;
-      stateC!.text = item.state!;
-      countryC!.text = item.country!;
-      stateC!.text = item.state!;
-      latitude = item.latitude;
-      longitude = item.longitude;
-
-      type = item.type;
-      city = item.cityId;
-      area = item.areaId;
-
-      if (type!.toLowerCase() == HOME.toLowerCase()) {
-        selectedType = 1;
-      } else if (type!.toLowerCase() == OFFICE.toLowerCase()) {
-        selectedType = 2;
-      } else {
-        selectedType = 3;
-      }
-
-      checkedDefault = item.isDefault == "1" ? true : false;
-    } else {
-      // getCurrentLoc();
-    }
+    //
+    // if (widget.update!) {
+    //   User item = [widget.index!];
+    //   addressList[widget.index!];
+    //
+    //   mobileC!.text = item.mobile!;
+    //   nameC!.text = item.name!;
+    //   altMobC!.text = item.altMob!;
+    //   landmarkC!.text = item.landmark!;
+    //   pincodeC!.text = item.pincode!;
+    //   addressC!.text = item.address!;
+    //   stateC!.text = item.state!;
+    //   countryC!.text = item.country!;
+    //   stateC!.text = item.state!;
+    //   latitude = item.latitude;
+    //   longitude = item.longitude;
+    //
+    //   type = item.type;
+    //   city = item.cityId;
+    //   area = item.areaId;
+    //
+    //   if (type!.toLowerCase() == HOME.toLowerCase()) {
+    //     selectedType = 1;
+    //   } else if (type!.toLowerCase() == OFFICE.toLowerCase()) {
+    //     selectedType = 2;
+    //   } else {
+    //     selectedType = 3;
+    //   }
+    //
+    //   checkedDefault = item.isDefault == "1" ? true : false;
+    // } else {
+    //   // getCurrentLoc();
+    // }
   }
 
   @override
@@ -229,7 +229,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
   Future<void> checkNetwork() async {
     bool avail = await isNetworkAvailable();
     if (avail) {
-      addNewAddress();
+      // addNewAddress();
     } else {
       Future.delayed(Duration(seconds: 2)).then((_) async {
         if (mounted) {
@@ -305,10 +305,13 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             horizontal: 10.0,
           ),
           child: TextFormField(
-              maxLength: 10,
+            maxLength: 10,
             keyboardType: TextInputType.number,
             controller: mobileC,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly,LengthLimitingTextInputFormatter(12)],
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(12)
+            ],
             textInputAction: TextInputAction.next,
             focusNode: monoFocus,
             style: Theme.of(context)
@@ -326,7 +329,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               _fieldFocusChange(context, monoFocus!, almonoFocus);
             },
             decoration: InputDecoration(
-              counterText: "",
+                counterText: "",
                 label: Text(getTranslated(context, "MOBILEHINT_LBL")!),
                 fillColor: Theme.of(context).colorScheme.white,
                 isDense: true,
@@ -745,21 +748,20 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                         // Position position = await Geolocator.getCurrentPosition(
                         //     desiredAccuracy: LocationAccuracy.high);
 
-                        await
-                        Navigator.push(
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Map(
-                                      // latitude:
-                                      //     latitude == null || latitude == ""
-                                      //         ? position.latitude
-                                      //         : double.parse(latitude!),
-                                      // longitude:
-                                      //     longitude == null || longitude == ""
-                                      //         ? position.longitude
-                                      //         : double.parse(longitude!),
-                                      // from:
-                                      //     getTranslated(context, 'ADDADDRESS'),
+                                    // latitude:
+                                    //     latitude == null || latitude == ""
+                                    //         ? position.latitude
+                                    //         : double.parse(latitude!),
+                                    // longitude:
+                                    //     longitude == null || longitude == ""
+                                    //         ? position.longitude
+                                    //         : double.parse(longitude!),
+                                    // from:
+                                    //     getTranslated(context, 'ADDADDRESS'),
                                     )));
                         if (mounted) setState(() {});
                         List<Placemark> placemark =
@@ -836,9 +838,9 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
   Future<void> callApi() async {
     bool avail = await isNetworkAvailable();
     if (avail) {
-      await getCities();
+      // await getCities();
       if (widget.update!) {
-        getArea(addressList[widget.index!].cityId, false);
+        // getArea(addressList[widget.index!].cityId, false);
       }
     } else {
       Future.delayed(Duration(seconds: 2)).then((_) async {
@@ -851,38 +853,38 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> getCities() async {
-    try {
-      Response response = await post(getCitiesApi, headers: headers)
-          .timeout(Duration(seconds: timeOut));
-
-      var getdata = json.decode(response.body);
-      bool error = getdata["error"];
-      String? msg = getdata["message"];
-      if (!error) {
-        var data = getdata["data"];
-
-        cityList =
-            (data as List).map((data) => new User.fromJson(data)).toList();
-
-        citySearchLIst.addAll(cityList);
-      } else {
-        setSnackbar(msg!);
-      }
-      cityLoading = false;
-      if (cityState != null) cityState!(() {});
-      if (mounted) setState(() {});
-
-      if (widget.update!) {
-        selCityPos = citySearchLIst
-            .indexWhere((f) => f.id == addressList[widget.index!].cityId);
-
-        if (selCityPos == -1) selCityPos = null;
-      }
-    } on TimeoutException catch (_) {
-      setSnackbar(getTranslated(context, 'somethingMSg')!);
-    }
-  }
+  // Future<void> getCities() async {
+  //   try {
+  //     Response response = await post(getCitiesApi, headers: headers)
+  //         .timeout(Duration(seconds: timeOut));
+  //
+  //     var getdata = json.decode(response.body);
+  //     bool error = getdata["error"];
+  //     String? msg = getdata["message"];
+  //     if (!error) {
+  //       var data = getdata["data"];
+  //
+  //       cityList =
+  //           (data as List).map((data) => new User.fromJson(data)).toList();
+  //
+  //       citySearchLIst.addAll(cityList);
+  //     } else {
+  //       setSnackbar(msg!);
+  //     }
+  //     cityLoading = false;
+  //     if (cityState != null) cityState!(() {});
+  //     if (mounted) setState(() {});
+  //
+  //     if (widget.update!) {
+  //       // selCityPos = citySearchLIst
+  //           // .indexWhere((f) => f.id == addressList[widget.index!].cityId);
+  //
+  //       if (selCityPos == -1) selCityPos = null;
+  //     }
+  //   } on TimeoutException catch (_) {
+  //     setSnackbar(getTranslated(context, 'somethingMSg')!);
+  //   }
+  // }
 
   Future<void> getArea(String? city, bool clear) async {
     try {
@@ -911,15 +913,15 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
 
         areaSearchList.addAll(areaList);
 
-        if (widget.update!)
-          for (User item in addressList) {
-            for (int i = 0; i < areaSearchList.length; i++) {
-              if (areaSearchList[i].id == item.areaId) {
-                selArea = areaSearchList[i];
-                selAreaPos = i;
-              }
-            }
-          }
+        if (widget.update!) ;
+        // for (User item in addressList) {
+        //   for (int i = 0; i < areaSearchList.length; i++) {
+        //     if (areaSearchList[i].id == item.areaId) {
+        //       selArea = areaSearchList[i];
+        //       selAreaPos = i;
+        //     }
+        //   }
+        // }
       } else {
         setSnackbar(msg!);
       }
@@ -1047,143 +1049,143 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> addNewAddress() async {
-    if (mounted) {
-      setState(() {
-        _isProgress = true;
-      });
-    }
-
-    try {
-      var data = {
-        USER_ID: context.read<SettingProvider>().userId,
-        NAME: name,
-        MOBILE: mobile,
-        PINCODE: pincodeC!.text,
-        CITY_ID: city,
-        AREA_ID: area,
-        ADDRESS: address,
-        STATE: state,
-        COUNTRY: country,
-        TYPE: type,
-        ISDEFAULT: checkedDefault.toString() == "true" ? "1" : "0",
-        LATITUDE: latitude,
-        LONGITUDE: longitude
-      };
-      print("para here ${data.toString()}");
-      if (widget.update!) data[ID] = addressList[widget.index!].id;
-
-      Response response = await post(
-              widget.update! ? updateAddressApi : getAddAddressApi,
-              body: data,
-              headers: headers)
-          .timeout(Duration(seconds: timeOut));
-
-
-      if (response.statusCode == 200) {
-        var getdata = json.decode(response.body);
-
-        bool error = getdata["error"];
-        String? msg = getdata["message"];
-
-        await buttonController!.reverse();
-
-        if (!error) {
-          var data = getdata["data"];
-
-          if (widget.update!) {
-            if (checkedDefault.toString() == "true" ||
-                addressList.length == 1) {
-              for (User i in addressList) {
-                i.isDefault = "0";
-              }
-
-              addressList[widget.index!].isDefault = "1";
-
-              if (!ISFLAT_DEL) {
-                if (oriPrice <
-                    double.parse(addressList[selectedAddress!].freeAmt!)) {
-                  delCharge = double.parse(
-                      addressList[selectedAddress!].deliveryCharge!);
-                } else {
-                  delCharge = 0;
-                }
-
-                totalPrice = totalPrice - delCharge;
-              }
-
-              User value = new User.fromAddress(data[0]);
-
-              addressList[widget.index!] = value;
-
-              selectedAddress = widget.index;
-              selAddress = addressList[widget.index!].id;
-
-              if (!ISFLAT_DEL) {
-                if (oriPrice <
-                    double.parse(addressList[selectedAddress!].freeAmt!)) {
-                  delCharge = double.parse(
-                      addressList[selectedAddress!].deliveryCharge!);
-                } else {
-                  delCharge = 0;
-                }
-                totalPrice = totalPrice + delCharge;
-              }
-            }
-          } else {
-            User value = new User.fromAddress(data[0]);
-            addressList.add(value);
-
-            if (checkedDefault.toString() == "true" ||
-                addressList.length == 1) {
-              for (User i in addressList) {
-                i.isDefault = "0";
-              }
-
-              addressList[widget.index!].isDefault = "1";
-
-              if (!ISFLAT_DEL && addressList.length != 1) {
-                if (oriPrice <
-                    double.parse(addressList[selectedAddress!].freeAmt!)) {
-                  delCharge = double.parse(
-                      addressList[selectedAddress!].deliveryCharge!);
-                } else {
-                  delCharge = 0;
-                }
-
-                totalPrice = totalPrice - delCharge;
-              }
-
-              selectedAddress = widget.index;
-              selAddress = addressList[widget.index!].id;
-
-              if (!ISFLAT_DEL) {
-                if (totalPrice <
-                    double.parse(addressList[selectedAddress!].freeAmt!)) {
-                  delCharge = double.parse(
-                      addressList[selectedAddress!].deliveryCharge!);
-                } else {
-                  delCharge = 0;
-                }
-                totalPrice = totalPrice + delCharge;
-              }
-            }
-          }
-
-          if (mounted) {
-            setState(() {
-              _isProgress = false;
-            });
-          }
-          Navigator.of(context).pop();
-        } else {
-          setSnackbar(msg!);
-        }
-      }
-    } on TimeoutException catch (_) {
-      setSnackbar(getTranslated(context, 'somethingMSg')!);
-    }
-  }
+  // Future<void> addNewAddress() async {
+  //   if (mounted) {
+  //     setState(() {
+  //       _isProgress = true;
+  //     });
+  //   }
+  //
+  //   try {
+  //     var data = {
+  //       USER_ID: context.read<SettingProvider>().userId,
+  //       NAME: name,
+  //       MOBILE: mobile,
+  //       PINCODE: pincodeC!.text,
+  //       CITY_ID: city,
+  //       AREA_ID: area,
+  //       ADDRESS: address,
+  //       STATE: state,
+  //       COUNTRY: country,
+  //       TYPE: type,
+  //       ISDEFAULT: checkedDefault.toString() == "true" ? "1" : "0",
+  //       LATITUDE: latitude,
+  //       LONGITUDE: longitude
+  //     };
+  //     print("para here ${data.toString()}");
+  //     if (widget.update!) data[ID] = addressList[widget.index!].id;
+  //
+  //     Response response = await post(
+  //             widget.update! ? updateAddressApi : getAddAddressApi,
+  //             body: data,
+  //             headers: headers)
+  //         .timeout(Duration(seconds: timeOut));
+  //
+  //
+  //     if (response.statusCode == 200) {
+  //       var getdata = json.decode(response.body);
+  //
+  //       bool error = getdata["error"];
+  //       String? msg = getdata["message"];
+  //
+  //       await buttonController!.reverse();
+  //
+  //       if (!error) {
+  //         var data = getdata["data"];
+  //
+  //         if (widget.update!) {
+  //           if (checkedDefault.toString() == "true" ||
+  //               addressList.length == 1) {
+  //             for (User i in addressList) {
+  //               i.isDefault = "0";
+  //             }
+  //
+  //             addressList[widget.index!].isDefault = "1";
+  //
+  //             if (!ISFLAT_DEL) {
+  //               if (oriPrice <
+  //                   double.parse(addressList[selectedAddress!].freeAmt!)) {
+  //                 delCharge = double.parse(
+  //                     addressList[selectedAddress!].deliveryCharge!);
+  //               } else {
+  //                 delCharge = 0;
+  //               }
+  //
+  //               totalPrice = totalPrice - delCharge;
+  //             }
+  //
+  //             User value = new User.fromAddress(data[0]);
+  //
+  //             addressList[widget.index!] = value;
+  //
+  //             selectedAddress = widget.index;
+  //             selAddress = addressList[widget.index!].id;
+  //
+  //             if (!ISFLAT_DEL) {
+  //               if (oriPrice <
+  //                   double.parse(addressList[selectedAddress!].freeAmt!)) {
+  //                 delCharge = double.parse(
+  //                     addressList[selectedAddress!].deliveryCharge!);
+  //               } else {
+  //                 delCharge = 0;
+  //               }
+  //               totalPrice = totalPrice + delCharge;
+  //             }
+  //           }
+  //         } else {
+  //           User value = new User.fromAddress(data[0]);
+  //           addressList.add(value);
+  //
+  //           if (checkedDefault.toString() == "true" ||
+  //               addressList.length == 1) {
+  //             for (User i in addressList) {
+  //               i.isDefault = "0";
+  //             }
+  //
+  //             addressList[widget.index!].isDefault = "1";
+  //
+  //             if (!ISFLAT_DEL && addressList.length != 1) {
+  //               if (oriPrice <
+  //                   double.parse(addressList[selectedAddress!].freeAmt!)) {
+  //                 delCharge = double.parse(
+  //                     addressList[selectedAddress!].deliveryCharge!);
+  //               } else {
+  //                 delCharge = 0;
+  //               }
+  //
+  //               totalPrice = totalPrice - delCharge;
+  //             }
+  //
+  //             selectedAddress = widget.index;
+  //             selAddress = addressList[widget.index!].id;
+  //
+  //             if (!ISFLAT_DEL) {
+  //               if (totalPrice <
+  //                   double.parse(addressList[selectedAddress!].freeAmt!)) {
+  //                 delCharge = double.parse(
+  //                     addressList[selectedAddress!].deliveryCharge!);
+  //               } else {
+  //                 delCharge = 0;
+  //               }
+  //               totalPrice = totalPrice + delCharge;
+  //             }
+  //           }
+  //         }
+  //
+  //         if (mounted) {
+  //           setState(() {
+  //             _isProgress = false;
+  //           });
+  //         }
+  //         Navigator.of(context).pop();
+  //       } else {
+  //         setSnackbar(msg!);
+  //       }
+  //     }
+  //   } on TimeoutException catch (_) {
+  //     setSnackbar(getTranslated(context, 'somethingMSg')!);
+  //   }
+  // }
 
   @override
   void dispose() {

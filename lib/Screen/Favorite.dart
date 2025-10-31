@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:omega_employee_management/Screen/SendOtp.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:omega_employee_management/Provider/FavoriteProvider.dart';
-import 'package:omega_employee_management/Provider/UserProvider.dart';
-import 'package:omega_employee_management/Screen/HomePage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
+import 'package:omega_employee_management/Provider/FavoriteProvider.dart';
+import 'package:omega_employee_management/Provider/UserProvider.dart';
+import 'package:omega_employee_management/Screen/HomePage.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -21,7 +19,7 @@ import '../Helper/Session.dart';
 import '../Helper/String.dart';
 import '../Model/Section_Model.dart';
 import 'Login.dart';
-import 'Product_Detail.dart';
+import 'MyOrder.dart';
 
 class Favorite extends StatefulWidget {
   @override
@@ -398,18 +396,18 @@ class StateFav extends State<Favorite> with TickerProviderStateMixin {
                 splashColor: colors.primary.withOpacity(0.2),
                 onTap: () {
                   Product model = favList[index];
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => ProductDetail(
-                              model: model,
-
-                              secPos: 0,
-                              index: index,
-                              list: true,
-                              //  title: productList[index].name,
-                            )),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   PageRouteBuilder(
+                  //       pageBuilder: (_, __, ___) => ProductDetail(
+                  //             model: model,
+                  //
+                  //             secPos: 0,
+                  //             index: index,
+                  //             list: true,
+                  //             //  title: productList[index].name,
+                  //           )),
+                  // );
                 },
               ),
             ),

@@ -577,9 +577,10 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Sum Of Total Consumption Of ${widget.model?.finalTotal?[j].title}",
+                                  "Sum Of Total Consumption Of ${widget.model?.finalTotal?[j].title}"
+                                      .toUpperCase(),
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
@@ -599,16 +600,18 @@ class _MySiteDetailsState extends State<MySiteDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Sum Of Further Consumption Of ${widget.model?.finalTotal?[j].title}",
+                                  "Sum Of Further Consumption Of ${widget.model?.finalTotal?[j].title}"
+                                      .toUpperCase(),
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  "₹ ${widget.model?.finalTotal?[j].furtherConsumption}",
+                                  "₹ ${widget.model?.finalTotal?[j].furtherConsumption}"
+                                      .toUpperCase(),
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),

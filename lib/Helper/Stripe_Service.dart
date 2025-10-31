@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:omega_employee_management/Provider/SettingProvider.dart';
-import 'package:omega_employee_management/Screen/Cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:stripe_payment/stripe_payment.dart';
-
-import 'String.dart';
 
 class StripeTransactionResponse {
   final String? message, status;
@@ -35,22 +32,24 @@ class StripeService {
         androidPayMode: stripeMode));
   }
 
-  
   static Future<StripeTransactionResponse> payWithNewCard(
-      {String? amount, String? currency, String? from,BuildContext? context}) async {
+      {String? amount,
+      String? currency,
+      String? from,
+      BuildContext? context}) async {
     try {
       var paymentMethod = await StripePayment.paymentRequestWithCardForm(
           CardFormPaymentRequest());
 
-      var paymentIntent =
-          await (StripeService.createPaymentIntent(amount, currency, from,context));
+      var paymentIntent = await (StripeService.createPaymentIntent(
+          amount, currency, from, context));
 
       var response = await StripePayment.confirmPaymentIntent(PaymentIntent(
         clientSecret: paymentIntent!['client_secret'],
         paymentMethodId: paymentMethod.id,
       ));
 
-      stripePayId = paymentIntent['id'];
+      // stripePayId = paymentIntent['id'];
 
       if (response.status == 'succeeded') {
         return new StripeTransactionResponse(
@@ -89,10 +88,10 @@ class StripeService {
         message: message, success: false, status: "cancelled");
   }
 
-  static Future<Map<String, dynamic>?> createPaymentIntent(
-      String? amount, String? currency, String? from,BuildContext? context) async {
-
-    SettingProvider settingsProvider = Provider.of<SettingProvider>(context!, listen: false);
+  static Future<Map<String, dynamic>?> createPaymentIntent(String? amount,
+      String? currency, String? from, BuildContext? context) async {
+    SettingProvider settingsProvider =
+        Provider.of<SettingProvider>(context!, listen: false);
 
     String orderId =
         "wallet-refill-user-${settingsProvider.userId}-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(900) + 100}";
@@ -103,17 +102,13 @@ class StripeService {
         'currency': currency,
         'payment_method_types[]': 'card',
         'description': from,
-
       };
       if (from == 'wallet') body['metadata[order_id]'] = orderId;
-
 
       var response = await http.post(Uri.parse(StripeService.paymentApiUrl),
           body: body, headers: StripeService.headers);
       return jsonDecode(response.body);
-    } catch (err) {
-
-    }
+    } catch (err) {}
     return null;
   }
 }

@@ -287,6 +287,7 @@ class _SplashScreen extends State<Splash> {
         // String? checkInTime = prefs.getString("CheckInTime");
         // Navigator.pushReplacementNamed(context, "/home");
         bool? checkIn = await prefs.getBool("CheckIn");
+        print("is checck in here ${checkIn}");
         if (checkIn ?? false) {
           String? checkInTime = await prefs.getString("CheckInTime");
           debugPrint("CheckInTime" + checkInTime.toString());
@@ -313,7 +314,7 @@ class _SplashScreen extends State<Splash> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginPage(),
+              builder: (context) => CheckInScreen(),
             ),
           );
           // Navigator.pushReplacementNamed(context, "/home");

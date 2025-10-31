@@ -37,7 +37,6 @@ import '../main.dart';
 import 'Example.dart';
 import 'Faqs.dart';
 import 'FeedbackList.dart';
-import 'Manage_Address.dart';
 import 'NotificationLIst.dart';
 import 'Privacy_Policy.dart';
 
@@ -766,9 +765,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                 : Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ManageAddress(
-                        home: true,
-                      ),
+                      builder: (context) => ReferEarn(
+                          // home: true,
+                          ),
                     ));
           } else if (title == getTranslated(context, 'REFEREARN')) {
             Navigator.push(

@@ -27,10 +27,6 @@ import 'package:omega_employee_management/Provider/SettingProvider.dart';
 import 'package:omega_employee_management/Provider/UserProvider.dart';
 import 'package:omega_employee_management/Screen/AddClients.dart';
 import 'package:omega_employee_management/Screen/AddPhoto.dart';
-import 'package:omega_employee_management/Screen/My_Wallet.dart';
-import 'package:omega_employee_management/Screen/SellerList.dart';
-import 'package:omega_employee_management/Screen/Seller_Details.dart';
-import 'package:omega_employee_management/Screen/SubCategory.dart';
 import 'package:omega_employee_management/Screen/ViewClient.dart';
 import 'package:omega_employee_management/Screen/check_out_screen.dart';
 import 'package:package_info/package_info.dart';
@@ -41,6 +37,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
 import '../Model/ClientModel.dart';
+import '../Model/DepartmentModel.dart';
 import '../Model/PermissionModel.dart';
 import 'AddGeoTag.dart';
 import 'ClientForm.dart';
@@ -48,9 +45,6 @@ import 'EditClent.dart';
 import 'FeedbackForm.dart';
 import 'Login.dart';
 import 'MySiteVisit.dart';
-import 'ProductList.dart';
-import 'Product_Detail.dart';
-import 'SectionList.dart';
 import 'SiteVisitForm.dart';
 import 'ViewCounterVisitForm.dart';
 import 'check_In_screen.dart';
@@ -962,8 +956,8 @@ class _HomePageState extends State<HomePage>
       children: [
         InkWell(
           onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyWallet()));
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => MyWallet()));
           },
           child: Card(
             elevation: 4,
@@ -1162,15 +1156,15 @@ class _HomePageState extends State<HomePage>
                 ),
                 onPressed: () {
                   SectionModel model = sectionList[index];
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SectionList(
-                        index: index,
-                        section_model: model,
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => SectionList(
+                  //       index: index,
+                  //       section_model: model,
+                  //     ),
+                  //   ),
+                  // );
                 },
               ),
             ],
@@ -1199,39 +1193,39 @@ class _HomePageState extends State<HomePage>
           if (offerImages[index].type == "products") {
             Product? item = offerImages[index].list;
 
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                  //transitionDuration: Duration(seconds: 1),
-                  pageBuilder: (_, __, ___) =>
-                      ProductDetail(model: item, secPos: 0, index: 0, list: true
-                          //  title: sectionList[secPos].title,
-                          )),
-            );
+            // Navigator.push(
+            //   context,
+            //   PageRouteBuilder(
+            //       //transitionDuration: Duration(seconds: 1),
+            //       pageBuilder: (_, __, ___) =>
+            //           ProductDetail(model: item, secPos: 0, index: 0, list: true
+            //               //  title: sectionList[secPos].title,
+            //               )),
+            // );
           } else if (offerImages[index].type == "categories") {
             Product item = offerImages[index].list;
             if (item.subList == null || item.subList!.length == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductList(
-                    name: item.name,
-                    id: item.id,
-                    tag: false,
-                    fromSeller: false,
-                  ),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => ProductList(
+              //       name: item.name,
+              //       id: item.id,
+              //       tag: false,
+              //       fromSeller: false,
+              //     ),
+              //   ),
+              // );
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SubCategory(
-                    title: item.name!,
-                    subList: item.subList,
-                  ),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => SubCategory(
+              //       title: item.name!,
+              //       subList: item.subList,
+              //     ),
+              //   ),
+              // );
             }
           }
         },
@@ -1593,16 +1587,16 @@ class _HomePageState extends State<HomePage>
           ),
           onTap: () {
             Product model = sectionList[secPos].productList![index];
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                // transitionDuration: Duration(milliseconds: 150),
-                pageBuilder: (_, __, ___) => ProductDetail(
-                    model: model, secPos: secPos, index: index, list: false
-                    //  title: sectionList[secPos].title,
-                    ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   PageRouteBuilder(
+            //     // transitionDuration: Duration(milliseconds: 150),
+            //     pageBuilder: (_, __, ___) => ProductDetail(
+            //         model: model, secPos: secPos, index: index, list: false
+            //         //  title: sectionList[secPos].title,
+            //         ),
+            //   ),
+            // );
           },
         ),
       );
@@ -1679,50 +1673,50 @@ class _HomePageState extends State<HomePage>
             popularList.length > 0) {
           if (popularList[index].subList == null ||
               popularList[index].subList!.length == 0) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductList(
-                    name: popularList[index].name,
-                    id: popularList[index].id,
-                    tag: false,
-                    fromSeller: false,
-                  ),
-                ));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => ProductList(
+            //         name: popularList[index].name,
+            //         id: popularList[index].id,
+            //         tag: false,
+            //         fromSeller: false,
+            //       ),
+            //     ));
           } else {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SubCategory(
-                    subList: popularList[index].subList,
-                    title: popularList[index].name ?? "",
-                    catId: popularList[index].id,
-                  ),
-                ));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => SubCategory(
+            //         subList: popularList[index].subList,
+            //         title: popularList[index].name ?? "",
+            //         catId: popularList[index].id,
+            //       ),
+            //     ));
           }
         } else if (subList[index].subList == null ||
             subList[index].subList!.length == 0) {
           print(StackTrace.current);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductList(
-                  name: subList[index].name,
-                  id: subList[index].id,
-                  tag: false,
-                  fromSeller: false,
-                ),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => ProductList(
+          //         name: subList[index].name,
+          //         id: subList[index].id,
+          //         tag: false,
+          //         fromSeller: false,
+          //       ),
+          //     ));
         } else {
           print(StackTrace.current);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SubCategory(
-                  subList: subList[index].subList,
-                  title: subList[index].name ?? "",
-                ),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => SubCategory(
+          //         subList: subList[index].subList,
+          //         title: subList[index].name ?? "",
+          //       ),
+          //     ));
         }
       },
     );
@@ -2083,7 +2077,7 @@ class _HomePageState extends State<HomePage>
       getClients();
       getPermission();
       getSetting();
-      getSlider();
+      getDepartment();
       // getCat();
       getUserCheckInStatus();
       // getSeller();
@@ -2743,15 +2737,46 @@ class _HomePageState extends State<HomePage>
     } on TickerCanceled {}
   }
 
-  void getSlider() {
-    Map map = Map();
+  String? department_id;
+  DepartmentModel? departmentModel;
+  getDepartment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString("user_id");
+    var headers = {
+      'Cookie': 'ci_session=aa83f4f9d3335df625437992bb79565d0973f564'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(getDep.toString()));
+    request.fields.addAll({
+      USER_ID: '${uid}',
+    });
+    print("this is refer  get departmet request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print("permission");
+      String str = await response.stream.bytesToString();
+      var result = json.decode(str);
+      var finalResponse = DepartmentModel.fromJson(result);
+      print("permission responseeeeee ${finalResponse}");
+      setState(() {
+        departmentModel = finalResponse;
+        department_id = departmentModel?.data?.first.department.toString();
+        print("deeeeeeeeeeeeee ${department_id}");
+        getSlider();
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 
-    apiBaseHelper.postAPICall(getSliderApi, map).then((getdata) {
+  void getSlider() {
+    var parameter = {"department_ids": department_id.toString()};
+    print("department id is ${parameter}");
+    apiBaseHelper.postAPICall(getSliderApi, parameter).then((getdata) {
       bool error = getdata["error"];
       String? msg = getdata["message"];
       if (!error) {
         var data = getdata["data"];
-
         homeSliderList =
             (data as List).map((data) => new Model.fromSlider(data)).toList();
         pages = homeSliderList.map((slider) {
@@ -2921,10 +2946,10 @@ class _HomePageState extends State<HomePage>
                         GestureDetector(
                           child: Text(getTranslated(context, 'VIEW_ALL')!),
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SellerList()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => SellerList()));
                           },
                         )
                       ],
@@ -2943,27 +2968,27 @@ class _HomePageState extends State<HomePage>
                           padding: const EdgeInsetsDirectional.only(end: 10),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SellerProfile(
-                                            sellerStoreName:
-                                                sellerList[index].store_name ??
-                                                    "",
-                                            sellerRating: sellerList[index]
-                                                    .seller_rating ??
-                                                "",
-                                            sellerImage: sellerList[index]
-                                                    .seller_profile ??
-                                                "",
-                                            sellerName:
-                                                sellerList[index].seller_name ??
-                                                    "",
-                                            sellerID:
-                                                sellerList[index].seller_id,
-                                            storeDesc: sellerList[index]
-                                                .store_description,
-                                          )));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => SellerProfile(
+                              //               sellerStoreName:
+                              //                   sellerList[index].store_name ??
+                              //                       "",
+                              //               sellerRating: sellerList[index]
+                              //                       .seller_rating ??
+                              //                   "",
+                              //               sellerImage: sellerList[index]
+                              //                       .seller_profile ??
+                              //                   "",
+                              //               sellerName:
+                              //                   sellerList[index].seller_name ??
+                              //                       "",
+                              //               sellerID:
+                              //                   sellerList[index].seller_id,
+                              //               storeDesc: sellerList[index]
+                              //                   .store_description,
+                              //             )));
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
